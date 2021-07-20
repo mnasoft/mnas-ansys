@@ -1,0 +1,126 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: ToDo
+#+DATE: <2021-01-12 Вт>
+#+AUTHOR:
+#+EMAIL: mnasoft@gmail.com
+#+LANGUAGE: ru
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.3 (Org mode 9.1.9)
+#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
+#+OPTIONS: html-preamble:t html-scripts:t html-style:t
+#+OPTIONS: html5-fancy:nil tex:t
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_CONTAINER: div
+#+DESCRIPTION:
+#+KEYWORDS:
+#+HTML_LINK_HOME:
+#+HTML_LINK_UP:
+#+HTML_MATHJAX:
+#+HTML_HEAD:
+#+HTML_HEAD_EXTRA:
+#+SUBTITLE:
+#+INFOJS_OPT:
+#+CREATOR: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 26.3 (<a href="https://orgmode.org">Org</a> mode 9.1.9)
+#+LATEX_HEADER:
+
+* Извлечение типов объектов их tetin-файла
+Извлечение типов объектов их tetin-файла
+#+BEGIN_SRC lisp
+  (in-package :mnas-icem)
+  (defun tetin-types ()
+    (sort 
+     (remove-duplicates
+      (reduce #'(lambda (lst el)
+		  (if (and (stringp el)
+			   (< 0 (length el))
+			   (alpha-char-p (first (coerce el 'list))))
+		      (cons (first (mnas-string:split " " el)) lst)
+		      lst))
+	      ,*lines* :initial-value nil)
+      :test #'equal)
+     #'string<))
+
+  (mapcar #'list (tetin-types))
+#+END_SRC
+
+#+RESULTS:
+| affix                           |
+| bspline                         |
+| coedge                          |
+| define_curve                    |
+| define_family                   |
+| define_model                    |
+| define_prism_meshing_parameters |
+| define_solid                    |
+| define_subset                   |
+| define_surface                  |
+| loop                            |
+| material_point                  |
+| polyline                        |
+| prescribed_point                |
+| return                          |
+| set_triangulation_tolerance     |
+| trim_surface                    |
+
+#+BEGIN_SRC lisp
+(defun lam (el lst)
+	    (when (alpha-char-p (first (coerce el 'list)))
+	      (cons (first (mnas-string:split " " el)) lst)))
+#+END_SRC
+
+
+* [13/16] Задачи
+1. [ ] Добавить слот time (содержащий время последней модификации
+   tin-файла) в объект <tin>, что позволит програмно принять решение о
+   целесобразности считывания и разбора tin-файла.  Если время
+   модификации файла не изменилось повторное считывание и разбор не
+   является необходимым. Написать метод reopen, учитывающий слот time.
+2. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
+   реализацию с учетом возможности использования слота surfases
+   объекта <curve>. Цель ускорение.
+3. [ ] Написать функцию для нахождения дерева кривых. При этом
+   сопряжение кривых происходит в вершинах - find-coincidense.
+   - [ ] Добавить считывание точек.
+4. [X] Выполнить первоначальное документирование проектов.
+5. [X] Разделить проект на части.
+6. [X] select-curves-by-coedges-number - написать функцию для нахождения
+   кривых с определенным количеством прилегающих к кривым
+   поверхностей. Эту функцию планируется исползовать для выделенния
+   контекстного окружения при залечивании геометрии.
+   - [X] Вариант 2 Взамен списков кривых и поверхностей в классе <tin>
+     хранить хешированные таблицы кривых и поверхностей (точек). В
+     описание класса кривой добавить список, содержащий имена
+     сопряженных поверхностей. В описание класса поверхности добавить
+     список, содержащий имена сопряженных поверхностей. При таком
+     подходе тяжелые опрерация поиска элементов в списках кривых и
+     поверхностей исчезнут.
+7. [X] Определить метод, которая возвращает уникальный список имен
+   семейств для списка объектов типа <ent> точек; кривых;
+   поверхностей - familys.
+8. [X] Доработать считыватель для ускорения его работы (заменить
+   список строк вектором строк). После профилирования скорость на
+   тестовом примере скорость считывания увеличена в увеличена в 
+   (/ 42.668  3.028 ) 14.09114927344782 раз.
+9. [X] Написать функцию для нахождения поверхностей сопряженных с
+   поверхностями, находящимися в определенном семействе.
+   - [X] Найти поверхности принадлежащие этому семейству;
+   - [X] Найти кривые сопряженные с найденными поверхностями;
+   - [X] Удалить повторяющиеся кривые;
+   - [X] Найти поверхности сопряженные с найденными кривыми;
+   - [X] Удалить повторяющиеся поверхности;
+10. [X] Написать функцию для разбора tetin-файла.
+11. [X] Создать черновой вариант документации.
+12. [X] Переместить исходные файлы в отдельный каталог - src.
+13. [X] Добавить подпроект для докуметирования mnas-icem/docs.
+14. [X] surface-names-coedged-with-curve-by-number - Написать функцию
+    поиска имен поверхностей, сопряженных хотябы одним краем с кривой,
+    сопряженной с поверхностями number раз.
+15. [X] Исключить префикс find из методов пакета utils, добавить names
+    в имена методов там, где на в поток выводятся имена графических
+    объектов.
+16. [X] Исключить префикс select из имен методов пакета select.

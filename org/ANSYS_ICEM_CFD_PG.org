@@ -1,0 +1,2692 @@
+* Programmer's Guide
+** Conventions Used In This Manual
+In this manual, default arguments for each proc argument, if any, are given in [] brackets.
+
+Contains proprietary and confidential information of ANSYS, Inc. and its subsidiaries and affiliates.
+
+** ICEM CFD Scripting Basics
+The Message Window in ANSYS ICEM CFD is a Tcl/Tk shell with an extended
+library consisting of ANSYS ICEM CFD commands. Most of these commands begin
+with "ic_" to indicate an ANSYS ICEM CFD command. Documentation for Tcl/Tk
+procedures can be obtained at http://www.tcl.tk.com. Many books have also been
+written on the subject.
+
+Tcl, which stands for Tool Command Language, is a string-based programming
+language. This means that, except for inside the expr command, you need not
+discern between variable types, such as integers, doubles, or
+strings. Everything is treated as a string. There is also no need to set aside
+memory (dimension) for variables, and they can be reset to values of any
+length without re-dimensioning.
+
+Tk stands for Toolkit and contains the add-on Tcl commands that allow
+graphical interfaces or windows of an application to be made.
+
+*** Command Syntax
+The basic syntax for a Tcl command is:
+<s
+command arg1 arg2 arg3 ...
+
+Commands are terminated by either a newline character (not usually displayed)
+or a semicolon, ";".
+
+Spaces are key characters which separate arguments.
+
+Commands can only be continued to the next line with a "\" at the end of the
+line, or with the beginning of an argument grouping using “{” or ".
+
+*** Argument Grouping
+If a space is to occur inside an argument, then the argument must be grouped
+as one so that it is not interpreted as separate arguments. For example, the
+syntax for the puts command is:
+
+<s
+puts ?-nonewline? ?channelId? string
+
+The text between question marks, "?...?" comprises optional arguments or
+switches which may or may not be present. Consider the following commands and
+their return values:
+
+%puts {Hello world}
+Hello world
+
+%puts Hello worldcannot find channel named "Hello"
+
+In the first example, note that the grouping brackets, "{...}", were stripped
+out by the interpreter, but it was treated as a single argument.
+
+In the second example, the arguments, "Hello" and "world" are treated as
+separate arguments where "Hello" is the channelId. At this point, no channel
+named "Hello" exists.
+
+There are 3 types of grouping: 
+- {...} - Groups without allowing substitution inside
+- "..." - Groups while allowing substitution inside.
+- [...] - Interrupts the current command to do the command contained inside
+  the brackets. The next word following “[” must be a command. This creates a
+  nested Tcl command structure. Some Tcl documentations do not consider this a
+  grouping structure.
+
+Note: The puts command will not output text to the ANSYS ICEM CFD
+message window. To do this, use mess or ic_mess. This command
+automatically does the -nonewline switch. You must use “\n” inside the
+message string to insert a new line.
+
+
+*** Substitution
+There are 3 types of substitution: 
+- Command - This is done whenever there are square brackets,
+  “[...]”. The command is executed and the return value is substituted
+  before continuing with the original command.
+- Variable - Variable substitutions are done by using a dollar sign,
+  “$”, in front of the variable.
+- Backslash - When a backslash, “\” is encountered, the next character
+  is treated special. For example, “\n” means to substitute a new line
+  character.
+
+The following commands can be used to set a value to a variable and then
+substitute that value for the variable later:
+<s
+%set x 5
+5
+%mess "x is: $x\n"
+x is: 5
+%mess {x is: $x\n}
+x is: $x\n
+
+Here, the “\n” is used to ensure that the next text printed to the
+message window will appear on the next line. Without it, the text will
+continue on the same line. Also note that the set command will also
+return the value as well as set the variable to the value.
+
+In the third example, note that no substitution, variable or
+backslash, was done inside the brackets, “{...}”.
+
+Note: Argument grouping is ALWAYS done before substitution, so the number of
+arguments input into a command is always determined before any variable or
+command substitutions that may result in multiple return values
+
+*** Creating a Simple Script
+The following examples demonstrate how to load multiple geometry files of
+varying names and save them all as one new geometry file, without using the
+ANSYS ICEM CFD window (GUI) displayed (GUI stands for Graphical User
+Interface):
+
+
+Do the following in the ANSYS ICEM CFD window:
+1. Go to File > Replay Scripts > Replay Control, then load the tetin file.
+2. Save the tetin file to a different name.
+
+You should see the following commands printed:
+
+1. ic_load_tetin support/test/tetin1.tin 
+2. ic_geo_get_body_matlpnt LIVE.0
+3. ic_boco_solver
+4. ic_boco_clear_icons
+5. ic_boco_natran_csystem reset
+6. ic_uns_set_modified 0
+7. ic_geo_set_modified 0
+8. ic_undo_start
+9. ic_save_tetin support/test/new_tetin.tin 0 0
+
+You may discard all but the first and last commands since you are not
+interested in any GUI updates, boco settings, or the undo log. This is what
+remains:
+
+<s
+1. ic_load_tetin support/test/tetin1.tin
+9. ic_save_tetin support/test/new_tetin.tin 0 0 
+
+The file name paths start from either the working directory as in this case,
+or from the top level drive. Since the tetin names can be changed, as well as
+the working directory, you must use variables. It is safe to specify all names
+from the top level, so set a variable that is the path of the working
+directory:
+<s
+set wdir D:/user/support/test 
+set tetin tetin1.tin
+ic_load_tetin $wdir/$tetin
+ic_save_tetin $wdir/new_$tetin.tin 0 0 
+
+Note: You can use “/” on Windows operating systems as well as Unix. The "\" is
+an escape character which interprets the next character differently. There are
+situations, however, where this could potentially cause problems, so it is a
+good practice to use the file join command. With the file join command
+inserted inside bracket expressions, the script looks like this:
+<s
+set wdir D:/user/support/test
+set tetin tetin1.tin
+ic_load_tetin [file join $wdir $tetin]
+ic_save_tetin [file join $wdir new_$tetin.tin] 0 0 
+
+Now, you can use a foreach loop to cycle through multiple tetin files. The simplest syntax for the foreach command is:foreach varname list body
+
+The foreach loop will step through a list of values assigning each next item in the string to the varname, and evaluating body each time. The list can be a proper Tcl list made using the list command, or by simply grouping text within "..." or {...}. List elements must be separated by spaces. With a foreach loop, the script becomes this:set wdir D:/user/support/test 
+
+foreach tetin [list tetin1.tin tetin2.tin tetin3.tin] { 
+
+ic_load_tetin [file join $wdir $tetin] }
+
+ic_save_tetin [file join $wdir new_$tetin.tin] 0 0
+
+The example illustrates another important property of grouping
+arguments with {...} or "..." (but not [...]). The grouping quotes or
+curly brackets (the "body" argument here) allow an argument to span
+multiple lines so that the current command is not terminated by the
+first newline character (which are usually not displayed in the text
+editor).
+
+Now, you can save this script as script.tcl in the directory D:/user.
+*** Running the Script
+There are 4 ways to run the script: 
+- From the Replay control window - By using Do one or Do all
+- Using the File > Replay Scripts > Run from script file option
+- source - Using the Tcl command to execute Tcl commands in a file.
+- icemcfd -script - Specifying a script to run when you start up ANSYS ICEM CFD
+
+All 4 methods can be used with the GUI displayed, but only the last two can be
+done in batch mode.
+
+
+source D:/user/script.tcl can be typed in the message window, or ANSYS ICEM
+CFD can be started in batch mode by adding the -batch argument to the ANSYS
+ICEM CFD startup command (icemcfd -batch). Then you can source the script from
+the shell.
+
+
+Using both the -batch and -script arguments (icemcfd -batch -script
+D:/user/script.tcl) will start ANSYS ICEM CFD in batch mode and immediately
+run the script.
+
+
+Note: The source command can be used inside a script to execute Tcl commands
+from a separate script.You can have ANSYS ICEM CFD close immediately after
+your script is finished if you add the exit command to the end of your script.
+
+*** Arrays and Environment Variables
+Environment variables are accessed through a reserved global array variable
+named env.
+An array is a variable name followed by another name within parentheses. This
+is a variable which contains sub-variables, each of which can have a value
+assigned. The following are array variables of the same array:
+<s
+geom(point)
+geom(curve)
+geom(surface)
+
+You can use the env variable to make the script portable between different
+installations of ANSYS ICEM CFD by using it in the path for any scripting
+commands that run another executable inside ANSYS ICEM CFD.
+
+For example, the following line was printed in the Replay control window when
+a mesh was written to the CFX5 format:
+<s
+ic_exec {C:/Program Files/Ansys
+Inc/v90/icemcfd/5.1-win/icemcfd/output-interfaces/cfx5} -dom
+D:/user/support/test/tetra_mesh.uns -b D:/user/support/test/family_boco.fbc
+-ascii -internal_faces D:/user/support/test/cfx5_input 
+
+where cfx5 is the executable being run.
+
+The ICEM_ACN environment variable points to the top ANSYS ICEM CFD folder,
+5.1-win. You can substitute the environment variable for the path leading up
+to 5.1-win. You can also set a working directory variable as before and
+substitute that where appropriate using the file join command:
+
+<s
+set wdir D:/user/support/test
+ic_exec [file join $env(ICEM_ACN) icemcfd output-interfaces cfx5] 
+-dom [file join $wdir tetra_mesh.uns] -b [file join $wdir family_boco.fbc] -ascii -internal_faces [file join $wdir cfx5_input]
+
+Since argument grouping is always done before substitution, you need not put
+quotes, "...", around $env(ICEM_ACN). It is seen as one argument in the file
+join command even though its value contains spaces:
+<s
+$env(ICEM_ACN) = "C:/Program Files/Ansys Inc/v90/icemcfd/5.1-win"
+
+Note also that the curly brackets ({...}) are removed in the original
+command in order to do variable substitution within, and the square
+brackets, [...], will do the grouping.
+*** Creating Your Own Procedures (Functions)
+
+By using the proc command, you can put the earlier script in a
+procedure and use the file names as the arguments, so different file
+names can easily be typed in without re-sourcing the file or
+restarting ANSYS ICEM CFD. The syntax for the proc command is: proc
+name args body
+
+An example procedure using the earlier script might look like this:
+
+set wdir D:/user/support/test 
+proc merge_tetins {infiles outfile} {
+  global wdir  foreach tetin $infiles {
+ ic_load_tetin [file join $wdir $tetin]  
+} ic_save_tetin [file join $wdir $outfile] 0 0
+}
+
+Note the global command inside the procedure. Any variables defined
+outside of a procedure are global variables. Any variable set or used
+inside a procedure, including the arguments, are local variables, and
+will be unset when the procedure is finished executing. wdir is a
+global variable since it was defined outside a procedure. To access it
+inside a procedure, it must be declared inside the procedure as
+global.
+
+After reading the script into ANSYS ICEM CFD using any of the 4
+methods, the procedure will only be defined. It will not be
+executed. To execute the procedure, type the following in the ANSYS
+ICEM CFD message window or in the shell (in batch mode): <s
+merge_tetins {tetin1.tin tetin2.tin tetin3.tin} new_tetin.tin
+
+You can re-type this at any time with different argument inputs to
+re-execute the procedure. If you would like to execute the procedure
+when the script is read, you can add the call of the procedure to the
+end of the script. A script can have any number of procedures, and any
+of the procedures can be called from inside the script.
+
+*** Mathematical Expressions
+
+Mathematical expressions cannot be evaluated in Tcl simply be typing
+them. They must be contained within the expr command. For example:
+
+%expr {5+2/7}5
+%expr {5+2/7.0}5.28571428571
+
+The expr command does its own substitution, so if you use "..." or no
+grouping at all instead of {...}, it will substitute once before the
+command is executed, and then once again when it is executed. This may
+not affect the result, but it will be quicker to execute if you only
+allow one substitution by using the curly brackets.
+
+The order of evaluation is the same as conventional mathematics. 2/7
+is done before 5 is added. The resulting type (floating, integer,
+etc.) will be integer if all of the operands are integer. If any one
+operand is a floating point, then the result will be a floating point.
+
+Note: The expr command is done on the test conditions for the if,
+while, and for commands, so you can use mathematical expressions
+inside without using the expr command.
+
+** Form Creation Functions
+===
+** External Commands
+
+ These commands are used to run external programs or perform OS-dependent
+ things. Unless otherwise noted, they behave similarly to the corresponding
+ UNIX commands. All commands begin with cmd_.
+*** cmd_ External Commands
+**** cmd_rm args
+
+ Removes the specified files.
+
+**** cmd_rmdir args
+
+ Removes the specified directories.
+
+**** cmd_rm_r args
+
+ Removes the specified files or directories.
+
+**** cmd_cp args
+
+ Copies the first files into the last named directory, or renames a
+ file.
+
+**** cmd_cp_r args
+
+ Recursively copies the first files into the last named directory.
+
+**** cmd_mv args
+
+ Moves the first files into the last named directory.
+
+**** cmd_rename old new
+
+ Renames old to new.
+
+**** cmd_mkdir dir
+
+ Makes a new directory with the specified name.
+
+**** cmd_date
+
+ Returns the current date.
+
+**** cmd_chmod mod file
+
+ Changes the file permissions to the given octal mod.
+
+**** cmd_kill pid sig [15]
+
+ Sends a signal to the process. On UNIX systems, the sig
+ argument gives the signal number.
+
+**** cmd_uname_n 
+
+ Returns the current computer's name.
+
+**** cmd_whoami
+
+ Returns the current user name.
+
+**** cmd_uname_a
+
+ Returns information about the current OS.
+
+**** cmd_tempfile fn suff [""]
+
+ Returns a file that begins with fn that does not
+ currently exist.
+
+**** cmd_gzip args
+
+ Runs gzip with the given arguments.
+
+**** cmd_cat_onto f1 f2 
+
+ Appends f1 onto the end of f2.
+
+**** cmd_tar args
+
+ Runs tar with the given arguments.
+
+**** cmd_uuencode f u f2 [""]
+
+ Runs uuencode with the given arguments.
+
+**** cmd_uudecode uu
+
+ Runs uudecode on the given file.
+
+**** cmd_grep args
+
+ Runs grep with the given arguments.
+
+**** cmd_renice pri pid
+
+ Changes the priority of process pid to pri.
+
+**** cmd_wc file
+
+ Runs wc on the specified file.
+
+**** cmd_xterm args
+
+ Opens an Xterm or a Windows command prompt in the current
+ directory.
+
+**** cmd_ln_s from to
+
+ Either symbolically link from to to, or on Windows system,
+ copy it.
+
+**** cmd_pagesize
+
+ Returns the current page size on the system.
+
+**** cmd_freemem
+
+ Returns the amount of free memory, if possible.
+
+**** cmd_edit_file file [""] back [0]
+
+ Edits the file using the default text
+ editor. If back is 1 then return immediately, else, wait until the editor
+ finishes. The return value is the file that was selected (if the original file
+ was blank).
+
+**** cmd_print_file filename
+
+ Prints the file on the default printer.
+
+**** cmd_check_process_exists pid
+
+ Returns 1 if the process exists on the current
+ machine, else returns 0.
+
+ Contains proprietary and confidential information of ANSYS, Inc. and its
+ subsidiaries and affiliates.
+
+*** Geometry Functions
+**** ic_load_tetin filenames tri_tolerance [0] keep_model_params [1] blanks [0]
+
+These functions manipulate the geometric data which is loaded in from the
+ tetin file. Geometric entities are referenced by type and name. For every
+ entity of a given type there is a unique name, and every entity is in a given
+ family which is generally transferred to the mesh that is created from the
+ geometry. The types are:
+- surface: surfaces, which may be either trimmed NURBS surfaces or faceted
+  (from STL or other triangular formats). Surfaces correspond to regions of
+  triangles or quads in the mesh, and nodes in the mesh that fall on a surface
+  have a dimension of 2.
+- curve: either NURBS curves or piecewise linear paths. Curves correspond to
+  bar elements and nodes with dimension 1.
+- point: prescribed points. These correspond to NODE elements in the mesh and
+  nodes with dimension 0.
+- material: material points. These define connected regions, where all volume
+  elements are assigned the family of the material point.
+- loop: a list of curves which defines a closed loop, which is used by the
+  Quad surface mesher.
+- density: a density polygon is a set of points that define a convex hull, in
+  which the size of the tetra elements must be no greater than a specified
+  value.
+
+Load the specified tetin files. The full path names must be given. If the
+tri_tolerance is specified, that becomes the new triangulation tolerance for
+the file, overriding what is specified.
+
+Notes: 
+- The tetin file will be merged with any existing geometry already loaded. See
+  also ic_unload_tetin.
+- On Windows use the "/" character as the path delimiter instead of the
+  backslash "\" character. For example:
+<s
+ic_load_tetin c:/speed_racer/mach5.tin
+
+**** ic_empty_tetin
+
+Creates an empty geometry database.
+
+**** ic_save_tetin file only_visible [0] v4 [0] only_fams [""] only_ents [""] v10 [0] quiet [0] clear_undo [1]
+
+Saves the current geometry data to the given file name. The full path name
+must be specified. If only_visible is 1 then only the visible data will be
+saved. If v4 is 1 then the tetin file will be saved in ANSYS ICEM CFD 4.x
+compatibility mode. 
+
+Note: On Windows use the "/" character as the path delimiter instead of the
+backslash "\" character. For example:
+<
+ic_save_tetin c:/speed_racer/mach5.tin
+
+**** ic_unload_tetin quiet [0]
+
+Unloads the current geometry data.
+
+**** ic_geo_import_mesh domains do_seg no_orfn do_merge [1]
+
+Imports a mesh file and creates a tetin database. Surface elements are turned
+into surfaces (by family), bar elements to curves, node elements to prescribed
+points, and one volume element per family to material points. If domains is ""
+then it will be imported from the currently loaded unstructured mesh. If
+do_seg is 1, then the curves and surfaces will be segmented by connectivity,
+else, they will be kept as one object per family. if no_orfn is 1, then any
+elements that were in the ORFN (0) family will be moved to a new family called
+MOVED_ORFN.
+
+***** update_surface_display obj
+
+Utility to update display of surface and related edges, vertices.
+
+***** ic_geo_export_to_mesh merge fams [""]
+
+Copies the current geometry into the mesh database. This is the opposite of
+ic_geo_import_mesh . Surfaces will be turned into families of triangles,
+etc. If merge is 1, then all surfaces, etc will keep their families, and if 0,
+then the geometric objects will each be mapped to a separate family in the
+mesh.
+
+**** ic_ddn_app type partname partdir extra_cmds batch [1]
+
+Runs either DDN or a DDN GPL application. type:type may be ddn, mif, input, or
+frontal.partname and partdir:The partname and partdir arguments map to the DDN
+pn and db command line arguments.extra_cmds:extra_cmds is a list of lines that
+will go into the input file after the commands to start up the GPL
+application.batchIf batch is 1 (the default) then DDN will be run without
+graphics.
+
+Note: This command is currently broken in MED 4.2 08/16/01ic_list_ddn_parts
+dir updateUpdates the DDDN directory file. dir name of parts directory update
+1 = update the directoryreturnList of DDN parts ic_geo_summary Prints a
+summary of the geometry in the message window.
+
+**** ic_geo_lookup_family_pid fam
+
+Returns the internal numeric id (pid) of the family. This is not a safe
+function to use in general because the pid is not guaranteed to stay the same
+between one invocation of the program and the next, and no scripting commands
+use it as an argument.
+
+**** ic_geo_is_loaded 
+
+Reports if any geometry is loaded.
+
+**** ic_geo_is_modified
+
+Reports if the current geometry has been modified since the last save.
+
+**** ic_geo_valid_name name no_colon
+
+Changes a name into a valid family/entity name.
+
+**** ic_geo_set_modified on
+Sets the modified flag for the current geometry. This should not be used for
+most operations since they set this flag themselves.
+
+**** ic_geo_check_family name
+Checks whether a family exists.
+
+**** ic_geo_check_part name
+Checks whether a part exists.
+
+**** ic_geo_new_family name do_update [1] 
+Creates a new family if it is not already there. Returns 1 if a new family was
+created, or 0 if it already existed. 
+
+Note: The newly created family will not appear in the interactive family list
+unless you issue the update_family_display command interactively.
+
+**** ic_geo_new_name type prefix
+Creates a new, unused name for an entity in a family.
+
+**** ic_geo_get_unused_part prefix no_first_num [0]
+Creates a new unused part or family name.
+
+**** ic_geo_delete_family names
+Deletes a family, or a list of families.
+
+**** ic_geo_params_blank_done type reset [0]
+Blanks those entities that have some meshing parameters already defined. If
+reset == 1, then the entities blanked entities are unblanked.
+
+**** ic_geo_match_name type pat
+Returns the names of the objects that match a given pattern.
+
+**** ic_geo_update_visibility type vis_fams visible
+Changes the visibility so that only objects with the given families and type
+are visible or not, depending on the visible option. If vis_fams is *skip*
+then they are retained and the type is checked. If a family is not listed in
+the family list then it is ignored.
+
+**** ic_geo_get_visibility type name
+Returns whether an object is visible or not.
+
+**** ic_geo_set_visible_override type name val
+Sets or unsets the visible_override
+flag. If this flag is set for an object then it is always visible no matter
+what types and families are enabled. This is needed for geometry subsets.
+
+**** ic_geo_temporary_visible type objects vis force [0]
+Temporarily blanks or unblanks an object. This will not go away when the user
+changes anything larger scale. If objects is set to all then all will be
+blanked or unblanked.
+
+**** ic_geo_set_visible_override_families_and_types fams types
+This is a helper function that sets the visible_override flag for all objects
+in some families and types, and clears it for all others. Note that after
+calling this function all the visible flags on the non-override families will
+be off.
+
+**** ic_redraw_geometry type name
+This redraws the geometry in case something changes.
+
+**** ic_geo_incident type names even_if_dormant [0]
+Returns what objects of higher dimensionality are incident to this
+one. Surfaces are incident to curves and curves are incident to points.
+
+**** ic_geo_surface_get_objects surface type [embedded_points]
+Returns a list of objects associated to a surface.
+
+**** ic_geo_loop_get_objects loop type [surface]
+Returns a list of objects associated to a loop.
+
+**** ic_geo_surface_edges_incident_to_curve surfname curvename
+Returns the edges in a triangulated surface which are incident to a given curve.
+
+**** ic_geo_surface_normals_orient refsurfname [""] outward [1]
+Reorients the normals of surfaces in a model with respect to the given
+reference surface refsurfname in direction given outward [0|1]. If there is no
+material point, outward means reverse reference surface before reorienting
+with respect to it.
+
+**** ic_geo_get_side_surfaces tol how list [""]
+Returns a list of surfaces whose normal of magnitude tol does not intersect another surface.
+
+**** ic_geo_boundary typenames [""] outer [0] even_if_dormant [0] embedded [0]
+Returns the objects of lower dimensionality which are the boundary of the
+one specified. Points are the boundary of curves and curves are the boundary
+of surfaces and loops. The list returned has a sublist for each element in
+names such that {{c00 c01} {c10 c11} ...}, unless names is one element, in
+which case the returned list goes as: "c00 c01".. names may be one name, or a
+list of names. outer may be 0 or 1, indicating what kind of
+boundaries. even_if_dormant may be 0 or 1, indicating which additional
+boundaries. embedded may be 0 or 1, indicating which additional boundaries.
+
+**** ic_geo_object_visible type names visible
+Changes the visibility of a specific object or objects. The visible argument is 0 or 1.
+
+**** ic_geo_configure_objects type simp shade st spsh sq names wide dnodes count nnum tnum norms thickness lshow lfull lst lsq comp [0] grey_scale [0] transparent [0] count_quad [0] dormant [0]
+Configures the attributes of all the visible objects of a given type. The
+arguments are: simp : the level of simplification. 0 shows the full detail of
+the object, and higher values simplify them more: 5 is very simple. In the
+case of faceted geometry, this value is 1/20 of the angle that is used to
+extract internal curvesshade : how to draw the objects: one of wire, solid,
+solid/wire, or hidden.st : if 1 show sizes appropriate for Tetra.sp : if 1
+show sizes appropriate for Prism.sh : if 1 show sizes appropriate for
+Hexa.sq : if 1 show sizes appropriate for Quad.names : if 1 show the names of
+the objects.wide : draw wide lines. This value plus 1 is the line
+thickness.dnodes : if 1 display the nodes of the object.count : if 1 show
+curves in different colors: green: no surfaces are adjacent to this
+curveyellow: just one surface is adjacent to this curvered: two surfaces are
+adjacent to this curveblue: more than two surfaces are adjacent to this
+curvennum : draw node numbers (internal to the surface or curve, useful for
+debugging)tnum : draw triangle or segment numbers (internal to the surface or
+curve, useful for debugging)tnum : draw normals of non-mesh surfacescomp :
+show composite curvesic_geo_configure_one_attribute type what valConfigure one
+attribute of a whole type.
+
+**** ic_geo_configure_one_object type name what val [-]
+Configure the attributes of one object.
+
+**** ic_geo_list_families only_material [0] non_empty [0]
+Lists the current families used by geometry objects. If only_material is 1
+then limit the listing to families used by materials. If non_empty is 1 then
+list only families which are non empty.
+
+**** ic_geo_list_parts prefix [""] non_empty [0]
+Lists the current parts.
+
+**** ic_geo_check_part name
+Checks if a part exists.
+
+**** ic_geo_list_families_in_part part
+Lists the current families in a part.
+
+**** ic_geo_list_families_with_group gname
+Lists the families in a group.
+
+**** ic_geo_list_parts_with_group gname
+Lists the parts that have some family in a group.
+
+**** ic_geo_family_is_empty fam
+Returns whether or not the family is empty of entities.
+
+**** ic_geo_family_is_empty_except_dormant fam
+Returns whether or not the family contains only dormant entities.
+
+**** ic_geo_non_empty_families 
+Lists all the non-empty families. 
+Note: This does not check whether there are directives.
+
+**** ic_geo_non_empty_families_except_dormant
+Lists all the families containing only dormant entities. 
+Note: This does not check whether there are directives.
+
+**** ic_geo_num_objects type
+Returns the number of objects of the given type.
+
+**** ic_geo_num_visible_objects type any [0]
+Returns the number of visible objects of the given type. If any is 1, specify
+whether that number is more than 0ic_geo_num_segments type nameReturns the
+number of triangles or bars, and nodes in this object.
+
+**** ic_geo_set_family type newfam how objs rename [1]
+Changes the geometry with the given type and name to family newfam. The first
+argument tells the type of geometry objects: surface, curve, material, point,
+density, or loop. The second argument is the new family name to be set. The
+third argument tells how to select the objects and the fourth is the list of
+object specifiers. how can be one of the following: names: a list of the names
+of the objectsnumbers: a list of the internal numbers (not for general
+consumption)patterns: a list of glob-patterns that match the names of the
+objectsfamilies: a list of the families to selectall: all objects of that type
+(the objects list is ignored)visible: all visible objects of that type (the
+objects list is ignored)rename: if 1, change the name of the object to match
+the new family, if appropriate. Note that if this function is called as part
+of a larger script, the renaming might break things if other parts of the code
+think they know the names of the objects they are dealing with and those names
+change beneath them.
+
+**** ic_geo_set_part type names newpart rename_part [1]
+Moves geometry from one part to a new one. This has to create the new part
+name and copy the boundary conditions if necessary so that the other groups in
+the family are not disturbed.
+
+**** ic_geo_set_name type name newname make_new [0] warn [1]
+Change the geometry with the given type and name to name newname. If make_new
+is 1 then an unused name that starts with newname is used and this value is
+returned from the function. If possible newname is used without
+modification. If make_new is 0 then any objects of that same type and name
+that already exist will be deleted first.
+
+**** ic_geo_rename_family fam newfam rename_ents [1]
+Rename the family. All objects in fam will now be in nfam. If rename_ents is
+set, family entities will be renamed.
+
+**** ic_geo_replace_entity type e1name e2name
+For two geometry entities of type, the first, of name e1name, will be replaced
+by the second, of name e2name, as well as being put into the family of the
+first entity and having the meshing parameters copied from the first to the
+second. The name of the first entity is appended with _OLD and put into the
+family ORFN.
+
+**** ic_geo_get_ref_size
+Returns the reference mesh size. This is used to scale all meshing parameter values for display to the user.
+
+**** ic_set_meshing_params type num args
+Set or get the meshing parameters associated with the model or the geometry. The type and num arguments define
+what the parameters are being defined for. The remaining arguments are
+name/value pairs, so that the function call might look
+likeic_set_meshing_params surface 2 emax 10 erat 13The num argument can also
+be a name. Any or all of the meshing parameters can be specified, and the ones
+not given are not modified. Note that all the sizes are in absolute units, not
+factors of the reference size. This is different from what you see in the
+GUI. The type can be one of the following: global: set or get the global
+parameters like natural size, etc. The num argument is ignored. The parameters
+that are accepted are: gref: the reference size for the modelgmax: the maximum
+size of any element in the meshgnat: the natural size valuegnatref: the
+natural size refinement factorgedgec: the edge criteriongcgap: the number of
+cells allowed in a gapgttol: the triangularization tolerancegfast: if the
+value is 1 then set fast transitionigwall: if the value is 1 then ignore wall
+thicknessgrat: the growth ratio valuecurve: set or get the parameters on curve
+num The parameters that are accepted are: emax: the maximum element sizeehgt:
+the maximum heighterat: the size expansion ratioewid: the number of layers of
+tetrahedra of the same size that should surround a surfacenlay: the number of
+quad offset layersemin: the minimum sizeedev: the deviation valuesurface: set
+or get the parameters on surface num The parameters that are accepted are:
+emax: the maximum element sizeehgt: the maximum heighterat: the size expansion
+ratiohrat: the height expansion ratioewid: the number of layers of tetrahedra
+of the same size that should surround a surfacenlay: the number of prism
+layersemin: the minimum sizeedev: the deviation valuepoint: set or get the
+parameters on prescribed point num The parameters that are accepted are: ehgt:
+the maximum heighterat: the size expansion ratiohrat: the height expansion
+ratiodensity: set or get the parameters on density volume num The parameters
+that are accepted are: emax: the maximum element sizeloop: set or get the
+parameters on loop num The parameters that are accepted are: etyp: the element
+typecurve_fam, surface_fam, point_fam: set or get the parameters on all
+objects of the family num (in this case num is not a number but a family
+name). The accepted parameters are the same as the ones listed for individual
+objects.The return value of this function is a list of names and values in the
+same format as the arguments, which are the values after the
+modification. Therefore to get the current values you can use
+**** ic_set_meshing_params type num with no other arguments. 
+Note: If you give a family instead of a number then you will get the parameters only for one of the objects in that family.
+
+**** ic_get_mesh_growth_ratio 
+Returns mesh growth ratio.
+
+**** ic_get_meshing_params type num
+Returns the meshing parameters. This has the advantage over ic_set_meshing_params that it is not recorded in the replay file.
+
+**** ic_geo_scale_meshing_params types factor
+Scales the meshing parameters on geometric entities of types by a factor. If types is all then rescales entities of types "surface curve point material density loop".
+
+**** ic_geo_set_curve_bunching curves args
+Sets curve bunching.
+
+**** ic_geo_get_curve_bunching name
+Gets curve bunching.
+
+**** ic_geo_create_surface_segment name how args
+Creates new surfaces by segmenting
+an existing one. The name argument is the name of the existing surface. The
+how argument describes how to do the segmentation: angle: split the surface
+where the angle exceeds the given value (see below)curve: split the surface at
+the named curves (see below)plane: split the surface at the given plane (see
+below)connect: split the surface by connectivityThe remaining optional
+arguments are: angle: the angle to use for splittingmintri: the smallest
+number of triangles to allow in a surfacecurves: a list of curve names to use
+for splittingplane_p: the point to define the plane (in the current
+LCS)plane_n: the normal to define the planekeep_old: if 1 then keep the old
+surface after segmentation. The default is 0The return value is a list of
+numbers which are the newly created surfaces.
+
+**** ic_geo_create_curve_segment name how args
+Creates new curves by segmenting an
+existing one. The name argument is the name of the existing curve. The how
+argument describes how to do the segmentation: angle: split the curve where
+the angle exceeds the given value (see below)plane: split the curve at the
+given plane (see below)connect: split the curve by connectivityThe remaining
+optional arguments are: angle: the angle to use for splittingminedge: the
+smallest number of edges to allow in a curvepoint: point for splittingplane_p:
+the point to define the planeplane_n: the normal to define the planekeep_old:
+if 1 then keep the old curve after segmentation. The default is 0The return
+value is a list of numbers which are the newly created curves.
+
+**** ic_geo_split_curve curve points curve name of the curvepoints list of points
+returnnames of curve segments 
+Note:   This splits the curve in the specified
+order of the pointsic_geo_split_curve_at_point curve point tol [0]Splits a
+curve at a point. curvename of the curvepointmay be a prescribed point name or
+{xyz} coordinatestol(optional) on curve tolerancereturnnames of curve segments
+(usually 2) Notes: If the trim operation does not segment the curve (e.g. trim
+at curve endpoint), the result string will be empty.If the function returns
+with the error status set, the result string will contain an error message.For
+example usage, refer to ic_geo_split_curve_at_point.tcl in the ANSYS
+installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_create_loop name fam how curves all_separate surfs fams [""] pts [""]
+crs [""]
+Creates a loop with the given name and family using the specified
+curves. If how is names then curves is a list of the names of the curves to
+use, and if it is families then it is a list of family names. If all_separate
+is 1 then all the curves are considered individually and if it is 0 then they
+are all taken together to create the loop. Surfaces are associated to the loop
+if a list surfs of names of surfaces is given. Optionally the loops can be set
+to the families in the list fams in order, in the case of all_separate
+is 1. Points can be added to a loop if a list points of names of points is
+given.
+
+**** ic_geo_modify_loop name curves surfs [""] pts [""] crs [""]
+Modify 1 loop with
+the given name using the specified curves, points and surfaces. A list of
+names of curves must be given. Surfaces are associated to the loop if a list
+surfs of names of surfaces is given. Points/corners can be added to a loop if
+a list points of names of points/corners is given.
+
+**** ic_geo_pick_location args
+Selects a geometric entity on the screen. Arguments
+are: line {{x y z} {x y z}}: the line in model spacetype type: one of: entity,
+surface, curve, point, material, loop, or densityThe return value is a list
+that contains the type, name, and location on the object.
+
+**** ic_geo_get_object_type type names
+Determines whether an object is type param (a
+trimmed NURBS curve or surface) or mesh (a faceted surface or piecewise linear
+curve). If both types are present in the list of names mixed is returned.
+
+**** ic_geo_trim_surface surf curves build_topo [1]
+Trims the surface by the
+curves. This creates a new surface with the name of the old surface followed
+by .cut.$n.
+
+**** ic_geo_intersect_surfaces fam surfs bsp_flag [""] multi_flag [""]
+Intersects the surfaces and creates new intersection curves in the given
+family. familyfamily containing surfacesurfslist of surfacesbsp_flag ==
+"use_bsp" - create curves as b-splinemulti_flag== "multi_crv" - create
+multiple curvesreturnnames of created curvesNotes: When multi_flag is set to
+“multi_crv”, the function will produce 1 curve for each connected component of
+the intersection. When multi_flag is set to "", the function will produce 1
+unstructured curve.Setting the bsp_flag to "use_bsp" implies setting the
+multi_flagFor example usage, refer to ic_geo_intersect_surfaces.tcl in the
+ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_intersect_surfs_by_groups groups fam [""] bsp_flag [""] multi_flag [""]
+Intersects surface groups.groups can be a list of two forms: {srf1 srf2
+srf3 ...}{{srf1 srf2 srf3 ...} {srf4 srf5 srf6 ...} {srf7 srf8 srf9 ...}
+...}In the first form, every surface is intersected with each other, but
+curves created from each surface pair intersection will be separate. In the
+second form, each set is intersected with every other set. Surfaces within
+each set will not be intersected with each other. Separate curves are still
+generated from each surface pair intersection.
+
+**** ic_geo_create_unstruct_curve_from_points name fam pts
+Creates a piecewise linear curve from the points. This curve is given the specified name and
+family. pts is a list of triples of floating point numbers or list of
+prescribed point names and they are connected in order. The points are in the
+current local coordinate system.
+
+**** ic_geo_create_unstruct_surface_from_points name fam pts
+Creates a surface from
+4 points, with the given name and family. pts is a list of 4 triples of
+floating point numbers or list prescribed point names and 2 triangles are
+created to make a rectangular surface. The points are in the current local
+coordinate system.
+
+**** ic_geo_create_empty_unstruct_surface name fam
+Creates an empty surface, with the given name and family.
+
+**** ic_geo_create_empty_unstruct_curve name fam
+Creates an empty curve, with the given name and family.
+
+**** ic_geo_create_curve_ends names
+Creates points at the ends of the named curve. namesnames of curvereturnnames of created points
+
+Note: This function creates new points at curve endpoints as needed. See also 
+ic_geo_mod_crv_set_end.
+
+**** ic_geo_mod_crv_set_end crv pnt crvend tol [-1]
+Sets the curve end.crvname of curvepntname of prescribed pointcrvendcurve end indicatortolmerge
+tolerancereturnname of curve vertexNotes: The curve end parameter, crv1end,
+takes the values:start point 0 end point 1If the curve end is already
+associated, the function will take no action. The name of the curve end will
+be returned in any case.If the merge tolerance is set negative, the tolerance
+will default to the triangulation tolerance.If the function returns with the
+error status set, the result string will contain an error message.For example
+usage, refer to ic_geo_mod_crv_set_end.tcl in the ANSYS installation directory
+under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_crv_get_end crv crvend
+Returns the curve end.crvname of curvecrvendcurve
+end indicatorreturnname of curve vertexNotes: The curve end parameter,
+crv1end, takes the values:
+start point 0end point 1If the curve end is not already associated, the function will return an error which needs to be
+caught.
+
+**** ic_geo_create_points_curveinter curves tol fam name [""]
+Creates points at the intersection of curves. curves is a list of curves to intersect.
+
+**** ic_geo_create_point_location fam pt in_lcs [1]
+This function has been replaced by ic_geo_cre_pntic_geo_create_material_location fam ptThis function has been
+replaced by ic_geo_cre_matic_geo_create_density name size pts width [0.0]
+ratio [0.0] strfac [1.0] strvec [""]Creates a density polygon from a set of
+points. It is given the specified name and tetra size. Stretch factor with
+direction may be specified optionally. namename of polygonsizetetra size (must
+be > 0)ptslist of points (must have 4 or more)widthsize of constant spacing
+layerratioexpansion ratestrfacstretch factor strvecstretch directionNote:  
+Points may be passed either as 3-tuples or as names of prescribed points.
+
+**** ic_geo_extract_points names angle
+Extracts points from curves based on the
+angle between adjacent segments in degrees.
+
+**** ic_geo_extract_curves names bound angle minedge
+Extracts curves from mesh
+surfaces. If bound is 1 then only the boundary of the surface is extracted. If
+it is 0 then the angle is used to determine feature lines. The minedge
+argument determines what the smallest curve that will be extracted is.
+
+**** ic_geo_create_surface_edges names
+Creates curves based on the edges of a
+surface.
+
+**** ic_geo_get_srf_edges srf
+Returns any curves associated as edges to a surface.
+
+**** ic_geo_stats type name
+Returns some statistics about the object. This is a
+readable string that says what the type is, how many triangles, nodes, etc.
+
+**** ic_geo_get_point_location name
+Given the name of a point, returns its location.
+
+**** ic_geo_get_material_location name
+Given the name of a material point, returns
+its location.
+
+**** ic_set_point_location args
+Sets the location of a point or points. The names
+and locations must come in pairs.
+
+**** ic_set_material_location args
+Sets the location of one or more material
+points. The names and locations must come in pairs.
+
+**** ic_delete_material names
+
+Deletes a material.
+
+**** ic_geo_check_objects_exist type args
+
+This function checks to make sure the
+objects exist - it returns the list of names that were found. If no objects
+with the given type and names were found it returns an empty list.
+
+**** ic_geo_get_objects types fams [""] even_if_dormant [0]
+
+This function returns
+all the objects of the given type and family. If the family doesn't exist it
+returns an empty list, and if it is "" then it returns all objects of all
+families.
+
+**** ic_geo_count_in_family types fams
+
+Returns the number of objects of the given
+type in the given family.
+
+**** ic_geo_objects_in_family types fams
+
+Returns a list of objects in the given
+family name.
+
+**** ic_geo_objects_in_parts types parts
+
+Returns a list of objects (type/name pairs)
+in the given parts.
+
+**** ic_geo_get_internal_object type name
+
+Returns the internal object associated
+with a name. This is a bit of a back door.
+
+**** ic_geo_get_name_of_internal_object obj
+
+Returns the name of an internal
+object. This is a bit of a back door.
+
+**** ic_geo_get_text_point type name
+
+Returns the text point list for an object,
+specified by type and name. The list is: "{xloc yloc zloc} {xdir ydir
+zdir}"ic_geo_get_centroid type nameReturns the centroid for an object,
+specified by type and name. The return is: "{xloc yloc zloc}". This function
+only works for curves thus far.
+
+**** ic_geo_num_segments type name
+
+Returns the number of segments or triangles in
+the object. This returns 2 numbers - the number of segments and the number of
+nodes.
+
+**** ic_geo_num_nodes type name
+
+Returns number of nodes in the object.
+
+**** ic_geo_get_node type name num
+
+Returns a node in a mesh curve, surface or
+density polygon.
+
+**** ic_geo_drag_nodes type name ptnums startpts startmouse spos svec how
+
+Allows you
+to interactively drag nodes in surfaces and curves.
+
+**** ic_geo_drag_point name startpt startmouse spos svec
+
+Allows you to interactively
+drag prescribed points.
+
+**** ic_geo_drag_material name startpt startmouse spos svec
+
+Allows you to
+interactively drag material points.
+
+**** ic_geo_drag_body name startpt startmouse spos svec
+
+Allows you to interactively
+drag body points.
+
+**** ic_geo_project_point type names pt dir [0 0 0] tan_ext [0]
+
+Project a point to a
+set of objects. dir is the vector along which to project, or 0 0 0 if the
+nearest point is desired. dir is used only in the case of surfaces. typepoint,
+curve, surface nameslist of entity namesptpoint -- either entity name or
+3-tuple dirprojection vector, {0, 0, 0} for nearest pointtan_ext project to
+tangential extension (curves only)ic_geo_project_coords type names ptloc dir
+[0 0 0] tan_ext [0]Project coordinates to a set of objects. dir is the vector
+along which to project, or 0 0 0 if the nearest point is desired. dir is used
+only in the case of surfaces.
+
+**** ic_geo_nearest_object type pt dir [0 0 0] tol [0]
+
+Projects a point to a set of
+objects, and return the name of the best one and the location. dir is the
+vector along which to project, or 0 0 0 if the nearest point is desired. pt
+may either be an XYZ location or the name of a prescribed point. The tol
+argument is used for intersecting a line with curves. Note:  Curve projection
+is not yet implemented.
+
+**** ic_geo_project_curve_to_surface crvs surfs name fam [""] new_name [0] bld_topo [0]
+
+Projects one or more curves to one or more surfaces.crvslist of curve
+namessurfslist of surface namesnamebase name of created curve famfamily of
+created curvesnew_namedo not reuse existing namesbld_topotrim surfaces by
+projected curvesreturnname(s) of created curve(s)ic_geo_create_surface_curves
+crv1 crv2 nameCreates a faceted surface from crv1 and crv2. If the curves are
+not connected, the new surface will connect straight across the gaps. name is
+the name of the new surface.
+
+**** ic_geo_create_surface_curtain crvs surfs name fam bld_topo [0] quiet [0]
+
+Creates a curtain surface between one or more curves and a
+surface. crvslist of defining curvessurfssurface(s) to project tonamebase name
+of created surfacesfamfamily of created surfacesbld_toporun the topology
+builderquietsuppress diagnostic messagesic_geo_set_node type name num ptMoves
+a node on an object.
+
+**** ic_geo_get_family type name
+
+Returns the family for an object.
+
+**** ic_geo_get_part type name
+
+Returns the part for an object (just the family with
+stuff after the first : removed)ic_build_topo argsBuilds the topology
+information from the geometry data. Arguments are: tolerance: the gap
+tolerance-angle angle: the angle for extraction-filter_points: extract the cad
+points-filter_curves: extract the cad curves-delete_degenerate: delete
+degenerate surfaces-save_old: don't delete existing entities.-quiet: suppress
+diagnostic messages-no_reg_surf: do not trim/regularize surfaces-no_concat: do
+join edge curves-create_interior: create interior curves on mesh
+surfacesfamily_name: name(s) of family(ies) to operate on.
+
+**** ic_geo_default_topo_tolerance_old
+
+Get a good tolerance for the current
+geometry.
+
+**** ic_delete_geometry type how objects [""] report_err [1] even_if_dormant [0] 
+
+Deletes geometry objects. The first argument tells what kind of objects to
+delete: surface, curve, material, point, density, or loop. The second argument
+tells how to select the objects and the third is the list of object
+specifiers. how can be one of the following: names: a list of the names of the
+objectsnumbers: a list of the numbers of the objectspatterns: a list of
+glob-patterns that match the names of the objectsfamilies: a list of the
+families to selectall: all objects of that type (the objects list is
+ignored)visible: all visible objects of that type (the objects list is ignored
+and can be left out)blanked: all blanked objects of that type (the objects
+list is ignored and can be left out)objects: the internal handles for the
+objectsreport_err: optional argument - if 0 then do not report errors if
+objects don't existic_geo_pnt_mrg_inc_crv how objectsDeletes a point and joins
+incident curves.how - defines how points are selected. See
+**** ic_delete_geometry.objects - the internal handles for the objectsic_facetize_geometry type name args
+
+Makes a new geometric entity that is
+the faceted or piecewise linear equivalent of the old one. Optional arguments
+are: noisy on : if 1 print status informationreplace on : if 1 replace the old
+object, otherwise make a new one.
+
+**** ic_move_geometry type args
+
+Moves an existing geometry entity. The type argument
+gives the type: point, curve, surface, material, density, loop, or all. The
+other arguments are: names: a list of the names of the objectstype_names: a
+list of pairs with the types and names of the objectsnumbers: a list of the
+numbers of the objectspatterns: a list of glob-patterns that match the names
+of the objects (* = all objects)families: a list of the families to
+selectobjects: the internal handles for the objectscent: a list of X Y Z
+giving the center for rotation, scaling, and mirroring, which could be
+"centroid"translate: the X Y Z values for translating the entityrotate: the
+number of degrees to rotate the object about the axis given by
+rotate_axisrotate_axis: the vector giving the axis to rotate aboutscale: a
+scale value, or 3 values giving the factor to scale in X Y and Zmirror: the
+axis about which to mirrorThe translation vector, center of rotation, and
+rotate axis should be specified in the current local Cartesian coordinate
+system.
+
+**** ic_geo_duplicate type name newname [""] facetize [0]
+
+Duplicates an existing
+geometrical entity. If the newname is given then that is used, otherwise a
+name is generated automatically. If facetize is specified then bspline
+surfaces are turned into facets.
+
+**** ic_geo_fixup mesh [0]
+
+Fix problems in surfaces and curves like duplicate
+triangles, unused nodes, etc.
+
+**** ic_geo_min_edge_length args
+
+Returns the minimum edge length on the a list of
+surfaces or curves. Arguments are: surface val: list of surface namescurve
+val: list of curve namesExample usage: set surfaces "surf1 surf2 surf3" set
+curves "curv1" ic_geo_min_edge_length surface $surfaces curve
+$curvesic_geo_coarsen argsSimplify surfaces or curves by coarsening them. The
+arguments are: tol val: the tolerance to use for coarsening, which determines
+how far from the original surface the new nodes can move (default 0)surfaces
+namelist: the surfaces to coarsen.curves namelist: the curves that define
+prescribed nodes that should not be coarsened (default none)points namelist:
+the points that should not be coarsened away (default none)auto_curves on :
+UNIMPLEMENTED - automatically determine what curves to preserveauto_points
+on : UNIMPLEMENTED - automatically determine what points to preserven_iter
+num: how many iterations of coarsening to try (default 16)noisy on : print
+status informationic_geo_gap_repair argsPerform geometry repair. Arguments
+are: toler val: the geometry tolerancetoler_max val: the maximum gap
+tolerancepartial val: allow partial repairing if set, default is 0yellow val:
+yellow curves only if set, default is 1do val: Close gaps if value is 1, match
+surfaces if 2, close one hole if 3, and close multiple holes if 4.build_topo
+val : build topology if set, default is 1 (for do = 1 only)new_family name :
+the family name for new geometrynew_name name: the entity name for new
+geometryquiet val : Quiet operation if set. Default is 0. For do = 1 it
+selects re-intersection, if 1, fill, if 2, blend, if 3, and Y-closure if 4.db
+val: Do some checking and printing if > 0, print less messages if < 0. Default
+is 0.curves names : the names of the curves to doReturn value is 0 if there
+was an error and 1 if it was OK. ic_geo_midsurface argsCreates
+midsurfaces. Arguments are: max_dist val: the maximum distance between surface
+pairsfamily val: the family name for midsurfacessurfaces names: the names of
+the surfaces to compresssurfaces2 names: the names of the second set of
+surfaces to compresssave_old val : save compressed surfaces if setpartial val:
+create partial midsurface if setsimilar val: do similar pairs only if
+setalternate val: do alternate order of surfaces if setprefer_connected val:
+prefer connected surface pairs if setprecision val: precision value for
+midsurface if setoffset val: just offset side 1 half distance to side
+2tolerance val : the midsurface tolerance if setask val : quiet operation, if
+not set, ask yes/no if 1, present the candidates and ask yes/no if 2, just
+count and return number of candidates if 3Return value is 0 if there was an
+error and 1 if it was OK.
+
+**** ic_geo_lookup types how spec [""]
+
+Looks up geometry objects based on certain
+criteria. type may be one of the geometry type names or all. This always
+returns a list of type/name pairs. Useful values for how and args are: names
+names: return objects with the given namesfamilies names: return objects with
+the given familiesall: return all objects of the specified typespatterns pats:
+looks up objects based on glob-style name matching (e.g., FAM*)visible: all
+visible objectsblanked: all non-visible objectsic_geo_get_entity_types
+entnamesFor the given list of entities, return a *flat* list of "type entname"
+pairs, i.e. {type_1 ent_1 type_2 ent_2 ... type_n
+ent_n}ic_geo_memory_usedSpecifies how much memory the geometry data is using
+currently.
+
+**** ic_geo_project_mode which
+
+Sets the projection mode.
+
+**** ic_csystem_get_current
+
+Specifies the current coordinate system.
+
+**** ic_csystem_set_current what
+
+Sets the current coordinate system.
+
+**** ic_csystem_list 
+
+Lists the existing coordinate systems.
+
+**** ic_csystem_get name
+
+Returns information on the named coordinate system. This
+returns a list of 4 items: the type of the coordinate system, the origin, and
+the 3 vectors that define coordinate system. The type can be one of:
+cartesiancylindricalsphericaltoroidalic_csystem_delete nameDeletes the named
+coordinate system.
+
+**** ic_csystem_create name type center axis0 axis1 axis2
+
+Creates a new coordinate
+system with the given parameters. name: the name of the system to create.type:
+the type which can be one of cartesian, cylindrical, spherical, or toroidal
+(as yet unsupported).center: the center point in 3-D coordinates.axis0: the
+first axis vector.axis1: the second axis vector.axis2: the third axis vector.
+
+**** ic_coords_into_global pt system [""]
+
+Translates coordinates from the current or
+given system into the global system.
+
+**** ic_coords_dir_into_global pt system [""]
+
+Translates a vector from the current
+or given system into the global system.
+
+**** ic_coords_into_local pt system [""]
+
+Translates coordinates from the global
+system into the current or given local system.
+
+**** ic_csystem_display name on
+
+Displays the specified coordinate system. If name is
+all and on is 0 then erase all coordinate systems.
+
+**** ic_geo_untrim_surface surf
+
+Untrims a surface.
+
+**** ic_geo_get_thincuts
+
+Returns the thincut data.
+
+**** ic_geo_set_thincuts data
+
+Sets the thincut data.
+
+**** ic_geo_get_periodic_data
+
+Returns the periodic data.
+
+**** ic_geo_set_periodic_data data
+
+Sets the periodic data.
+
+**** ic_geo_get_family_param fam name
+
+Returns the family parameters.
+
+**** ic_geo_set_family_params fam args
+
+Sets the family parameters. If there is no
+such family, nothing will be done.
+
+**** ic_geo_reset_family_params fams params
+
+Reset family parameters on families fams
+for parameters params.
+
+**** ic_geo_delete_unattached fams [""] quiet [0] only_if_dormant [0]
+
+Deletes
+unattached geometry.
+
+**** ic_geo_remove_feature curves
+
+Removes features.
+
+**** ic_geo_merge_curves curves
+
+Merges curves.
+
+**** ic_geo_modify_curve_reappr curves tol ask [1]
+
+Reapproximates curves. curveslist
+of curve namestolre-approximation toleranceaskprompt to accept result
+returnlist of new curve namesNote:   In interactive mode, if the ask parameter
+is 1 (default), you will be prompted whether the result is okay for each
+curve. Parameter is ignored in batch mode.
+
+**** ic_geo_modify_surface_reappr surfaces tol ask [1] each [0] curves
+[""]
+
+Reapproximates surfaces. surfaceslist of surface namestolre-approximation
+toleranceaskprompt to accept result if seteachre-approximate each surface
+separately if set curveslist of curve namesreturnlist of new surface
+namesNote:   In interactive mode, if the ask parameter is 1 (default), you
+will be prompted whether the result is okay for each surface. Parameter is
+ignored in batch mode.
+
+**** ic_geo_reset_data_structures 
+
+Resets the Tcl data structures after making big
+changes to the proj database.
+
+**** ic_geo_params_update_show_size type size
+
+Modifies the display of the size icons
+for ref, natural, and max size. Can also be used for per-object parameters
+like tetra_size.
+
+**** ic_geo_stlrepair_holes type segs add_nodes int_surf complete_edges [1] dcurves
+[""] toler [""]
+
+Repairs holes using the stlrepair functionality. type indicates
+the entity type by which segments are specified, e.g. surface.
+
+**** ic_geo_stlrepair_edges type segs merge_tol merge_ends [-1]
+
+Repairs edges using
+the stlrepair functionality. type indicates the entity type by which segments
+are specified, e.g. surface.
+
+**** ic_show_geo_selected type names on color [""] force_visible [0]
+
+Displays some
+geometry selected or not.
+
+**** ic_reset_geo_selected
+
+Resets all selection display.
+
+**** ic_get_geo_selected
+
+Returns all current geometry selections.
+
+**** ic_set_geo_selected selected on
+
+Sets all previous geometry selections.
+
+**** ic_select_geometry_option
+
+Returns the previously used selection option.
+
+**** ic_geo_add_segment type name item pts
+
+Adds segments or triangles to a surface
+or curve.
+
+**** ic_geo_delete_segments type name item pts
+
+Deletes segments or triangles from a
+curve or surface.
+
+**** ic_geo_restrict_segments type name item pts
+
+Restrict to segments or triangles
+from a surface or curve.
+
+**** ic_geo_split_segments type name item how pts
+
+Splits some segments in a surface
+or curve.
+
+**** ic_geo_split_edges type name pts
+
+Splits some edges in a surface.
+
+**** ic_geo_split_one_edge type name ed
+
+Splits one edge in a surface.
+
+**** ic_geo_swap_edges type name pts
+
+Swaps some edges in a surface.
+
+**** ic_geo_move_segments type name1 name2 item pts
+
+Moves some segments from one
+surface to another.
+
+**** ic_geo_move_node type name nodes args
+
+Moves a node in a surface or curve. nodes
+is a list of the node numbers. After this, specify either one or more
+positions. If one, then all nodes are moved to that position. If more, then
+the nodes are moved to their corresponding positions.
+
+**** ic_geo_merge_nodes type name nodes
+
+Merges nodes in a surface or curve.
+
+**** ic_geo_merge_nodes_tol type name tol
+
+Merges nodes in a surface or curve by
+tolerance.
+
+**** ic_geo_merge_surfaces to from
+
+Merges multiple surfaces.
+
+**** ic_geo_merge_objects type dest objs
+
+Merges multiple curves, or surfaces.
+
+**** ic_geo_merge_points_tol pts tol
+
+Merges multiple points using a tolerance.
+
+**** ic_geo_finish_edit type name
+
+Cleans up a surface or curve after editing
+operations.
+
+**** ic_geo_delete_if_empty type name
+
+Deletes a surface or curve if it is empty.
+
+**** ic_geo_smallest_segment type name
+
+Returns the smallest triangle in a surface.
+
+**** ic_geo_get_config_param type name param
+
+This is kind of an escape.
+
+**** ic_geo_set_config_param type name param val
+
+This is kind of an escape.
+
+**** ic_geo_set_tag type names tagname on
+
+Sets the given tag on the objects, or
+removes it. If the tagname is pickable this affects the geometry selection
+code. If the type is clear then the tag is removed from all objects and the
+name and on parameters are ignored. If name is an empty string then all the
+objects of that type will be modified.
+
+**** ic_geo_highlight_segments type name add hsmode segs
+
+Highlights some segments of
+an image.
+
+**** ic_geo_bounding_box objlist
+
+Returns the bounding box of a set of
+objects. objlist is a list of type names pairs, e.g. { { curve {C1 C2 C2}
+point {C2 C3}} } It can also be all which will give the bounding box of all
+the geometry.
+
+**** ic_geo_bounding_box2 objlist 
+
+This is the more rigorous version of the boundary
+box calculation.
+
+**** ic_geo_model_bounding_box
+
+This gives the bounding box of all objects in
+projlib.
+
+**** ic_geo_feature_size type name
+
+Returns the feature size of an object.
+
+**** ic_geo_replace_surface_mesh name pts tris
+
+Replaces a surface mesh. pts is a
+list of x y z triples. tris is a list of 3 point numbers. e.g.,
+**** ic_geo_replace_surface_mesh SURF.1 {{0 0 0} {1 1 1} ...} {{0 1 2} ...} 
+**** ic_geo_replace_curve_mesh name pts bars
+
+Replaces a curve mesh. pts is a list of
+x y z triples. bars is a list of 2 point numbers. e.g.,
+**** ic_geo_replace_curve_mesh CRV.1 {{0 0 0} {1 1 1} ...} {{0 1} {2 3} ...} 
+**** ic_geo_vec_diff p1 p2
+
+Computes the displacement vector between two
+points.p1point -- e.g. {1 2 3}p2point -- e.g. {3 4 3}return3-tuple containing
+differenceExample
+# Compute the dot product between two vectors # if [catch {ic_geo_vec_diff {1 2 3} {3 4 3} } crv1] { mess "$crv1\n" red } else { mess "vec diff, $crv1\n" }ic_geo_vec_dot
+v1 v2Computes the dot product between two vectors.v1vector -- e.g. {1 2
+3}v2vector -- e.g. {3 4 3}returndot product Example
+# Compute the dot product between two vectors # if [catch {ic_geo_vec_dot {1 2 3} {3 4 3} } crv1] { mess "$crv1\n" red } else { mess "vec dot, $crv1\n" }ic_geo_vec_mult
+v1 v2Computes the cross product between two vectors.v1vector -- e.g. {1 2
+3}v2vector -- e.g. {3 4 3}returncross productExample
+# Compute the cross product between two vectors # if [catch {ic_geo_vec_mult {2 0 1} {1 3 0} } crv1] { mess "$crv1\n" red } else { mess "vec mult, $crv1\n" }ic_geo_vec_nrm
+vecNormalizes a vector.vecvector -- e.g. {1 2 3} returnnormalized
+vectorExample
+# Normalize a vector # if [catch {ic_geo_vec_nrm {2 2 4} } crv1] { mess "$crv1\n" red } else { mess "vec normalize, $crv1\n" }ic_geo_vec_len
+vecComputes the length of a vector.vecvector -- e.g. {1 2
+3}returnlengthExampleif [catch {ic_geo_vec_len {3 4 0} } len] { mess "$len\n" red } else { mess "vec length should be 5: $len\n" }ic_geo_pnt_dist
+pnt1 pnt2Computes the distance between two points.pnt1point -- e.g. {1 2 3} or
+point namepnt2point -- e.g. {1 2 3} or point namereturndistance between
+pointsExample# if [catch {ic_geo_pnt_dist {2 2 4} {3 2 1}} len] { mess "Error: $len\n" red } else { mess "Distance = $len\n" }ic_geo_vec_smult
+vec scalMultiplies a vector by a scalar.vecvector -- e.g. {1 2 3}scalscalar --
+e.g. 42returnscalar product vectorExample
+# Multiply a vector by a scalar # if [catch {ic_geo_vec_smult {1 2 3} 42 } crv1] { mess "$crv1\n" red } else { mess "vec smult, $crv1\n" }ic_geo_vec_sum
+v1 v2Computes the sum of two vectors.v1vector -- e.g. {1 2 3}v2vector --
+e.g. {3 4 3}returncross product Example
+# Compute the sum of two vectors # if [catch {ic_geo_vec_sum {1 2 3} {4 5 6}} crv1] { mess "$crv1\n" red } else { mess "vec sum, $crv1\n" }ic_geo_crv_length
+crvs t_min [0] t_max [1]Computes the arc length of a curve segment.crvslist of
+one or more curvest_minlower limit of segment (unitizedt_max upper limit of
+segment (unitizedreturnlist of computed arc lengthsNotes: t_min and t _max
+default to 0 and 1 respectively
+For example usage, refer to ic_geo_crv_length.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_rev family name gen base zaxis srtang endang dxn [a] bld_topo [0] 
+
+Creates a revolution surface from a generator curve and axis.familyfamily
+containing surface namename of created surfacegengenerator curve(s) baseaxis
+base pointzaxisaxis direction vectorsrtangstart angle (degrees)endangend angle
+(degrees)dxnc-clockwise, a-anticlockwisebld_topoassociate edge
+curvesreturnname of created surface Notes: The specified surface name may be
+modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.Positions may be
+specified explicitly or using names of prescribed pointsThe dxn flag
+determines whether the curve is swept clockwise or anti-clockwise (counter
+clockwise) about the rev axis.For example usage, refer to ic_geo_cre_srf_rev.tcl 
+in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_crv_iso_crv family name srfs par sel do_split [0] coord [0]
+
+Creates
+isoparametric curve segments on a surface.familyfamily containing
+curvesnamename of created curvessrfslist of surface names list of surface
+namesparsurface parameter 0 <= par <= 1sel== 0 u cons; == 1 v consdo_split== 1
+split the surfacecoord== 0 use restricted coordinates; == 1 use natural
+coordinatesreturnlist of created curves/surfacesNotes: The defining parameter
+is assumed to be unitizedWhen applied to trimmed surfaces The feature may
+produce multiple result curvesRestricted coordinates are taken with respect to
+the active region of the trimmed surface, not the domain of the underlying
+surface.Natural coordinates are taken with respect to the underlying
+surface. This alternative is consistent with the output of
+**** ic_geo_find_nearest_srf_pnt in that while the coordinates are still unitized,
+they run through the full extent of the underlying surface.The specified curve
+name may be modified to resolve name collisionsIf the function returns with
+the error status set, the result string will contain an error message.The
+surface parameter is unitized.The return value is a list containing two
+elements, names of created curves and names of created surfacesFor example
+usage, refer to ic_geo_cre_crv_iso_crv.tcl in the ANSYS installation directory
+under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_pln_3pnts family name p1 p2 p3 rad
+
+Creates a bspline plane from
+3 points.familyfamily containing planenamename of created planep1point data,
+e.g. {1 2 3}p2point data, e.g. {1 2 3} p3point data, e.g. {1 2 3}scalescales
+surface extentsNotes: The specified surface name may be modified to resolve
+name collisions.If the function returns with the error status set, the result
+string will contain an error message.For an annotated example of usage, refer
+to ic_geo_cre_srf_pln_3pnts.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_pln_nrm_pnt family name pnt nrm rad
+
+Creates a bspline plane from
+a point and normal vector.familyfamily containing planenamename of created
+planepntpoint data, e.g. {1 2 3} nrmplane normal, e.g. {1 1 1} radradius of
+created surfaceNotes: The specified surface name may be modified to resolve
+name collisions.If the function returns with the error status set, the result
+string will contain an error message.For an annotated example of usage, refer
+to ic_geo_cre_srf_pln_nrm_pnt.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_pln_nrm_dist family name nrm dist rad
+
+Creates a bspline plane
+from normal vector at a distance from origin.familyfamily containing
+planenamename of created planenrmplane normal, e.g. {1 1 1}distsigned distance
+between origin and planeradradius of created surfaceNotes: The specified
+surface name may be modified to resolve name collisions.If the function
+returns with the error status set, the result string will contain an error
+message.This variant replaces plane definition by coefficients from older
+API's. The plane equation can be written in terms of the input variables
+as:DOT(nrm, X) = LENGTH(nrm)*dist Example
+if [catch {ic_geo_cre_srf_pln_nrm_dist duck dewey \ {1 2 3} {1 0 0} 10 42} pln1] { mess "$pln1\n" red } else { mess "created a plane, $pln1\n" }ic_geo_cre_arc_from_pnts
+family name p1 p2 p3Create a bspline arc from 3 points.familyfamily containing
+curvenamename of created curvep1point data, e.g. {1 2 3} p2point data, e.g. {1
+2 3} p3point data, e.g. {1 2 3}Notes: The specified curve name may be modified
+to resolve name collisions.Positions may be specified explicitly or using
+names of prescribed points.If the function returns with the error status set,
+the result string will contain an error message.For an annotated example of
+usage, refer to ic_geo_cre_arc_from_pnts.tcl in the ANSYS installation
+directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_bsp_crv_n_pnts family name pnts tol [0.0001] deg [3]
+
+Creates a bspline curve from n points.familyfamily containing curvenamename of created
+curvepntspoint datatolapproximation tolerancedegcurve degree = 1 (linear) or 3
+(cubic) Notes: The specified curve name may be modified to resolve name
+collisions.If the function returns with the error status set, the result
+string will contain an error message.Positions may be specified explicitly or
+using names of prescribed points.The approximation tolerance is relative. It
+will be scaled by the pointset chordlength to form an absolute tolerance. It
+has a default value of 0.0001.For example usage, refer to ic_geo_cre_bsp_crv_n_pnts.tcl in the 
+ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_bsp_crv_n_pnts_cons family name pnts fix Pnts tanCons tanIndx tol [0.001]
+Creates a bspline curve from n points with constraints.familyfamily
+containing curvenamename of created curvepntspoint datafixPntsfixed
+pointstanConsspecified tangentstanIndxindices of points in pnts associated to
+tangent vectorstolapproximation toleranceNotes: The specified curve name may
+be modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.Positions may be
+specified explicitly or using names of prescribed pointsPoint array is indexed
+as 0, 1, 2, . . .The approximation tolerance is relative. It will be scaled by
+the pointset chordlength to form an absolute tolerance. It has a default value
+of 0.0001.For example usage, refer to ic_geo_cre_bsp_crv_n_pnts_cons.tcl in
+the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_crv_arc_ctr_rad family name center x_ax normal radius srtang endang
+Creates a bspline arc from center, radius information.familyfamily
+containing curvenamename of created curvecenterarc centerx_axvector aligned
+along angle == 0normalarc normalradiusarc radiussrtangstart angle
+(degrees)endangend angle (degrees)returnname of created curveNotes: The
+specified curve name may be modified to resolve name collisions.If the
+function returns with the error status set, the result string will contain an
+error message.If endang < srtang or (endang - srtang) > 360, the angle will be
+adjusted by adding 360 increments.Positions may be specified explicitly or
+using names of prescribed points.For annotated examples of usage, refer to 
+ic_geo_cre_crv_arc_ctr_rad.tcl and ic_geo_create_surface_from_curves.tcl 
+in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_cyl family name center x_ax z_ax radius srtang endang length
+Create a bspline cylinder from center, radius information.familyfamily
+containing surfacenamename of created surfacebasecylinder base pointx_axvector
+aligned along angle == 0z_axvector aligned along cyl axisradiuscylinder
+radiussrtangstart angle (degrees) endangend angle
+(degrees)lengthlengthreturnname of created surfaceNotes: The specified surface
+name may be modified to resolve name collisions.If the function returns with
+the error status set, the result string will contain an error message.If
+endang < srtang or (endang - srtang) > 360, the angle will be adjusted by
+adding 360 degree increments.Positions may be specified explicitly or using
+names of prescribed points.For an annotated example of usage, refer to
+ic_geo_cre_srf_cyl.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_line family name p1 p2
+
+Create a bspline line from 2
+points.familyfamily containing curvenamename of created curvep1point data,
+e.g. {1 2 3}p2point data, e.g. {1 2 3}returnname of created curveNotes: The
+specified curve name may be modified to resolve name collisionsIf the function
+returns with the error status set, the result string will contain an error
+message.Positions may be specified explicitly or using names of prescribed
+pointsFor an annotated example of usage, refer to ic_geo_cre_line.tcl in the
+ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_pnt family name pnt in_lcs [1]
+
+Creates a prescribed point from
+coordinates.familyfamily containing point namename of created pointpntpoint
+data, e.g. {1 2 3}in_lcs1 if the location should be in the current local
+coordinate system (default) returnname of created point Notes: The specified
+point name may be modified to resolve name collisionsIf the function returns
+with the error status set, the result string will contain an error
+message.Example
+# Create a prescribed point from coordinates if [catch {ic_geo_cre_pnt duck louie {1 2 3} } pnt1] { mess "$pnt1\n" red } else { mess "created a ducky point, $pnt1\n" }ic_geo_cre_mat
+fam name pt in_lcs [1]Create a material point from coordinates.familyfamily
+containing material point namename of created material point pntpoint data,
+e.g. {1 2 3}, or the word outsidein_lcs1 if the location should be in the
+current local coordinate system (default)returnname of created material point
+Notes: The specified point name may be modified to resolve name collisions.If
+the function returns with the error status set, the result string will contain
+an error message.Example
+# Create a material point from coordinates if [catch {ic_geo_cre_mat duck louie {1 2 3} } pnt1] { mess "$pnt1\n" red } else { mess "created a ducky point, $pnt1\n" }ic_geo_get_srf_nrm
+upar vpar srfGet the normal vector of a surface at a parameter.uparsurface u
+parametervparsurface v parametersrflist of surfaces to evaluatereturnlist of
+3-tuple of doublesNotes: If the function returns with the error status set,
+the result string will contain an error message.The return string will be a
+list of 3-tuplesThe input uv coordinates should be unitized.For example usage,
+refer to ic_geo_get_srf_nrm.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_get_srf_pos upar vpar srf
+
+Get a surface position at a
+parameter.uparsurface u parametervparsurface v parameter srflist of surfaces
+to evaluatereturnlist of 3-tuple of doublesNotes: If the function returns with
+the error status set, the result string will contain an error message.The
+return string will be a list of 3-tuplesThe input uv coordinates should be
+unitized.For example usage, refer to ic_geo_get_srf_pos.tcl in the ANSYS
+installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_pnt_on_srf_at_par family name upar vpar srf
+
+Creates a prescribed
+point on a surface at a parameter.familyfamily containing point namename of
+created pointuparsurface u parametervparsurface v parameter srflist of
+surfaces to evaluatereturnnames of created pointsNotes: The specified point
+name may be modified to resolve name collisions.If the function returns with
+the error status set, the result string will contain an error message.The
+input uv coordinates should be unitized.For example usage, refer to
+ic_geo_cre_pnt_on_srf_at_par.tcl in the ANSYS installation directory 
+under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_pnt_on_crv_at_par family name par crv
+
+Creates a prescribed point on a curve at a parameter.familyfamily containing 
+point namename of created pointparcurve parametercrvname of curve to evaluatereturnname of created point
+Notes: The specified point name may be modified to resolve name collisions.If
+the function returns with the error status set, the result string will contain
+an error message.For example usage, refer to ic_geo_cre_pnt_on_crv_at_par.tcl
+in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_crv_concat family name tol crvs
+
+Create a new curve by concatenating
+existing curves.familyfamily containing curve namename of created
+curvetolmerge tolerance crvslist of curves to be joinedreturnname of created
+curveNotes: The specified curve name may be modified to resolve name
+collisions.If the function returns with the error status set, the result
+string will contain an error message.The list crvs contains curve curve
+names.For example usage, refer to ic_geo_cre_crv_concat.tcl in the ANSYS
+installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_create_curve_concat family name tol crvs
+
+Deprecated version of ic_geo_cre_crv_concat. This function has been replaced by
+**** ic_geo_cre_crv_concat.
+
+**** ic_geo_cre_srf_from_contour family name tol crvs
+
+Create a new surface spanning
+a planar contour.familyfamily containing new surfacenamebase name of created
+surfacetolmerge tolerancecrvslist of curves to spanNotes: The specified
+surface name may be modified to resolve name collisions.If the function
+returns with the error status set, the result string will contain an error
+message.The list crvs contains curve curve names.For example usage, refer to
+ic_geo_cre_srf_from_contour.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_create_surface_from_curves family name tol crvs bld_topo [0]
+
+Create a
+new surface spanning two to four curves. familyfamily containing new
+surfacenamename of created surfacetolmerge tolerance crvslist of curves to
+spanbld_topoassociate edge curvesNotes: The specified surface name may be
+modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.The list crvs
+contains curve curve names.For example usage, refer to
+ic_geo_create_surface_from_curves.tcl in the ANSYS installation directory
+under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_create_param_surface family name nu nv ord_u ord_v rational u_knots v_knots control_pts loops
+
+Create a new surface from a u,v set of
+coordinates.familyfamily containing new surface namename of created surface
+nunumber of u coordinates nvnumber of v coordinatesord_uorder of uord_vorder
+of v rationaldimension of polynomial fit above 3u_knotsfor rational=0, list of
+u coordinatesv_knotsfor rational=0, list of v coordinatescontrol_ptspoints the
+surface should go throughloopsloops to trimIf the function returns with the
+error status set, the result string will contain an error message.
+
+**** ic_geo_list_crv_data file format crvsLists the IGES data defining a list of
+curves.out_file output file formatoutput format crvslist of curvesNotes:
+Output formats: igesIGES StyletetinTETIN StyleIf the function returns with the
+error status set, the result string will contain an error message.The list
+crvs contains curve names.
+Example
+# List the IGES data defining a list of curves # if [catch {ic_geo_cre_crv_arc_ctr_rad duck dewey \ {1 2 3} {1 0 0} {1 1 1} 4.2 0 1.047197} crv1] { mess "$crv1\n" red } else { mess "created a ducky arc, $crv1\n" if [catch {ic_geo_cre_crv_arc_ctr_rad duck louie \ {1 2 3} {0 1 0} {1 1 1} 4.2 0 1.047197} crv2] { mess "$crv2\n" red } else { mess "created a ducky arc, $crv2\n" if [catch {ic_geo_list_crv_data out.txt iges \ "$crv1 $crv2"} err] { mess "$err\n" red } }ic_geo_list_srf_data
+file format srfsLists the IGES data defining a list of surfacesout_fileoutput
+file formatoutput format crvslist of surfacesNotes: Output formats: igesIGES
+StyletetinTETIN Style If the function returns with the error status set, the
+result string will contain an error message.The list srfs contains surface
+names.
+
+**** ic_geo_make_conn_regions type entities surf_angle [180] surf_curvature [360]
+
+Makes connected regions of type: surface or curve entities are a list of
+the type, surfaces or curves. If type is surface, surf_angle limits
+connectivity based on curves over the feature angle; default is 180, 0 would
+make each surface separate. If type is surface, surf_curvature limits
+connectivity to surfaces with curvature over value; default is 360, 0 would
+make each surface separate. The return is a separated list based on
+connectivity.
+
+**** ic_geo_get_attached_entities attach_type orig_type entities
+
+Gets all attached
+entities based on attach_type and orig_type to a list of entities. attach_type
+could be boundary or incident. orig_type could be surface curve or
+point. Example: if you want all curves attached to a list of surfaces
+attach_type is boundary, orig_type is surface, entities is the list of
+surfaces.
+
+**** ic_geo_get_entities_by_attach_num type num entities [""]
+
+Gets all entities of a
+type: point or curve; that have defined number of entities attached to it. For
+example a single curve has 1 entity attached. entities is list of type to look
+for. Default is all entities of this type. if num is multiple, it will find
+attachments of 3 or more. If num is double, it will find attachments of 2. If
+num is single, it will find attachments of 1. If num is unattached, it will
+find attachments of 0.
+
+**** ic_geo_get_internal_surface_boundary surf not_single [0]
+
+This command will take
+a given "surf" and return the curves that are internal. In other words, it
+will return all attached curves except those on outer boundary. Optional
+argument not_single will limit the returned curves to only those that are
+attached to more than 1 surface.
+
+**** ic_geo_find_internal_outer_loops surfs not_single [0] all_boundary [0]
+
+This procedure returns a list of outer curves and inner curves attached to a set of
+surfaces, optional argument not_single will limit the list to just curves
+attached to more than 1 surface.
+
+**** ic_geo_find_internal_surfaces loop surrounding_surfsouter_curves [""] exclusion_surfs [""]
+
+This function will find a set of surfaces enclosed by a
+loop of curves.
+
+**** ic_geo_make_conn_buttons loop exclusion_surfs [""]
+
+This function will take a
+curve list (loop), and find all surfaces attached to it excluding any given
+exclusion_surfs.
+
+**** ic_geo_split_surfaces_at_thin_regions srfs tolerance min_res_curve_len
+
+Splits
+boundaries of the given surfaces at thin regions, that is, where a surface
+boundary points is less than tolerance from an other boundary curve. It will
+not, however, split curves which would result in segments of length less than
+min_res_curve_len. Returns a list of all new points, if any.
+
+**** ic_geo_surface_create_smart_nodes srfs tolerance min_res_curve_len
+
+Split
+boundaries of the given surfaces at thin regions, that is, where a surface
+boundary points is less than tolerance from an other boundary curve. It will
+not, however, split curves which would result in segments of length less than
+min_res_curve_len. Returns tcl-error-stat.
+
+**** ic_geo_surface_topological_corners surfs
+
+For each surface in the given list
+surfs returns a list of the four corners of a rectangular topology of that
+surface. The points are ordered around the rectangular either clockwise or
+counter-clockwise. The form of the list returned is: "{surf_name_1
+{pt_name_1_1 pt_name_1_2 pt_name_1_3 pt_name_1_4} {surf_name_2 {pt_name_2_1
+...}}" ic_geo_flanges_notch_critical_points surfsReturns the critical point of
+the notch in a given flange surface.
+
+**** ic_geo_trm_srf_at_par srf par sel
+
+Splits a surface at a parameter.srfsurface
+nameparsurface parameter 0 <= par <= 1sel== 0 u cons; == 1 v consExample
+if [catch {ic_geo_trm_srf_at_par $srf1 0.5 0} err] { mess "$err\n" red }ic_geo_trm_srfs_by_curvature
+srfs angSplits folded surfaces by maximum curvature. srfssurface
+namesangmaximum total curvatureic_surface_curvature surf tol [100] debug
+[0]Calculates curvature of surface. surfsurface namebtolrelative boundary
+tolerance (100 -> 1/100 -> 1%)ic_hull_2d entities tol [0] four [1] type
+[surface] shrink [0] debug [0]Creates 2D hull of surfaces or
+curves. entitiesentity namestolapproximation tolerancefoursplit hull at best
+four corners if settypesurface or curveshrinkrelative shrink tolerance (0
+... 1)ic_surface_from_points points part [""] name [""]Creates a faceted
+surface from points using a 2D Delaunay triangulation. pointspoint
+namesic_geo_surface_extend curve surfaces toler [0] bld_topo [1] perpendicular
+[1] connect [0] concat_crvs [1] db [0]Extends surface edge to
+surface(s). curve"yellow" edge to extendsurfacessurfaces to extend surface
+edge totolergeometry tolerancebld_topoassociate edge curvesperpendicularextend
+normal to curve if 1, create a curtain surface if 0, or do a parametric
+extension if 2connectconnect extension to target surface(s) if
+setconcat_crvsclean points on surface edges if setic_geo_cre_srf_crv_drv_srf
+family name gencrv ctrcrv bld_topo [0]Create a curve driven
+surface.familyfamily containing new surfacenamename of created
+surfacegencrvname of generator or driven curve ctrcrvname of center or driver
+curvebld_topoassociate edge curves Notes: The specified surface name may be
+modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.
+
+**** ic_geo_get_types which [all]
+
+This function returns a list of all geometric
+entity types available in the loaded geometry. If no geometry is loaded, it
+returns all possible types: "surface curve point material density
+loop"ic_flood_fill_surface_angle surf curve angleReturns the list of incident
+surfaces at curve whose dihedral angle with surf is less than the feat_angle.
+
+**** ic_geo_flood_fill what ents all [1] feat_angle [0] bound_mode [all] nedges [0]
+
+Returns the list of entities connected by the lower dimension entities. For
+example surfaces connected by the curves. what - 'curve' or 'surface'ents -
+list of type, name pairsall - 0 if only one level is desiredfeat_angle - 0 >=
+theta <= 90, valid only for $what = surfacebound_mode - 'outer' if only outer
+loop is desired, valid only for $what = surfacenedges - for use with curves -
+if 0 then all attached curves, else only go with curves that have the
+specified number of attached surfacesic_geo_get_triangulation_toleranceReturns
+a two-element list containing the triangulation tolerance of the model, such
+that the first element is the tolerance (real number) and the second element
+is an integer (0 or 1) indicating whether or not the value is relative to a
+global setting.
+
+**** ic_geo_convex_hull entities name fam
+
+Creates the convex hull of the
+objects. entities is a list of pairs, where the first element is the type and
+the second is the name.
+
+**** ic_geo_remove_triangles_on_plane surf plane tol
+
+Remove triangles on a plane in
+the named surface.
+
+**** ic_geo_bbox_of_entities ents
+
+Return the bounding box of some objects. The ents
+argument is a list of the form {{type name} {type name}
+...}ic_geo_classify_by_regions planes entities howUsed by convex hull.
+
+**** ic_geo_split_surfaces surfs planes
+
+Used by convex hull.
+
+**** ic_geo_elem_assoc domain assoc
+
+Generate mesh geometry associativity for CATIA
+interface.domaindomain file assocoutput associativity
+fileic_geo_cre_bsp_srf_by_pnt_array family name n_ptu n_ptv pnts tol
+[0.0001]Creates a bspline surface from a point array.familyfamily containing
+surfacenamename of created surfacen_ptu number of points in u directionn_ptv
+number of points in v directionpntspoint dataNotes: The specified surface name
+may be modified to resolve name collisions.If the function returns with the
+error status set, the result string will contain an error message.Positions
+may be specified explicitly or using names of prescribed pointsThe
+approximation tolerance is relative. It will be scaled by the pointset radius
+to form an absolute tolerance. It has a default value of 0.001.
+
+**** ic_geo_cre_geom_input in_file fit_tol [0.0001] mode [input] pnt_fam [ PNT] pnt_prefix [pnt] crv_fam [CRV] crv_prefix [crv] srf_fam [SRF] srf_prefix [srf]
+Create point and b-spline geometry from an ANSYS ICEM CFD Input
+file. fit_tolapproximation tolerance modetype of ICEM CFD input
+filepnt_famfamily for point entitiespnt_prefix prefix for point
+namescrv_famfamily for curve entitiescrv_prefixprefix for curve
+namessrf_famfamily for surface entitiessrf_prefixprefix for surface
+namesNotes: If the function returns with the error status set, the result
+string will contain an error message.MED must be initialized by loading a
+tetin file or opening an empty part (see ic_empty_tetin).The approximation
+tolerance is relative. It will be scaled by the pointset radius to form an
+absolute tolerance. It has a default value of 0.001.Supported values for mode
+are input and plot3d. named for named entities is planned, but not yet
+supported.For example usage, refer to ic_geo_cre_geom_input.tcl in the ANSYS
+installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_import_str_to_cad doms srf_fam [SRFS] crv_fam [""] pnt_fam [""]
+Converts
+structured surface domains to b-spline geometry. If successful, the current
+mesh and geometry are unloaded, and the new geometry is loaded. Surfaces,
+curves, and points are created only if families are provided for each argument
+type. By default, only surfaces will be created.
+
+**** ic_geo_crv_data crvs datums
+
+Return the b-spline data associated to a
+curve.crvslist of curve to examinedatumslist of curve properties to
+returnNotes: curve properties may be a list of one or more of the following:
+order — Integer order of splinencp — Number of control points (3-tuples in
+model space)rat — Rational flag -- 1 if rational; 0 if integralcps — Return
+model space control pointsknots — Return knot vectorweights — Return a list of
+curve weightsIf the utility is called for multiple curves, the data for each
+curve will be grouped togetherIf weights are requested for an integral spline,
+the list of weights returned will be nullFor example usage, refer to
+ic_geo_crv_data.tcl in the ANSYS installation directory under 
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_srf_data srfs datums
+
+Return the b-spline data associated to a surface
+srfslist of surface to examinedatumslist of surface properties to return
+Notes: surface properties may be a list of one or more of the following: order
+— Integer orders (u and v) of splinencp — Control point counts in u and vrat —
+Rational flag -- 1 if rational; 0 if integralcps — Return model space control
+points. Control points are returned in a list arranged in v-major order (see
+example program for details).knots_u — Return u knot vectorknots_v — Return v
+knot vectorweights — Return a list of surface weights. Weights are returned in
+a list arranged in v-major orderIf the utility is called for multiple
+surfaces, the data for each surface will be grouped togetherIf weights are
+requested for an integral spline, the list of weights returned will be nullFor
+example usage, refer to ic_geo_srf_data.tcl in the ANSYS installation
+directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_loft_crvs family name tol crvs sec_ord [4] form [0] bld_topo [0]
+
+Create a new surface by lofting two or more curves familyfamily containing
+new surfacenamename of created surfacetolapproximation tolerancecrvslist of
+curves to loft sec_ordorder in cross directionform0 (C1 cubic blend) or 1 (C2
+cubic blend) bld_topoassociate edge curvesNotes: The surface order in the
+cross direction must be 2 (linear) or 4 (cubic).The specified surface name may
+be modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.The approximated
+surface should lie within tol of the curves.The list crvs contains curve curve
+names.
+
+**** ic_geo_cre_crv_test_project_surface family name surface curve dir
+
+Project a curve to a surface. familyfamily for new curvenamename for new curve (can be "") 
+surfacename of input surfacecurvename of input curvedirdirection vectorReturn value is the name of the new curve.
+
+**** ic_geo_cre_surface_section family name surface mode P0 P1 P2 [""] trim [0] 
+Create curve as section of a surface with plane, cylinder or
+segment. familyfamily for new curvenamename for new curve (can be
+"")surfacename of input surfacemode0 - section with plane1 - section with
+cylinder 2 - section with segment P0, P1, P2define plane, cylinder or
+segment:Surface through three given points Cylinder with axis on P0-P1 line
+and P2 on the radius Segment from P0 to P1 projected in direction P0-P2Return
+value is the name of the new curve.
+
+**** ic_geo_offset family name surface_to_offset offset max_factor [3]
+
+Offset surface using mesh representation.
+
+**** ic_geo_cre_crv_datred family name crvs tol [0.001]Creates a reduced b-spline
+curve familyfamily containing curvenamename of created curvecrvslist of curves
+to be joinedtolapproximation tolerance returnnames of created curvesNotes: The
+specified curve name may be modified to resolve name collisions.If the
+function returns with the error status set, the result string will contain an
+error message.The list crvs contains curve curve names.For example usage,
+refer to ic_geo_cre_crv_datred.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_datred family name srfs tol [0.001]
+
+Create a reduced b-spline
+surface.familyfamily containing surfacenamename of created surface srfslist of
+surfaces to be joinedtolapproximation tolerance returnnames of created
+surfacesNotes: The specified surface name may be modified to resolve name
+collisions.If the function returns with the error status set, the result
+string will contain an error message.The list srfs contains surface surface
+names.For example usage, refer to ic_geo_cre_srf_datred.tcl in the ANSYS
+installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_sweep family name gen drv bld_topo [0]
+
+Creates a swept surface
+from a generator curve and axis.familyfamily containing surfacenamename of
+created surfacegengenerator curve(s)drvdrive curve or vectorbld_topoassociate
+edge curvesreturnname of created surfaceNotes: The specified surface name may
+be modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.Positions may be
+specified explicitly or using names of prescribed pointsFor example usage,
+refer to ic_geo_cre_srf_sweep.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_crv_is_opposite crv1 crv2
+
+Determines whether two curves are oriented in
+parallel or opposite directions. crv1curve 1 namecrv2curve 2 namereturn1 if
+opposite, 0 otherwiseNotes: Main use of this function is to diagnose failures
+in some of the surface construction codes.For example usage, refer to
+ic_geo_crv_is_opposite.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_crv_is_edge crv
+
+Determines whether a curve bounds a surface.crvcurve
+namereturnnumber of surfaces bounded ic_geo_fix_degen_geom switch [0]Activates
+repair function for degenerate bsplines in the tetin reader. For now these
+functions are disabled by default. switch0 for off; 1 for
+onic_geo_find_nearest_srf_pnt srf pnt want_ext [0]Finds parameters of closest
+point on surface.srf name of surfacepnttest pointwant_extwant extended output
+returnuv pair Notes: If the function returns with the error status set, the
+result string will contain an error message.The uv coordinates will be
+unitized.For example usage, refer to ic_geo_find_nearest_srf_pnt.tcl in the
+ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_find_nearest_crv_pnt crv pnt
+
+Finds parameters of closest point on
+curve.crvname of curvepnttest pointreturnt parameterNotes: If the function
+returns with the error status set, the result string will contain an error
+message.The t parameter will be unitized.For example usage, refer to
+ic_geo_find_nearest_crv_pnt.tcl in the  ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_distance_from_surfaces surfs coords
+
+Gets the distance of coords from the
+nearest surface in surface_familyic_geo_nearest_surface_list coords
+surfacesGets nearest surface to coords from a list of surfaces.
+
+**** ic_geo_get_crv_nrm par crv
+
+Gets the normal vector of a curve at a
+parameter.parcurve t parametercrvlist of curves to evaluatereturnlist of
+3-tuple of doublesNotes: If the function returns with the error status set,
+the result string will contain an error message.The return string will be a
+list of 3-tuplesThe input uv coordinates should be unitized.
+
+**** ic_geo_get_crv_pos par crv
+
+Gets a position on a curve at a parameter.parcurve t
+parametercrvlist of curves to evaluatereturnlist of 3-tuple of doubles Notes:
+If the function returns with the error status set, the result string will
+contain an error message.The input uv coordinates should be unitized.The
+return string will be a list of 3-tuplesFor example usage, refer to
+ic_geo_get_crv_pos.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_get_crv_binrm par crv
+
+Gets the binormal vector of a curve at a
+parameter.parcurve t parametercrvlist of curves to evaluatereturnlist of
+3-tuple of doublesNotes: If the function returns with the error status set,
+the result string will contain an error message.The input uv coordinates
+should be unitized.
+
+**** ic_geo_cvt_uns_to_bsc family base uns
+
+Creates one or more bspline curves from
+an unstructured curve.familyfamily for new curves basebase name of created
+curves unsname(s) of unstructured curve(s)returnname of created curves Notes:
+If the function returns with the error status set, the result string will
+contain an error message.If the input curve is a b-spline curve it will be
+returned without modification as the output curveFor example usage, refer to
+ic_geo_cvt_uns_to_bsc.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_srf_area srfs
+
+Computes the area of one or more surfaces.srfslist of one
+or more surfaces returnarea of surfacesNotes: Surface area is computed from
+projlib's facetization of the geometry; the results will be influenced by the
+value of the triangulation tolerance when the part was read.For example usage,
+refer to ic_geo_srf_area.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_sort_by_srf_area surf_list args [""]
+
+Sorts surfaces by their surface
+area. args is arguments for the sort.
+
+**** ic_geo_reduce_face srfs
+
+Trims a surface back to its active area. srfslist of
+one or more surfacesNotes: A form of data reduction; trims the undisplayed
+portion of a b-spline away.Unless the underlying surface is reduced by at
+least 5% in the u or v coordinate, the surface will be left unmodified.For
+example usage, refer to ic_geo_reduce_face.tcl in the ANSYS installation
+directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_get_crv_tan par crv
+
+Gets the tangent vector of a curve at a
+parameter.parcurve t parameter crvlist of curves to evaluatereturnlist of
+3-tuple of doublesNotes: The tangent vector will be the un-normalized
+derivative vector with respect to the unitized parameterizationIf the function
+returns with the error status set, the result string will contain an error
+message.The input uv coordinates should be unitized.
+
+**** ic_geo_mod_crv_tanext crvs dist srtend
+
+Tangentially extend a curve.crvslist of
+curves to extend distdistance (relative) of ext.srtendextend start (0),
+end(1)returnnames of extended curvesNotes: The specified curve name may be
+modified to resolve name collisionsThe length of the extension will be roughly
+"dist*curve length"If the function returns with the error status set, the
+result string will contain an error message.If the curve has topology
+(i.e. references surfaces or vertices) it will be copied rather than
+modified.The list crvs contains curve curve names.For example usage, refer to
+ic_geo_mod_crv_tanext.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_mod_srf_tanext srfs dist srtend bld_topo [0]
+
+Tangentially extend a
+surface.srfslist of surfaces to extend distdistance (relative) of
+ext. edgeindex of edge to extend returnnames of modified surfacesNotes: The
+dist parameter is unitless and will be scaled by the lengths of the u or v
+constant control point rows.If the function returns with the error status set,
+the result string will contain an error message.The edge indicator is set as
+follows: 1 V-Min direction2 U-Min direction3 V-Max direction4 U-Max
+directionThe list srfs contains surface surface names.For example usage, refer
+to ic_geo_mod_srf_tanext.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_mod_srf_ext srfs dist edge bld_topo [0]
+
+Extend a surface.srfslist of
+surfaces to extenddistdistance of extensionedgecurve at edge to
+extendreturnnames of modified surfacesic_geo_mod_crv_match_crv crv1 crv2
+crv1end [0] crv2end [0] modes [""]Matches two curves.crv1name of first
+curvecrv2name of second curvecrv1endcurve1 end indicatorcrv2endcurve2 end
+indicatormodes5 element list of flagsreturnnames of modified curvesNotes: The
+curve end parameters, crv1end and crv2end, take the following values: closest
+endpoint0start point 1end point 2The modes argument is an optional 5 element
+list of flags addressing the following functions:mode[0]0 point only 1 point
+and tangent (default) 2 point, tangent, and curvature 3 point and curvature
+mode[1]1 geometric matching (default) 2 exact matching mode[2]0 do not change
+order 1 permit change of order (default) mode[3]0 both splines matched
+(default) 1 only first spline changed mode[4]0 3d matching (default) 1 4d
+matching If the function returns with the error status set, the result string
+will contain an error message.For example usage, refer to
+ic_geo_mod_crv_match_crv.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_mod_crv_match_pnt crv pnt crvend [0] modes [""]
+
+Match curve and a
+point.crvname of curvepntname of point crvendcurve end indicatorreturnname of
+modified curveNotes: The curve end parameter, crvend takes the following
+values:closest endpoint0start point1end point2If the function returns with the
+error status set, the result string will contain an error message.
+
+**** ic_geo_cre_srf_offset family name base offset all_conn [0] stitch [0]
+
+Creates one or more offset surfaces.familyfamily containing surfacenamebase name of
+created surface basesurface(s) to offsetoffsetdistance to offset
+all_connoffset connected surfs if set stitchpreserve connected edges if set
+returnname(s) of created surface(s)Notes: The specified surface name may be
+modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.Negative offsets
+are allowed.If more than one surface is given to the routine, offsets will be
+oriented relative to the first surface if the two surfaces are related by an
+edge adjacency chain.If the all_conn flag is set, all surfaces connected to
+the first surface by an edge adjacency chain will be offset.If the stitchflag
+is set, the offsets of two surfaces sharing an edge will be extended
+tangentially so that the offset surfaces also share an edgeFor example usage,
+refer to ic_geo_cre_srf_offset.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_build_bodies fam [
+
+LIVE] buildtopo [0] tol [0.01] multi [0] newm [0]
+surf [""]Automatically creates a body for each closed volume of surfaces as
+determined by the connectivity produced from build topology.famFamily for
+bodiesbuildtopoBuild topology if non-zerotolTolerance for the optional build
+topology functionmultiOld style assembly naming if non-zeronewmUse the new
+schema if non-zerosurfInitial surfaceic_geo_create_volume matlpt name [""] fam
+[LIVE]Creates volume from material point name, matlpt.
+
+**** ic_geo_reset_bodies
+
+Updates the current defined bodies in the model, by
+removing nonexistent ones and adding any new ones to the display.
+
+**** ic_geo_create_body surfs name [""] fam [""] quiet [0]
+
+Creates a body from the
+collection of surfaces, surfs. The new body will be given the name, name, in
+the family, fam.
+
+**** ic_geo_get_body_matlpnt bdy
+
+Returns the material point name associated with the
+body, bdy.
+
+**** ic_geo_srf_radius srfs
+
+Computes the radius of a b-spline surface.srfslist of
+one or more surfacesreturnlist of computed surface radii Notes: The radius is
+the maximum chord length of the control point rows.For example usage, refer to
+ic_geo_cre_srf_offset.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_srf_offset_edge family name crv offset
+
+Creates an offset surface
+from a generator curve and axis.familyfamily containing surfacenamename of
+created surfacegengenerator curve(s)baseaxis base pointzaxisaxis direction
+vectorsrtangstart angle (degrees)endangend angle (degrees)returnname of
+created surface Notes: The specified surface name may be modified to resolve
+name collisions.If the function returns with the error status set, the result
+string will contain an error message.Positions may be specified explicitly or
+using names of prescribed pointsFor example usage, refer to
+ic_geo_cre_srf_offset_edge.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_body_lower_entities bdy
+
+Given a body name, bdy, it returns the names of
+the surfaces, curves, and points belonging to the body. These are returned in
+the form of argument pairs where the first name is the entity type and the
+second name is the entity name.
+
+**** ic_geo_cre_geom_plot3d in_file fit_tol [0.0001] pnt_fam [
+
+PNT] pnt_prefix [pnt]
+crv_fam [CRV] crv_prefix [crv] srf_fam [SRF] srf_prefix [srf]Creates point and
+b-spline geometry from a Plot3d file. fit_tolapproximation
+tolerancepnt_famfamily for point entitiespnt_prefixprefix for point
+namescrv_famfamily for curve entitiescrv_prefix prefix for curve namessrf_fam
+family for surface entitiessrf_prefixprefix for surface namesNotes:If the
+function returns with the error status set, the result string will contain an
+error message.MED must be initialized by loading a tetin file or opening an
+empty part (see ic_empty_tetin).The approximation tolerance is relative. It
+will be scaled by the pointset radius to form an absolute tolerance. It has a
+default value of 0.001.This routine is called by
+**** ic_geo_cre_geom_inputic_geo_cre_srf_db_pnts srfs
+
+Create the deboor points of a
+bspline surface.srfslist of surfacesreturnnames of created
+pointsic_geo_cre_crv_db_pnts crvsCreates the deboor points of a bspline
+curve.crvslist of curvesreturnnames of created pointsic_geo_read_off_file fam
+name in_fileRead an OFF file (native format for Geomview).famfamily for new
+geometrynameroot name for new surfacesin_file input fileNotes:This function
+reads triangulated surfaces from the input file and creates unstructured
+surfaces in MED.Only minimal coverage of the OFF format has been
+implemented. For example usage, refer to ic_geo_read_off_file.tcl in the ANSYS
+installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_read_xyz_file fam name in_file off_file mode [""]
+
+Reads and triangulate
+a list of XYZ points.famfamily for new geometry nameroot name for new
+surfacesin_fileinput fileoff_file intermediate OFF filemodefast, tightNotes:
+This function reads triangulated surfaces from the off file and creates
+unstructured surfaces in MED.Only minimal coverage of the OFF format has been
+implemented. For example usage, refer to ic_geo_read_xyz_file.tcl in the ANSYS
+installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.mode can be used to specify
+fast execution or watertight model.
+
+**** ic_geo_crv_is_arc crvs tol [-1]
+
+Determine whether one or more curves are
+circular.crvslist of one or more curvestolapproximation tolerancereturnlist of
+true/false flagsNotes: The tolerance defaults to 0.001*arc_lengthFor example
+usage, refer to ic_geo_crv_is_arc.tcl in the ANSYS installation directory
+under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_get_keypoints dir border bb [""]
+
+Gets keypoints for the current
+geometry. dir is 0, 1, or 2. If border is non zero, then add some slack.
+
+**** ic_geo_reverse_crv crvs
+
+Reverses the orientation of one or more curves.crvslist
+of one or more curvesreturnerror message on failureFor example usage, refer to
+ic_geo_reverse_crv.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_cre_edge_concat crvs require_topo [0]
+
+Merges one or more curves and
+associated topology.crvslist of curves to be joinedrequire_topofail if
+topology will not mergereturnname of created curveNotes: The specified curve
+name may be modified to resolve name collisions.If the function returns with
+the error status set, the result string will contain an error message.The list
+crvs contains curve curve names.If require_topo is set, the utility will fail
+if the associated topology cannot be merged. If require_topo is not set, the
+utility will create a new curve and preserve the original edges if the
+associated topology cannot be updated.For example usage, refer to
+ic_geo_cre_edge_concat.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_create_histogram_box min max lbl
+
+ListMake a histogram box.minmin pt of
+the boxmaxmax pt of the boxlblListlist of labelsNotes: Each label in lblList
+is a list of {lbl_text, lbl_pt, ispt}.If $ispt==1, a point will be drawn as
+well as the label.
+
+**** ic_geo_build_topo_on_srfs srfs crvs [""] tol [-1] trim_srfs [0] concat_crvs
+[0] quiet [0]
+
+Builds topology on a list of surfaces.srfssurface(s)crvsoptional
+curve(s)tolmerge tolerancetrim_srfs 1 -- trim surfaces; 0
+otherwiseconcat_crvs1 -- concatenate edges that join tangentially; 0
+otherwisequiet1 -- suppress chatter; 0 otherwiseNotes: Merge tolerance will be
+determined from the bounding box of the surfaces.The merge tolerance defaults
+to 0.0001 * (min surface radius).
+
+**** ic_geo_contact_surfaces surfaces distance [0] family [""] debug [0]
+
+Search for
+contact surfaces. surfaceslist of surface namesdistancemaximum distance
+familyfamily name for contact surfacesreturnlist of surface pairs
+**** ic_geo_map_tetin_sizes tetin what [0]
+
+Map parameter data from a tetin file to
+the current model.tetininput tetin file what== 0 - map all possible databit0 -
+map global parametersbit1 - map family parametersbit2 - map prescribed points
+databit3 - map curve databit4 - map surface dataFor example usage, refer to
+ic_geo_map_tetin_sizes.tcl in the ANSYS installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_surface_thickness surfaces order thickness [""]
+
+Set (or get) the thickness of surfaces. surfaceslist of surface namesorderorder 
+of thickness approximationthicknessorder * order thickness valuesic_geo_srf_in_srf_fam_set
+srf famsDetermines whether a surface is within a volume bounded by one or more
+surface families. srftest surfacefamslist of familiesic_geo_cre_srf_over_holes
+fam srfsCloses planar holes in a collection of surfaces.srftest
+surfacefamslist of familiesic_geo_subset_exists nameChecks if a geometry
+subset exists.
+
+**** ic_geo_subset_copy oldname newname
+
+Copies the geometry from one subset to
+another.
+
+**** ic_geo_subset_clear name
+
+Clears out everything from a subset.
+
+**** ic_geo_subset_unused_name pref [subset]
+
+Returns an unused geometry subset name
+with the given prefix Note that this gives names unique for both geometry and
+mesh.
+
+**** ic_geo_subset_delete name
+
+Deletes a geometry subset.
+
+**** ic_geo_subset_visible name vis
+
+Makes a geometry subset visible (or not).
+
+**** ic_geo_subset_list_families name
+
+Lists all the families that are represented in
+the named subset. ic_geo_subset_list pat [*]Lists all the geometry subset
+names that currently exist. ic_geo_subset_add_items name itemsAdds items to a
+geometry subset. If the subset does not exist, it will be created. The items
+argument is a list of type/name pairs. The types can be one of point, curve,
+surface, material, density, loop, body, shell, lump, solid, and the names
+specify the desired object of that type.
+
+**** ic_geo_subset_remove_items name items
+
+Removes items from a geometry subset. The
+items list is the same as for ic_geo_subset_add_items.
+
+**** ic_geo_subset_handle_bc_changes items subset add
+
+Adds or removes bc icons and
+groups based on addition or removal of objects in subsets.
+
+**** ic_geo_subset_get_items name
+
+Gets items in a geometry subset. This returns a
+list of type/name pairs.
+
+**** ic_geo_subset_bbox name
+
+Returns the bounding box of all geometry in a named
+subset. ic_geo_subset_add_layer name all feat_angle bound_modeAdds one or more
+layers to a geom subset. Arguments are the same as ic_geo_flood_fill.
+
+**** ic_geo_subset_remove_layer name
+
+Removes one or more layers from a geometry
+subset.
+
+**** ic_geo_get_srf_edges srf
+
+Get any curves associated as edges to a surface.
+
+**** ic_geo_get_vert_edges pnt
+
+Get any curves associated as edges to a vertex.
+
+**** ic_geo_calc_bisector_pnt pnt1 pnt2 pnt3 len inverse
+
+Calculates node lying on
+the bisector of the angle formed by nodes pnt1, pnt2, pnt3 in distance
+delta. If inverse: calculate the reverse bisector.
+
+**** ic_geo_cre_srf_simple_trim families names srf crvs
+
+Trims a surface using a
+simple contour. familieslist of 2 family namesnameslist of 2 surface
+namessrfsurface to trimcrvslist of trim curves Notes: The specified surface
+names may be modified to resolve name collisions.If the function returns with
+the error status set, the result string will contain an error message.
+
+**** ic_geo_set_simplification_level pixels
+
+Sets the simplification level in pixels
+(surfaces smaller than this size will be drawn as a box. 0 disables
+simplification. A value of -1 just returns the level.
+
+**** ic_surface_thickness_check names newfam [""] return_unassigned [0]
+
+Checks for
+zero thickness surfaces and assigns to new family. newfam is family name for
+surfaces with no thickness. return_unassigned is option to return unassigned
+surfaces without changing family. Default (0) is disabled.
+
+**** ic_geo_close_contour crvs srf
+
+Closes up a contour prior to trimming.crvslist of
+curves srfsurface to trimNotes: The specified surface names may be modified to
+resolve name collisions.If the function returns with the error status set, the
+result string will contain an error message.
+
+**** ic_geo_find_srf_prc_pnt srf pnt vec
+
+Finds parameter of pierce point on
+surface.srfname of surfacepnttest point vecpierce directionreturnuv pairNotes:
+If the function returns with the error status set, the result string will
+contain an error message.The uv coordinates will be unitized.For example
+usage, refer to ic_geo_find_srf_prc_pnt.tcl in the ANSYS installation
+directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+
+**** ic_geo_get_dormant type only_if_visible [""]
+
+Returns list of dormant points or
+curves.
+
+**** ic_geo_get_dormant_entity type name
+
+Determines whether an entity is dormant
+Only points and curves can be dormant synchronized pickable and visible. Used
+in bounding box.
+
+**** ic_get_facets type list
+
+Returns list of faceted surfaces.
+
+**** ic_geo_filter_curves angle fams
+
+Returns a list of essential curves. A curve is
+"essential" when it bounds two surfaces which meet at an angle (measured by
+surface normals) exceeding a threshold angle. The function identifies the
+essential curves in the specified families. anglethreshold angle in
+degreesfamsnames of families to searchic_geo_cre_bridge_crv fam name crv1 crv2
+end1 [0] end2 [0] mag1 [0.3] mag2 [0.3]Creates a bridge curve between two
+curves.famfamily of created curve namename of created curvecrv1curve 1
+namecrv2curve 2 nameend1curve 1 end indicatorend2curve 2 end
+indicatormag1magnitude of start vectormag2magnitude of end vectorreturnname of
+curve vertexNotes: The curve end parameters, end1, end2, take the following
+values:point closest to other crv0start point1end point20 < mag1, mag2 <
+1ic_geo_cre_pln_crv fam name crv base nrmCreates the projection of a curve
+onto a plane.famfamily of created curve namename of created curvecrv1curve
+namereturnname of created curveic_geo_pln_n_pnts pntsFinds the least square
+plane through three or more points.pntslist of 3 or more points return{base}
+{normal} of planeic_geo_sub_get_numbers_by_names type ent_namesReturns each
+entity number (recognized in the batch interpreter) associated with each
+entity name in ent_names. ent_names can be a list but they must all be the
+same type defined by type. In this case, the return is a list of numbers in
+the same order as the entity names were given.
+
+**** ic_geo_get_pnt_marked name
+
+Determines whether a point is marked.
+ic_geo_get_all_marked_pntsReturns a list of all marked points.
+
+**** ic_geo_add_embedded_crv srf crvs
+
+Embeds a curve into a
+surface.srfsurfacecrvslist of curvesNote:   No checks are performed to
+determine whether the curves are actually on the surface.
+
+**** ic_geo_add_embedded_pnt srf pnts
+
+Embeds a point into a
+surface.srfsurfacepntslist of pointsNote:   No checks are performed to
+determine whether the points are actually on the surface.
+
+**** ic_geo_is_crv_on_srf crv srf tol [-1]
+
+Checks if a curve is on a
+surface.crvcurvesrfsurfacetoltoleranceNote:   If a negative value is passed
+for the tolerance, the utility will use an internally computed tolerance.
+
+**** ic_geo_register_crv crv_name new_fam
+
+Register a curve (this is used by ANSYS
+TurboGrid)crv_namename of created curveic_geo_cre_midline_crv crvs [""] tol
+debug [0] crvs2 [""] fam [""] Creates a new curve by midlining two existing
+curves.crvslist of 2 curvestoltolerancefamilyfamily containing curve
+returnname of created midline curveNotes:The specified curve name may be
+modified to resolve name collisions.If the function returns with the error
+status set, the result string will contain an error message.The list crvs
+contains 2 curves or curves of first set curve names.The list crvs2 contains
+curves of second set curve names.
+
+**** ic_geo_get_points_from_curves curves
+
+This finds all the points attached to a
+list of curves.
+
+**** ic_geo_test_cmd vec pnt crvs srfs
+
+Test routine.
+
+**** ic_geo_cre_crv_ell family name center srt_pnt next_pnt srtang [0] endang
+[360]
+
+Creates a bspline ellipse from center, start point, second
+point.familyfamily containing curvenamename of created curvecenterellipse
+centersrt_pntcrv point on ellipse major axisnext_pntcrv point not on major
+axissrtangstart angle (degrees) endangend angle (degrees)returnname of created
+curveNotes:The specified curve name may be modified to resolve name
+collisions.If the function returns with the error status set, the result
+string will contain an error message.If endang < srtang or (endang - srtang) >
+360, the angle will be adjusted by adding 360 increments.Positions may be
+specified explicitly or using names of prescribed pointsic_geo_improve_edge
+crvsImproves one or more edges.crvslist of one or more curvesic_geo_just_do_it
+srfsSurface test routine.srfslist of one or more
+surfacesic_geo_get_prism_familiesReturns the list of families for prism
+meshing.
+
+**** ic_geo_set_prism_families prism_fams excl [1]
+
+Sets the list of families for
+prism meshing. If excl==1, then any previous prism families are reset.
+
+**** ic_geo_get_prism_family_params fam
+
+Returns the prism meshing parameters for a
+family.
+
+**** ic_geo_set_prism_family_params fam args
+
+Sets the prism meshing parameters for a
+family.
+
+**** ic_vcalc op [""] args
+
+Calculates basic "vector" functions using triplets and/or point name

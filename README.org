@@ -1,0 +1,52 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: README
+#+DATE: <2020-12-17 Чт>
+#+AUTHOR:
+#+EMAIL: mnasoft@gmail.com
+#+LANGUAGE: ru
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.3 (Org mode 9.1.9)
+
+# mnas-icem
+* Назначение
+
+Предназначен для выполнения операций с представлением tin-файлов 
+(представления геометрии) системы ANSYS ICEM
+
+* Получение tin-файлов из расчетного кластера
+
+#+BEGIN_SRC bash
+# Запускать из оболочки bash.
+cd /home/namatv/quicklisp/local-projects/ANSYS/mnas-icem/tin;
+rsync.exe -Pavzhe ssh namatv@hp1:/_gas/CFX/otd11/namatv/a32_base/PR-01/GT/*.tin .
+rsync.exe -Pavzhe ssh namatv@hp1:/_gas/CFX/otd11/namatv/a32_base/PR-01/GU/*.tin .
+#+END_SRC
+
+#+RESULTS:
+
+* [/] ToDo
+- [ ] Добавить каждого класса функцию tag, которая будет возвращать.
+* Схема именования геометрии
+
+| P04         |      |         |     |
+| P04_E_C     | Edge | Curve   |     |
+| P04_H_C_BIG | Hole | Curve   | Big |
+| P04_H_S     | Hole | Surface |     |
+
+ASM.05/P05 ASM.05/P05_E_C ASM.05/P05_H_S ASM.05/P05_H_C_BIG
+ASM.06/P06 ASM.06/P06_E_C ASM.06/P06_H_S ASM.06/P06_H_C_BIG
+ASM.07/P07 ASM.07/P07_E_C ASM.07/P07_H_S ASM.07/P07_H_C_BIG
+ASM.08/P08 ASM.08/P08_E_C ASM.08/P08_H_S ASM.08/P08_H_C_BIG
+ASM.09/P09 ASM.09/P09_E_C ASM.09/P09_H_S ASM.09/P09_H_C_BIG
+ASM.10/P10 ASM.10/P10_E_C ASM.10/P10_H_S ASM.10/P10_H_C_BIG
+
+ASM.11/P11 ASM.11/P11_E_C ASM.11/P11_H_S ASM.11/P11_H_C
+
+ASM.12-1/P12-1 ASM.12-1/P12-1_E_C ASM.12-1/P12-1_H_S ASM.12-1/P12-1_H_C
+
+ASM.12-2/P12-2 ASM.12-2/P12-2_E_C ASM.12-2/P12-2_H_S ASM.12-2/P12-2_H_C
