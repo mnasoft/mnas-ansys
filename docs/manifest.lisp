@@ -12,4 +12,8 @@
                         "mnas-icem-select-graph.scr"
                         "mnas-icem-utils.scr"
                         "mnas-icem-utils-graph.scr"
+                        "mnas-icem-ccl.scr"
+                        "mnas-icem-ccl-graph.scr"
+                        "mnas-icem-ccl-parse.scr"
+                        "mnas-icem-ccl-parse-graph.scr"
                         ))))

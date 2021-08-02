@@ -11,10 +11,13 @@
 (defun make-document ()
   (loop
     :for i :in
-    '((:mnas-icem :mnas-icem)
-      (:mnas-icem/read :mnas-icem/read)
-      (:mnas-icem/select :mnas-icem/select)
-      (:mnas-icem/utils :mnas-icem/utils)
+    '((:mnas-icem           :mnas-icem)
+      (:mnas-icem/read      :mnas-icem/read)
+      (:mnas-icem/select    :mnas-icem/select)
+      (:mnas-icem/utils     :mnas-icem/utils)
+      (:mnas-icem/ccl       :mnas-icem/ccl)
+      (:mnas-icem/ccl-parse :mnas-icem/ccl-parse)
+      
       )
     :do (apply #'mnas-package:document i)))
 
@@ -25,6 +28,9 @@
       :mnas-icem/read
       :mnas-icem/select
       :mnas-icem/utils
+      
+      :mnas-icem/ccl
+      :mnas-icem/ccl-parse
       )
     :do (mnas-package:make-codex-graphs i i)))
 

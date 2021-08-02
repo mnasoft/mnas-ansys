@@ -28,7 +28,10 @@ CFX-PRE.
                "mnas-package/sys"
                "mnas-icem/read"
                "mnas-icem/core"
-               "mnas-icem/utils"))
+               "mnas-icem/utils"
+
+               "mnas-icem/ccl"
+               ))
 
 (asdf:defsystem "mnas-icem/read"
   :description
@@ -106,3 +109,29 @@ CFX-PRE.
 		:serial nil
                 :components ((:file "docs"))))
   :depends-on ("mnas-package" "codex"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(asdf:defsystem "mnas-icem/ccl"
+  :description
+  "Система @b(mnas-icem/ccl) функции для извлечения и преобразования данных в формате CCL ANSYS CFX."
+  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("mnas-icem/ccl-parse")
+  :components ((:module "src/ccl" 
+                :serial nil
+                :components
+                ((:file "ccl")))))
+
+(asdf:defsystem "mnas-icem/ccl-parse"
+  :description
+  "Система @b(mnas-icem/ccl-parse) определяет функции для разбора CCL формата ANSYS CFX."
+  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  ;; :depends-on ()
+  :components ((:module "src/ccl/parse" 
+                :serial nil
+                :components
+                ((:file "ccl-parse")))))
