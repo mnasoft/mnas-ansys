@@ -1,6 +1,18 @@
 ;;;; ./src/ccl/test.lisp
 
-(in-package #:mnas-icem/ccl)
+(defpackage #:mnas-icem/ccl-belt
+  (:use #:cl )
+  (:intern number-to-string mm->m)
+  (:export make-tangent-belts
+           make-radial-belts
+           )
+  (:documentation
+   "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
+ сценарии для построения поверхностей в программном комплексе ANSYS
+ CFX на языке CCL.
+"))
+
+(in-package #:mnas-icem/ccl-belt)
 
 (require :mnas-string)
 (require :math/coord)
@@ -428,138 +440,6 @@ END
             (/ x-coord 1000.0) (/ (+ i by) 1000.0))))
   )
 
-(defun mk-lines (l-prefix x-coord r-max r-min by)
-  (loop :for i :from r-min :below r-max :by by :do
-    (format t
-            "LINE: Line ~A ~A ~A
-  Apply Instancing Transform = On
-  Colour = 1, ~A, 0
-  Colour Map = Default Colour Map
-  Colour Mode = Constant
-  Colour Scale = Linear
-  Colour Variable = Pressure
-  Colour Variable Boundary Values = Hybrid
-  Domain List = /DOMAIN GROUP:All Domains
-  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
-  Line Samples = 10
-  Line Type = Sample
-  Line Width = 2
-  Max = 0.0 [Pa]
-  Min = 0.0 [Pa]
-  Option = Two Points
-  Point 1 = ~A [m], ~A [m], 0 [m]
-  Point 2 = ~A [m], ~A [m], 0 [m]
-  Range = Global
-  Visibility = On
-  OBJECT VIEW TRANSFORM: 
-    Apply Reflection = Off
-    Apply Rotation = Off
-    Apply Scale = Off
-    Apply Translation = Off
-    Principal Axis = Z
-    Reflection Plane Option = XY Plane
-    Rotation Angle = 0.0 [degree]
-    Rotation Axis From = 0 [m], 0 [m], 0 [m]
-    Rotation Axis To = 0 [m], 0 [m], 0 [m]
-    Rotation Axis Type = Principal Axis
-    Scale Vector = 1 , 1 , 1
-    Translation Vector = 0 [m], 0 [m], 0 [m]
-    X = 0.0 [m]
-    Y = 0.0 [m]
-    Z = 0.0 [m]
-  END
-END
-"
-            l-prefix i (+ i 3)
-            (nth-value 1 (floor (1+ i) 2))
-            (/ x-coord 1000.0) (/ i 1000.0)
-            (/ x-coord 1000.0) (/ (+ i by) 1000.0))))
-
-(mk-lines "466i5" 466.5 477 411 3)
-
-(defun mk-surf-rings (s-prefix line-group-name Theta-Max Theta-Min r-max r-min by)
-  (loop :for i :from r-min :below r-max :by by :do
-    (format t
-            "
-SURFACE OF REVOLUTION: ~A ~A ~A ~A
-  Apply Instancing Transform = On
-  Apply Texture = Off
-  Blend Texture = On
-  Colour = 1, ~A, 0
-  Colour Map = Default Colour Map
-  Colour Mode = Constant
-  Colour Scale = Linear
-  Colour Variable = Pressure
-  Colour Variable Boundary Values = Hybrid
-  Culling Mode = No Culling
-  Domain List = /DOMAIN GROUP:All Domains
-  Draw Faces = On
-  Draw Lines = Off
-  Ending Axial Shift = 0.0 [m]
-  Ending Radial Shift = 0.0 [m]
-  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
-  Lighting = On
-  Line Colour = 0, 0, 0
-  Line Colour Mode = Default
-  Line Width = 1
-  Location List = /LINE:Line ~A ~A ~A
-  Max = 0.0 [Pa]
-  Meridional Point 1 = 0 [m], 1 [m]
-  Meridional Point 2 = 1 [m], 2 [m]
-  Meridional Points = 20
-  Min = 0.0 [Pa]
-  Option = From Line
-  Principal Axis = X
-  Project to AR Plane = On
-  Range = Global
-  Render Edge Angle = 0 [degree]
-  Rotation Axis From = 0 [m], 0 [m], 0 [m]
-  Rotation Axis To = 1 [m], 0 [m], 0 [m]
-  Rotation Axis Type = Principal Axis
-  Specular Lighting = On
-  Starting Axial Shift = 0.0 [m]
-  Starting Radial Shift = 0.0 [m]
-  Surface Drawing = Smooth Shading
-  Texture Angle = 0
-  Texture Direction = 0 , 1 , 0
-  Texture File = 
-  Texture Material = Metal
-  Texture Position = 0 , 0
-  Texture Scale = 1
-  Texture Type = Predefined
-  Theta Max = ~A [degree]
-  Theta Min = ~A [degree]
-  Theta Points = 10
-  Tile Texture = Off
-  Transform Texture = Off
-  Transparency = 0.0
-  Use Angle Range = On
-  Visibility = On
-  OBJECT VIEW TRANSFORM: 
-    Apply Reflection = Off
-    Apply Rotation = Off
-    Apply Scale = Off
-    Apply Translation = Off
-    Principal Axis = Z
-    Reflection Plane Option = XY Plane
-    Rotation Angle = 0.0 [degree]
-    Rotation Axis From = 0 [m], 0 [m], 0 [m]
-    Rotation Axis To = 1 [m], 0 [m], 0 [m]
-    Rotation Axis Type = Principal Axis
-    Scale Vector = 1 , 1 , 1
-    Translation Vector = 0 [m], 0 [m], 0 [m]
-    X = 0.0 [m]
-    Y = 0.0 [m]
-    Z = 0.0 [m]
-  END
-END
-"
-            s-prefix
-            line-group-name i (+ i 3) (nth-value 1 (floor (1+ i) 2))
-            line-group-name i (+ i 3)
-            Theta-Max Theta-Min)))
-
-(mk-surf-rings "S R" "466i5" 33.75 11.25 477 411 3)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

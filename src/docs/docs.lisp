@@ -17,6 +17,7 @@
       (:mnas-icem/utils     :mnas-icem/utils)
       (:mnas-icem/ccl       :mnas-icem/ccl)
       (:mnas-icem/ccl-parse :mnas-icem/ccl-parse)
+      (:mnas-icem/belt      :mnas-icem/belt)
       
       )
     :do (apply #'mnas-package:document i)))
@@ -31,6 +32,7 @@
       
       :mnas-icem/ccl
       :mnas-icem/ccl-parse
+      :mnas-icem/belt
       )
     :do (mnas-package:make-codex-graphs i i)))
 

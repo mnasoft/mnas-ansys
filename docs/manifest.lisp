@@ -16,4 +16,6 @@
                         "mnas-icem-ccl-graph.scr"
                         "mnas-icem-ccl-parse.scr"
                         "mnas-icem-ccl-parse-graph.scr"
+                        "mnas-icem-belt.scr"
+                        "mnas-icem-belt-graph.scr"
                         ))))

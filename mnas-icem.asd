@@ -135,3 +135,16 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "ccl-parse")))))
+
+(asdf:defsystem "mnas-icem/belt"
+  :description
+  "Система @b(mnas-icem/belt) определяет функции для генерирования
+ поверхностей в системе ANSYS CFX при помощи языка CCL."
+  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("mnas-string/translit" "math/coord")
+  :components ((:module "src/ccl/belt" 
+                :serial nil
+                :components
+                ((:file "belt")))))
