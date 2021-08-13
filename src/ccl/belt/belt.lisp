@@ -37,10 +37,18 @@
   "@b(Описание:) функция @b(mm->m) переводит милиметры в метры."
   (/ value 1000.0))
 
+(defun belt-line-name (x y r-min r-max alpha)
+  (format nil "Line ~A ~A ~A ~A ~A"
+          (number-to-string alpha)
+          (number-to-string x)
+          (number-to-string y)
+          (number-to-string r-min)
+          (number-to-string r-max)))
+
 (defun make-line-belt (x y r-i r-i+1 alpha &key (colour '(1 0 0)))
   (format t
           "
-LINE: Line ~A ~A ~A ~A ~A 
+LINE: ~A
   Apply Instancing Transform = On
   Colour = ~F, ~F, ~F
   Colour Map = Default Colour Map
@@ -80,11 +88,7 @@ LINE: Line ~A ~A ~A ~A ~A
 END
 "
           ;; Header
-          (number-to-string alpha)
-          (number-to-string x)
-          (number-to-string y)
-          (number-to-string r-i)
-          (number-to-string r-i+1)
+          (belt-line-name x y r-i r-i+1 alpha)
           ;; Color
           (first colour) (second colour) (third colour)
           ;; x, y , z Point 1
@@ -97,6 +101,15 @@ END
           (* (sin (math/coord:dtr alpha)) (mm->m (+ y r-i+1)))))
 
 #+nil (make-line-belt 466.5 0.0 411.0 477.0 0.0 :colour '(1 0 0))
+
+(defun belt-surface-name (x y r-min r-max theta-min theta-max alpha)
+  (format nil "SURFACE ~A ~A ~A ~A ~A ~A"
+          (number-to-string alpha)
+          (number-to-string x)
+          (number-to-string r-min)
+          (number-to-string r-max)
+          (number-to-string theta-min)
+          (number-to-string theta-max)))
 
 (defun make-surface-belt (x y r-i r-i+1 theta-min theta-max alpha &key (colour '(1 0 0))) 
   (format t
@@ -122,7 +135,7 @@ SURFACE OF REVOLUTION: SURFACE ~A ~A ~A ~A ~A ~A
   Line Colour = 0, 0, 0
   Line Colour Mode = Default
   Line Width = 1
-  Location List = /LINE:Line ~A ~A ~A ~A ~A
+  Location List = /LINE:~A
   Max = 0.0 [Pa]
   Meridional Point 1 = 0 [m], 1 [m]
   Meridional Point 2 = 1 [m], 2 [m]
@@ -183,12 +196,8 @@ END
           (number-to-string theta-max) 
           ;; Colour
           (first colour) (second colour) (third colour)
-          ;; Location
-          (number-to-string alpha)
-          (number-to-string x)
-          (number-to-string y)
-          (number-to-string r-i)
-          (number-to-string r-i+1) 
+          ;; Location List
+          (belt-line-name x y r-i r-i+1 alpha)
           ;; y, z Rotation Axis From 
           (* (cos (math/coord:dtr alpha)) (mm->m y)) 
           (* (sin (math/coord:dtr alpha)) (mm->m y))
@@ -264,24 +273,115 @@ END
    (make-radial-belts 10 50.0 530 10.0 110 -180.00 180.0 22.5))
 @end(code)
 "
-  (make-line-belt x y r-min r-max alpha :colour '(0 0 1))
-  (loop :for i :from 0 :below number :do
-    (let ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
-          (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min)))))
-      (make-surface-belt x y r-min r-max theta-i theta-i+1 alpha
-                         :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0)))))
+  (let ((theta-i-theta-i+1-sur-names nil))
+    (make-line-belt x y r-min r-max alpha :colour '(0 0 1))
+    (loop :for i :from 0 :below number :do
+      (let ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
+            (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min)))))
+        (make-surface-belt x y r-min r-max theta-i theta-i+1 alpha
+                           :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
+        (push (list theta-i
+                    theta-i+1
+                    (belt-surface-name x y r-min r-max theta-i theta-i+1 alpha))
+              theta-i-theta-i+1-sur-names)))
+    theta-i-theta-i+1-sur-names))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 
 (defun make-cell (surfaces &key (equation "massFlowAve(Total Temperature)") (col "B" ) (row 10) (format "%4.1f"))
   (loop :for surf :in surfaces
       :for j :from row :do
         (format t "~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" col j equation surf format)))
 
-#+nil
-(mnas-icem/belt:make-tangent-belts 10 466.5 0.0 411.0 477.0 -11.25 11.25 0.0)
+(defun char+number (string number)
+  (format nil "~A" (code-char (+ (char-code (elt string 0)) number))))
+
+(defun make-triple-cell (vmin-vmax-surfaces &key (equation "massFlowAve(Total Temperature)")
+                                              (col "A" )
+                                              (row 10)
+                                              (format "%4.1f")
+                                              (head-min "r-min")
+                                              (head-max "r-max"))
+  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 0) row head-min "%8.2f")
+  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 1) row head-max "%8.2f")
+  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 2) row equation "%8.2f")
+  (loop :for surf :in vmin-vmax-surfaces
+        :for j :from (1+ row) :do
+          (progn
+            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 0) j (first surf) "%8.2f")
+            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 1) j (second surf) "%8.2f")
+            (format t "  ~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 2) j equation (third  surf) format))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;A10 = "10.5", False, False, False, Left, False, 0, Font Name, 1|1, %10.3e, True, ffffff, 000000, True
+
+(defun make-table-tangent-belts (number x y r-min r-max theta-min theta-max alpha
+                                 &key
+                                   (equation "massFlowAve(Total Temperature)")
+                                   (col "A" )
+                                   (row 1)
+                                   (format "%4.1f"))
+  "@b(Описание:) функция @b(make-table-tangent-belts) выводит на
+ стандартный вывод данные, пригодные для формирования вертикальной
+ эпюры поля значений."
+  (let ((r-min-r-max-sur-name
+          (make-tangent-belts number x y r-min r-max theta-min theta-max alpha)))
+    (format t 
+    "
+TABLE: Table 1
+  Export Table Only = True
+  Table Exists = True
+  Table Export Format = State
+  Table Export HTML Border Width = 1
+  Table Export HTML Caption Position = Bottom
+  Table Export HTML Cell Padding = 5
+  Table Export HTML Cell Spacing = 1
+  Table Export Lines = All
+  Table Export Separator = Tab
+  Table Export Trailing Separators = True
+  OBJECT REPORT OPTIONS: 
+    Report Caption = 
+  END
+  TABLE CELLS: ~%")
+    (make-triple-cell r-min-r-max-sur-name :equation equation :col col :row row :format format)
+    (format t "  END~%END~%~%")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun make-table-radial-belts (number x y r-min r-max theta-min theta-max alpha
+                                &key
+                                  (equation "massFlowAve(Total Temperature)")
+                                  (col "E")
+                                  (row 1)
+                                  (format "%4.1f"))
+  "@b(Описание:) функция @b(make-table-radial-belts) выводит на
+ стандартный вывод данные, пригодные для формирования окружной эпюры
+ поля значений.
+"
+  (let ((alpha-min-alpha-max-sur-name
+          (make-radial-belts number x y r-min r-max theta-min theta-max alpha)))
+    (format t 
+            "
+TABLE: Table 1
+  Export Table Only = True
+  Table Exists = True
+  Table Export Format = State
+  Table Export HTML Border Width = 1
+  Table Export HTML Caption Position = Bottom
+  Table Export HTML Cell Padding = 5
+  Table Export HTML Cell Spacing = 1
+  Table Export Lines = All
+  Table Export Separator = Tab
+  Table Export Trailing Separators = True
+  OBJECT REPORT OPTIONS: 
+    Report Caption = 
+  END
+  TABLE CELLS: ~%")
+    (make-triple-cell alpha-min-alpha-max-sur-name :equation equation :col col :row row :format format :head-min "alpha-min" :head-max "alpha-max")
+    (format t "  END~%END~%~%")))
+
+(make-table-radial-belts 20 466.5 0.0 411.0 477.0 -11.25 11.25 0.0)
 
 #+nil
 (make-cell

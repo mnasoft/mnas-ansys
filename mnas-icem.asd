@@ -31,6 +31,7 @@ CFX-PRE.
                "mnas-icem/utils"
 
                "mnas-icem/ccl"
+               "mnas-icem/belt"
                ))
 
 (asdf:defsystem "mnas-icem/read"
