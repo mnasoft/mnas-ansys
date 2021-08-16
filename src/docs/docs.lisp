@@ -47,7 +47,7 @@
  Пакет документации формируется в каталоге
 ~/public_html/Common-Lisp-Programs/mnas-string.
 "
-;;  (inferior-shell:run `("mkdir" "-p" ,(mnas-package::codex-html-pathname :mnas-icem)))
+  (mnas-package:make-html-path :mnas-icem)
   (make-document)
   (make-graphs)
   (mnas-package:make-mainfest-lisp
@@ -62,7 +62,3 @@
   (mnas-package:rsync-doc "mnas-icem"))
 
 ;;;; (make-all)
-
-;;;; => "D:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-icem/docs/build/mnas-icem/html"
-
-
