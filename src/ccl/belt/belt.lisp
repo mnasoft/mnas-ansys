@@ -10,6 +10,9 @@
   (:export make-tangent-belts
            make-radial-belts
            )
+  (:export make-table-tangent-belts
+           make-table-radial-belts
+           )
   (:documentation
    "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
  сценарии для построения поверхностей в программном комплексе ANSYS
@@ -302,15 +305,35 @@ END
                                               (format "%4.1f")
                                               (head-min "r-min")
                                               (head-max "r-max"))
-  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 0) row head-min "%8.2f")
-  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 1) row head-max "%8.2f")
-  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 2) row equation "%8.2f")
+  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+          (char+number col 0) row head-min "%8.2f")
+  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+          (char+number col 1) row head-max "%8.2f")
+  (when (stringp equation)
+    (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+            (char+number col 2) row equation "%8.2f"))
+  (when (consp equation)
+    (loop :for eq :in equation
+          :for k :from 2
+          :do
+             (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                     (char+number col k) row eq "%8.2f")))
   (loop :for surf :in vmin-vmax-surfaces
         :for j :from (1+ row) :do
           (progn
-            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 0) j (first surf) "%8.2f")
-            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 1) j (second surf) "%8.2f")
-            (format t "  ~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" (char+number col 2) j equation (third  surf) format))))
+            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                    (char+number col 0) j (first surf) "%8.2f")
+            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                    (char+number col 1) j (second surf) "%8.2f")
+            (when (stringp equation)
+              (format t "  ~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                      (char+number col 2) j equation (third  surf) format))
+            (when (consp equation)
+              (loop :for eq :in equation
+                    :for k :from 2
+                    :do
+                       (format t "  ~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                               (char+number col k) j eq (third  surf) format))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -321,15 +344,34 @@ END
                                    (equation "massFlowAve(Total Temperature)")
                                    (col "A" )
                                    (row 1)
-                                   (format "%4.1f"))
+                                   (format "%4.1f")
+                                   (table 1))
   "@b(Описание:) функция @b(make-table-tangent-belts) выводит на
  стандартный вывод данные, пригодные для формирования вертикальной
- эпюры поля значений."
+ эпюры поля значений.
+
+ @b(Переменые:) 
+@begin(list) 
+ @item(number - количество окружных поясов;)
+ @item(x - плоскость, в которой строятся пояса;) 
+ @item(y - координата центра поясов;) 
+ @item(r-min - радиус максимальный;)
+ @item(r-max - радиус минимальный;) 
+ @item(theta-min - угол минимальный;)
+ @item(theta-max - угол максимальный;)
+ @item(alpha - угол поворота поясов вокруг оси X, градусы;)
+ @item(equation - строка, представляющая функцию на языке CCL;)
+ @item(col - левая колонка начала ражмещения таблицы;)
+ @item(row - верхняя строка начала ражмещения таблицы;)
+ @item(format - формат вывода данных в таблицу.)
+@end(list)
+
+"
   (let ((r-min-r-max-sur-name
           (make-tangent-belts number x y r-min r-max theta-min theta-max alpha)))
     (format t 
     "
-TABLE: Table 1
+TABLE: Table ~A
   Export Table Only = True
   Table Exists = True
   Table Export Format = State
@@ -343,7 +385,7 @@ TABLE: Table 1
   OBJECT REPORT OPTIONS: 
     Report Caption = 
   END
-  TABLE CELLS: ~%")
+  TABLE CELLS: ~%" table)
     (make-triple-cell r-min-r-max-sur-name :equation equation :col col :row row :format format)
     (format t "  END~%END~%~%")))
 
@@ -354,16 +396,33 @@ TABLE: Table 1
                                   (equation "massFlowAve(Total Temperature)")
                                   (col "E")
                                   (row 1)
-                                  (format "%4.1f"))
+                                  (format "%4.1f")
+                                  (table 1))
   "@b(Описание:) функция @b(make-table-radial-belts) выводит на
  стандартный вывод данные, пригодные для формирования окружной эпюры
  поля значений.
+
+ @b(Переменые:) 
+@begin(list) 
+ @item(number - количество окружных поясов;)
+ @item(x - плоскость, в которой строятся пояса;) 
+ @item(y - координата центра поясов;) 
+ @item(r-min - радиус максимальный;)
+ @item(r-max - радиус минимальный;) 
+ @item(theta-min - угол минимальный;)
+ @item(theta-max - угол максимальный;)
+ @item(alpha - угол поворота поясов вокруг оси X, градусы;)
+ @item(equation - строка, представляющая функцию на языке CCL;)
+ @item(col - левая колонка начала ражмещения таблицы;)
+ @item(row - верхняя строка начала ражмещения таблицы;)
+ @item(format - формат вывода данных в таблицу.)
+@end(list)
 "
   (let ((alpha-min-alpha-max-sur-name
           (make-radial-belts number x y r-min r-max theta-min theta-max alpha)))
     (format t 
             "
-TABLE: Table 1
+TABLE: Table ~A
   Export Table Only = True
   Table Exists = True
   Table Export Format = State
@@ -377,14 +436,58 @@ TABLE: Table 1
   OBJECT REPORT OPTIONS: 
     Report Caption = 
   END
-  TABLE CELLS: ~%")
+  TABLE CELLS: ~%" table)
     (make-triple-cell alpha-min-alpha-max-sur-name :equation equation :col col :row row :format format :head-min "alpha-min" :head-max "alpha-max")
     (format t "  END~%END~%~%")))
 
-(make-table-radial-belts 20 466.5 0.0 411.0 477.0 -11.25 11.25 0.0)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#+nil
-(make-cell
- (mnas-icem/belt:make-tangent-belts 10 466.5 0.0 411.0 477.0 -11.25 11.25 0.0))
+(let ((belts 20)
+      (d-row  3)
+      (r-1    1)
+      (eqs '("massFlowAve(Total Temperature)"
+             "maxVal(Total Temperature)")))
+
+  ;; Построение радиальной эпюры для двух труб жаровых (левой и правой)
+  ;; #+nil
+  (make-table-tangent-belts belts 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "A" :row r-1 :equation eqs) 
+  ;; Построение окружной эпюры для левой трубы жаровой
+  ;; #+nil
+  (make-table-radial-belts  belts 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "F" :row r-1 :equation eqs)
+  ;; Среднее значение радиальной эпюры для левой трубы жаровой
+  ;; #+nil
+  (make-table-tangent-belts 1 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "A" :row (+ r-1 d-row belts) :equation eqs)
+  ;; Среднее значение окружной эпюры для левой трубы жаровой
+  ;; #+nil
+  (make-table-radial-belts  1 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "F" :row (+ r-1 d-row belts) :equation eqs)
+  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+  ;; Построение радиальной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-tangent-belts belts 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "A" :row r-1 :equation eqs) 
+  ;; Построение окружной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-radial-belts  belts 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "F" :row r-1 :equation eqs)
+  ;; Среднее значение радиальной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-tangent-belts 1 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "A" :row (+ r-1 d-row belts) :equation eqs)
+  ;; Среднее значение окружной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-radial-belts  1 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "F" :row (+ r-1 d-row belts) :equation eqs)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Построение радиальной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-tangent-belts belts 466.5 0.0 411.0 477.0 -11.25 11.25 22.5 :col "A" :row (+ r-1 (* 2 d-row) (* 1 belts)) :equation eqs)
+  ;; Построение окружной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-radial-belts  belts 466.5 0.0 411.0 477.0 -11.25 11.25 22.5 :col "F" :row (+ r-1 (* 2 d-row) (* 1 belts)) :equation eqs)
+  ;; Среднее значение радиальной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-tangent-belts 1 466.5 0.0 411.0 477.0 -11.25 11.25 22.5 :col "A" :row (+ r-1 (* 3 d-row) (* 2 belts)) :equation eqs)
+  ;; Среднее значение окружной эпюры для левой трубы жаровой
+  #+nil
+  (make-table-radial-belts  1 466.5 0.0 411.0 477.0 -11.25 (+ 11.25 22.5) 0.0 :col "F" :row (+ r-1 (* 4 d-row) (* 2 belts)) :equation eqs)
+  ;; 
+  )
 
 
