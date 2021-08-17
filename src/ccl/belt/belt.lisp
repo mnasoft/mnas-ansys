@@ -291,23 +291,27 @@ END
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun make-cell (surfaces &key (equation "massFlowAve(Total Temperature)") (col "B" ) (row 10) (format "%4.1f"))
-  (loop :for surf :in surfaces
-      :for j :from row :do
-        (format t "~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%" col j equation surf format)))
+(defun make-cell (locations &key (equations '("" "=massFlow()@")) (col "A" ) (row 1) (format "%10.6f"))
+  (loop :for location :in locations
+        :for j :from row :do
+          (loop :for equation :in equations
+                :for k :from 0 :do
+            (format t "    ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                    (char+number col k) j equation location format))))
 
 (defun char+number (string number)
   (format nil "~A" (code-char (+ (char-code (elt string 0)) number))))
 
-(defun make-triple-cell (vmin-vmax-surfaces &key (equation "massFlowAve(Total Temperature)")
+(defun make-triple-cell (vmin-vmax-surfaces &key
+                                              (equation "massFlowAve(Total Temperature)")
                                               (col "A" )
                                               (row 10)
                                               (format "%4.1f")
                                               (head-min "r-min")
                                               (head-max "r-max"))
-  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+  (format t "    ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
           (char+number col 0) row head-min "%8.2f")
-  (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+  (format t "    ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
           (char+number col 1) row head-max "%8.2f")
   (when (stringp equation)
     (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
@@ -440,6 +444,75 @@ TABLE: Table ~A
     (make-triple-cell alpha-min-alpha-max-sur-name :equation equation :col col :row row :format format :head-min "alpha-min" :head-max "alpha-max")
     (format t "  END~%END~%~%")))
 
+(defun make-table-by-locations (locations
+                                &key
+                                  (equations '("" "=massFlow()@"))
+                                  (col "A")
+                                  (row 1)
+                                  (format "%4.1f")
+                                  (table 1))
+  "@b(Описание:) функция @b(make-table-radial-belts) выводит на
+ стандартный вывод данные, пригодные для формирования окружной эпюры
+ поля значений.
+
+ @b(Переменые:) 
+@begin(list) 
+ @item(locations - список строк содержащих локации, для которых выполняется функци(я/и) equation;)
+ @item(equation - строка, представляющая функцию на языке CCL;)
+ @item(col - левая колонка начала ражмещения таблицы;)
+ @item(row - верхняя строка начала ражмещения таблицы;)
+ @item(format - формат вывода данных в таблицу.)
+@end(list)
+"
+  (format t 
+          "
+TABLE: Table ~A
+  Export Table Only = True
+  Table Exists = True
+  Table Export Format = State
+  Table Export HTML Border Width = 1
+  Table Export HTML Caption Position = Bottom
+  Table Export HTML Cell Padding = 5
+  Table Export HTML Cell Spacing = 1
+  Table Export Lines = All
+  Table Export Separator = Tab
+  Table Export Trailing Separators = True
+  OBJECT REPORT OPTIONS: 
+    Report Caption = 
+  END
+  TABLE CELLS: ~%" table)
+  (make-cell locations :equations equations :col col :row row :format format)
+  (format t "  END~%END~%~%"))
+
+(make-table-by-locations
+ '("C_1 3_N01 Side 2"
+   "C_1 4_N01 Side 2"
+   
+   "C_1 5_N02 Side 2"
+   "C_1 5_N01 Side 2"
+   "C_1 6_N01 Side 2"
+   "C_1 2_X0495 Side 2"
+   "C_1 2_X0715 Side 2"
+   "C_1 2_X0765 Side 2"
+   "C_1 2_X0935 Side 2"
+   "C_1 2_X1155 Side 2"
+   "C_1 2_X1375 Side 2"
+   "C_1 2_X1595 Side 2"
+   "C_1 2_X1815 Side 2"
+   "C_1 2_X2035 Side 2"
+   "C_1 2_X2255 Side 2"
+   "C_1 2_X2549 Side 2"
+   "C_1 2_X2640 Side 2"
+   "C_1 2_X3029 Side 2"
+   "C_1 2_X3509 Side 2"
+   "C_1 2_X4015 Side 2"
+   "C_1 2_X4365 Side 2"
+   "C_1 2_X4560 Side 2"
+   "C_1 2_X4665 Side 2"
+   "B AIR INLET L")
+ :table 2 :row 3 :col "B"
+ :format "%10.6f")
+ 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (let ((belts 20)

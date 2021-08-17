@@ -37,7 +37,9 @@
   "@b(Описание:) функция @b(section-header-p) возврашает T, если строка
   @b(string) является заголовком секции.
 "
-  (when (find #\: string) t))
+  (when #+nil (find #\: string)
+        (search ": " string)
+        t))
 
 (defun key-value-p (string)
   "@b(Описание:) функция @b(key-value-p) возврашает T, если строка
@@ -47,7 +49,8 @@
 @begin[lang=lisp](code)
  (key-value-p \"    Boundary List1 = C T_1 G Side 1\") => T
 @end(code)"
-  (when (find #\= string) t))
+  (when #+nil (find #\= string)
+        (search " = " string) t))
 
 (defun end-p (string)
   "@b(Описание:) функция @b(end-p) возвращает:
@@ -196,8 +199,15 @@
 "
   (parse (mnas-icem/read:read-file-as-lines file-name)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 #+nil
 (defparameter *lines*
   (mnas-icem/read:read-file-as-lines
-   "~/quicklisp/local-projects/ANSYS/mnas-icem/data/ccl/interfaces.ccl"))
+   "~/quicklisp/local-projects/ANSYS/mnas-icem/data/ccl/temp.ccl"))
+
+#+nil
+(mapcar #'(lambda (el)
+            (mnas-icem/ccl::value (mnas-icem/ccl:find-in-tree-key "BOUNDARY" el)))
+        (parse *lines*))
 
