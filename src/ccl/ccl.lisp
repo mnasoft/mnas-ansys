@@ -12,7 +12,7 @@
 (in-package #:mnas-icem/ccl)
 
 (defun find-in-tree (item tree &key (test #'eql) (key #'identity))
-  "@b(Описание:) функция @b(find-in-tree) выполняет рекуссивый поиск
+  "@b(Описание:) функция @b(find-in-tree) выполняет рекурсивый поиск
   элемента @b(item) в древовидном списке @b(tree).
 
  @b(Пример использования:)
@@ -60,11 +60,8 @@
   (mnas-icem/read:read-file-as-lines
    "~/quicklisp/local-projects/ANSYS/mnas-icem/data/ccl/interfaces.ccl"))
 
-(defparameter *ccl* (parse *lines*))
-
-(find-in-tree-key "&replace DOMAIN INTERFACE" (elt *ccl* 1))
-(find-in-tree-key "Filter Domain List1" (elt *ccl* 1))
-(find-in-tree-key "Filter Domain List2" (elt *ccl* 1))
+(defparameter *ccl* (mnas-icem/ccl-parse::parse-slow *lines*))
+(defparameter *ccl* (mnas-icem/ccl-parse::parse *lines*))
 
 (value
  (find-in-tree-key "Option"

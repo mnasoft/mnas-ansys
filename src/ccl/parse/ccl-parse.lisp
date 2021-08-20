@@ -2,7 +2,23 @@
 
 (defpackage #:mnas-icem/ccl-parse
   (:use #:cl)
-  (:export parse parse-file))
+  (:intern start-char
+           string-depth
+           section-header-p
+           key-value-p
+           end-p
+           empty-p
+           separate
+           read-key-value
+           read-section-header
+           deep-reverse
+           nthcar
+           nth-cons-subst
+           ccl-line
+           ccl-line-slow
+           parse-slow)
+  (:export parse
+           parse-file))
 
 (in-package #:mnas-icem/ccl-parse)
  
@@ -159,7 +175,63 @@
                (ccl-line (first rez) v-strings (1+ i) end level))
         (key-value-p
          (list (read-key-value string)
-               (list string-depth section-header-p key-value-p empty-p end-p)))))))
+               (list string-depth section-header-p key-value-p empty-p end-p)))
+        (end-p (list nil
+                     (list string-depth section-header-p key-value-p empty-p end-p)))))))
+
+(defun ccl-line-slow (v-strings i)
+  "@b(Описание:) функция @b(ccl-line) возвращает список из двух элементов или NIL.
+ 
+  Список из двух элементов возвращается в случае если @b(i)-товый
+  элемент вектора строк @b(v-strings) является:
+
+@begin(list)
+ @item(заголовком секции;)
+ @item(парой ключ-значение.)
+@end(list)
+"
+  (let ((string (svref v-strings i)))
+    (let ((empty-p          (empty-p string))
+          (key-value-p      (key-value-p string))
+          (section-header-p (section-header-p string))
+          (end-p            (end-p string))
+          (string-depth     (string-depth string)))
+      (cond
+        (section-header-p
+         (list (read-section-header string)
+               (list string-depth section-header-p key-value-p empty-p end-p)))
+        (key-value-p
+         (list (read-key-value string)
+               (list string-depth section-header-p key-value-p empty-p end-p)))
+        (t nil)))))
+
+(defun parse-slow (v-strings)
+  "@b(Описание:) функция @b(parse) возвращает список как результат
+  парсинга вектора строк @b(v-strings) формата CCL ANSYS CFX.
+
+ При парсинге учитывается количество двойных отступов.
+
+ При парсинге признаки окончания раздела игнорируются.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (parse *lines*)
+@end(code)
+"
+    (let ((rez nil)
+          (a   nil))
+      (loop :for i :from 0 :below (length v-strings) :do
+        (progn
+          #+nil
+          (format t "~A~%" i)
+          (setf a (ccl-line-slow v-strings i))
+          (cond
+            ((null a))
+            ((numberp (first (second a)))
+             (setf rez (nth-cons-subst (first (second a))
+                                       (first a)
+                                       rez))))))
+      (deep-reverse rez)))
 
 (defun parse (v-strings)
   "@b(Описание:) функция @b(parse) возвращает список как результат
@@ -172,21 +244,25 @@
  @b(Пример использования:)
 @begin[lang=lisp](code)
  (parse *lines*)
-@end(code)
-
-"
-    (let ((rez nil)
-          (a   nil))
-      (loop :for i :from 0 :below (length v-strings) :do
-        (progn
-          (setf a (ccl-line v-strings i))
-          (cond
-            ((null a))
-            ((numberp (first (second a)))
-             (setf rez (nth-cons-subst (first (second a))
-                                       (first a)
-                                       rez))))))
-      (deep-reverse rez)))
+@end(code)"
+  (let ((a nil)
+        (of (make-string-output-stream)))
+    (format of "(~%")
+    (loop :for i :from 0 :below (length v-strings) :do
+      (progn
+        (setf a (ccl-line v-strings i))
+        (cond
+          ;; section-header-p
+          ((second (second a)) (format of "(~{~S ~}~%" (nreverse (first a))))
+          ;; key-value-p
+          ((third (second a))
+           (format of "~S~%" (nreverse (first a))))
+          ;; end-p
+          ((fifth (second a))
+           (format of ")~%")))))
+    (format of ")~%")
+    (read-from-string
+     (get-output-stream-string of))))
 
 (defun parse-file (file-name)
   "@b(Описание:) функция @b(parse-file) возвращает список как результат
@@ -202,12 +278,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #+nil
-(defparameter *lines*
-  (mnas-icem/read:read-file-as-lines
-   "~/quicklisp/local-projects/ANSYS/mnas-icem/data/ccl/temp.ccl"))
-
-#+nil
-(mapcar #'(lambda (el)
-            (mnas-icem/ccl::value (mnas-icem/ccl:find-in-tree-key "BOUNDARY" el)))
-        (parse *lines*))
-
+(progn
+  (sb-profile:profile start-char
+                      string-depth
+                      section-header-p
+                      key-value-p
+                      end-p
+                      empty-p
+                      separate
+                      read-key-value
+                      read-section-header
+                      deep-reverse
+                      nthcar
+                      nth-cons-subst
+                      ccl-line
+                      parse
+                      parse-file)
+  (parse-file "~/quicklisp/local-projects/ZM/cfx/a32-base/temp.ccl")
+  (sb-profile:report)
+  (sb-profile:reset)
+  (sb-profile:unprofile))

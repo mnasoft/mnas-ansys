@@ -4,15 +4,23 @@
   (:use #:cl )
   (:intern number-to-string
            mm->m
+           line-name
+           belt-line-name
+           belt-surface-name
            make-line-belt
            make-surface-belt
-           )
+           char+number
+           make-cells
+           make-triple-cells)
+  (:export make-line
+           make-surface-of-revolution
+           make-table-head
+           make-table-end)
   (:export make-tangent-belts
-           make-radial-belts
-           )
+           make-radial-belts)
   (:export make-table-tangent-belts
-           make-table-radial-belts
-           )
+           make-table-radial-belts)
+  (:export make-table-by-locations)
   (:documentation
    "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
  сценарии для построения поверхностей в программном комплексе ANSYS
@@ -20,6 +28,98 @@
 "))
 
 (in-package #:mnas-icem/belt)
+
+(defun object-view-transform ()
+  (format t "  OBJECT VIEW TRANSFORM: 
+    Apply Reflection = Off
+    Apply Rotation = Off
+    Apply Scale = Off
+    Apply Translation = Off
+    Principal Axis = Z
+    Reflection Plane Option = XY Plane
+    Rotation Angle = 0.0 [degree]
+    Rotation Axis From = 0 [m], 0 [m], 0 [m]
+    Rotation Axis To = 0 [m], 0 [m], 0 [m]
+    Rotation Axis Type = Principal Axis
+    Scale Vector = 1 , 1 , 1
+    Translation Vector = 0 [m], 0 [m], 0 [m]
+    X = 0.0 [m]
+    Y = 0.0 [m]
+    Z = 0.0 [m]
+  END~%"))
+
+(defun line-name (point-1 point-2)
+  "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
+   имя отрезка. Строка основана на координатах концевых точек
+   отрезка.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (line-name '(0 50 100) '(-10 -60 110)) =>
+ \"Line p0i00 p50i00 p100i00 m10i00 m60i00 p110i00\"
+@end(code)"
+  (format nil "Line ~{~A~^ ~}"
+          (mapcar #'number-to-string (append point-1 point-2))))
+
+(defun make-line (point-1
+                  point-2
+                  &key
+                    (colour '(1 0 0))
+                    (name (line-name point-1 point-2)))
+  "@b(Описание:) функция @b(make-line) возвращает строку,
+  которая представляет отрезок в формате пригодном для
+  вставки в CCL файл системы ANSYS CFX.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-line '(0 50 100) '(50 150 200))
+@end(code)"
+  (format t "~%LINE: ~A~%" name)
+  (format t "  Apply Instancing Transform = On~%")
+  (format t "  Colour = ~{~F~^, ~}~%" colour)
+  (format t "  Colour Map = Default Colour Map
+  Colour Mode = Constant
+  Colour Scale = Linear
+  Colour Variable = Pressure
+  Colour Variable Boundary Values = Hybrid
+  Domain List = /DOMAIN GROUP:All Domains
+  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+  Line Samples = 10
+  Line Type = Sample
+  Line Width = 2
+  Max = 0.0 [Pa]
+  Min = 0.0 [Pa]
+  Option = Two Points~%")
+  (format t "  Point 1 = ~{~F [mm]~^, ~}~%" point-1)
+  (format t "  Point 2 = ~{~F [mm]~^, ~}~%" point-2)
+  (format t "  Range = Global
+  Visibility = On~%")
+  (object-view-transform)
+  (format t "END~%"))
+
+(defun make-table-head (table)
+  "@b(Описание:) функция @b(make-table-head) возвращает строку,
+  которая представляет заголовок таблицы в формате пригодном для
+  вставки в CCL файл системы ANSYS CFX.
+"
+  (format t "~%TABLE: Table ~A~%" table)
+    (format t "  Export Table Only = True
+  Table Exists = True
+  Table Export Format = State
+  Table Export HTML Border Width = 1
+  Table Export HTML Caption Position = Bottom
+  Table Export HTML Cell Padding = 5
+  Table Export HTML Cell Spacing = 1
+  Table Export Lines = All
+  Table Export Separator = Tab
+  Table Export Trailing Separators = True
+  OBJECT REPORT OPTIONS: 
+    Report Caption = 
+  END
+  TABLE CELLS: ~%"))
+
+(defun make-table-end ()
+  (format t "  END~%END~%~%"))
 
 (defun number-to-string (val &key (fmt "~,2@F"))
   "@b(Описание:) функция @b(number-to-string) возвращает строку,
@@ -41,83 +141,126 @@
   (/ value 1000.0))
 
 (defun belt-line-name (x y r-min r-max alpha)
-  (format nil "Line ~A ~A ~A ~A ~A"
-          (number-to-string alpha)
-          (number-to-string x)
-          (number-to-string y)
-          (number-to-string r-min)
-          (number-to-string r-max)))
+  (line-name
+   (list x 
+         (* (cos (math/coord:dtr alpha)) (+ y r-min)) 
+         (* (sin (math/coord:dtr alpha)) (+ y r-min)))
+   (list x 
+         (* (cos (math/coord:dtr alpha)) (+ y r-max)) 
+         (* (sin (math/coord:dtr alpha)) (+ y r-max)))))
 
-(defun make-line-belt (x y r-i r-i+1 alpha &key (colour '(1 0 0)))
-  (format t
-          "
-LINE: ~A
-  Apply Instancing Transform = On
-  Colour = ~F, ~F, ~F
-  Colour Map = Default Colour Map
-  Colour Mode = Constant
-  Colour Scale = Linear
-  Colour Variable = Pressure
-  Colour Variable Boundary Values = Hybrid
-  Domain List = /DOMAIN GROUP:All Domains
-  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
-  Line Samples = 10
-  Line Type = Sample
-  Line Width = 2
-  Max = 0.0 [Pa]
-  Min = 0.0 [Pa]
-  Option = Two Points
-  Point 1 = ~F [m], ~F [m], ~F [m]
-  Point 2 = ~F [m], ~F [m], ~F [m]
-  Range = Global
-  Visibility = On
-  OBJECT VIEW TRANSFORM: 
-    Apply Reflection = Off
-    Apply Rotation = Off
-    Apply Scale = Off
-    Apply Translation = Off
-    Principal Axis = Z
-    Reflection Plane Option = XY Plane
-    Rotation Angle = 0.0 [degree]
-    Rotation Axis From = 0 [m], 0 [m], 0 [m]
-    Rotation Axis To = 0 [m], 0 [m], 0 [m]
-    Rotation Axis Type = Principal Axis
-    Scale Vector = 1 , 1 , 1
-    Translation Vector = 0 [m], 0 [m], 0 [m]
-    X = 0.0 [m]
-    Y = 0.0 [m]
-    Z = 0.0 [m]
-  END
-END
-"
-          ;; Header
-          (belt-line-name x y r-i r-i+1 alpha)
-          ;; Color
-          (first colour) (second colour) (third colour)
-          ;; x, y , z Point 1
-          (mm->m x) 
-          (* (cos (math/coord:dtr alpha)) (mm->m (+ y r-i))) 
-          (* (sin (math/coord:dtr alpha)) (mm->m (+ y r-i)))
-          ;; x, y, z Point 2
-          (mm->m x) 
-          (* (cos (math/coord:dtr alpha)) (mm->m (+ y r-i+1))) 
-          (* (sin (math/coord:dtr alpha)) (mm->m (+ y r-i+1)))))
+(defun make-line-belt (x y r-min r-max alpha &key (colour '(1 0 0)))
+  (make-line
+   (list x 
+         (* (cos (math/coord:dtr alpha)) (+ y r-min)) 
+         (* (sin (math/coord:dtr alpha)) (+ y r-min)))
+   (list x 
+         (* (cos (math/coord:dtr alpha)) (+ y r-max)) 
+         (* (sin (math/coord:dtr alpha)) (+ y r-max)))
+   :colour colour))
 
 #+nil (make-line-belt 466.5 0.0 411.0 477.0 0.0 :colour '(1 0 0))
 
 (defun belt-surface-name (x y r-min r-max theta-min theta-max alpha)
-  (format nil "SURFACE ~A ~A ~A ~A ~A ~A"
+  (format nil "SURFACE ~A ~A ~A ~A ~A ~A ~A"
           (number-to-string alpha)
           (number-to-string x)
+          (number-to-string y)
           (number-to-string r-min)
           (number-to-string r-max)
           (number-to-string theta-min)
           (number-to-string theta-max)))
 
-(defun make-surface-belt (x y r-i r-i+1 theta-min theta-max alpha &key (colour '(1 0 0))) 
+(progn 
+  (make-line `(-48.589 ,(+ 530 73/2) 0) `(-36.589 ,(+ 530 73/2) 0) :name "Line")
+  (make-line `(-22.589 ,(+ 530 136/2) 0) `(-6.389 ,(+ 530 136/2) 0) :name "Line 1")
+  (make-surface-of-revolution '("Line")
+                              '(0 530 0)
+                              '(1 530 0)
+                              -180
+                              180)
+  (make-surface-of-revolution "Line 1"
+                              '(0 530 0)
+                              '(1 530 0)
+                              -180
+                              180))
+                            
+(defun make-surface-of-revolution (location-list
+                                   rotation-axis-from
+                                   rotation-axis-to
+                                   theta-min
+                                   theta-max
+                                   &key
+                                     (colour '(1 0 0))
+                                     (name (concatenate 'string "SURFACE "
+                                                        (cond
+                                                          ((stringp location-list) location-list)
+                                                          ((consp location-list)(first location-list))))))
+  ;;#+nil
+  (format t "~%SURFACE OF REVOLUTION: ~A
+  Apply Instancing Transform = On
+  Apply Texture = Off
+  Blend Texture = On~%" name)
+  (format t "  Colour = ~{~F~^, ~}~%" colour)
+  (format t "  Colour Map = Default Colour Map
+  Colour Mode = Constant
+  Colour Scale = Linear
+  Colour Variable = Pressure
+  Colour Variable Boundary Values = Hybrid
+  Culling Mode = No Culling
+  Domain List = /DOMAIN GROUP:All Domains
+  Draw Faces = On
+  Draw Lines = Off
+  Ending Axial Shift = 0.0 [m]
+  Ending Radial Shift = 0.0 [m]
+  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+  Lighting = On
+  Line Colour = 0, 0, 0
+  Line Colour Mode = Default
+  Line Width = 1~%")
+  (when (stringp location-list)
+    (format t "  Location List = /LINE:~A~%" location-list))
+  (when (consp location-list)
+    (format t "  Location List = /LINE:~{~A~^ ,~}~%" location-list))
+  (format t "  Max = 0.0 [Pa]
+  Meridional Point 1 = 0 [m], 1 [m]
+  Meridional Point 2 = 1 [m], 2 [m]
+  Meridional Points = 20
+  Min = 0.0 [Pa]
+  Option = From Line
+  Principal Axis = X
+  Project to AR Plane = On
+  Range = Global
+  Render Edge Angle = 0 [degree]~%")
+  (format t "  Rotation Axis From = ~{~F [mm]~^, ~}~%" rotation-axis-from)
+  (format t "  Rotation Axis To = ~{~F [mm]~^, ~}~%" rotation-axis-to)
+  (format t "  Rotation Axis Type = Rotation Axis
+  Specular Lighting = On
+  Starting Axial Shift = 0.0 [m]
+  Starting Radial Shift = 0.0 [m]
+  Surface Drawing = Smooth Shading
+  Texture Angle = 0
+  Texture Direction = 0 , 1 , 0
+  Texture File = 
+  Texture Material = Metal
+  Texture Position = 0 , 0
+  Texture Scale = 1
+  Texture Type = Predefined~%")
+  (format t "  Theta Max = ~A [degree]~%" theta-max)
+  (format t "  Theta Min = ~A [degree]~%" theta-min)
+  (format t "  Theta Points = 50
+  Tile Texture = Off
+  Transform Texture = Off
+  Transparency = 0.0
+  Use Angle Range = On
+  Visibility = On~%")
+  (object-view-transform)
+  (format t "END~%"))
+
+(defun make-surface-belt (x y r-min r-max theta-min theta-max alpha &key (colour '(1 0 0))) 
   (format t
           "
-SURFACE OF REVOLUTION: SURFACE ~A ~A ~A ~A ~A ~A
+SURFACE OF REVOLUTION: SURFACE ~A
   Apply Instancing Transform = On
   Apply Texture = Off
   Blend Texture = On
@@ -191,16 +334,11 @@ SURFACE OF REVOLUTION: SURFACE ~A ~A ~A ~A ~A ~A
 END
 "
           ;; SURFACE OF REVOLUTION:
-          (number-to-string alpha)
-          (number-to-string x)
-          (number-to-string r-i)
-          (number-to-string r-i+1)
-          (number-to-string theta-min)
-          (number-to-string theta-max) 
+          (belt-surface-name x y r-min r-max theta-min theta-max alpha)
           ;; Colour
           (first colour) (second colour) (third colour)
           ;; Location List
-          (belt-line-name x y r-i r-i+1 alpha)
+          (belt-line-name x y r-min r-max alpha)
           ;; y, z Rotation Axis From 
           (* (cos (math/coord:dtr alpha)) (mm->m y)) 
           (* (sin (math/coord:dtr alpha)) (mm->m y))
@@ -243,13 +381,15 @@ END
                            :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
         (push (list r-i
                     r-i+1
+                    #+nil
                     (format nil "SURFACE ~A ~A ~A ~A ~A ~A"
                             (number-to-string alpha)
                             (number-to-string x)
                             (number-to-string r-i)
                             (number-to-string r-i+1)
                             (number-to-string theta-min)
-                            (number-to-string theta-max)))
+                            (number-to-string theta-max))
+                    (belt-surface-name x y r-i r-i+1 theta-min theta-max alpha))
               r-i-r-i+1-sur-names)))
     r-i-r-i+1-sur-names))
 
@@ -291,7 +431,10 @@ END
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun make-cell (locations &key (equations '("" "=massFlow()@")) (col "A" ) (row 1) (format "%10.6f"))
+(defun char+number (string number)
+  (format nil "~A" (code-char (+ (char-code (elt string 0)) number))))
+
+(defun make-cells (locations &key (equations '("" "=massFlow()@")) (col "A" ) (row 1) (format "%10.6f"))
   (loop :for location :in locations
         :for j :from row :do
           (loop :for equation :in equations
@@ -299,10 +442,7 @@ END
             (format t "    ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
                     (char+number col k) j equation location format))))
 
-(defun char+number (string number)
-  (format nil "~A" (code-char (+ (char-code (elt string 0)) number))))
-
-(defun make-triple-cell (vmin-vmax-surfaces &key
+(defun make-triple-cells (vmin-vmax-surfaces &key
                                               (equation "massFlowAve(Total Temperature)")
                                               (col "A" )
                                               (row 10)
@@ -373,25 +513,9 @@ END
 "
   (let ((r-min-r-max-sur-name
           (make-tangent-belts number x y r-min r-max theta-min theta-max alpha)))
-    (format t 
-    "
-TABLE: Table ~A
-  Export Table Only = True
-  Table Exists = True
-  Table Export Format = State
-  Table Export HTML Border Width = 1
-  Table Export HTML Caption Position = Bottom
-  Table Export HTML Cell Padding = 5
-  Table Export HTML Cell Spacing = 1
-  Table Export Lines = All
-  Table Export Separator = Tab
-  Table Export Trailing Separators = True
-  OBJECT REPORT OPTIONS: 
-    Report Caption = 
-  END
-  TABLE CELLS: ~%" table)
-    (make-triple-cell r-min-r-max-sur-name :equation equation :col col :row row :format format)
-    (format t "  END~%END~%~%")))
+    (make-table-head table)
+    (make-triple-cells r-min-r-max-sur-name :equation equation :col col :row row :format format)
+    (make-table-end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -424,25 +548,9 @@ TABLE: Table ~A
 "
   (let ((alpha-min-alpha-max-sur-name
           (make-radial-belts number x y r-min r-max theta-min theta-max alpha)))
-    (format t 
-            "
-TABLE: Table ~A
-  Export Table Only = True
-  Table Exists = True
-  Table Export Format = State
-  Table Export HTML Border Width = 1
-  Table Export HTML Caption Position = Bottom
-  Table Export HTML Cell Padding = 5
-  Table Export HTML Cell Spacing = 1
-  Table Export Lines = All
-  Table Export Separator = Tab
-  Table Export Trailing Separators = True
-  OBJECT REPORT OPTIONS: 
-    Report Caption = 
-  END
-  TABLE CELLS: ~%" table)
-    (make-triple-cell alpha-min-alpha-max-sur-name :equation equation :col col :row row :format format :head-min "alpha-min" :head-max "alpha-max")
-    (format t "  END~%END~%~%")))
+    (make-table-head table)
+    (make-triple-cells alpha-min-alpha-max-sur-name :equation equation :col col :row row :format format :head-min "alpha-min" :head-max "alpha-max")
+    (make-table-end)))
 
 (defun make-table-by-locations (locations
                                 &key
@@ -464,103 +572,8 @@ TABLE: Table ~A
  @item(format - формат вывода данных в таблицу.)
 @end(list)
 "
-  (format t 
-          "
-TABLE: Table ~A
-  Export Table Only = True
-  Table Exists = True
-  Table Export Format = State
-  Table Export HTML Border Width = 1
-  Table Export HTML Caption Position = Bottom
-  Table Export HTML Cell Padding = 5
-  Table Export HTML Cell Spacing = 1
-  Table Export Lines = All
-  Table Export Separator = Tab
-  Table Export Trailing Separators = True
-  OBJECT REPORT OPTIONS: 
-    Report Caption = 
-  END
-  TABLE CELLS: ~%" table)
-  (make-cell locations :equations equations :col col :row row :format format)
-  (format t "  END~%END~%~%"))
+  (make-table-head table)
+  (make-cells locations :equations equations :col col :row row :format format)
+  (make-table-end))
 
-(make-table-by-locations
- '("C_1 3_N01 Side 2"
-   "C_1 4_N01 Side 2"
-   
-   "C_1 5_N02 Side 2"
-   "C_1 5_N01 Side 2"
-   "C_1 6_N01 Side 2"
-   "C_1 2_X0495 Side 2"
-   "C_1 2_X0715 Side 2"
-   "C_1 2_X0765 Side 2"
-   "C_1 2_X0935 Side 2"
-   "C_1 2_X1155 Side 2"
-   "C_1 2_X1375 Side 2"
-   "C_1 2_X1595 Side 2"
-   "C_1 2_X1815 Side 2"
-   "C_1 2_X2035 Side 2"
-   "C_1 2_X2255 Side 2"
-   "C_1 2_X2549 Side 2"
-   "C_1 2_X2640 Side 2"
-   "C_1 2_X3029 Side 2"
-   "C_1 2_X3509 Side 2"
-   "C_1 2_X4015 Side 2"
-   "C_1 2_X4365 Side 2"
-   "C_1 2_X4560 Side 2"
-   "C_1 2_X4665 Side 2"
-   "B AIR INLET L")
- :table 2 :row 3 :col "B"
- :format "%10.6f")
- 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(let ((belts 20)
-      (d-row  3)
-      (r-1    1)
-      (eqs '("massFlowAve(Total Temperature)"
-             "maxVal(Total Temperature)")))
-
-  ;; Построение радиальной эпюры для двух труб жаровых (левой и правой)
-  ;; #+nil
-  (make-table-tangent-belts belts 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "A" :row r-1 :equation eqs) 
-  ;; Построение окружной эпюры для левой трубы жаровой
-  ;; #+nil
-  (make-table-radial-belts  belts 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "F" :row r-1 :equation eqs)
-  ;; Среднее значение радиальной эпюры для левой трубы жаровой
-  ;; #+nil
-  (make-table-tangent-belts 1 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "A" :row (+ r-1 d-row belts) :equation eqs)
-  ;; Среднее значение окружной эпюры для левой трубы жаровой
-  ;; #+nil
-  (make-table-radial-belts  1 466.5 0.0 411.0 477.0 -11.25 (+ 22.5 11.25) 0.0 :col "F" :row (+ r-1 d-row belts) :equation eqs)
-  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
-  ;; Построение радиальной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-tangent-belts belts 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "A" :row r-1 :equation eqs) 
-  ;; Построение окружной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-radial-belts  belts 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "F" :row r-1 :equation eqs)
-  ;; Среднее значение радиальной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-tangent-belts 1 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "A" :row (+ r-1 d-row belts) :equation eqs)
-  ;; Среднее значение окружной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-radial-belts  1 466.5 0.0 411.0 477.0 -11.25 11.25 0.0 :col "F" :row (+ r-1 d-row belts) :equation eqs)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Построение радиальной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-tangent-belts belts 466.5 0.0 411.0 477.0 -11.25 11.25 22.5 :col "A" :row (+ r-1 (* 2 d-row) (* 1 belts)) :equation eqs)
-  ;; Построение окружной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-radial-belts  belts 466.5 0.0 411.0 477.0 -11.25 11.25 22.5 :col "F" :row (+ r-1 (* 2 d-row) (* 1 belts)) :equation eqs)
-  ;; Среднее значение радиальной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-tangent-belts 1 466.5 0.0 411.0 477.0 -11.25 11.25 22.5 :col "A" :row (+ r-1 (* 3 d-row) (* 2 belts)) :equation eqs)
-  ;; Среднее значение окружной эпюры для левой трубы жаровой
-  #+nil
-  (make-table-radial-belts  1 466.5 0.0 411.0 477.0 -11.25 (+ 11.25 22.5) 0.0 :col "F" :row (+ r-1 (* 4 d-row) (* 2 belts)) :equation eqs)
-  ;; 
-  )
-
-
