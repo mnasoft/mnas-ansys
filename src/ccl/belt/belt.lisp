@@ -17,7 +17,8 @@
            make-table-head
            make-table-end)
   (:export make-tangent-belts
-           make-radial-belts)
+           make-radial-belts
+           make-belts)
   (:export make-table-tangent-belts
            make-table-radial-belts)
   (:export make-table-by-locations)
@@ -40,9 +41,10 @@
 (defun obj-number-reset ()
   (setf *obj-number* 0))
 
-(defun obj-number-print (n)
-  (format nil "~12,'0D" n))
+(defun obj-number-print ()
+  (format nil "~12,'0D" *obj-number*))
 
+#+nil
 (obj-number-reset)
 
 (defun object-view-transform ()
@@ -64,6 +66,7 @@
     Z = 0.0 [m]
   END~%"))
 
+#+nil
 (defun line-name (point-1 point-2)
   "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
    имя отрезка. Строка основана на координатах концевых точек
@@ -77,13 +80,24 @@
   (format nil "Line ~{~A~^ ~}"
           (mapcar #'number-to-string (append point-1 point-2))))
 
+(defun line-name ()
+  "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
+   имя отрезка."
+  (format nil "Line ~A"
+          (obj-number-print)))
 
+(defun surface-name ()
+  "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
+   имя поверзности."
+  (format nil "Surface ~A"
+          (obj-number-print)))
 
 (defun make-line (point-1
                   point-2
                   &key
                     (colour '(1 0 0))
-                    (name (line-name point-1 point-2)))
+                    (name (progn (obj-number-incf)
+                                 (line-name))))
   "@b(Описание:) функция @b(make-line) возвращает строку,
   которая представляет отрезок в формате пригодном для
   вставки в CCL файл системы ANSYS CFX.
@@ -113,7 +127,32 @@
   (format t "  Range = Global
   Visibility = On~%")
   (object-view-transform)
-  (format t "END~%"))
+  (format t "END~%")
+  name)
+
+(defun make-lines (point-1 point-2 number)
+  (let ((x0 (first  point-1))
+        (y0 (second point-1))
+        (z0 (third  point-1))
+        (dx (- (first  point-2) (first  point-1)))
+        (dy (- (second point-2) (second point-1)))
+        (dz (- (third  point-2) (third  point-1))))
+    (loop :for i :from 0 :below number
+          :for j :from 1 
+          :collect
+          (let ((x-i (+ x0 (* (/ i number) dx)))
+                (x-j (+ x0 (* (/ j number) dx)))
+                (y-i (+ y0 (* (/ i number) dy)))
+                (y-j (+ y0 (* (/ j number) dy)))
+                (z-i (+ z0 (* (/ i number) dz)))
+                (z-j (+ z0 (* (/ j number) dz))))
+            (make-line
+             (list x-i y-i z-i)
+             (list x-j y-j z-j)
+             :colour
+             `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))))
+
+(make-lines '(0 500 300) '(300 100 500) 10)
 
 (defun make-table-head (table)
   "@b(Описание:) функция @b(make-table-head) возвращает строку,
@@ -158,6 +197,7 @@
   "@b(Описание:) функция @b(mm->m) переводит милиметры в метры."
   (/ value 1000.0))
 
+#+nil
 (defun belt-line-name (x y r-min r-max alpha)
   (line-name
    (list x 
@@ -197,11 +237,8 @@
                                    theta-max
                                    &key
                                      (colour '(1 0 0))
-                                     (name (concatenate 'string
-                                                        #+nil "SURFACE "
-                                                        (cond
-                                                          ((stringp location-list) location-list)
-                                                          ((consp location-list) (first location-list))))))
+                                     (name (progn (obj-number-incf)
+                                                  (surface-name))))
   ;;#+nil
   (format t "~%SURFACE OF REVOLUTION: ~A
   Apply Instancing Transform = On
@@ -252,8 +289,8 @@
   Texture Position = 0 , 0
   Texture Scale = 1
   Texture Type = Predefined~%")
-  (format t "  Theta Max = ~A [degree]~%" theta-max)
-  (format t "  Theta Min = ~A [degree]~%" theta-min)
+  (format t "  Theta Max = ~F [degree]~%" theta-max)
+  (format t "  Theta Min = ~F [degree]~%" theta-min)
   (format t "  Theta Points = 50
   Tile Texture = Off
   Transform Texture = Off
@@ -279,7 +316,7 @@
                               -180
                               180))
 
-(defun make-surface-belt (x y r-min r-max theta-min theta-max alpha &key (colour '(1 0 0))) 
+(defun make-surface-belt (location y theta-min theta-max alpha &key (colour '(1 0 0))) 
  "@b(Описание:) функция @b(make-surface-belt) предназначена для создания одиночного пояса.
 
  @b(Пример использования:)
@@ -288,18 +325,16 @@
 @end(code)
 
 "
-  (make-surface-of-revolution
-   (belt-line-name x y r-min r-max alpha)
-   (list 0.0
-         (* (cos (math/coord:dtr alpha)) y)
-         (* (sin (math/coord:dtr alpha)) y))
-   (list 1000.0
-         (* (cos (math/coord:dtr alpha)) y) 
-         (* (sin (math/coord:dtr alpha)) y))
-   theta-min
-   theta-max
-   :colour colour
-   :name  (belt-surface-name x y r-min r-max theta-min theta-max alpha)))
+  (make-surface-of-revolution location
+                              (list 0.0
+                                    (* (cos (math/coord:dtr alpha)) y)
+                                    (* (sin (math/coord:dtr alpha)) y))
+                              (list 1000.0
+                                    (* (cos (math/coord:dtr alpha)) y) 
+                                    (* (sin (math/coord:dtr alpha)) y))
+                              theta-min
+                              theta-max
+                              :colour colour))
 
 (defun make-tangent-belts (number x y r-min r-max theta-min theta-max alpha)
   "@b(Описание:) функция @b(make-tangent-belts) выводит на стандартный
@@ -337,35 +372,16 @@
 "
   (let ((r-i-r-i+1-sur-names nil))
     (loop :for i :from 0 :below number :do
-      (let ((r-i    (+ r-min (* (/ i      number) (- r-max r-min))))
-            (r-i+1  (+ r-min (* (/ (1+ i) number) (- r-max r-min)))))
-        (make-line-belt x y r-i r-i+1 alpha
-                        :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
-        (make-surface-belt x y r-i r-i+1 theta-min theta-max alpha
-                           :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
-        (push (list r-i
-                    r-i+1
-                    (belt-surface-name x y r-i r-i+1 theta-min theta-max alpha))
-              r-i-r-i+1-sur-names)))
+      (let* ((r-i    (+ r-min (* (/ i      number) (- r-max r-min))))
+             (r-i+1  (+ r-min (* (/ (1+ i) number) (- r-max r-min))))
+             (sur
+               (make-surface-belt
+                (make-line-belt x y r-i r-i+1 alpha
+                                :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
+                y theta-min theta-max alpha
+                :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
+        (push (list r-i r-i+1 sur) r-i-r-i+1-sur-names)))
     r-i-r-i+1-sur-names))
-
-(defun make-belts (number locations rotation-axis-from rotation-axis-to theta-min theta-max)
-  (let ((rez nil))
-    (loop :for i :from 0 :below number :do
-      (let* ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
-             (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min))))
-             (name       (make-surface-of-revolution
-                          locations
-                          rotation-axis-from
-                          rotation-axis-to
-                          theta-i
-                          theta-i+1
-                          :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
-        (push name rez)))
-    rez))
-
-
-(make-belts 3 "Line" '(0.0 0.0 0.0) '(1000.0 300.0 0.0) -45.0 45.0)
 
 (defun make-radial-belts (number x y r-min r-max theta-min theta-max alpha)
   "@b(Описание:) функция @b(make-radial-belts) выводит на стандартный
@@ -401,18 +417,64 @@
 
  @image[src=make-radial-belts.png]()
 "
-  (let ((theta-i-theta-i+1-sur-names nil))
-    (make-line-belt x y r-min r-max alpha :colour '(0 0 1))
+  (let ((theta-i-theta-i+1-sur-names nil)
+        (line (make-line-belt x y r-min r-max alpha :colour '(0 0 1))))
     (loop :for i :from 0 :below number :do
-      (let ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
-            (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min)))))
-        (make-surface-belt x y r-min r-max theta-i theta-i+1 alpha
-                           :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
-        (push (list theta-i
-                    theta-i+1
-                    (belt-surface-name x y r-min r-max theta-i theta-i+1 alpha))
-              theta-i-theta-i+1-sur-names)))
+      (let* ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
+             (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min))))
+             (sur (make-surface-belt line y theta-i theta-i+1 alpha
+                           :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
+        
+        (push (list theta-i theta-i+1 sur) theta-i-theta-i+1-sur-names)))
     theta-i-theta-i+1-sur-names))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun make-belts (u-number v-number point-1 point-2 rotation-axis-from rotation-axis-to theta-min theta-max)
+  "@b(Описание:) функция @b(make-belts) выводит на стандартный вывод
+   данные в формате CCL ANSYS, представляющие из себя сетку из
+   поверхностей.
+
+ Возвращает список списков имен, вновьобразованных поверхностей. По
+ строкам рост в направлении от point-1 к point-2. По столбцам рост от
+ theta-min к theta-max.
+
+ @b(Переменые:)
+@begin(list)
+@iterm(u-number - количество делений отрезка point-1 point-2;)
+@iterm(v-number - количество делений theta-min theta-max;)
+@iterm(point-1 - начальная точка образующей;)
+@iterm(point-2 - конечная точка образующей;)
+@iterm(rotation-axis-from - первая точка на оси;)
+@iterm(rotation-axis-to - вторая точка на оси;)
+@iterm(theta-min - угол минимальный;)
+@iterm(theta-max - угол максимальный.)
+@end(list)
+
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-belts 6 12 '(466.5 411.0 0.0)  '(466.5 477.0 0.0 ) '(0.0 0.0 0.0) '(1000.0 0.0 0.0)  -11.25 11.25)
+@end(code)
+
+"
+  (let (#+nil (rez nil)
+        (lines (make-lines point-1 point-2 u-number)))
+    (loop :for u :in lines
+          :for i :from 1
+          :collect
+          (loop :for v :from 0 :below v-number
+                :collect
+                (let* ((theta-i    (+ theta-min (* (/ v      v-number) (- theta-max theta-min))))
+                       (theta-i+1  (+ theta-min (* (/ (1+ v) v-number) (- theta-max theta-min))))
+                       (name       (make-surface-of-revolution
+                                    u
+                                    rotation-axis-from
+                                    rotation-axis-to
+                                    theta-i
+                                    theta-i+1
+                                    :colour `(1 ,(nth-value 1 (floor (1+ v) 2)) ,(nth-value 1 (floor (1+ i) 2))))))
+                  name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -580,7 +642,3 @@
  "=areaAve(Velocity u)@" "=areaAve(Velocity v)@" "=areaAve(Velocity w)@"))
 
 (make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
-
-(make-surface-belt 1200.0 0.0 0.0 200.0 -180 +180 0.0)
-
-(belt-surface-name 1200.0 0.0 0.0 200.0 -180 +180 0.0)
