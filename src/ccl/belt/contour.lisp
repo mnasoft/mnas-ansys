@@ -11,10 +11,10 @@
 
 (in-package #:mnas-icem/contour)
 
-(defun make-contour (contour
-                     colour-variable
+(defun make-contour (colour-variable
                      location-list
                      &key
+                       (name "Contour")
                        (max "0 [C]") (min "0 [C]") (number-of-contours 11) (line-width 1))
   "@b(Описание:) функция @b(make-contour)
 

@@ -1,4 +1,4 @@
-;;;; ./src/ccl/test.lisp
+;;;; ./src/ccl/belt/belt.lisp
 
 (defpackage #:mnas-icem/belt
   (:use #:cl )
@@ -28,6 +28,22 @@
 "))
 
 (in-package #:mnas-icem/belt)
+
+(defvar *obj-number* 1)
+
+(defun obj-number ()
+  *obj-number*)
+
+(defun obj-number-incf ()
+  (incf *obj-number*))
+
+(defun obj-number-reset ()
+  (setf *obj-number* 0))
+
+(defun obj-number-print (n)
+  (format nil "~12,'0D" n))
+
+(obj-number-reset)
 
 (defun object-view-transform ()
   (format t "  OBJECT VIEW TRANSFORM: 
@@ -60,6 +76,8 @@
 @end(code)"
   (format nil "Line ~{~A~^ ~}"
           (mapcar #'number-to-string (append point-1 point-2))))
+
+
 
 (defun make-line (point-1
                   point-2
@@ -171,20 +189,7 @@
           (number-to-string theta-min)
           (number-to-string theta-max)))
 
-(progn 
-  (make-line `(-48.589 ,(+ 530 73/2) 0) `(-36.589 ,(+ 530 73/2) 0) :name "Line")
-  (make-line `(-22.589 ,(+ 530 136/2) 0) `(-6.389 ,(+ 530 136/2) 0) :name "Line 1")
-  (make-surface-of-revolution '("Line")
-                              '(0 530 0)
-                              '(1 530 0)
-                              -180
-                              180)
-  (make-surface-of-revolution "Line 1"
-                              '(0 530 0)
-                              '(1 530 0)
-                              -180
-                              180))
-                            
+
 (defun make-surface-of-revolution (location-list
                                    rotation-axis-from
                                    rotation-axis-to
@@ -192,10 +197,11 @@
                                    theta-max
                                    &key
                                      (colour '(1 0 0))
-                                     (name (concatenate 'string "SURFACE "
+                                     (name (concatenate 'string
+                                                        #+nil "SURFACE "
                                                         (cond
                                                           ((stringp location-list) location-list)
-                                                          ((consp location-list)(first location-list))))))
+                                                          ((consp location-list) (first location-list))))))
   ;;#+nil
   (format t "~%SURFACE OF REVOLUTION: ~A
   Apply Instancing Transform = On
@@ -255,102 +261,58 @@
   Use Angle Range = On
   Visibility = On~%")
   (object-view-transform)
-  (format t "END~%"))
+  (format t "END~%")
+  name)
+
+#+nil
+(progn 
+  (make-line `(-48.589 ,(+ 530 73/2) 0) `(-36.589 ,(+ 530 73/2) 0) :name "Line")
+  (make-line `(-22.589 ,(+ 530 136/2) 0) `(-6.389 ,(+ 530 136/2) 0) :name "Line 1")
+  (make-surface-of-revolution '("Line")
+                              '(0 530 0)
+                              '(1 530 0)
+                              -180
+                              180)
+  (make-surface-of-revolution "Line 1"
+                              '(0 530 0)
+                              '(1 530 0)
+                              -180
+                              180))
 
 (defun make-surface-belt (x y r-min r-max theta-min theta-max alpha &key (colour '(1 0 0))) 
-  (format t
-          "
-SURFACE OF REVOLUTION: SURFACE ~A
-  Apply Instancing Transform = On
-  Apply Texture = Off
-  Blend Texture = On
-  Colour = ~F, ~F, ~F
-  Colour Map = Default Colour Map
-  Colour Mode = Constant
-  Colour Scale = Linear
-  Colour Variable = Pressure
-  Colour Variable Boundary Values = Hybrid
-  Culling Mode = No Culling
-  Domain List = /DOMAIN GROUP:All Domains
-  Draw Faces = On
-  Draw Lines = Off
-  Ending Axial Shift = 0.0 [m]
-  Ending Radial Shift = 0.0 [m]
-  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
-  Lighting = On
-  Line Colour = 0, 0, 0
-  Line Colour Mode = Default
-  Line Width = 1
-  Location List = /LINE:~A
-  Max = 0.0 [Pa]
-  Meridional Point 1 = 0 [m], 1 [m]
-  Meridional Point 2 = 1 [m], 2 [m]
-  Meridional Points = 20
-  Min = 0.0 [Pa]
-  Option = From Line
-  Principal Axis = X
-  Project to AR Plane = On
-  Range = Global
-  Render Edge Angle = 0 [degree]
-  Rotation Axis From = 0 [m], ~F [m], ~F [m]
-  Rotation Axis To = 1 [m], ~F [m], ~F [m]
-  Rotation Axis Type = Rotation Axis
-  Specular Lighting = On
-  Starting Axial Shift = 0.0 [m]
-  Starting Radial Shift = 0.0 [m]
-  Surface Drawing = Smooth Shading
-  Texture Angle = 0
-  Texture Direction = 0 , 1 , 0
-  Texture File = 
-  Texture Material = Metal
-  Texture Position = 0 , 0
-  Texture Scale = 1
-  Texture Type = Predefined
-  Theta Max = ~A [degree]
-  Theta Min = ~A [degree]
-  Theta Points = 50
-  Tile Texture = Off
-  Transform Texture = Off
-  Transparency = 0.0
-  Use Angle Range = On
-  Visibility = On
-  OBJECT VIEW TRANSFORM: 
-    Apply Reflection = Off
-    Apply Rotation = Off
-    Apply Scale = Off
-    Apply Translation = Off
-    Principal Axis = Z
-    Reflection Plane Option = XY Plane
-    Rotation Angle = 0.0 [degree]
-    Rotation Axis From = 0 [m], 0 [m], 0 [m]
-    Rotation Axis To = 1 [m], 0 [m], 0 [m]
-    Rotation Axis Type = Principal Axis
-    Scale Vector = 1 , 1 , 1
-    Translation Vector = 0 [m], 0 [m], 0 [m]
-    X = 0.0 [m]
-    Y = 0.0 [m]
-    Z = 0.0 [m]
-  END
-END
+ "@b(Описание:) функция @b(make-surface-belt) предназначена для создания одиночного пояса.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-surface-belt 0 1200 0 100 -180 180 0.0)
+@end(code)
+
 "
-          ;; SURFACE OF REVOLUTION:
-          (belt-surface-name x y r-min r-max theta-min theta-max alpha)
-          ;; Colour
-          (first colour) (second colour) (third colour)
-          ;; Location List
-          (belt-line-name x y r-min r-max alpha)
-          ;; y, z Rotation Axis From 
-          (* (cos (math/coord:dtr alpha)) (mm->m y)) 
-          (* (sin (math/coord:dtr alpha)) (mm->m y))
-          ;; y, z Rotation Axis To
-          (* (cos (math/coord:dtr alpha)) (mm->m y)) 
-          (* (sin (math/coord:dtr alpha)) (mm->m y))
-          theta-max
-          theta-min))
+  (make-surface-of-revolution
+   (belt-line-name x y r-min r-max alpha)
+   (list 0.0
+         (* (cos (math/coord:dtr alpha)) y)
+         (* (sin (math/coord:dtr alpha)) y))
+   (list 1000.0
+         (* (cos (math/coord:dtr alpha)) y) 
+         (* (sin (math/coord:dtr alpha)) y))
+   theta-min
+   theta-max
+   :colour colour
+   :name  (belt-surface-name x y r-min r-max theta-min theta-max alpha)))
 
 (defun make-tangent-belts (number x y r-min r-max theta-min theta-max alpha)
-  "@b(Описание:) функция @b(make-tangent-belts) предназначена для создания поверхностей,
- представляющих из себя окружные пояса.
+  "@b(Описание:) функция @b(make-tangent-belts) выводит на стандартный
+ вывод данные в формате CCL ANSYS, представляющие из себя окружные
+ пояса. 
+
+ Возвращает список длиной в @b(number) элементов, каждым элементом
+ которого являются:
+@begin(list)
+ @item(меньший угол пояса;)
+ @item(больший угол пояса;)
+ @item(имя поверхности.)
+@end(list)
 
  @b(Переменые:) 
 @begin(list) 
@@ -367,9 +329,11 @@ END
  @b(Пример использования:)
 @begin[lang=lisp](code)
  (progn
-   (make-tangent-belts 10 450 530 10 110 -180.0 180. 0.0)
-   (make-tangent-belts 10 450 530 10 110 -180.0 180. 22.5))
+   (make-tangent-belts 3 1200 200.0 100 200.0 -45.0 +45.0 0)
+   (make-tangent-belts 3 1200 200.0 100 200.0 -45.0 +45.0 60.0))
 @end(code)
+
+ @image[src=make-tangent-belts.png]()
 "
   (let ((r-i-r-i+1-sur-names nil))
     (loop :for i :from 0 :below number :do
@@ -381,21 +345,40 @@ END
                            :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
         (push (list r-i
                     r-i+1
-                    #+nil
-                    (format nil "SURFACE ~A ~A ~A ~A ~A ~A"
-                            (number-to-string alpha)
-                            (number-to-string x)
-                            (number-to-string r-i)
-                            (number-to-string r-i+1)
-                            (number-to-string theta-min)
-                            (number-to-string theta-max))
                     (belt-surface-name x y r-i r-i+1 theta-min theta-max alpha))
               r-i-r-i+1-sur-names)))
     r-i-r-i+1-sur-names))
 
+(defun make-belts (number locations rotation-axis-from rotation-axis-to theta-min theta-max)
+  (let ((rez nil))
+    (loop :for i :from 0 :below number :do
+      (let* ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
+             (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min))))
+             (name       (make-surface-of-revolution
+                          locations
+                          rotation-axis-from
+                          rotation-axis-to
+                          theta-i
+                          theta-i+1
+                          :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
+        (push name rez)))
+    rez))
+
+
+(make-belts 3 "Line" '(0.0 0.0 0.0) '(1000.0 300.0 0.0) -45.0 45.0)
+
 (defun make-radial-belts (number x y r-min r-max theta-min theta-max alpha)
-  "@b(Описание:) функция @b(make-radial-belts) создает поверхности,
- представляющие из себя радиальные пояса.
+  "@b(Описание:) функция @b(make-radial-belts) выводит на стандартный
+ вывод данные в формате CCL ANSYS, представляющие из себя радиальные
+ пояса. 
+
+ Возвращает список длиной в @b(number) элементов, каждым элементом
+ которого являются:
+@begin(list)
+ @item(меньший угол пояса;)
+ @item(больший угол пояса;)
+ @item(имя поверхности.)
+@end(list)
 
  @b(Переменые:)
 @begin(list)
@@ -412,9 +395,11 @@ END
  @b(Пример использования:)
 @begin[lang=lisp](code)
  (progn
-   (make-radial-belts 10 50.0 530 10.0 110 -180.00 180.0 0)
-   (make-radial-belts 10 50.0 530 10.0 110 -180.00 180.0 22.5))
+   (make-radial-belts 3 1200 200.0 100 200.0 -45.0 +45.0 0)
+   (make-radial-belts 3 1200 200.0 100 200.0 -45.0 +45.0 60.0))
 @end(code)
+
+ @image[src=make-radial-belts.png]()
 "
   (let ((theta-i-theta-i+1-sur-names nil))
     (make-line-belt x y r-min r-max alpha :colour '(0 0 1))
@@ -443,7 +428,7 @@ END
                     (char+number col k) j equation location format))))
 
 (defun make-triple-cells (vmin-vmax-surfaces &key
-                                              (equation "massFlowAve(Total Temperature)")
+                                              (equations "=massFlowAve(Total Temperature)@")
                                               (col "A" )
                                               (row 10)
                                               (format "%4.1f")
@@ -453,15 +438,15 @@ END
           (char+number col 0) row head-min "%8.2f")
   (format t "    ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
           (char+number col 1) row head-max "%8.2f")
-  (when (stringp equation)
+  (when (stringp equations)
     (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-            (char+number col 2) row equation "%8.2f"))
-  (when (consp equation)
-    (loop :for eq :in equation
+            (char+number col 2) row (string-trim "=@" equations) "%8.2f"))
+  (when (consp equations)
+    (loop :for eq :in equations
           :for k :from 2
           :do
              (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                     (char+number col k) row eq "%8.2f")))
+                     (char+number col k) row (string-trim "=@" eq) "%8.2f")))
   (loop :for surf :in vmin-vmax-surfaces
         :for j :from (1+ row) :do
           (progn
@@ -469,14 +454,14 @@ END
                     (char+number col 0) j (first surf) "%8.2f")
             (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
                     (char+number col 1) j (second surf) "%8.2f")
-            (when (stringp equation)
-              (format t "  ~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                      (char+number col 2) j equation (third  surf) format))
-            (when (consp equation)
-              (loop :for eq :in equation
+            (when (stringp equations)
+              (format t "  ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                      (char+number col 2) j equations (third  surf) format))
+            (when (consp equations)
+              (loop :for eq :in equations
                     :for k :from 2
                     :do
-                       (format t "  ~A~A = \"=~A@~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+                       (format t "  ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
                                (char+number col k) j eq (third  surf) format))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -485,7 +470,7 @@ END
 
 (defun make-table-tangent-belts (number x y r-min r-max theta-min theta-max alpha
                                  &key
-                                   (equation "massFlowAve(Total Temperature)")
+                                   (equations "=massFlowAve(Total Temperature)@")
                                    (col "A" )
                                    (row 1)
                                    (format "%4.1f")
@@ -504,9 +489,9 @@ END
  @item(theta-min - угол минимальный;)
  @item(theta-max - угол максимальный;)
  @item(alpha - угол поворота поясов вокруг оси X, градусы;)
- @item(equation - строка, представляющая функцию на языке CCL;)
- @item(col - левая колонка начала ражмещения таблицы;)
- @item(row - верхняя строка начала ражмещения таблицы;)
+ @item(equations - строка, представляющая функцию на языке CCL;)
+ @item(col - левая колонка начала размещения таблицы;)
+ @item(row - верхняя строка начала размещения таблицы;)
  @item(format - формат вывода данных в таблицу.)
 @end(list)
 
@@ -514,14 +499,14 @@ END
   (let ((r-min-r-max-sur-name
           (make-tangent-belts number x y r-min r-max theta-min theta-max alpha)))
     (make-table-head table)
-    (make-triple-cells r-min-r-max-sur-name :equation equation :col col :row row :format format)
+    (make-triple-cells r-min-r-max-sur-name :equations equations :col col :row row :format format)
     (make-table-end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun make-table-radial-belts (number x y r-min r-max theta-min theta-max alpha
                                 &key
-                                  (equation "massFlowAve(Total Temperature)")
+                                  (equations "=massFlowAve(Total Temperature)@")
                                   (col "E")
                                   (row 1)
                                   (format "%4.1f")
@@ -540,16 +525,23 @@ END
  @item(theta-min - угол минимальный;)
  @item(theta-max - угол максимальный;)
  @item(alpha - угол поворота поясов вокруг оси X, градусы;)
- @item(equation - строка, представляющая функцию на языке CCL;)
- @item(col - левая колонка начала ражмещения таблицы;)
- @item(row - верхняя строка начала ражмещения таблицы;)
+ @item(equations - строка, представляющая функцию на языке CCL;)
+ @item(col - левая колонка начала размещения таблицы;)
+ @item(row - верхняя строка начала размещения таблицы;)
  @item(format - формат вывода данных в таблицу.)
 @end(list)
 "
   (let ((alpha-min-alpha-max-sur-name
           (make-radial-belts number x y r-min r-max theta-min theta-max alpha)))
     (make-table-head table)
-    (make-triple-cells alpha-min-alpha-max-sur-name :equation equation :col col :row row :format format :head-min "alpha-min" :head-max "alpha-max")
+    (make-triple-cells
+     alpha-min-alpha-max-sur-name
+     :equations equations
+     :col col
+     :row row
+     :format format
+     :head-min "alpha-min"
+     :head-max "alpha-max")
     (make-table-end)))
 
 (defun make-table-by-locations (locations
@@ -559,16 +551,17 @@ END
                                   (row 1)
                                   (format "%4.1f")
                                   (table 1))
-  "@b(Описание:) функция @b(make-table-radial-belts) выводит на
- стандартный вывод данные, пригодные для формирования окружной эпюры
- поля значений.
+  "@b(Описание:) функция @b(make-table-by-locations) выводит на
+ стандартный вывод данные, пригодные для формирования таблицы на языке
+ CCL.
 
  @b(Переменые:) 
 @begin(list) 
- @item(locations - список строк содержащих локации, для которых выполняется функци(я/и) equation;)
- @item(equation - строка, представляющая функцию на языке CCL;)
- @item(col - левая колонка начала ражмещения таблицы;)
- @item(row - верхняя строка начала ражмещения таблицы;)
+ @item(locations - список строк содержащих локации, для которых
+ выполняется функци(я/и) equation;)
+ @item(equations - список строк, представляющих функцию на языке CCL;)
+ @item(col - левая колонка начала размещения таблицы;)
+ @item(row - верхняя строка начала размещения таблицы;)
  @item(format - формат вывода данных в таблицу.)
 @end(list)
 "
@@ -577,3 +570,17 @@ END
   (make-table-end))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Примеры использования функций
+
+(make-tangent-belts 50 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+
+(make-table-tangent-belts
+ 50 1200.0 0.0 0.0 200.0 -180 +180 0.0
+ :equations '("=massFlowAve(Velocity u)@" "=massFlowAve(Velocity v)@" "=massFlowAve(Velocity w)@"
+ "=areaAve(Velocity u)@" "=areaAve(Velocity v)@" "=areaAve(Velocity w)@"))
+
+(make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+
+(make-surface-belt 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+
+(belt-surface-name 1200.0 0.0 0.0 200.0 -180 +180 0.0)
