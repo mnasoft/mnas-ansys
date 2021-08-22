@@ -147,4 +147,5 @@ CFX-PRE.
   :components ((:module "src/ccl/belt" 
                 :serial nil
                 :components
-                ((:file "belt")))))
+                ((:file "belt")
+                 (:file "contour")))))

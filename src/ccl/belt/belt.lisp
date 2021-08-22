@@ -1,7 +1,7 @@
 ;;;; ./src/ccl/belt/belt.lisp
 
 (defpackage #:mnas-icem/belt
-  (:use #:cl )
+  (:use #:cl)
   (:intern number-to-string
            mm->m
            line-name
@@ -12,6 +12,11 @@
            char+number
            make-cells
            make-triple-cells)
+  (:export obj-number
+           obj-number-incf
+           obj-number-reset
+           obj-number-print )
+  (:export for-list)
   (:export make-line
            make-surface-of-revolution
            make-table-head
@@ -21,6 +26,7 @@
            make-belts)
   (:export make-table-tangent-belts
            make-table-radial-belts)
+  (:export make-table-belts)
   (:export make-table-by-locations)
   (:documentation
    "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
@@ -46,6 +52,30 @@
 
 #+nil
 (obj-number-reset)
+
+(defun for-list (stream parameter variable)
+  (format stream
+          (concatenate 'string
+                       parameter
+                       (cond ((consp variable) "~{~A~^, ~}") (t "~A"))
+                       "~%")
+          variable))
+
+(defun divide-min-max (x-min x-max number)
+  "@b(Описание:) функция @b(divide-min-max) делит отрезок 
+  (@b(x-min); @b(x-max)) на (number) равных по длите отрезков.
+ Возвращает список результирующих отрезков.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (divide-min-max -11.25 11.25 4) 
+ => ((-11.25 -5.625) (-5.625 0.0) (0.0 5.625) (5.625 11.25))
+@end(code)"
+  (let ((d-x (- x-max x-min)))
+    (loop :for i :from 0 :below number
+          :for j :from 1
+          :collect
+          (list (+ x-min (* (/ i number) d-x)) (+ x-min (* (/ j number) d-x))))))
 
 (defun object-view-transform ()
   (format t "  OBJECT VIEW TRANSFORM: 
@@ -88,7 +118,7 @@
 
 (defun surface-name ()
   "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
-   имя поверзности."
+   имя поверхности."
   (format nil "Surface ~A"
           (obj-number-print)))
 
@@ -131,28 +161,49 @@
   name)
 
 (defun make-lines (point-1 point-2 number)
-  (let ((x0 (first  point-1))
+  "@b(Описание:) функция @b(make-lines) выводит на стандартный вывод
+ данные в формате CCL ANSYS, представляющие из себя отрезки, делящие
+ отрезок (@b(point-1); @b(point-2)) на @b(number) равных частей.
+
+ Возвращает список имен воновьсозданных отрезков. Имена в списке идут
+ от точки @b(point-1) к точке @b(point-2).
+
+ Вторым значением возвращает список расстояний минимальных и
+ максимальных до концевых точек отрезков от точки @b(point-1).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-lines '(0.0 50.0 0.0) '(100. 75.0 0.0) 2) 
+ => (\"Line 000000000326\" \"Line 000000000327\"), ((0.0 51.538822) (51.538822 103.077644))
+@end(code)"
+  (flet ((sq (x) (* x x))         )
+  (let ((min-max-lenth-from-point-1 nil)
+        (x0 (first  point-1))
         (y0 (second point-1))
         (z0 (third  point-1))
         (dx (- (first  point-2) (first  point-1)))
         (dy (- (second point-2) (second point-1)))
         (dz (- (third  point-2) (third  point-1))))
-    (loop :for i :from 0 :below number
-          :for j :from 1 
-          :collect
-          (let ((x-i (+ x0 (* (/ i number) dx)))
-                (x-j (+ x0 (* (/ j number) dx)))
-                (y-i (+ y0 (* (/ i number) dy)))
-                (y-j (+ y0 (* (/ j number) dy)))
-                (z-i (+ z0 (* (/ i number) dz)))
-                (z-j (+ z0 (* (/ j number) dz))))
-            (make-line
-             (list x-i y-i z-i)
-             (list x-j y-j z-j)
-             :colour
-             `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))))
-
-(make-lines '(0 500 300) '(300 100 500) 10)
+    (values
+     (loop :for i :from 0 :below number
+           :for j :from 1 
+           :collect
+           (let ((x-i (+ x0 (* (/ i number) dx)))
+                 (x-j (+ x0 (* (/ j number) dx)))
+                 (y-i (+ y0 (* (/ i number) dy)))
+                 (y-j (+ y0 (* (/ j number) dy)))
+                 (z-i (+ z0 (* (/ i number) dz)))
+                 (z-j (+ z0 (* (/ j number) dz))))
+             (push (list
+                    (sqrt (+ (sq (- x-i x0)) (sq (- y-i y0)) (sq (- z-i z0))))
+                    (sqrt (+ (sq (- x-j x0)) (sq (- y-j y0)) (sq (- z-j z0)))))
+                   min-max-lenth-from-point-1)
+             (make-line
+              (list x-i y-i z-i)
+              (list x-j y-j z-j)
+              :colour
+              `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
+     (nreverse min-max-lenth-from-point-1)))))
 
 (defun make-table-head (table)
   "@b(Описание:) функция @b(make-table-head) возвращает строку,
@@ -197,17 +248,17 @@
   "@b(Описание:) функция @b(mm->m) переводит милиметры в метры."
   (/ value 1000.0))
 
-#+nil
-(defun belt-line-name (x y r-min r-max alpha)
-  (line-name
-   (list x 
-         (* (cos (math/coord:dtr alpha)) (+ y r-min)) 
-         (* (sin (math/coord:dtr alpha)) (+ y r-min)))
-   (list x 
-         (* (cos (math/coord:dtr alpha)) (+ y r-max)) 
-         (* (sin (math/coord:dtr alpha)) (+ y r-max)))))
-
 (defun make-line-belt (x y r-min r-max alpha &key (colour '(1 0 0)))
+  "@b(Описание:) функция @b(make-line-belt) выводит на стандартный
+вывод данные в формате CCL ANSYS, представляющие из себя отрезок,
+который предназначен для формирования поверхности пояса.
+
+ Возвращает имя сгенерированного отрезка.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-line-belt 466.5 0.0 411.0 477.0 0.0 :colour '(1 0 0))
+@end(code)"
   (make-line
    (list x 
          (* (cos (math/coord:dtr alpha)) (+ y r-min)) 
@@ -216,8 +267,6 @@
          (* (cos (math/coord:dtr alpha)) (+ y r-max)) 
          (* (sin (math/coord:dtr alpha)) (+ y r-max)))
    :colour colour))
-
-#+nil (make-line-belt 466.5 0.0 411.0 477.0 0.0 :colour '(1 0 0))
 
 (defun belt-surface-name (x y r-min r-max theta-min theta-max alpha)
   (format nil "SURFACE ~A ~A ~A ~A ~A ~A ~A"
@@ -261,10 +310,7 @@
   Line Colour = 0, 0, 0
   Line Colour Mode = Default
   Line Width = 1~%")
-  (when (stringp location-list)
-    (format t "  Location List = /LINE:~A~%" location-list))
-  (when (consp location-list)
-    (format t "  Location List = /LINE:~{~A~^ ,~}~%" location-list))
+  (for-list t "  Location List = /LINE:" location-list)
   (format t "  Max = 0.0 [Pa]
   Meridional Point 1 = 0 [m], 1 [m]
   Meridional Point 2 = 1 [m], 2 [m]
@@ -317,14 +363,24 @@
                               180))
 
 (defun make-surface-belt (location y theta-min theta-max alpha &key (colour '(1 0 0))) 
- "@b(Описание:) функция @b(make-surface-belt) предназначена для создания одиночного пояса.
+ "@b(Описание:) функция @b(make-surface-belt) выводит на стандартный
+ вывод данные в формате CCL ANSYS, представляющие из себя элемент
+ одиночного пояса (поверхность вращения).
+
+ @b(Переменые:)
+@begin(list)
+ @item(location - строка с именем отрезка;) 
+ @item(y - смещение оси x=0 вращения пояса в направлении y;)
+ @item(theta-min - угол в градусах минимальный;)
+ @item(theta-max - угол в градусах максиальный;)
+ @item(alpha - поворот пояса вокруг оси x=0;)
+ @item(colour - цвет в формате RGB.) 
+@end(list)
 
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (make-surface-belt 0 1200 0 100 -180 180 0.0)
-@end(code)
-
-"
+ (make-surface-belt \"Line\" 100 -180 180 0.0)
+@end(code)"
   (make-surface-of-revolution location
                               (list 0.0
                                     (* (cos (math/coord:dtr alpha)) y)
@@ -366,22 +422,26 @@
  (progn
    (make-tangent-belts 3 1200 200.0 100 200.0 -45.0 +45.0 0)
    (make-tangent-belts 3 1200 200.0 100 200.0 -45.0 +45.0 60.0))
+ ((166.66667 200.0 \"Surface 000000000419\")
+  (133.33334 166.66667 \"Surface 000000000417\")
+  (100.0 133.33334 \"Surface 000000000415\"))
 @end(code)
 
  @image[src=make-tangent-belts.png]()
 "
-  (let ((r-i-r-i+1-sur-names nil))
-    (loop :for i :from 0 :below number :do
-      (let* ((r-i    (+ r-min (* (/ i      number) (- r-max r-min))))
-             (r-i+1  (+ r-min (* (/ (1+ i) number) (- r-max r-min))))
-             (sur
-               (make-surface-belt
-                (make-line-belt x y r-i r-i+1 alpha
-                                :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))
-                y theta-min theta-max alpha
-                :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
-        (push (list r-i r-i+1 sur) r-i-r-i+1-sur-names)))
-    r-i-r-i+1-sur-names))
+  (let ((ri-rj-snames nil)
+        (r-s (divide-min-max r-min r-max number)))
+    (loop :for (r-i r-j) :in r-s
+          :for i :from 1 :do
+      (let* ((line (make-line-belt
+                   x y r-i r-j alpha
+                   :colour `(1 ,(nth-value 1 (floor i 2)) 0)))
+            (sur (make-surface-belt
+                  line
+                  y theta-min theta-max alpha
+                  :colour `(1 ,(nth-value 1 (floor i 2)) 0))))
+        (push (list r-i r-j sur) ri-rj-snames)))
+    ri-rj-snames))
 
 (defun make-radial-belts (number x y r-min r-max theta-min theta-max alpha)
   "@b(Описание:) функция @b(make-radial-belts) выводит на стандартный
@@ -417,16 +477,15 @@
 
  @image[src=make-radial-belts.png]()
 "
-  (let ((theta-i-theta-i+1-sur-names nil)
+  (let ((ti-tj-snames nil)
+        (tetas (divide-min-max theta-min theta-max number))
         (line (make-line-belt x y r-min r-max alpha :colour '(0 0 1))))
-    (loop :for i :from 0 :below number :do
-      (let* ((theta-i    (+ theta-min (* (/ i      number) (- theta-max theta-min))))
-             (theta-i+1  (+ theta-min (* (/ (1+ i) number) (- theta-max theta-min))))
-             (sur (make-surface-belt line y theta-i theta-i+1 alpha
-                           :colour `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
-        
-        (push (list theta-i theta-i+1 sur) theta-i-theta-i+1-sur-names)))
-    theta-i-theta-i+1-sur-names))
+    (loop :for (t-i t-j) :in tetas
+          :for i :from 0 :do
+            (let ((sur (make-surface-belt line y t-i t-j alpha
+                                           :colour `(1 ,(nth-value 1 (floor i 2)) 0))))
+              (push (list t-i t-j sur) ti-tj-snames)))
+    ti-tj-snames))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -436,13 +495,13 @@
    поверхностей.
 
  Возвращает список списков имен, вновьобразованных поверхностей. По
- строкам рост в направлении от point-1 к point-2. По столбцам рост от
- theta-min к theta-max.
+строкам рост в направлении от point-1 к point-2. По столбцам рост от
+theta-min к theta-max.
 
  @b(Переменые:)
 @begin(list)
 @iterm(u-number - количество делений отрезка point-1 point-2;)
-@iterm(v-number - количество делений theta-min theta-max;)
+@iterm(v-number - количество делений угла theta-min theta-max;)
 @iterm(point-1 - начальная точка образующей;)
 @iterm(point-2 - конечная точка образующей;)
 @iterm(rotation-axis-from - первая точка на оси;)
@@ -451,92 +510,117 @@
 @iterm(theta-max - угол максимальный.)
 @end(list)
 
-
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (make-belts 6 12 '(466.5 411.0 0.0)  '(466.5 477.0 0.0 ) '(0.0 0.0 0.0) '(1000.0 0.0 0.0)  -11.25 11.25)
+ (make-belts 6 12 
+            '(466.5 411.0 0.0) '(466.5 477.0 0.0) 
+            '(0.0 0.0 0.0)     '(1000.0 0.0 0.0)
+            -11.25 11.25)
 @end(code)
 
 "
-  (let (#+nil (rez nil)
-        (lines (make-lines point-1 point-2 u-number)))
-    (loop :for u :in lines
-          :for i :from 1
-          :collect
-          (loop :for v :from 0 :below v-number
-                :collect
-                (let* ((theta-i    (+ theta-min (* (/ v      v-number) (- theta-max theta-min))))
-                       (theta-i+1  (+ theta-min (* (/ (1+ v) v-number) (- theta-max theta-min))))
-                       (name       (make-surface-of-revolution
-                                    u
-                                    rotation-axis-from
-                                    rotation-axis-to
-                                    theta-i
-                                    theta-i+1
-                                    :colour `(1 ,(nth-value 1 (floor (1+ v) 2)) ,(nth-value 1 (floor (1+ i) 2))))))
-                  name)))))
+  (let ((tetas (divide-min-max theta-min theta-max v-number)))
+    (multiple-value-bind  (lines dists) (make-lines point-1 point-2 u-number)
+      (values
+       
+       (nreverse (loop :for u :in lines :for i :from 0
+                       :collect
+                       (loop :for (t-min t-max) :in tetas :for j :from 0
+                             :collect
+                             (let ((name (make-surface-of-revolution
+                                          u
+                                          rotation-axis-from
+                                          rotation-axis-to
+                                          t-min
+                                          t-max
+                                          :colour `(1 ,(nth-value 1 (floor i 2)) ,(nth-value 1 (floor j 2))))))
+                               name))))
+       (nreverse dists)
+       tetas))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun char+number (string number)
   (format nil "~A" (code-char (+ (char-code (elt string 0)) number))))
 
-(defun make-cells (locations &key (equations '("" "=massFlow()@")) (col "A" ) (row 1) (format "%10.6f"))
+
+(defun make-cell (row col location &key (equation "") (format "%10.6f"))
+  (format t "    ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
+          (char+number "A" (1- col)) row equation location format))
+
+
+(defun make-cells-by-row (tbl &key (equation "") (row 1) (col 1) (format "%10.6f"))
+   "
+ @b(Переменые:)
+@begin(list)
+ @item(equation - \"=massFlow()@\";)
+ @item( )
+@end(list)
+" 
+  (loop :for r :in tbl :for i :from 0
+        :collect
+        (loop :for val :in r :for j :from 0
+              :collect
+              (make-cell (+ i row) (+ col j) val :equation equation :format format))))
+
+(defun make-cells-by-col (tbl &key (equation "") (row 1) (col 1) (format "%10.6f"))
+  "
+ @b(Переменые:)
+@begin(list)
+ @item(equation - \"=massFlow()@\";)
+ @item( )
+@end(list)
+"
+  (loop :for r :in tbl :for i :from 0
+        :collect
+        (loop :for val :in r :for j :from 0
+              :collect
+              (make-cell (+ j row) (+ i col) val :equation equation :format format))))
+
+(defun make-cells (locations &key (equations '("" "=massFlow()@")) (row 1) (col 1) (format "%10.6f"))
   (loop :for location :in locations
-        :for j :from row :do
+        :for i :from row :do
           (loop :for equation :in equations
-                :for k :from 0 :do
-            (format t "    ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                    (char+number col k) j equation location format))))
+                :for j :from col :do
+                  (make-cell i j location :equation equation :format format))))
 
 (defun make-triple-cells (vmin-vmax-surfaces &key
-                                              (equations "=massFlowAve(Total Temperature)@")
-                                              (col "A" )
-                                              (row 10)
-                                              (format "%4.1f")
-                                              (head-min "r-min")
-                                              (head-max "r-max"))
-  (format t "    ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-          (char+number col 0) row head-min "%8.2f")
-  (format t "    ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-          (char+number col 1) row head-max "%8.2f")
-  (when (stringp equations)
-    (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-            (char+number col 2) row (string-trim "=@" equations) "%8.2f"))
+                                               (equations "=massFlowAve(Total Temperature)@")
+                                               (col 1)
+                                               (row 1)
+                                               (format "%4.1f")
+                                               (head-min "r-min")
+                                               (head-max "r-max"))
+  (make-cell (+ row 0) (+ col 0) head-min)
+  (make-cell (+ row 0) (+ col 1) head-max)
+  (when (stringp equations) (make-cell (+ row 0) (+ col 2) (string-trim "=@" equations)))
   (when (consp equations)
-    (loop :for eq :in equations
-          :for k :from 2
-          :do
-             (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                     (char+number col k) row (string-trim "=@" eq) "%8.2f")))
-  (loop :for surf :in vmin-vmax-surfaces
-        :for j :from (1+ row) :do
+    (loop :for eq :in equations :for j :from 2 :do
+      (make-cell (+ row 0) (+ col j) (string-trim "=@" eq))))
+  (loop :for (v-min v-max surf) :in vmin-vmax-surfaces
+        :for i :from (1+ row) :do
           (progn
-            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                    (char+number col 0) j (first surf) "%8.2f")
-            (format t "  ~A~A = \"~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                    (char+number col 1) j (second surf) "%8.2f")
-            (when (stringp equations)
-              (format t "  ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                      (char+number col 2) j equations (third  surf) format))
+            (make-cell i (+ col 0) v-min)
+            (make-cell i (+ col 1) v-max)
+            (when (stringp equations) (make-cell i (+ col 2) surf :equation equations :format format))
             (when (consp equations)
               (loop :for eq :in equations
-                    :for k :from 2
+                    :for j :from 2
                     :do
-                       (format t "  ~A~A = \"~A~A\", False, False, False, Left, False, 0, Font Name, 1|1, ~A, False, ffffff, 000000, True~%"
-                               (char+number col k) j eq (third  surf) format))))))
+                       (make-cell i (+ col j) surf :equation eq :format format))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;A10 = "10.5", False, False, False, Left, False, 0, Font Name, 1|1, %10.3e, True, ffffff, 000000, True
 
 (defun make-table-tangent-belts (number x y r-min r-max theta-min theta-max alpha
                                  &key
                                    (equations "=massFlowAve(Total Temperature)@")
-                                   (col "A" )
                                    (row 1)
+                                   (col 1)
                                    (format "%4.1f")
-                                   (table 1))
+                                   (table 1)
+                                   (head-min "a-min")
+                                   (head-max "a-max")
+                                   )
   "@b(Описание:) функция @b(make-table-tangent-belts) выводит на
  стандартный вывод данные, пригодные для формирования вертикальной
  эпюры поля значений.
@@ -554,14 +638,17 @@
  @item(equations - строка, представляющая функцию на языке CCL;)
  @item(col - левая колонка начала размещения таблицы;)
  @item(row - верхняя строка начала размещения таблицы;)
- @item(format - формат вывода данных в таблицу.)
+ @item(format - формат вывода данных в таблицу;)
+ @item(table - номер таблицы;)
+ @item(head-min - заголовок для столбца минимальных значений;)
+ @item(head-max - заголовок для столбца макисмальных значений.)
 @end(list)
 
 "
-  (let ((r-min-r-max-sur-name
+  (let ((rmin-rmax-sname
           (make-tangent-belts number x y r-min r-max theta-min theta-max alpha)))
     (make-table-head table)
-    (make-triple-cells r-min-r-max-sur-name :equations equations :col col :row row :format format)
+    (make-triple-cells rmin-rmax-sname :equations equations :col col :row row :format format :head-min head-min :head-max head-max)
     (make-table-end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -569,10 +656,13 @@
 (defun make-table-radial-belts (number x y r-min r-max theta-min theta-max alpha
                                 &key
                                   (equations "=massFlowAve(Total Temperature)@")
-                                  (col "E")
+                                  (col 1)
                                   (row 1)
                                   (format "%4.1f")
-                                  (table 1))
+                                  (table 1)
+                                  (head-min "a-min")
+                                  (head-max "a-max")
+                                  )
   "@b(Описание:) функция @b(make-table-radial-belts) выводит на
  стандартный вывод данные, пригодные для формирования окружной эпюры
  поля значений.
@@ -590,21 +680,55 @@
  @item(equations - строка, представляющая функцию на языке CCL;)
  @item(col - левая колонка начала размещения таблицы;)
  @item(row - верхняя строка начала размещения таблицы;)
- @item(format - формат вывода данных в таблицу.)
+ @item(format - формат вывода данных в таблицу;)
+ @item(table - номер таблицы;)
+ @item(head-min - заголовок для столбца минимальных значений;)
+ @item(head-max - заголовок для столбца макисмальных значений.)
 @end(list)
 "
-  (let ((alpha-min-alpha-max-sur-name
+  (let ((amin-amax-sname
           (make-radial-belts number x y r-min r-max theta-min theta-max alpha)))
     (make-table-head table)
-    (make-triple-cells
-     alpha-min-alpha-max-sur-name
-     :equations equations
-     :col col
-     :row row
-     :format format
-     :head-min "alpha-min"
-     :head-max "alpha-max")
+    (make-triple-cells amin-amax-sname :equations equations :col col :row row :format format :head-min head-min :head-max head-max)
     (make-table-end)))
+
+
+(defun make-table-belts (u-number v-number point-1 point-2 rotation-axis-from rotation-axis-to theta-min theta-max
+                         &key
+                           (equations '("=massFlowAve(Total Temperature)@" "=massFlowAve(Velocity)@"))
+                           (formats   '("%4.1f"                            "%4.1f"))
+                           (col 1)
+                           (row 1)
+                           (format-r "%6.2f")
+                           (format-a "%6.2f")
+                           (table 1))
+  "@b(Описание:) функция @b(make-table-belts)  выводит на
+ стандартный вывод данные, пригодные для формирования 
+ полей значений, вычисленых по выражениям @b(equations).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-table-belts 5 4 
+                  '(1200 50 0)   '(1200 150 0.0) 
+                  '(0.0 0.0 0.0) '(1000.0 0.0 0.0)
+                  -90 90)
+@end(code)
+"
+  (multiple-value-bind (loc-tbl r-tbl a-tbl)
+      (make-belts u-number v-number point-1 point-2 rotation-axis-from rotation-axis-to theta-min theta-max)
+    (make-table-head table)
+    (loop :for eq :in equations :for fmt :in formats :for n :from 0 :by (+ (length r-tbl) 5) :do
+      (block cells
+        (make-cells-by-row `((,(string-trim "=@" eq))) :row (+ row 0 n) :col (+ col 0))
+        (make-cells-by-row '(("r-min" "r-max")) :row (+ row 2 n) :col (+ col 0))
+        (make-cells-by-col '(("a-min" "a-max")) :row (+ row 0 n) :col (+ col 2))
+        (make-cells-by-row r-tbl                :row (+ row 3 n) :col (+ col 0) :format format-r)
+        (make-cells-by-col a-tbl                :row (+ row 0 n) :col (+ col 3) :format format-a)
+        (make-cells-by-row loc-tbl :equation eq :row (+ row 3 n) :col (+ col 3) :format fmt)))
+    (make-table-end)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun make-table-by-locations (locations
                                 &key

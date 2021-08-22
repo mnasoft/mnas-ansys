@@ -81,7 +81,7 @@
   Параметр @b(times) задает глубину поиска - количество итераций.
 
   На каждом шаге @b(times) поверхности, задаваемые ключевым параметром
-  @(excluded) из результирующего списка исключаются.  
+  @b(excluded) из результирующего списка исключаются.  
 "
   (names (surface-coeged-with-surfaces surf tin :excluded excluded :times times)))
 

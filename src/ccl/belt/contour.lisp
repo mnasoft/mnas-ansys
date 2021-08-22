@@ -1,4 +1,4 @@
-;;;; ./src/ccl/test.lisp
+;;;; ./src/ccl/belt/contour.lisp
 
 (defpackage #:mnas-icem/contour
   (:use #:cl #:mnas-icem/belt)
@@ -11,20 +11,29 @@
 
 (in-package #:mnas-icem/contour)
 
+(defun contour-name ()
+  "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
+   имя поверхности."
+  (format nil "Contour ~A"
+          (obj-number-print)))
+
 (defun make-contour (colour-variable
-                     location-list
+                     locations
                      &key
-                       (name "Contour")
-                       (max "0 [C]") (min "0 [C]") (number-of-contours 11) (line-width 1))
+                       (max "0 [C]")
+                       (min "0 [C]")
+                       (number-of-contours 11)
+                       (line-width 1)
+                       (name (progn (obj-number-incf)
+                                    (contour-name))))
   "@b(Описание:) функция @b(make-contour)
 
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (make-contour \"Contour 1\" \"Total Temperature\" \"SURFACE p0i00 p466i50 p411i00 p477i00 m11i25 p33i75\")
+ (make-contour  \"Total Temperature\" \"SURFACE 0001\")
 @end(code)
-
 "
-  (format t "CONTOUR: ~A~%" contour)
+  (format t "CONTOUR: ~A~%" name)
   (format t "  Apply Instancing Transform = On
   Clip Contour = Off
   Colour Map = Default Colour Map
@@ -45,7 +54,7 @@
   Line Colour Mode = Default
 ")
   (format t "  Line Width = ~A~%" line-width)
-  (format t "  Location List = ~A~%" location-list)
+  (for-list t "  Location List = " locations)
   (format t "  Max = ~A~%" max)
   (format t "  Min = ~A~%" min)
   (format t "  Number of Contours = ~A~%" number-of-contours)
@@ -80,5 +89,8 @@ END
 
 #+nil
 (make-contour
- "Contour 1"
  "Total Temperature" "SURFACE p0i00 p466i50 p411i00 p477i00 m11i25 p33i75")
+
+(make-contour
+ "Total Temperature"
+ (mapcar #'caddr (make-tangent-belts 10 1300 0 0 200 -90 90 0.0)))
