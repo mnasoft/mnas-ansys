@@ -1,23 +1,23 @@
-(defpackage #:mnas-icem/docs
+(defpackage #:mnas-ansys/docs
   (:use #:cl ) 
   (:nicknames "MICEM/DOCS")
   (:export make-all)
-  (:documentation "Пакет @b(mnas-icem/docs) содержит функции
+  (:documentation "Пакет @b(mnas-ansys/docs) содержит функции
   генерирования и публикации документации.
 "))
 
-(in-package :mnas-icem/docs)
+(in-package :mnas-ansys/docs)
 
 (defun make-document ()
   (loop
     :for i :in
-    '((:mnas-icem           :mnas-icem)
-      (:mnas-icem/read      :mnas-icem/read)
-      (:mnas-icem/select    :mnas-icem/select)
-      (:mnas-icem/utils     :mnas-icem/utils)
-      (:mnas-icem/ccl       :mnas-icem/ccl)
-      (:mnas-icem/ccl-parse :mnas-icem/ccl-parse)
-      (:mnas-icem/belt      :mnas-icem/belt)
+    '((:mnas-ansys           :mnas-ansys)
+      (:mnas-ansys/read      :mnas-ansys/read)
+      (:mnas-ansys/select    :mnas-ansys/select)
+      (:mnas-ansys/utils     :mnas-ansys/utils)
+      (:mnas-ansys/ccl       :mnas-ansys/ccl)
+      (:mnas-ansys/ccl-parse :mnas-ansys/ccl-parse)
+      (:mnas-ansys/belt      :mnas-ansys/belt)
       
       )
     :do (apply #'mnas-package:document i)))
@@ -25,14 +25,14 @@
 (defun make-graphs ()
   (loop
     :for i :in
-    '(:mnas-icem
-      :mnas-icem/read
-      :mnas-icem/select
-      :mnas-icem/utils
+    '(:mnas-ansys
+      :mnas-ansys/read
+      :mnas-ansys/select
+      :mnas-ansys/utils
       
-      :mnas-icem/ccl
-      :mnas-icem/ccl-parse
-      :mnas-icem/belt
+      :mnas-ansys/ccl
+      :mnas-ansys/ccl-parse
+      :mnas-ansys/belt
       )
     :do (mnas-package:make-codex-graphs i i)))
 
@@ -47,18 +47,18 @@
  Пакет документации формируется в каталоге
 ~/public_html/Common-Lisp-Programs/mnas-string.
 "
-  (mnas-package:make-html-path :mnas-icem)
+  (mnas-package:make-html-path :mnas-ansys)
   (make-document)
   (make-graphs)
   (mnas-package:make-mainfest-lisp
-   '(:mnas-icem :mnas-icem/docs)
-   "Mnas-Icem"
+   '(:mnas-ansys :mnas-ansys/docs)
+   "Mnas-Ansys"
    '("Nick Matvyeyev")
-   (mnas-package:find-sources "mnas-icem")
+   (mnas-package:find-sources "mnas-ansys")
    :output-format of)
-  (codex:document :mnas-icem)
+  (codex:document :mnas-ansys)
   (make-graphs)
-  (mnas-package:copy-doc->public-html "mnas-icem")
-  (mnas-package:rsync-doc "mnas-icem"))
+  (mnas-package:copy-doc->public-html "mnas-ansys")
+  (mnas-package:rsync-doc "mnas-ansys"))
 
 ;;;; (make-all)

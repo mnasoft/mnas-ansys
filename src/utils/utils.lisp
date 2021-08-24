@@ -1,7 +1,7 @@
 ;;;; ./src/utils/utils.lisp
 
-(defpackage #:mnas-icem/utils
-  (:use #:cl #:mnas-icem #:mnas-icem/select #:math/geom)
+(defpackage #:mnas-ansys/utils
+  (:use #:cl #:mnas-ansys #:mnas-ansys/select #:math/geom)
   (:export curve-names-coeged-with-surface-in-family
            surface-names-coeged-with-surface-in-family
            surface-names-coeged-with-surfaces 
@@ -12,12 +12,12 @@
            )
   (:export quality-series)
   (:documentation
-   " Пакет @b(mnas-icem/utils) определяет функции, предназаченные для
+   " Пакет @b(mnas-ansys/utils) определяет функции, предназаченные для
    манипулирования графическими объектами при взаимодействии
    пользователя с программой ANSYS ICEM."
    ))
 
-(in-package :mnas-icem/utils)
+(in-package :mnas-ansys/utils)
 
 (defmethod curve-names-coeged-with-surface-in-family (families (tin <tin>))
   "@b(Описание:) функция @b(curve-names-coeged-with-surface-in-family)
@@ -40,11 +40,11 @@
 		     lst))
 	     (mapcar
 	      #'(lambda (el)
-		  (list (mnas-icem::<obj>-name el)
+		  (list (mnas-ansys::<obj>-name el)
 			(sort
-			 (mapcar #'mnas-icem::<ent>-family (coedged el tin))
+			 (mapcar #'mnas-ansys::<ent>-family (coedged el tin))
 			 #'string<)))
-              (mnas-icem::tin-curves tin))
+              (mnas-ansys::tin-curves tin))
 	      ;; (<tin>-curves tin))
 	     :initial-value ()))))
 
@@ -63,12 +63,12 @@
          (surfaces-excluded excluded)
          (start-surfaces family-surfaces))
     (loop :for i :from 0 :below times :do
-      (let* ((curves  (mnas-icem::find-curves-coeged-with-surfases start-surfaces tin))
-             (sufaces (mnas-icem::find-surfaces-coeged-with-curves curves tin)))
+      (let* ((curves  (mnas-ansys::find-curves-coeged-with-surfases start-surfaces tin))
+             (sufaces (mnas-ansys::find-surfaces-coeged-with-curves curves tin)))
         (map nil #'(lambda (el) (setf sufaces (remove el sufaces))) surfaces-excluded)
         (setf start-surfaces sufaces)))
     (map nil #'(lambda (el) (setf start-surfaces (remove el start-surfaces))) family-surfaces)
-    (mapcar #'mnas-icem::<obj>-name start-surfaces)))
+    (mapcar #'mnas-ansys::<obj>-name start-surfaces)))
 
 (defmethod surface-names-coeged-with-surfaces (surf (tin <tin>)
                                                &key

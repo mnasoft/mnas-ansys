@@ -1,15 +1,15 @@
 ;;;; ./src/ccl/belt/contour.lisp
 
-(defpackage #:mnas-icem/contour
-  (:use #:cl #:mnas-icem/belt)
+(defpackage #:mnas-ansys/contour
+  (:use #:cl #:mnas-ansys/belt)
   (:export make-contour)
   (:documentation
-   "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
+   "@b(Описание:) Пакет @b(mnas-ansys/ccl-belt) позволяет генерировать
  сценарии для построения поверхностей в программном комплексе ANSYS
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-icem/contour)
+(in-package #:mnas-ansys/contour)
 
 (defun contour-name ()
   "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую

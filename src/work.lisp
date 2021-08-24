@@ -1,4 +1,4 @@
-(in-package #:mnas-icem/utils)
+(in-package #:mnas-ansys/utils)
 
 (defparameter *tin-file* "/_gas/CFX/otd11/namatv/a32_base/PR-01/a32_KS_ALL.tin")
 

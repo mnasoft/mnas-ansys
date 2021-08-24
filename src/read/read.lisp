@@ -1,6 +1,6 @@
 ;;;; ./src/read/read.lisp
 
-(defpackage #:mnas-icem/read
+(defpackage #:mnas-ansys/read
   (:use #:cl)
   (:export read-file-as-lines
            read-by-key
@@ -10,12 +10,12 @@
 	   read-z-by-key
            )
   (:documentation
-   " Пакет @b(mnas-icem/read) предназначен для выполнения
+   " Пакет @b(mnas-ansys/read) предназначен для выполнения
  низкоуровевого разбора инструкций tin-файлов
  (представления геометрии) системы ANSYS ICEM."
    ))
 
-(in-package :mnas-icem/read)
+(in-package :mnas-ansys/read)
 
 (defun read-file-as-lines (filename)
   "@b(Описание:) функция @b(read-file-as-lines) возвращает вектор

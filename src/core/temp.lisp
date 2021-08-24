@@ -1,5 +1,5 @@
 ;;;; ./src/core/temp.lisp
-(in-package #:mnas-icem)
+(in-package #:mnas-ansys)
 
 (defun z-plane-x-axis (point)
   "@b(Описание:) функция @b(z-plane-x-axis) возвращает координаты точки,

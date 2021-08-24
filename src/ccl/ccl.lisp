@@ -1,15 +1,15 @@
 
 ;;;; ./src/clim/clim.lisp
 
-(defpackage #:mnas-icem/ccl
-  (:use #:cl #:mnas-icem/ccl-parse)
+(defpackage #:mnas-ansys/ccl
+  (:use #:cl #:mnas-ansys/ccl-parse)
   (:export find-in-tree
            find-in-tree-key
            find-in-tree-value)
   (:documentation
    "STUB"))
 
-(in-package #:mnas-icem/ccl)
+(in-package #:mnas-ansys/ccl)
 
 (defun find-in-tree (item tree &key (test #'eql) (key #'identity))
   "@b(Описание:) функция @b(find-in-tree) выполняет рекурсивый поиск
@@ -57,11 +57,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter *lines*
-  (mnas-icem/read:read-file-as-lines
-   "~/quicklisp/local-projects/ANSYS/mnas-icem/data/ccl/interfaces.ccl"))
+  (mnas-ansys/read:read-file-as-lines
+   "~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl"))
 
-(defparameter *ccl* (mnas-icem/ccl-parse::parse-slow *lines*))
-(defparameter *ccl* (mnas-icem/ccl-parse::parse *lines*))
+(defparameter *ccl* (mnas-ansys/ccl-parse::parse-slow *lines*))
+(defparameter *ccl* (mnas-ansys/ccl-parse::parse *lines*))
 
 (value
  (find-in-tree-key "Option"

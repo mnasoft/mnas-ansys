@@ -1,6 +1,6 @@
-(in-package #:mnas-icem)
+(in-package #:mnas-ansys)
 
-;; (defparameter *tin-file* "~/quicklisp/local-projects/ANSYS/mnas-icem/tin/a32_GT-13.tin")
+;; (defparameter *tin-file* "~/quicklisp/local-projects/ANSYS/mnas-ansys/tin/a32_GT-13.tin")
 (defparameter *tin-file* "Z:/CFX/otd11/namatv/a32_base/PR-01/GT/a32_GT-15.tin")
 (defparameter *tin* (open-tin-file *tin-file*))
 
@@ -8,7 +8,7 @@
 (<curve>-surfaces (first (tin-curves *tin*)))
 
 (length
- (mnas-icem/select:entities-by-families
+ (mnas-ansys/select:entities-by-families
   '(;; "GT_P15_STUB"
     "GT_P15_OUTER"
     )
@@ -22,7 +22,7 @@
      )
  )
 
-(mnas-icem/select:curves-by-families '("GT_P15_STUB") *tin*)
+(mnas-ansys/select:curves-by-families '("GT_P15_STUB") *tin*)
 
 ("GT_P15_STUB" "GT_P15_OUTER")
 find-coincidense

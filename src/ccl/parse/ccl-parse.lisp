@@ -1,6 +1,6 @@
 ;;;; ./src/clim/clim.lisp
 
-(defpackage #:mnas-icem/ccl-parse
+(defpackage #:mnas-ansys/ccl-parse
   (:use #:cl)
   (:intern start-char
            string-depth
@@ -20,7 +20,7 @@
   (:export parse
            parse-file))
 
-(in-package #:mnas-icem/ccl-parse)
+(in-package #:mnas-ansys/ccl-parse)
  
 (defun start-char (char string)
   "@b(Описание:) функция @b(start-chars) возвращает количество
@@ -270,10 +270,10 @@
 
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (parse-file \"~/quicklisp/local-projects/ANSYS/mnas-icem/data/ccl/interfaces.ccl\")
+ (parse-file \"~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl\")
 @end(code)
 "
-  (parse (mnas-icem/read:read-file-as-lines file-name)))
+  (parse (mnas-ansys/read:read-file-as-lines file-name)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

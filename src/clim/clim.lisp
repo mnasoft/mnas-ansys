@@ -1,9 +1,9 @@
 ;;;; ./src/clim/clim.lisp
 
-(defpackage #:mnas-icem/clim
+(defpackage #:mnas-ansys/clim
   (:use #:clim-lisp #:alexandria))
 
-(in-package #:mnas-icem/clim)
+(in-package #:mnas-ansys/clim)
 
 (clim:define-application-frame app ()
   ((a :initform 100 :accessor a)

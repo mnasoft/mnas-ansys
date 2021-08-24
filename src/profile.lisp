@@ -4,7 +4,7 @@
                       make-instance
                       read-object
                       )
-  (open-tetin-file "~/quicklisp/local-projects/ANSYS/mnas-icem/tin/a32_GU.tin")
+  (open-tetin-file "~/quicklisp/local-projects/ANSYS/mnas-ansys/tin/a32_GU.tin")
   (sb-profile:report)
   (sb-profile:reset)
   (sb-profile:unprofile))

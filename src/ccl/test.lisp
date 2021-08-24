@@ -1,18 +1,18 @@
 ;;;; ./src/ccl/test.lisp
 
-(defpackage #:mnas-icem/ccl-belt
+(defpackage #:mnas-ansys/ccl-belt
   (:use #:cl )
   (:intern number-to-string mm->m)
   (:export make-tangent-belts
            make-radial-belts
            )
   (:documentation
-   "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
+   "@b(Описание:) Пакет @b(mnas-ansys/ccl-belt) позволяет генерировать
  сценарии для построения поверхностей в программном комплексе ANSYS
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-icem/ccl-belt)
+(in-package #:mnas-ansys/ccl-belt)
 
 (require :mnas-string)
 (require :math/coord)

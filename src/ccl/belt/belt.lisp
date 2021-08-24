@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/belt/belt.lisp
 
-(defpackage #:mnas-icem/belt
+(defpackage #:mnas-ansys/belt
   (:use #:cl)
   (:intern number-to-string
            mm->m
@@ -29,12 +29,12 @@
   (:export make-table-belts)
   (:export make-table-by-locations)
   (:documentation
-   "@b(Описание:) Пакет @b(mnas-icem/ccl-belt) позволяет генерировать
+   "@b(Описание:) Пакет @b(mnas-ansys/ccl-belt) позволяет генерировать
  сценарии для построения поверхностей в программном комплексе ANSYS
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-icem/belt)
+(in-package #:mnas-ansys/belt)
 
 (defvar *obj-number* 1)
 

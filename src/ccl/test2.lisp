@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/test.lisp
 
-(in-package #:mnas-icem/ccl)
+(in-package #:mnas-ansys/ccl)
 
 (defclass <mesh-connection> ()
   ((option :accessor <mesh-connection>-option)))
