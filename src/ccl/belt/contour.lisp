@@ -20,10 +20,13 @@
 (defun make-contour (colour-variable
                      locations
                      &key
-                       (max "0 [C]")
-                       (min "0 [C]")
+                       (max "0")
+                       (min "0")
                        (number-of-contours 11)
                        (line-width 1)
+                       (colour-variable-boundary-values "Hybrid")
+                       (colour-scale "Linear")
+                       (contour-range "Local")
                        (name (progn (obj-number-incf)
                                     (contour-name))))
   "@b(Описание:) функция @b(make-contour)
@@ -34,58 +37,39 @@
 @end(code)
 "
   (format t "CONTOUR: ~A~%" name)
-  (format t "  Apply Instancing Transform = On
-  Clip Contour = Off
-  Colour Map = Default Colour Map
-  Colour Scale = Linear
-")
+  (format t "  Apply Instancing Transform = On~%")
+  (format t "  Clip Contour = Off~%")
+  (format t "  Colour Map = Default Colour Map~%")
+  (format t "  Colour Scale = ~A~%" colour-scale)
   (format t "  Colour Variable = ~A~%" colour-variable)
-  (format t "  Colour Variable Boundary Values = Hybrid
-  Constant Contour Colour = Off
-  Contour Range = Local
-  Culling Mode = No Culling
-  Domain List = /DOMAIN GROUP:All Domains
-  Draw Contours = On
-  Font = Sans Serif
-  Fringe Fill = On
-  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
-  Lighting = On
-  Line Colour = 0, 0, 0
-  Line Colour Mode = Default
-")
+  (format t "  Colour Variable Boundary Values = ~A~%" colour-variable-boundary-values)
+  (format t "  Constant Contour Colour = Off~%")
+  (format t "  Contour Range = ~A~%" contour-range)
+  (format t "  Culling Mode = No Culling~%")
+  (format t "  Domain List = /DOMAIN GROUP:All Domains~%")
+  (format t "  Draw Contours = On~%")
+  (format t "  Font = Sans Serif~%")
+  (format t "  Fringe Fill = On~%")
+  (format t "  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform~%")
+  (format t "  Lighting = On~%")
+  (format t "  Line Colour = 0, 0, 0~%")
+  (format t "  Line Colour Mode = Default~%")
   (format t "  Line Width = ~A~%" line-width)
   (for-list t "  Location List = " locations)
   (format t "  Max = ~A~%" max)
   (format t "  Min = ~A~%" min)
   (format t "  Number of Contours = ~A~%" number-of-contours)
-  (format t "  Show Numbers = Off
-  Specular Lighting = On
-  Surface Drawing = Smooth Shading
-  Text Colour = 0, 0, 0
-  Text Colour Mode = Default
-  Text Height = 0.024
-  Transparency = 0.0
-  Value List = 0 [C],1 [C]
-  Visibility = On
-  OBJECT VIEW TRANSFORM: 
-    Apply Reflection = Off
-    Apply Rotation = Off
-    Apply Scale = Off
-    Apply Translation = Off
-    Principal Axis = Z
-    Reflection Plane Option = XY Plane
-    Rotation Angle = 0.0 [degree]
-    Rotation Axis From = 0 [m], 0 [m], 0 [m]
-    Rotation Axis To = 0 [m], 0 [m], 0 [m]
-    Rotation Axis Type = Principal Axis
-    Scale Vector = 1 , 1 , 1
-    Translation Vector = 0 [m], 0 [m], 0 [m]
-    X = 0.0 [m]
-    Y = 0.0 [m]
-    Z = 0.0 [m]
-  END
-END
-"))
+  (format t "  Show Numbers = Off~%")
+  (format t "  Specular Lighting = On~%")
+  (format t "  Surface Drawing = Smooth Shading~%")
+  (format t "  Text Colour = 0, 0, 0~%")
+  (format t "  Text Colour Mode = Default~%")
+  (format t "  Text Height = 0.024~%")
+  (format t "  Transparency = 0.0~%")
+  (format t "  Value List = 0 [C],1 [C]~%")
+  (format t "  Visibility = On~%")
+  (object-view-transform) 
+  (format t "END~%"))
 
 #+nil
 (make-contour

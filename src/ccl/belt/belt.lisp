@@ -16,6 +16,7 @@
            obj-number-incf
            obj-number-reset
            obj-number-print )
+  (:export object-view-transform)
   (:export for-list)
   (:export make-line
            make-surface-of-revolution
