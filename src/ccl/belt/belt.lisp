@@ -97,20 +97,6 @@
     Z = 0.0 [m]
   END~%"))
 
-#+nil
-(defun line-name (point-1 point-2)
-  "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
-   имя отрезка. Строка основана на координатах концевых точек
-   отрезка.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (line-name '(0 50 100) '(-10 -60 110)) =>
- \"Line p0i00 p50i00 p100i00 m10i00 m60i00 p110i00\"
-@end(code)"
-  (format nil "Line ~{~A~^ ~}"
-          (mapcar #'number-to-string (append point-1 point-2))))
-
 (defun line-name ()
   "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую
    имя отрезка."
