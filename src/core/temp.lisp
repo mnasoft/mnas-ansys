@@ -75,3 +75,17 @@
             (605.8267 597.5887) (606.6081 601.0924) (606.0468 603.99225)
             (604.7355 606.18604) (601.6083 608.45844) (528.5 637.99585))
           2)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(progn
+(defparameter *tin*
+  (open-tin-file "d:/home/_namatv/CFX/ugt5000_H2/ugt5000_H2.tin"))
+
+(mnas-ansys/utils:surface-names-coeged-with-surface-in-family
+ '("P_04")  *tin*
+ :families-excluded
+ '("KORP_04" "A_H/H_D001.8" "A_H/H_D004.0" "STOP" )
+ :times 1 ))
+
+
+

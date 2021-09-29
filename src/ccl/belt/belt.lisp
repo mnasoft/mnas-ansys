@@ -636,7 +636,9 @@ theta-min к theta-max.
           (make-tangent-belts number x y r-min r-max theta-min theta-max alpha)))
     (make-table-head table)
     (make-triple-cells rmin-rmax-sname :equations equations :col col :row row :format format :head-min head-min :head-max head-max)
-    (make-table-end)))
+    (make-table-end)
+    (mapcar #'third rmin-rmax-sname)
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -27,6 +27,7 @@
                        (colour-variable-boundary-values "Hybrid")
                        (colour-scale "Linear")
                        (contour-range "Local")
+                       (constant-contour-colour "On")
                        (name (progn (obj-number-incf)
                                     (contour-name))))
   "@b(Описание:) функция @b(make-contour)
@@ -43,7 +44,7 @@
   (format t "  Colour Scale = ~A~%" colour-scale)
   (format t "  Colour Variable = ~A~%" colour-variable)
   (format t "  Colour Variable Boundary Values = ~A~%" colour-variable-boundary-values)
-  (format t "  Constant Contour Colour = Off~%")
+  (format t "  Constant Contour Colour = ~A~%" constant-contour-colour)
   (format t "  Contour Range = ~A~%" contour-range)
   (format t "  Culling Mode = No Culling~%")
   (format t "  Domain List = /DOMAIN GROUP:All Domains~%")
@@ -74,7 +75,7 @@
 #+nil
 (make-contour
  "Total Temperature" "SURFACE p0i00 p466i50 p411i00 p477i00 m11i25 p33i75")
-
+#+nil
 (make-contour
  "Total Temperature"
  (mapcar #'caddr (make-tangent-belts 10 1300 0 0 200 -90 90 0.0)))
