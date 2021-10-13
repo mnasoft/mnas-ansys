@@ -1,189 +1,40 @@
-DATA READER: 
-  CASE: Case base01 frc ed G1 12_002
-    BOUNDARY: C_1 3_N01 Side 1
-      Apply Instancing Transform = On
-      Apply Texture = Off
-      Blend Texture = On
-      Colour = 0.2, 0.5, 1
-      Colour Map = Default Colour Map
-      Colour Mode = Constant
-      Colour Scale = Linear
-      Colour Variable Boundary Values = Hybrid
-      Culling Mode = No Culling
-      Domain List = /DATA READER/CASE:Case base01 frc ed G1 12_002/DOMAIN:D1L
-      Draw Faces = On
-      Draw Lines = Off
-      Instancing Transform = Default Transform
-      Lighting = true
-      Line Colour = 0, 0, 0
-      Line Colour Mode = Default
-      Line Width = 1
-      Range = Global
-      Render Edge Angle = 0 [degree]
-      Specular Lighting = On
-      Surface Drawing = Smooth Shading
-      Texture Angle = 0
-      Texture Direction = 0.0, 1.0, 0.0
-      Texture Material = Metal
-      Texture Position = 0.0, 0.0
-      Texture Scale = 1.0
-      Texture Type = Predefined
-      Tile Texture = Off
-      Transform Texture = Off
-      Transparency = 0.0
-      Visibility = On
-    END
-  END
-END
 
-DATA READER: 
-  CASE: Case base01 frc ed G1 12_002
-    BOUNDARY: C_1 4_N01 Side 1
-      Apply Instancing Transform = On
-      Apply Texture = Off
-      Blend Texture = On
-      Colour = 0.2, 0.5, 1
-      Colour Map = Default Colour Map
-      Colour Mode = Constant
-      Colour Scale = Linear
-      Colour Variable Boundary Values = Hybrid
-      Culling Mode = No Culling
-      Domain List = /DATA READER/CASE:Case base01 frc ed G1 12_002/DOMAIN:D1L
-      Draw Faces = On
-      Draw Lines = Off
-      Instancing Transform = Default Transform
-      Lighting = true
-      Line Colour = 0, 0, 0
-      Line Colour Mode = Default
-      Line Width = 1
-      Range = Global
-      Render Edge Angle = 0 [degree]
-      Specular Lighting = On
-      Surface Drawing = Smooth Shading
-      Texture Angle = 0
-      Texture Direction = 0.0, 1.0, 0.0
-      Texture Material = Metal
-      Texture Position = 0.0, 0.0
-      Texture Scale = 1.0
-      Texture Type = Predefined
-      Tile Texture = Off
-      Transform Texture = Off
-      Transparency = 0.0
-      Visibility = On
+FLUID MODELS: 
+      COMBUSTION MODEL: 
+        Option = Finite Rate Chemistry and Eddy Dissipation
+      END
+      COMPONENT: CH4
+        Option = Transport Equation
+      END
+      COMPONENT: CO
+        Option = Transport Equation
+      END
+      COMPONENT: CO2
+        Option = Transport Equation
+      END
+      COMPONENT: H2O
+        Option = Transport Equation
+      END
+      COMPONENT: N2
+        Option = Constraint
+      END
+      COMPONENT: NO
+        Option = Transport Equation
+      END
+      COMPONENT: O2
+        Option = Transport Equation
+      END
+      HEAT TRANSFER MODEL: 
+        Option = Total Energy
+      END
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END
+      TURBULENCE MODEL: 
+        Option = SST
+      END
+      TURBULENT WALL FUNCTIONS: 
+        High Speed Model = Off
+        Option = Automatic
+      END
     END
-  END
-END
-
-DATA READER: 
-  CASE: Case base01 frc ed G1 12_002
-    BOUNDARY: C_1 5_N01 Side 1
-      Apply Instancing Transform = On
-      Apply Texture = Off
-      Blend Texture = On
-      Colour = 0.2, 0.5, 1
-      Colour Map = Default Colour Map
-      Colour Mode = Constant
-      Colour Scale = Linear
-      Colour Variable Boundary Values = Hybrid
-      Culling Mode = No Culling
-      Domain List = /DATA READER/CASE:Case base01 frc ed G1 12_002/DOMAIN:D1L
-      Draw Faces = On
-      Draw Lines = Off
-      Instancing Transform = Default Transform
-      Lighting = true
-      Line Colour = 0, 0, 0
-      Line Colour Mode = Default
-      Line Width = 1
-      Range = Global
-      Render Edge Angle = 0 [degree]
-      Specular Lighting = On
-      Surface Drawing = Smooth Shading
-      Texture Angle = 0
-      Texture Direction = 0.0, 1.0, 0.0
-      Texture Material = Metal
-      Texture Position = 0.0, 0.0
-      Texture Scale = 1.0
-      Texture Type = Predefined
-      Tile Texture = Off
-      Transform Texture = Off
-      Transparency = 0.0
-      Visibility = On
-    END
-  END
-END
-
-DATA READER: 
-  CASE: Case base01 frc ed G1 12_002
-    BOUNDARY: C_1 5_N02 Side 1
-      Apply Instancing Transform = On
-      Apply Texture = Off
-      Blend Texture = On
-      Colour = 0.2, 0.5, 1
-      Colour Map = Default Colour Map
-      Colour Mode = Constant
-      Colour Scale = Linear
-      Colour Variable Boundary Values = Hybrid
-      Culling Mode = No Culling
-      Domain List = /DATA READER/CASE:Case base01 frc ed G1 12_002/DOMAIN:D1L
-      Draw Faces = On
-      Draw Lines = Off
-      Instancing Transform = Default Transform
-      Lighting = true
-      Line Colour = 0, 0, 0
-      Line Colour Mode = Default
-      Line Width = 1
-      Range = Global
-      Render Edge Angle = 0 [degree]
-      Specular Lighting = On
-      Surface Drawing = Smooth Shading
-      Texture Angle = 0
-      Texture Direction = 0.0, 1.0, 0.0
-      Texture Material = Metal
-      Texture Position = 0.0, 0.0
-      Texture Scale = 1.0
-      Texture Type = Predefined
-      Tile Texture = Off
-      Transform Texture = Off
-      Transparency = 0.0
-      Visibility = On
-    END
-  END
-END
-
-DATA READER: 
-  CASE: Case base01 frc ed G1 12_002
-    BOUNDARY: C_1 6_N01 Side 1
-      Apply Instancing Transform = On
-      Apply Texture = Off
-      Blend Texture = On
-      Colour = 0.2, 0.5, 1
-      Colour Map = Default Colour Map
-      Colour Mode = Constant
-      Colour Scale = Linear
-      Colour Variable Boundary Values = Hybrid
-      Culling Mode = No Culling
-      Domain List = /DATA READER/CASE:Case base01 frc ed G1 12_002/DOMAIN:D1L
-      Draw Faces = On
-      Draw Lines = Off
-      Instancing Transform = Default Transform
-      Lighting = true
-      Line Colour = 0, 0, 0
-      Line Colour Mode = Default
-      Line Width = 1
-      Range = Global
-      Render Edge Angle = 0 [degree]
-      Specular Lighting = On
-      Surface Drawing = Smooth Shading
-      Texture Angle = 0
-      Texture Direction = 0.0, 1.0, 0.0
-      Texture Material = Metal
-      Texture Position = 0.0, 0.0
-      Texture Scale = 1.0
-      Texture Type = Predefined
-      Tile Texture = Off
-      Transform Texture = Off
-      Transparency = 0.0
-    END
-  END
-END
-

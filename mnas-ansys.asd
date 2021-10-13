@@ -31,6 +31,7 @@ CFX-PRE.
                "mnas-ansys/utils"
                "mnas-ansys/ccl"
                "mnas-ansys/belt"
+               "mnas-ansys/dia"
                ))
 
 (asdf:defsystem "mnas-ansys/read"
@@ -149,3 +150,20 @@ CFX-PRE.
                 :components
                 ((:file "belt")
                  (:file "contour")))))
+
+(asdf:defsystem "mnas-ansys/dia"
+  :description
+  "Подсистема @(mnas-ansys/read) определяет вспомогательные функции для парсинга tin-файла."
+  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on (#+nil "mnas-ansys/read"
+               "mnas-file-dialog"
+               "mnas-ansys/core"
+               "mnas-ansys/utils"
+               "mnas-ansys/ccl"
+               "mnas-ansys/belt")
+  :components ((:module "src/dia" 
+                :serial nil
+                :components
+                ((:file "dia")))))

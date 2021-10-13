@@ -67,17 +67,41 @@
  (find-in-tree-key "Option"
                   (find-in-tree-key "INTERFACE MODELS" (elt *ccl* 1))))
 
-(defun domain-interface-graph (item &key (stream t))
+(defun interface-models-option (domain-interface)
+  (second
+   (find-in-tree-key "Option"
+                     (find-in-tree-key "INTERFACE MODELS" domain-interface))))
+
+(defun short-name-upper (string)
+  (concatenate 'string 
+               (loop :for ch :from 0 :below (length string)
+                     :when (upper-case-p (char  string ch))
+                       :collect (char string ch))))
+
+(defun interface-models-option-short (domain-interface)
+  (short-name-upper (interface-models-option domain-interface)))
+
+(defun domain-interface-item (item &key (stream t))
   (let* ((d-i (find-in-tree-key "&replace DOMAIN INTERFACE" item))
          (d-i-name (value d-i))
          (d-i-f-d-l1 (value (find-in-tree-key "Filter Domain List1" item)))
-         (d-i-f-d-l2 (value (find-in-tree-key "Filter Domain List2" item))))
+         (d-i-f-d-l2 (value (find-in-tree-key "Filter Domain List2" item)))
+         (d-i-int-mod-op (interface-models-option-short d-i)))
     (when d-i
       d-i-name
-      #+nil (format stream "~A -- ~A [label=~S]~%" d-i-f-d-l1 d-i-f-d-l2 d-i-name)
-      (format stream "~A -- ~A~%" d-i-f-d-l1 d-i-f-d-l2))))
+      #+nil
+      (format stream "~A -- ~A [label=~S]~%" d-i-f-d-l1 d-i-f-d-l2 d-i-name)
+      #+nil
+      (format stream "~A -- ~A~%" d-i-f-d-l1 d-i-f-d-l2)
+      (format stream "~A -- ~A [label=~S]~%" d-i-f-d-l1 d-i-f-d-l2 d-i-int-mod-op)
+      )))
 
-(mapcar #'domain-interface-graph *ccl*)
+(defun domain-interface-graph (ccl &key (stream t))
+  (format stream "graph {~%")  
+  (mapcar
+   #'(lambda (item)
+            (domain-interface-item item :stream stream))
+   ccl)
+  (format stream "}~%"))
 
-(domain-interface-graph (elt *ccl* 68))
-
+(domain-interface-graph *ccl*)
