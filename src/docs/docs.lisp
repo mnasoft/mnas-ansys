@@ -1,6 +1,6 @@
 (defpackage #:mnas-ansys/docs
   (:use #:cl ) 
-  (:nicknames "MICEM/DOCS")
+  (:nicknames "M-ANSYS/DOCS")
   (:export make-all)
   (:documentation "Пакет @b(mnas-ansys/docs) содержит функции
   генерирования и публикации документации.

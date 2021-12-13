@@ -2,6 +2,7 @@
 
 ;; (defparameter *tin-file* "~/quicklisp/local-projects/ANSYS/mnas-ansys/tin/a32_GT-13.tin")
 (defparameter *tin-file* "Z:/CFX/otd11/namatv/a32_base/PR-01/GT/a32_GT-15.tin")
+
 (defparameter *tin* (open-tin-file *tin-file*))
 
 (<tin>-families *tin*)
