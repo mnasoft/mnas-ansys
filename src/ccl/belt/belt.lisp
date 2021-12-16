@@ -18,7 +18,8 @@
            obj-number-print )
   (:export object-view-transform)
   (:export for-list)
-  (:export make-line
+  (:export make-point
+           make-line
            make-surface-of-revolution
            make-table-head
            make-table-end)
@@ -743,6 +744,65 @@ theta-min к theta-max.
   (make-table-head table)
   (make-cells locations :equations equations :col col :row row :format format)
   (make-table-end))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun point-name ()
+  "@b(Описание:) функция @b(point-name) возвращает строку,
+   обозначающую имя точки."
+  (format nil "Point ~A"
+          (obj-number-print)))
+
+(defun make-point (point &key (point-symbol "Ball"))
+  (obj-number-incf)
+  (format t "POINT: ~A~%" (point-name))
+  (format t "  Apply Instancing Transform = On
+  Colour = 0, 0, 0
+  Colour Map = Default Colour Map
+  Colour Mode = Constant
+  Colour Scale = Linear
+  Colour Variable = Pressure
+  Colour Variable Boundary Values = Hybrid
+  Culling Mode = No Culling
+  Domain List = /DOMAIN GROUP:All Domains
+  Draw Faces = On
+  Draw Lines = Off
+  Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+  Lighting = On
+  Line Width = 2
+  Max = 0.0 [kPa]
+  Min = 0.0 [kPa]
+  Node Number = 1
+  Option = XYZ~%")
+  (format t "  Point = ~{~F [mm]~^, ~}~%" point)
+  (format t "  Point Symbol = ~A~%" point-symbol)
+  (format t "  Range = Global
+  Specular Lighting = On
+  Surface Drawing = Smooth Shading
+  Symbol Size = 0.1
+  Transparency = 0.0
+  Variable = Pressure
+  Variable Boundary Values = Hybrid
+  Visibility = On
+  OBJECT VIEW TRANSFORM: 
+    Apply Reflection = Off
+    Apply Rotation = Off
+    Apply Scale = Off
+    Apply Translation = Off
+    Principal Axis = Z
+    Reflection Plane Option = XY Plane
+    Rotation Angle = 0.0 [degree]
+    Rotation Axis From = 0 [m], 0 [m], 0 [m]
+    Rotation Axis To = 0 [m], 0 [m], 0 [m]
+    Rotation Axis Type = Principal Axis
+    Scale Vector = 1 , 1 , 1
+    Translation Vector = 0 [m], 0 [m], 0 [m]
+    X = 0.0 [m]
+    Y = 0.0 [m]
+    Z = 0.0 [m]
+  END
+END
+"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Примеры использования функций
