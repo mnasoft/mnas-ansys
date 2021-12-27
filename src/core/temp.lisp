@@ -87,5 +87,61 @@
  '("KORP_04" "A_H/H_D001.8" "A_H/H_D004.0" "STOP" )
  :times 1 ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+nil
+'(
+  initial-height
+  height-ratio
+  number-of-layers
+  total-height
+  
+  )
+
+(defun initial-height (height-ratio number-of-layers total-height)
+  "@b(Описание:) функция @b(initial-height) возвращает высоту первого
+слоя."
+    (/ total-height
+     (apply #'+
+            (loop :for i :from 0 :below number-of-layers
+                  :collect (expt height-ratio i)))))
+
+(initial-height 1.2d0 5 15)  
+                                2.0157
+
+(defun height-ratio (initial-height  number-of-layers total-height)
+  )
+
+(defun number-of-layers (initial-height height-ratio  total-height)
+  )
+
+(defun total-height (initial-height height-ratio number-of-layers)
+  "@b(Описание:) функция @b(total-height) возвращает высоту
+призматических слоев."
+  (* initial-height
+     (apply #'+
+            (loop :for i :from 0 :below number-of-layers
+                  :collect (expt height-ratio i)))))
+
+(defun S (a-1 q n)
+  (/ (* a-1 (- (expt q n) 1))(- q 1)))
+
+(s-n 2 1.2 5)  ; => 14.883203
+
+(defun n (a-1 q S)
+  (/ (log (+ 1 (/ (* S (- q 1)) a-1))) (log q)))
+
+(defun q (a-1 n S)
+  (labels
+      ((q+1 (x) (expt (+ 1 (/ (* S (- x 1)) a-1)) (/ n))))
+    (do* ((q-s 0.7 q-n)
+         (q-n (q+1 q-s) (q+1 q-s)))
+        ((< (abs (- (/ q-s q-n) 1)) 0.00001) q-n)
+      #+nil
+      (break "q-s=~S q-n=~S" q-s q-n))))
+
+
+(q 10 5 14.883203)
+
+
 
 
