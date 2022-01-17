@@ -87,5 +87,31 @@
  '("KORP_04" "A_H/H_D001.8" "A_H/H_D004.0" "STOP" )
  :times 1 ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+1.992916107177997
+4.404529571532997
+7.301586151122997
+
+(defun total-height (initial-height height-ratio number-of-layers)
+  (* initial-height
+     (apply #'+
+            (loop :for i :from 0 :below number-of-layers
+                  :collect (expt height-ratio i)))))
+
+(defun initial-height (height-ratio number-of-layers total-height)
+  (/ total-height
+     (apply #'+
+            (loop :for i :from 0 :below number-of-layers
+                  :collect (expt height-ratio i)))))
+
+(defun height-ratio (initial-height number-of-layers total-height)
+  )
+
+(total-height 2.0 1.2 3)
+(initial-height 1.2 3 7.28)
 
 
+
+(* 2 1.2)
+ ; => (+ 2 2.4)
