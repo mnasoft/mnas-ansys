@@ -53,13 +53,6 @@ system.
   (format t "ic_geo_create_unstruct_curve_from_points ~A ~A {~{ {~{~A~^ ~}} ~}}~%"
           name fam pts))
 
-(ic_geo_create_unstruct_curve_from_points
- "curve"
- "FAM/TOOL"
- '((1.0 0.0 0.0) (1.0 1.0 0.0) (-1.0 0.0 0.0)))
-
-(ic_geo_cre_pnt "FAM/COOL" "pnt" '(50 50 50))
-
 (defun ic_geo_cre_line (family name p1 p2)
 "
 ic_geo_cre_line family name p1 p2
@@ -89,7 +82,7 @@ v145/icemcfd/Samples/ProgrammersGuide/med_test.
   (format t "ic_geo_cre_line ~A ~A {~{~A~^ ~}} {~{~A~^ ~}}~%"
           family name p1 p2))
 
-(ic_geo_cre_line "FAM/SOOL" "line" '(0.0 0.0 0.0) '(50 80 140))
+
 
 (defun ic_geo_cre_arc_from_pnts (family name p1 p2 p3)
   "
@@ -116,11 +109,6 @@ For an annotated example of usage, refer to ic_geo_cre_arc_from_pnts.tcl in the 
   (format t "ic_geo_cre_arc_from_pnts ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}}~%"
           family name p1 p2 p3))
 
-(ic_geo_cre_arc_from_pnts "FAM/COOL" "arc"
-                          '(100.0 0.0 0.0)
-                          '(0.0 100.0 0.0)
-                          '(-100.0 0.0 0.0))
-
 (defun ic_geo_cre_bsp_crv_n_pnts (family name pnts &optional (tol 0.0001) (deg 3))
 "ic_geo_cre_bsp_crv_n_pnts family name pnts tol [0.0001] deg [3]
 
@@ -146,8 +134,8 @@ For example usage, refer to ic_geo_cre_bsp_crv_n_pnts.tcl in the ANSYS installat
 "
   )
 
-(defun ic_geo_cre_bsp_crv_n_pnts_cons family name pnts fixPnts tanCons tanIndx tol [0.001]
-"  
+(defun ic_geo_cre_bsp_crv_n_pnts_cons (family name pnts fixPnts tanCons tanIndx &optional (tol 0.001))
+  "  
 ic_geo_cre_bsp_crv_n_pnts_cons family name pnts fixPnts tanCons tanIndx tol [0.001]
 
 Creates a bspline curve from n points with constraints.
@@ -192,13 +180,19 @@ Notes:
 
 The specified curve name may be modified to resolve name collisions.
 
-If the function returns with the error status set, the result string will contain an error message.
+If the function returns with the error status set, the result string
+will contain an error message.
 
-If endang < srtang or (endang - srtang) > 360, the angle will be adjusted by adding 360 increments.
+If endang < srtang or (endang - srtang) > 360, the angle will be
+adjusted by adding 360 increments.
 
-Positions may be specified explicitly or using names of prescribed points.
+Positions may be specified explicitly or using names of prescribed
+points.
 
-For annotated examples of usage, refer to ic_geo_cre_crv_arc_ctr_rad.tcl and ic_geo_create_surface_from_curves.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+For annotated examples of usage, refer to
+ic_geo_cre_crv_arc_ctr_rad.tcl and
+ic_geo_create_surface_from_curves.tcl in the ANSYS installation
+directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
 "
   )
 
@@ -239,8 +233,6 @@ v145/icemcfd/Samples/ProgrammersGuide/med_test.
   (format t "ic_geo_cre_srf_cyl ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A ~A ~A~%"
           family name center x_ax z_ax radius srtang endang length))
 
-(ic_geo_cre_srf_cyl "family" "name" '(100.0 100.0 50.0) '(1.0 1.0 0.0) '(1.0 0.0 1.0) 100 0.0 180.0 800.0)
-
 (defun ic_geo_cre_mat (fam name pt &optional (in_lcs 1))
   "    
 ic_geo_cre_mat fam name pt in_lcs [1]
@@ -273,4 +265,24 @@ Example
   name
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(ic_geo_create_unstruct_curve_from_points
+ "curve"
+ "FAM/TOOL"
+ '((1.0 0.0 0.0) (1.0 1.0 0.0) (-1.0 0.0 0.0)))
+
+(ic_geo_cre_pnt "FAM/COOL" "pnt" '(50 50 50))
+
+(ic_geo_cre_srf_cyl "family" "name"
+                    '(100.0 100.0 50.0)
+                    '(1.0 1.0 0.0) '(1.0 0.0 1.0) 100 0.0 180.0 800.0)
+
 (ic_geo_cre_mat "fam" "name" '(400.0 100.0 50.0)) 
+
+(ic_geo_cre_line "FAM/SOOL" "line" '(0.0 0.0 0.0) '(50 80 140))
+
+(ic_geo_cre_arc_from_pnts "FAM/COOL" "arc"
+                          '(100.0 0.0 0.0)
+                          '(0.0 100.0 0.0)
+                          '(-100.0 0.0 0.0))
