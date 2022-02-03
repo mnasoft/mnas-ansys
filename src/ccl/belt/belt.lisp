@@ -23,6 +23,7 @@
            make-surface-of-revolution
            make-table-head
            make-table-end)
+  (:export make-legend)
   (:export make-tangent-belts
            make-radial-belts
            make-belts)
@@ -815,3 +816,48 @@ END
  "=areaAve(Velocity u)@" "=areaAve(Velocity v)@" "=areaAve(Velocity w)@"))
 
 (make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun make-legend (&key
+		      (name "Legend 1")
+		      (Colour '(0 0 0))
+		      (Font "Sans Serif")
+		      (Legend-Aspect 0.05)
+		      (Legend-Format "%3.0f") ;;"%10.3e"
+		      (Legend-Orientation "Horizontal") ;; "Vertical"
+		      (Legend-Plot "/CONTOUR:Contour 000000000931")
+		      (Legend-Position '(0.2 0.02))
+		      (Legend-Size 0.8)
+		      (Legend-Ticks 5)
+		      (Legend-Title "Legend")
+		      (Legend-Title-Mode "Variable and Location")
+		      (Legend-X-Justification "None") ;; "Center"
+		      (Legend-Y-Justification "None") ;; "Bottom"
+		      (Show-Legend-Units "On")
+		      (Text-Colour-Mode "Default")
+		      (Text-Height 0.018)
+		      (Text-Rotation 0)
+		      (Visibility "On"))
+  "@b(Описание:) функция @b(make-legend) 
+"
+  (format t "~%LEGEND: ~A" name)
+  (format t "  ~%Colour = ~{~A~^, ~}" Colour)
+  (format t "  ~%Font = ~A" Font)
+  (format t "  ~%Legend Aspect = ~A" Legend-Aspect)
+  (format t "  ~%Legend Format = ~A" Legend-Format)
+  (format t "  ~%Legend Orientation = ~A" Legend-Orientation)
+  (format t "  ~%Legend Plot = ~A" Legend-Plot)
+  (format t "  ~%Legend Position = ~{~A~^ , ~}" Legend-Position)
+  (format t "  ~%Legend Size = ~A" Legend-Size)
+  (format t "  ~%Legend Ticks = ~A" Legend-Ticks)
+  (format t "  ~%Legend Title = ~A" Legend-Title)
+  (format t "  ~%Legend Title Mode = ~A" Legend-Title-Mode)
+  (format t "  ~%Legend X Justification = ~A" Legend-X-Justification)
+  (format t "  ~%Legend Y Justification = ~A" Legend-Y-Justification)
+  (format t "  ~%Show Legend Units = ~A" Show-Legend-Units)
+  (format t "  ~%Text Colour Mode = ~A" Text-Colour-Mode)
+  (format t "  ~%Text Height = ~A" Text-Height)
+  (format t "  ~%Text Rotation = ~A" Text-Rotation)
+  (format t "  ~%Visibility = ~A" Visibility)
+  (format t "~%END~%~%"))

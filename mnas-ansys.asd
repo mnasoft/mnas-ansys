@@ -167,3 +167,14 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "dia")))))
+
+(asdf:defsystem "mnas-ansys/icem"
+    :description
+  "Подсистема @(mnas-ansys/icem-geometry-functions)."
+  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :components ((:module "src/icem" 
+                :serial nil
+                :components
+                ((:file "geometry")))))
