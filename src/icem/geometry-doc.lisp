@@ -4395,13 +4395,16 @@ return	name of created curve
 
 Notes:
 
-    The specified curve name may be modified to resolve name collisions.
+ The specified curve name may be modified to resolve name collisions.
 
-    If the function returns with the error status set, the result string will contain an error message.
+ If the function returns with the error status set, the result string
+ will contain an error message.
 
-    If endang < srtang or (endang - srtang) > 360, the angle will be adjusted by adding 360 increments.
+ If endang < srtang or (endang - srtang) > 360, the angle will be
+ adjusted by adding 360 increments.
 
-    Positions may be specified explicitly or using names of prescribed points
+ Positions may be specified explicitly or using names of prescribed
+ points
 ")
 
 

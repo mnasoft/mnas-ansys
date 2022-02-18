@@ -32,7 +32,7 @@ CFX-PRE.
                "mnas-ansys/ccl"
                "mnas-ansys/belt"
                "mnas-ansys/dia"
-               "mnas-ansys/icem/geometry"
+               "mnas-ansys/icem"
                ))
 
 (asdf:defsystem "mnas-ansys/read"
@@ -169,9 +169,9 @@ CFX-PRE.
                 :components
                 ((:file "dia")))))
 
-(asdf:defsystem "mnas-ansys/icem/geometry"
+(asdf:defsystem "mnas-ansys/icem"
     :description
-  "Подсистема @(mnas-ansys/icem-geometry-functions)."
+  "Подсистема @(mnas-ansys/icem)."
   :author "Nick Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
@@ -179,4 +179,9 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "geometry")
-                 (:file "geometry-doc")))))
+                 (:file "geometry-doc")
+                 (:file "boundary")
+                 (:file "display")
+                 (:file "translation")))))
+
+
