@@ -211,3 +211,42 @@
     D2/W/X/W_X436.5_D001.50_S00.58
 20 "D2/C/X/C_1-2_X436.5_D001.50_S00.58"
     D2/C/X/C_1-2_X436.5_D001.50_S00.58
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun foo (y)
+  (with-open-file (os "D:/home/_namatv/CFX/ugt5000_H2/V1/tin/DOMAINS/D1/123.rpl" :direction :output :if-exists :supersede)
+    (format os "ic_undo_group_begin~%")
+    (format os "ic_uns_subset_cut Selected set 1 1 {-92.750000000086757 ~A 0} {0 1 0} 0~%" y)
+    (format os "ic_uns_subset_cut {added faces} set 1 1 {-92.750000000086757 ~A 0} {0 1 0} 0~%" y)
+    (format os "ic_undo_group_end~%")
+    (format os "ic_undo_group_begin~%")
+    (format os "ic_rm D:/home/_namatv/CFX/ugt5000_H2/V1/tin/DOMAINS/D1/D1-Y_~A.ppm~%" y)
+    (format os "ic_undo_group_end~%")
+    (format os "sh {C:/ANSYS/v221/icemcfd/win64_amd/bin/cjpeg} -quality 75 D:/home/_namatv/CFX/ugt5000_H2/V1/tin/DOMAINS/D1/D1-Y_~A.ppm D:/home/_namatv/CFX/ugt5000_H2/V1/tin/DOMAINS/D1/D1-Y_~A.jpg~%"
+            y y)))
+
+(foo 500)
+
+ic_undo_group_begin 
+ic_rm ./plot_output.tmp
+ic_rm D:/home/_namatv/CFX/ugt5000_H2/V1/tin/DOMAINS/D1/D1-Y_500.ppm
+ic_undo_group_end 
+(* 0.25 2.82) ; => 0.705 (70.5%)
+
+(defparameter *lst-10* (list 1 5/4 8/5 2 5/2 16/5 4 5 63/10 8))
+(defparameter *R-10*
+  (apply #'append
+         (loop :for j :from -3 :to 2
+               :collect
+               (loop :for i :in *lst-10* :collect
+                                         (* i (expt 10 j))))))
+
+(defun dia (d &optional (k 4))
+  (loop :for i :in (reverse *R-10*)
+        :when (<= i (/ d k)) :return i))
+
+(dia 1.6)
+
+(/ 12.5 4)
+
