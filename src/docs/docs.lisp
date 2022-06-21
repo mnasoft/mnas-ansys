@@ -53,7 +53,7 @@
   (mnas-package:make-mainfest-lisp
    '(:mnas-ansys :mnas-ansys/docs)
    "Mnas-Ansys"
-   '("Nick Matvyeyev")
+   '("Mykola Matvyeyev")
    (mnas-package:find-sources "mnas-ansys")
    :output-format of)
   (codex:document :mnas-ansys)
