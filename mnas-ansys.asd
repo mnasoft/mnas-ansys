@@ -19,7 +19,7 @@ CFX-PRE.
 
 @end(section)
 "
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :version "0.0.10"
   :serial nil
@@ -38,7 +38,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/read"
   :description
   "Подсистема @(mnas-ansys/read) определяет вспомогательные функции для парсинга tin-файла."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-string" "mnas-package/sys")
@@ -50,7 +50,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/core"
   :description "Подсистема @(mnas-ansys/core) определяет базовые
   функции и методы работы с геометрией <tin>-объекта."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/read")
@@ -63,7 +63,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/select"
   :description
   "Система @(mnas-ansys/select) определяет функции для выбора объектов из контейнера геометрии."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/core")
@@ -76,7 +76,7 @@ CFX-PRE.
   :description
   "Система @(mnas-ansys/utils) определяет пользовательские функции для
    взаимодействия с контейнером геометрии (tin-файлом)."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-ansys/core"
@@ -91,7 +91,7 @@ CFX-PRE.
   :description
   "Система @(mnas-ansys/clim) определяет функции дотупные в диалоговом
    режиме для взаимодействия пользователя с контейнером геометрии (tin-файлом)."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("src/utils"
@@ -104,7 +104,7 @@ CFX-PRE.
 
 (defsystem "mnas-ansys/docs"
   :description "Зависимости для сборки документации к проекту mnas-ansys"
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later"
   :depends-on ("codex" "inferior-shell" "mnas-package" "mnas-ansys")
   :components ((:module "src/docs"
@@ -117,7 +117,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/ccl"
   :description
   "Система @b(mnas-ansys/ccl) функции для извлечения и преобразования данных в формате CCL ANSYS CFX."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-ansys/ccl-parse")
@@ -129,7 +129,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/ccl-parse"
   :description
   "Система @b(mnas-ansys/ccl-parse) определяет функции для разбора CCL формата ANSYS CFX."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   ;; :depends-on ()
@@ -142,7 +142,7 @@ CFX-PRE.
   :description
   "Система @b(mnas-ansys/belt) определяет функции для генерирования
  поверхностей в системе ANSYS CFX при помощи языка CCL."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-string/translit" "math/coord")
@@ -155,7 +155,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/dia"
   :description
   "Подсистема @(mnas-ansys/read) определяет вспомогательные функции для парсинга tin-файла."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on (#+nil "mnas-ansys/read"
@@ -172,7 +172,7 @@ CFX-PRE.
 (asdf:defsystem "mnas-ansys/icem"
     :description
   "Подсистема @(mnas-ansys/icem)."
-  :author "Nick Matvyeyev <mnasoft@gmail.com>"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :components ((:module "src/icem" 
