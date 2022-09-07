@@ -809,7 +809,10 @@
 (defun names (entities &optional (stream t))
   "@b(Описание:) функция @b(entities) 
 "
-  (format stream "~{~A~^ ~}~%" (mapcar #'<obj>-name entities)))
+  (let ((names (loop :for i :in entities
+                     :collect (<obj>-name i))))
+    (format stream "~{~A~^ ~}~2%" names)
+    names))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

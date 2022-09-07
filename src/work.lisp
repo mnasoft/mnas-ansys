@@ -11,6 +11,35 @@
 
 (defparameter *tin-file* "D:/home/_namatv/CFX/ugt5000_H2/V1/tin/GU//ugt5000_H2_V001_GU_03.tin")
 
+(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GT/cfx_N70_prj_01_GT-01.tin")
+
+(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GT/cfx_N70_prj_01_GT_RECOVER.tin")
+
+(defparameter *tin-file* "D:/home/_namatv/CFX/n70/tin/SEP/GU/cfx_N70_prj_01_GU-01.tin")
+
+(defparameter *tin* (open-tin-file *tin-file*))
+
+(names (mnas-ansys:<tin>-families *tin*))
+
+; CFX___70038107_1_10 GEOM STOP OUT POINT_CURVE G2/CH_2 G1/CH_1 G1/CH_1_H G1/CH_1_SH G1 G2/CH_2_K P2 G2/H2 G2/H2_S P3 G2
+
+("CFX___70038107_1_10"
+ "GEOM"
+ "STOP"
+ "OUT"
+ "POINT_CURVE"
+ "G2/CH_2"
+ "G1/CH_1"
+ "G1/CH_1_H"
+ "G1/CH_1_SH"
+ "G1"
+ "G2/CH_2_K"
+ "P2"
+ "G2/H2"
+ "G2/H2_S"
+ "P3"
+ "G2")
+
 (progn
   (defparameter *tin* (open-tin-file *tin-file*))
   (format t "~{~A ~}"
@@ -25,32 +54,27 @@
 (progn
   (defparameter *tin* (open-tin-file *tin-file*))
   (surface-names-coeged-with-surface-in-family
-   '(
-     ;;"GU/OUT/P_OUT"
-     "KOLL"
-    #+nil
-
-     "START"
-     #+nil
-     "SM/IN/P_IN"
-     #+nil
-     "SM/OUT/OUT"
-     )
+   '("OUT")
    *tin*
-   :times 1
-   :families-excluded '(
-                        "GU/A/A2"
-                        "GU/H/H1"
-                        "GU/H/H2"
-                        "GU/H/H3"
-                        "GU/H/H4"
-                        "GU/H/H5"
-                        "GU/T"
-                        "GU/OUT/P_OUT"
-                        "GU/D3/D_004.00"
-                        "GU/D3/D_000.80"
-                        )))
-
+   :times 5
+   :families-excluded
+   '("CFX___70038107_1_10"
+ "GEOM"
+ "STOP"
+ "OUT"
+ "POINT_CURVE"
+ "G2/CH_2"
+ "G1/CH_1"
+ "G1/CH_1_H"
+ "G1/CH_1_SH"
+ "G1"
+ "G2/CH_2_K"
+ "P2"
+ "G2/H2"
+ "G2/H2_S"
+ "P3"
+ "G2")
+   ))
 
 (progn
   (defparameter *tin* (open-tin-file *tin-file*))
