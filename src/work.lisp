@@ -6,8 +6,7 @@
 
 (names (mnas-ansys:<tin>-families *tin*))
 
-(mnas-ansys:<tin>-families 
- (curve-names-coeged-with-surf
+(curve-names-coeged-with-surf
   '(
     "ZAV_1/L1"
     "ZAV_1/ZAV_1_IN"
