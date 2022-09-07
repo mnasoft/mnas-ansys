@@ -11,6 +11,8 @@
   (:export tetra-size-for-hole-by-cell-number
            )
   (:export quality-series)
+  (:export secect-surfases-by-families
+           curve-names-coeged-with-surf)
   (:documentation
    " Пакет @b(mnas-ansys/utils) определяет функции, предназаченные для
    манипулирования графическими объектами при взаимодействии
@@ -47,6 +49,29 @@
               (mnas-ansys::tin-curves tin))
 	      ;; (<tin>-curves tin))
 	     :initial-value ()))))
+
+(defmethod secect-surfases-by-families (families (tin <tin>))
+  "@b(Описание:) метод @b(secect-surfases-by-families) возвращает список
+ поверхностей принадлежащих любому семейству из списка имен семейств
+ @b(families).
+"
+  (loop :for sur :being :the :hash-value :in (<tin>-surfaces tin) 
+        :if (member (<ent>-family sur) families :test #'equal)
+          :collect sur :into surfs
+        :finally (return surfs)))
+
+(coedged 
+
+(defmethod curve-names-coeged-with-surf (families (tin <tin>))
+  "@b(Описание:) метод @b(curve-names-coeged-with-surf) возвращает
+ список поверхностей принадлежащих семейству @b(families)
+"
+  (let ((ht-curves (make-hash-table)))
+    secect-surfases-by-families (families (tin <tin>))
+  (loop :for sur :being :the :hash-value :in (<tin>-surfaces tin) 
+        :if (member (<ent>-family sur) families :test #'equal)
+          :collect sur :into surfs
+        :finally (return surfs)))
 
 (defmethod surface-names-coeged-with-surfaces-bak (surf (tin <tin>)
                                               &key

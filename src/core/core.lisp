@@ -809,8 +809,9 @@
 (defun names (entities &optional (stream t))
   "@b(Описание:) функция @b(entities) 
 "
-  (let ((names (loop :for i :in entities
-                     :collect (<obj>-name i))))
+  (let ((names (sort (loop :for i :in entities
+                           :collect (<obj>-name i))
+                     #'string<)))
     (format stream "~{~A~^ ~}~2%" names)
     names))
 

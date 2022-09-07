@@ -1,91 +1,95 @@
 (in-package #:mnas-ansys/utils)
 
-(defparameter *tin-file* "/_gas/CFX/otd11/namatv/a32_base/PR-01/a32_KS_ALL.tin")
-
-(defparameter *tin-file* "/_gas/CFX/otd11/namatv/a32_base/PR-01/GT_GU_KORP/a32_KORP_01.tin")
-(defparameter *tin-file* "Z:/CFX/otd11/namatv/a32_base/PR-01/GT_GU_KORP/a32_KORP_01.tin")
-
-(defparameter *tin-file* "D:/home/_namatv/CFX/ugt5000_H2/V1/tin/GT/CONES/ugt5000_H2_V001_CONES.tin")
-
-(defparameter *tin-file* "D:/home/_namatv/CFX/ugt5000_H2/V1/tin/SM/SM-2/ugt5000_H2_V001_SM_05.tin")
-
-(defparameter *tin-file* "D:/home/_namatv/CFX/ugt5000_H2/V1/tin/GU//ugt5000_H2_V001_GU_03.tin")
-
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GT/cfx_N70_prj_01_GT-01.tin")
-
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GT/cfx_N70_prj_01_GT_RECOVER.tin")
-
-(defparameter *tin-file* "D:/home/_namatv/CFX/n70/tin/SEP/GU/cfx_N70_prj_01_GU-01.tin")
+(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GU/cfx_N70_prj_01_GU-01.tin")
 
 (defparameter *tin* (open-tin-file *tin-file*))
 
 (names (mnas-ansys:<tin>-families *tin*))
 
-; CFX___70038107_1_10 GEOM STOP OUT POINT_CURVE G2/CH_2 G1/CH_1 G1/CH_1_H G1/CH_1_SH G1 G2/CH_2_K P2 G2/H2 G2/H2_S P3 G2
-
-("CFX___70038107_1_10"
- "GEOM"
- "STOP"
- "OUT"
- "POINT_CURVE"
- "G2/CH_2"
- "G1/CH_1"
- "G1/CH_1_H"
- "G1/CH_1_SH"
- "G1"
- "G2/CH_2_K"
- "P2"
- "G2/H2"
- "G2/H2_S"
- "P3"
- "G2")
-
-
+(mnas-ansys:<tin>-families 
+ (curve-names-coeged-with-surf
+  '(
+    "ZAV_1/L1"
+    "ZAV_1/ZAV_1_IN"
+    "ZAV_1/ZAV_1_IN_ML"
+    "ZAV_1/ZAV_1_OUT"
+    "ZAV_1/ZAV_1_OUT_ML"
+    )
+  *tin*)
+ 
 (progn
   (defparameter *tin* (open-tin-file *tin-file*))
   (format t "~{~A ~}"
           (curve-names-coeged-with-surface-in-family
            '(
-             "SM/OUT/P_OUT"
-             ;;"SM/OUT/OUT"
+ "ZAV_1/L1"
+ "ZAV_1/ZAV_1_IN"
+ "ZAV_1/ZAV_1_IN_ML"
+ "ZAV_1/ZAV_1_OUT"
+ "ZAV_1/ZAV_1_OUT_ML"
+
              )
            *tin*
            )))
 
-(progn
-  (defparameter *tin* (open-tin-file *tin-file*))
-  (surface-names-coeged-with-surface-in-family
-   '("OUT")
-   *tin*
-   :times 5
-   :families-excluded
-   '("CFX___70038107_1_10"
- "GEOM"
- "STOP"
- "OUT"
- "POINT_CURVE"
- "G2/CH_2"
+("CFX___70038107_1_10"
+ "G1"
  "G1/CH_1"
  "G1/CH_1_H"
  "G1/CH_1_SH"
- "G1"
+ "G2"
+ "G2/CH_2"
  "G2/CH_2_K"
- "P2"
  "G2/H2"
  "G2/H2_S"
+ "GEOM"
+ "HOLES"
+ "HOLES/H_COOL"
+ "HOLES/H_COOL_1"
+ "HOLES/H_COOL_2"
+ "KOLL"
+ "OUT"
+ "P2"
  "P3"
- "G2")
+ "P4"
+ "P5"
+ "P6"
+ "POINT_CURVE"
+ "START"
+ "STOP"
+ "ZAV_1"
+ "ZAV_1/L1"
+ "ZAV_1/ZAV_1_IN"
+ "ZAV_1/ZAV_1_IN_ML"
+ "ZAV_1/ZAV_1_OUT"
+ "ZAV_1/ZAV_1_OUT_ML")
+
+(progn
+  (defparameter *tin* (open-tin-file *tin-file*))
+  (surface-names-coeged-with-surface-in-family
+   '("START")
+   *tin*
+   :times 1
+   :families-excluded
+   '(#+nil "CFX___70038107_1_10"
+     "H_COOL"
+)
    ))
 
 (progn
   (defparameter *tin* (open-tin-file *tin-file*))
   (surface-names-coeged-with-surface-in-family
-   '("START"
+   '("KOLL"
      #+nil "START"
      )
    *tin*
-   :times 1
-   :families-excluded '("GT/IN/T" "GT/OUT/T" "STOP" )
+   :times 4
+   :families-excluded
+   '(#+nil
+     "CFX___70038107_1_10" "G1" "G1/CH_1" "G1/CH_1_H" "G1/CH_1_SH" "G2" "G2/CH_2"
+     "G2/CH_2_K" "G2/H2" "G2/H2_S" "GEOM" "HOLES" "HOLES/H_COOL" "HOLES/H_COOL_1"
+     "HOLES/H_COOL_2" "KOLL" "L1" "OUT" "P2" "P3" "P4" "P5" "P6" "POINT_CURVE"
+     "START" "STOP")
    ))
 
 (progn
