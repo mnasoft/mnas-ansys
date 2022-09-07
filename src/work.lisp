@@ -40,6 +40,7 @@
  "P3"
  "G2")
 
+
 (progn
   (defparameter *tin* (open-tin-file *tin-file*))
   (format t "~{~A ~}"
