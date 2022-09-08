@@ -177,13 +177,17 @@
 
 (defmethod curve-names-coeged-with-surfaces-in-families (families (tin <tin>) &key (operation :union))
   "@b(Описание:) метод @b(curve-names-coeged-with-surfaces-in-families)
-operation :union - возвращаются кривые, являющиеся сопряженными с
-любой поверхностью
-operation :union "
+ @b(Переменые:)
+ @begin(list)
+ @item(operation :union - возвращаются кривые, являющиеся сопряженными
+       с любой поверхностью;)
+ @item(operation :intersection - возвращаются кривые, являющиеся
+       сопряженными поверхностями принадлежащими всем поверхностям;)
+ @end(list)"
   (cond
     ((eq operation :union)
      (curve-names-coeged-with-surfaces
       (secect-surfaces-by-families families tin)
       tin))
-    (eq operation :intersection)
-    ))
+    ((eq operation :intersection)
+     (curve-names-coeged-with-surface-in-family families tin))))
