@@ -2,8 +2,7 @@
 
 (defpackage #:mnas-ansys/utils
   (:use #:cl #:mnas-ansys #:mnas-ansys/select #:math/geom)
-  (:export curve-names-coeged-with-surface-in-family
-           surface-names-coeged-with-surface-in-family
+  (:export surface-names-coeged-with-surface-in-family
            surface-names-coeged-with-surfaces 
            surface-names-coedged-with-curve-by-number
            curve-names-by-coedges-number
@@ -11,8 +10,10 @@
   (:export tetra-size-for-hole-by-cell-number
            )
   (:export quality-series)
-  (:export secect-surfaces-by-families
-           curve-names-coeged-with-surf)
+  (:export secect-surfaces-by-families 
+           curve-names-coeged-with-surf
+           curve-names-coeged-with-surface-in-family
+           curve-names-coeged-with-surfaces-in-families)
   (:documentation
    " Пакет @b(mnas-ansys/utils) определяет функции, предназаченные для
    манипулирования графическими объектами при взаимодействии
@@ -49,28 +50,6 @@
               (mnas-ansys::tin-curves tin))
 	      ;; (<tin>-curves tin))
 	     :initial-value ()))))
-
-(defmethod surface-names-coeged-with-surfaces-bak (surf (tin <tin>)
-                                              &key
-                                                (excluded nil)
-                                                (times 1))
-  " @b(Описание:) метод @b(surface-names-coeged-with-surface-in-family)
-  возврвшает имена поверхностей, сопряженных с поверхностями,
-  принадлежащим семействам @b(families) из контейнера геометрии
-  @b(tin). Имена поверхностей, принадлежащие семействам
-  @b(families-excluded) из результирующего списка исключаются.
-  Параметр @b(times) задает глубину поиска.
-"
-  (let* ((family-surfaces surf)
-         (surfaces-excluded excluded)
-         (start-surfaces family-surfaces))
-    (loop :for i :from 0 :below times :do
-      (let* ((curves  (mnas-ansys::find-curves-coeged-with-surfases start-surfaces tin))
-             (sufaces (mnas-ansys::find-surfaces-coeged-with-curves curves tin)))
-        (map nil #'(lambda (el) (setf sufaces (remove el sufaces))) surfaces-excluded)
-        (setf start-surfaces sufaces)))
-    (map nil #'(lambda (el) (setf start-surfaces (remove el start-surfaces))) family-surfaces)
-    (mapcar #'mnas-ansys::<obj>-name start-surfaces)))
 
 (defmethod surface-names-coeged-with-surfaces (surf (tin <tin>)
                                                &key
@@ -179,15 +158,25 @@
           :collect sur :into surfs
         :finally (return surfs)))
 
-(defmethod curve-names-coeged-with-surf (families (tin <tin>))
+(defmethod curve-names-coeged-with-surfaces (surfaces (tin <tin>))
   "@b(Описание:) метод @b(curve-names-coeged-with-surf) возвращает
- список поверхностей принадлежащих семейству @b(families)
-"
-  (let ((ht-curves (make-hash-table)))
-    secect-surfaces-by-families (families (tin <tin>))
-  (loop :for sur :being :the :hash-value :in (<tin>-surfaces tin) 
-        :if (member (<ent>-family sur) families :test #'equal)
-          :collect sur :into surfs
-        :finally (return surfs))))
+ количество и список кривых (два значения) сопряженных с поверхностями
+ из списка @b(surfaces)."
+  (let* ((ht-curves (make-hash-table))
+         (curve-names
+           (loop :for sur :in surfaces :do
+             (loop :for cur in (coedged sur tin)
+                   :do (setf (gethash (<obj>-name cur) ht-curves) cur))
+                 :finally
+                    (return
+                      (loop :for curve-name :being :the :hash-keys :in ht-curves 
+                            :collect curve-name)))))
+    (format t "~{~A~^ ~}~2%" curve-names)
+    (values
+     (length curve-names)
+     curve-names)))
 
-(/ 360 15)
+(defmethod curve-names-coeged-with-surfaces-in-families (families (tin <tin>))
+  (curve-names-coeged-with-surfaces
+   (secect-surfaces-by-families families tin)
+   tin))
