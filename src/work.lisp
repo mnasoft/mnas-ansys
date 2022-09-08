@@ -6,7 +6,18 @@
 
 (names (mnas-ansys:<tin>-families *tin*))
 
-(curve-names-coeged-with-surf surfaces *tin*)
+(curve-names-coeged-with-surf
+ (secect-surfaces-by-families
+     '(
+       "ZAV_1/L1"
+       "ZAV_1/ZAV_1_IN"
+       "ZAV_1/ZAV_1_IN_ML"
+       "ZAV_1/ZAV_1_OUT"
+       "ZAV_1/ZAV_1_OUT_ML"
+       )
+     *tin*)
+ *tin*)
+
 (<obj>-name
  (first 
   (coedged
