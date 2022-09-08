@@ -11,7 +11,6 @@
            )
   (:export quality-series)
   (:export secect-surfaces-by-families 
-           curve-names-coeged-with-surf
            curve-names-coeged-with-surface-in-family
            curve-names-coeged-with-surfaces-in-families)
   (:documentation
@@ -176,7 +175,15 @@
      (length curve-names)
      curve-names)))
 
-(defmethod curve-names-coeged-with-surfaces-in-families (families (tin <tin>))
-  (curve-names-coeged-with-surfaces
-   (secect-surfaces-by-families families tin)
-   tin))
+(defmethod curve-names-coeged-with-surfaces-in-families (families (tin <tin>) &key (operation :union))
+  "@b(Описание:) метод @b(curve-names-coeged-with-surfaces-in-families)
+operation :union - возвращаются кривые, являющиеся сопряженными с
+любой поверхностью
+operation :union "
+  (cond
+    ((eq operation :union)
+     (curve-names-coeged-with-surfaces
+      (secect-surfaces-by-families families tin)
+      tin))
+    (eq operation :intersection)
+    ))
