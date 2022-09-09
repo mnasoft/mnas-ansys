@@ -18,7 +18,10 @@
            ccl-line-slow
            parse-slow)
   (:export parse
-           parse-file))
+           parse-file)
+  "@b(Описание:) пакет @b(mnas-ansys/ccl-parse) предназначен для парсинга (разбора) данных и
+ файлов в формате ccl.
+")
 
 (in-package #:mnas-ansys/ccl-parse)
  
