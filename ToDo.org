@@ -1,0 +1,20 @@
+* ToDo
+1. ccl/belt
+   1. [ ] Перенести фунции:
+      - [ ] make-point
+      - [ ] make-line
+      - [ ] make-surface-of-revolution
+      - [ ] make-table-head
+      - [ ] make-table-end
+      - [ ] make-legend
+      из пакета mnas-ansys/belt в пекет mnas-ansys/core.
+   2. Для функций:
+      - [ ] make-point
+      - [ ] make-line
+      - [ ] make-surface-of-revolution
+      - [ ] make-table-head
+      - [ ] make-table-end
+      - [ ] make-legend
+      создать соответствующие им объекты.
+   3. Манипуляции по п.1 и п.2 выполнить в отдельной ветке git.
+* DoNe
