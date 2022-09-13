@@ -462,7 +462,6 @@
   (let ((params (mnas-string:split " " (elt lines n))))
     (setf (<obj>-name             family) (read-by-key     "define_family" params))
     (setf (<family>-color         family) (read-int-by-key "color"         params))
-#|    
     (setf (<family>-prism         family) (read-int-by-key "prism"         params))
     (setf (<family>-internal-wall family) (read-int-by-key "internal_wall" params))
     (setf (<family>-split-wall    family) (read-int-by-key "split_wall"    params))
@@ -474,7 +473,6 @@
     (setf (<family>-width         family) (read-x-by-key   "width"         params))
     (setf (<family>-min           family) (read-x-by-key   "min"           params))
     (setf (<family>-dev           family) (read-x-by-key   "dev"           params))
-|#
     (values family 1)))
 
 (defmethod print-object ((family <family>) s)

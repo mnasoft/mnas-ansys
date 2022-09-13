@@ -1,0 +1,1091 @@
+DOMAIN: D1L
+  Coord Frame = Coord 0
+  Domain Type = Fluid
+  Location = D1 B1
+  BOUNDARY: B AIR INLET L
+    Boundary Type = INLET
+    Location = B B_I 1_N01_D070.00_S18.91
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Mass Fraction = 0.0
+        Option = Mass Fraction
+      END
+      COMPONENT: CO
+        Mass Fraction = 0.0
+        Option = Mass Fraction
+      END
+      COMPONENT: CO2
+        Mass Fraction = 0.0
+        Option = Mass Fraction
+      END
+      COMPONENT: H2O
+        Mass Fraction = 0.0
+        Option = Mass Fraction
+      END
+      COMPONENT: NO
+        Mass Fraction = 0.0
+        Option = Mass Fraction
+      END
+      COMPONENT: O2
+        Mass Fraction = 0.232
+        Option = Mass Fraction
+      END
+      FLOW DIRECTION:
+        Option = Normal to Boundary Condition
+      END
+      FLOW REGIME:
+        Option = Subsonic
+      END
+      HEAT TRANSFER:
+        Option = Total Temperature
+        Total Temperature = 474.9 [C]
+      END
+      MASS AND MOMENTUM:
+        Mass Flow Rate = 6.0784 [kg s^-1]
+        Option = Mass Flow Rate
+      END
+      TURBULENCE:
+        Option = Medium Intensity and Eddy Viscosity Ratio
+      END
+    END
+  END
+  BOUNDARY: B AIR OUTLET BL L
+    Boundary Type = OUTLET
+    Location = B B_1 O_N01_D010.00_S02.70
+    BOUNDARY CONDITIONS:
+      FLOW REGIME:
+        Option = Subsonic
+      END
+      MASS AND MOMENTUM:
+        Mass Flow Rate = 0.25 [kg s^-1]
+        Option = Mass Flow Rate
+      END
+    END
+  END
+  BOUNDARY: C T_1 G Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C T_1 R_N01_D070.0_S18.90
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C T_1 R Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C T_1 L_N01_D070.0_S18.90
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_N01 G Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 2_N01_D001.00_S00.38
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X0495 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X049.5_D001.20_S00.46
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X0715 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X071.5_D001.20_S00.46
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X0765 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X076.5_D001.20_S00.46
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X0935 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X093.5_D001.20_S00.46
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X1155 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X115.5_D001.20_S00.46
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X1375 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X137.5_D001.00_S00.38
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X1595 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X159.5_D001.00_S00.38
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X1815 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X181.5_D001.00_S00.38
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X2035 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X203.5_D001.00_S00.38
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X2255 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X225.5_D001.50_S00.58
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X2549 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X254.9_D001.60_S00.62
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X2640 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X264.0_D011.50_S03.10
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X3029 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X302.9_D001.50_S00.58
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X3509 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X350.9_D001.50_S00.58
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X4015 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X401.5_D001.20_S00.46,D1 C X C_1 \
+      2_X401.5_D001.50_S00.58
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X4365 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X436.5_D001.50_S00.58,D1 C X C_1 \
+      2_X436.5_D001.90_S00.73
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X4560 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X456.0_D001.50_S00.58
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 2_X4665 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C X C_1 2_X466.5_D001.50_S00.58
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 3_N01 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 3_N01_D024.00_S01.61
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 4_N01 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 4_N01_D032.00_S04.32
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 5_N01 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 5_N01_D001.20_S00.23
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 5_N02 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 5_N02_D015.80_S02.00
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 6_N01 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 6_N01_D003.00_S00.81
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 A_N01 Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 A_N01_D034.10_S02.50
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: C_1 B_N01 in D1L Side 1
+    Boundary Type = INTERFACE
+    Location = D1 C C_1 B_N01_D070.00_S10.00
+    BOUNDARY CONDITIONS:
+      COMPONENT: CH4
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: CO2
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: H2O
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: NO
+        Option = Conservative Interface Flux
+      END
+      COMPONENT: O2
+        Option = Conservative Interface Flux
+      END
+      HEAT TRANSFER:
+        Option = Conservative Interface Flux
+      END
+      MASS AND MOMENTUM:
+        Option = Conservative Interface Flux
+      END
+      TURBULENCE:
+        Option = Conservative Interface Flux
+      END
+    END
+  END
+  BOUNDARY: D1L Default
+    Boundary Type = WALL
+    Location = D1 W K W_D010.0_S02.70_K01,D1 W S W_D001.0_S00.56_T11,D1 W S \
+      W_D003.0_S00.81_T01,D1 W S W_D003.0_S00.81_T04,D1 W S \
+      W_D003.0_S00.81_T05,D1 W S W_D003.0_S00.81_T06,D1 W S \
+      W_D003.0_S00.81_T07,D1 W S W_D003.0_S00.81_T08,D1 W S \
+      W_D003.0_S00.81_T09,D1 W S W_D005.0_S01.35_T01,D1 W S \
+      W_D005.0_S01.35_T10,D1 W W_D001.3_S00.25_P14,D1 W \
+      W_D001.70_S00.24_P15,D1 W W_D012.0_S02.36_U04,D1 W \
+      W_D044.0_S11.89_K06,D1 W W_D070.0_S18.91_K03,D1 W \
+      W_D070.0_S18.91_P02,D1 W W_D070.0_S18.91_P03,D1 W \
+      W_D070.0_S18.91_P04,D1 W W_D070.0_S18.91_P05,D1 W \
+      W_D070.0_S18.91_P06,D1 W W_D070.0_S18.91_P07,D1 W \
+      W_D070.0_S18.91_P08,D1 W W_D070.0_S18.91_P09,D1 W \
+      W_D070.0_S18.91_P10,D1 W W_D070.0_S18.91_P11,D1 W \
+      W_D070.0_S18.91_P12,D1 W W_D070.0_S18.91_P13,Primitive 2D,Primitive \
+      2D A,Primitive 2D AA,Primitive 2D AB,Primitive 2D AC,Primitive 2D \
+      AD,Primitive 2D AE,Primitive 2D AF,Primitive 2D AG,Primitive 2D \
+      AH,Primitive 2D AI,Primitive 2D AJ,Primitive 2D AK,Primitive 2D \
+      AL,Primitive 2D AM,Primitive 2D AS,Primitive 2D AT,Primitive 2D \
+      AU,Primitive 2D AV,Primitive 2D AW,Primitive 2D AX,Primitive 2D \
+      AY,Primitive 2D AZ,Primitive 2D B,Primitive 2D BA,Primitive 2D \
+      BB,Primitive 2D C,Primitive 2D D,Primitive 2D E,Primitive 2D \
+      F,Primitive 2D G,Primitive 2D H,Primitive 2D I,Primitive 2D \
+      J,Primitive 2D K,Primitive 2D L,Primitive 2D M,Primitive 2D \
+      N,Primitive 2D O,Primitive 2D P,Primitive 2D Q,Primitive 2D \
+      R,Primitive 2D S,Primitive 2D T,Primitive 2D U,Primitive 2D \
+      V,Primitive 2D W,Primitive 2D X,Primitive 2D Y,Primitive 2D Z
+    BOUNDARY CONDITIONS:
+      HEAT TRANSFER:
+        Option = Adiabatic
+      END
+      MASS AND MOMENTUM:
+        Option = No Slip Wall
+      END
+      WALL ROUGHNESS:
+        Option = Smooth Wall
+      END
+    END
+  END
+  DOMAIN MODELS:
+    BUOYANCY MODEL:
+      Option = Non Buoyant
+    END
+    DOMAIN MOTION:
+      Option = Stationary
+    END
+    MESH DEFORMATION:
+      Option = None
+    END
+    REFERENCE PRESSURE:
+      Reference Pressure = 2000 [kPa]
+    END
+  END
+  FLUID DEFINITION: Fluid 1
+    Material = Gas
+    Option = Material Library
+    MORPHOLOGY:
+      Option = Continuous Fluid
+    END
+  END
+  FLUID MODELS:
+    COMBUSTION MODEL:
+      Option = Finite Rate Chemistry and Eddy Dissipation
+    END
+    COMPONENT: CH4
+      Option = Transport Equation
+    END
+    COMPONENT: CO
+      Option = Transport Equation
+    END
+    COMPONENT: CO2
+      Option = Transport Equation
+    END
+    COMPONENT: H2O
+      Option = Transport Equation
+    END
+    COMPONENT: N2
+      Option = Constraint
+    END
+    COMPONENT: NO
+      Option = Transport Equation
+    END
+    COMPONENT: O2
+      Option = Transport Equation
+    END
+    HEAT TRANSFER MODEL:
+      Option = Total Energy
+    END
+    THERMAL RADIATION MODEL:
+      Option = None
+    END
+    TURBULENCE MODEL:
+      Option = SST
+    END
+    TURBULENT WALL FUNCTIONS:
+      High Speed Model = Off
+      Option = Automatic
+    END
+  END
+END

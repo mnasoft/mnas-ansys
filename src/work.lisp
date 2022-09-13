@@ -1,8 +1,16 @@
 (in-package #:mnas-ansys/utils)
 
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GU/cfx_N70_prj_01_GU-01.tin")
+(defparameter *tin-file* "D:/home/_namatv/CFX/a32/a32_2d_ch_opt/tin/02/a32_2d_ch_opt_02.tin")
 
 (defparameter *tin* (open-tin-file *tin-file*))
+
+(svref (mnas-ansys/read:read-file-as-lines *tin-file*) 25)
+
+(<obj>-name (first (mnas-ansys:<tin>-families *tin*)))
+(<family>-prism (first (mnas-ansys:<tin>-families *tin*)))
+
+(sort (mnas-ansys:<tin>-families *tin*) #'string< :key #'<obj>-name)
 
 (names (mnas-ansys:<tin>-families *tin*))
 

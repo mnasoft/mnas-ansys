@@ -1,4 +1,4 @@
-;;;; ./src/clim/clim.lisp
+;;;; ./src/ccl/parse/ccl-parse.lisp
 
 (defpackage #:mnas-ansys/ccl-parse
   (:use #:cl)
@@ -19,9 +19,9 @@
            parse-slow)
   (:export parse
            parse-file)
-  "@b(Описание:) пакет @b(mnas-ansys/ccl-parse) предназначен для парсинга (разбора) данных и
- файлов в формате ccl.
-")
+  (:documentation
+   "@b(Описание:) пакет @b(mnas-ansys/ccl-parse) предназначен для
+ парсинга (разбора) данных и файлов в формате ccl."))
 
 (in-package #:mnas-ansys/ccl-parse)
  
