@@ -39,26 +39,22 @@
 (defun make-all (&aux
                    (of (if (find (uiop:hostname)
                                  mnas-package:*intranet-hosts*
-                                 :test #'string=)
+                                 :test #'string= :key #'first)
                            '(:type :multi-html :template :gamma)
                            '(:type :multi-html :template :minima))))
-  "@b(Описание:) функция @b(make-all) служит для создания документации.
-
- Пакет документации формируется в каталоге
-~/public_html/Common-Lisp-Programs/mnas-string.
-"
-  (mnas-package:make-html-path :mnas-ansys)
-  (make-document)
-  (make-graphs)
-  (mnas-package:make-mainfest-lisp
-   '(:mnas-ansys :mnas-ansys/docs)
-   "Mnas-Ansys"
-   '("Mykola Matvyeyev")
-   (mnas-package:find-sources "mnas-ansys")
-   :output-format of)
-  (codex:document :mnas-ansys)
-  (make-graphs)
-  (mnas-package:copy-doc->public-html "mnas-ansys")
-  (mnas-package:rsync-doc "mnas-ansys"))
+  (let* ((sys-symbol :mnas-ansys)
+         (sys-string (string-downcase (format nil "~a" sys-symbol))))
+    (mnas-package:make-html-path sys-symbol)
+    (make-document)
+    (mnas-package:make-mainfest-lisp `(,sys-symbol)
+                                     (string-capitalize sys-string)
+                                     '("Mykola Matvyeyev")
+                                     (mnas-package:find-sources sys-symbol)
+                                     :output-format of)
+    (codex:document sys-symbol)
+    (make-graphs)
+    (mnas-package:copy-doc->public-html sys-string)
+    (mnas-package:rsync-doc sys-string) 
+    :make-all-finish))
 
 ;;;; (make-all)
