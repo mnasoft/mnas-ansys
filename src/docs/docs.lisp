@@ -10,6 +10,7 @@
 
 (defun make-document ()
   (loop
+    :for j :from 1
     :for i :in
     '((:mnas-ansys           :mnas-ansys)
       (:mnas-ansys/read      :mnas-ansys/read)
@@ -20,10 +21,13 @@
       (:mnas-ansys/belt      :mnas-ansys/belt)
       
       )
-    :do (apply #'mnas-package:document i)))
+    :do (progn
+          (apply #'mnas-package:document i)
+          (format t "~A ~A~%" j i))))
 
 (defun make-graphs ()
   (loop
+    :for j :from 1    
     :for i :in
     '(:mnas-ansys
       :mnas-ansys/read
@@ -34,7 +38,9 @@
       :mnas-ansys/ccl-parse
       :mnas-ansys/belt
       )
-    :do (mnas-package:make-codex-graphs i i)))
+    :do (progn
+          (mnas-package:make-codex-graphs i i)
+          (format t "~A ~A~%" j i))))
 
 (defun make-all (&aux
                    (of (if (find (uiop:hostname)
