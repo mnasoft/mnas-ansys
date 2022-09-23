@@ -1408,6 +1408,11 @@
    fam name ))
 
 (defun ic_geo_set_family_params (fam args )
+  "
+ic_undo_group_begin 
+ic_geo_set_family_params B/AIR_RL_OUT/N2/D_10.000 no_crv_inf prism 0 emax 2.0 ehgt 0.0 hrat 0 nlay 0 erat 1.5 ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0
+ic_undo_group_end 
+"
   (format
    t
    "ic_geo_set_family_params ~A ~A~%"

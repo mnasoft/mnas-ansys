@@ -17,3 +17,24 @@
 
 (ic_geo_create_curve_ends '("line" "ell"))
 
+"
+ic_undo_group_begin 
+ic_geo_set_family_params INLET/D_08.000 no_crv_inf prism 0 emax 1.5 ehgt 0.0 hrat 0 nlay 0 erat 0 ewid 12 emin 0.0 edev 0.0 split_wall 0 internal_wall 0
+ic_undo_group_end 
+ic_geo_params_blank_done part 1
+
+ic_undo_group_begin 
+ic_set_meshing_params global 0 gref 1.0 gmax 17.0 gfast 0 gedgec 0.2 gnat 0 gcgap 1 gnatref 10
+ic_undo_group_end 
+"
+
+"
+1. ic_undo_group_begin 
+2. ic_set_meshing_params global 0 gref 1.0 gmax 16.0 gfast 0 gedgec 0.2 gnat 0 gcgap 1 gnatref 10
+3. ic_undo_group_end 
+4. ic_undo_group_begin 
+5. ic_geo_set_family_params B/AIR_RL_OUT/N2/D_10.000 no_crv_inf prism 0 emax 2.0 ehgt 0.0 hrat 0 nlay 0 erat 1.5 ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0
+6. ic_undo_group_end 
+7. ic_geo_params_blank_done part 1
+
+"
