@@ -1,6 +1,6 @@
 ;;;; ./src/icem/geometry-test.lisp
 
-(in-package #:mnas-ansys/icem/geometry)
+(in-package #:ic/geo)
 
 (ic_geo_create_unstruct_curve_from_points
  "curve"
@@ -13,7 +13,7 @@
                     '(100.0 100.0 50.0)
                     '(1.0 1.0 0.0) '(1.0 0.0 1.0) 100 0.0 180.0 800.0)
 
-(ic_geo_cre_mat "fam" "name" '(400.0 100.0 50.0)) 
+(cre-mat "fam" "name" '(400.0 100.0 50.0)) 
 
 (ic_geo_cre_line "FAM/SOOL" "line" '(0.0 0.0 0.0) '(50 80 140))
 
