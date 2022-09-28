@@ -1,17 +1,17 @@
 ;;;; ./src/icem/display.lisp
 
-(defpackage #:mnas-ansys/icem/display
+(defpackage #:ic/dis
   (:use #:cl)
-  (:export  ic_view
-            ic_visible
-            ic_set_family_color_for_name
-            ic_display_update
+  (:export  view
+            visible
+            set_family_color_for_name
+            display_update
             )
   (:documentation
-   " Пакет содержит функции отображения."
-   ))
+   "@b(Описание:) пакет @b(ic/dis) содержит функции отображения (Display
+ Functions)."))
 
-(in-package #:mnas-ansys/icem/display)
+(in-package #:ic/dis)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -23,7 +23,7 @@ Sets the current viewing position. what may be home, which sets the home positio
    t
    "ic_view ~S~%" what))
 
-(defun ic_visible (type what on)
+(defun visible (type what on)
 " Enable/disable visibility for different objects. The on argument
 should be 0 or 1. type is one of geometry, unstruct, or family. In the
 case of geometry, what should be one of surface, curve, point,
@@ -34,14 +34,14 @@ should be a family name.
   (format t
           "ic_visible ~S ~S ~S~%" type what on))
 
-(defun ic_set_family_color_for_name (name color)
+(defun set-family-color-for-name (name color)
 " Sets the color to use for drawing objects in the named family. This
 applies to geometry and mesh.
 "
   (format t
           "ic_set_family_color_for_name ~S ~S~%" name color))
 
-(defun ic_display_update (&optional (mode "") (new_fams 1) (types ""))
+(defun display-update (&optional (mode "") (new_fams 1) (types ""))
 " 
 Updates the display in the GUI. mode is one of: all, unstruct,
 struct, geom, \"\" implies all. new_fams determines whether or not to
