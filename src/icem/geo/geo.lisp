@@ -4,8 +4,8 @@
   (:use #:cl)
   (:export  load-tetin
             empty-tetin
-            ic_save_tetin
-            ic_unload_tetin
+            save-tetin
+            unload-tetin
             ic_geo_import_mesh
             update-surface-display
             ic_geo_export_to_mesh
@@ -42,7 +42,7 @@
             ic_geo_configure_objects
             ic_geo_configure_one_attribute
             ic_geo_configure_one_object
-            ic_geo_list_families
+            list-families
             ic_geo_list_parts
             ic_geo_check_part
             ic_geo_list_families_in_part
@@ -444,7 +444,7 @@ Creates an empty geometry database.
    t
    "ic_empty_tetin~%"))
 
-(defun ic_save_tetin (file &optional (only_visible 0) (v4 0) (only_fams "") (only_ents "") (v10 0) (quiet 0) (clear_undo 1))
+(defun save-tetin (file &optional (only_visible 0) (v4 0) (only_fams "") (only_ents "") (v10 0) (quiet 0) (clear_undo 1))
 " 
 Saves the current geometry data to the given file name. The full
 path name must be specified. If only_visible is 1 then only the
@@ -460,7 +460,7 @@ ic_save_tetin c:/speed_racer/mach5.tin"
    "ic_save_tetin ~A ~A ~A ~A ~A ~A ~A ~A~%"
    file only_visible v4 only_fams only_ents v10 quiet clear_undo))
 
-(defun ic_unload_tetin (&optional (quiet 0))
+(defun unload-tetin (&optional (quiet 0))
  "
 Unloads the current geometry data."  
   (format
@@ -930,9 +930,11 @@ Configure the attributes of one object.
    "ic_geo_configure_one_object ~A ~A ~A ~A~%"
    type name what val))
 
-(defun ic_geo_list_families (&optional (only_material 0) (non_empty 0))
-"
-Lists the current families used by geometry objects. If only_material is 1 then limit the listing to families used by materials. If non_empty is 1 then list only families which are non empty.
+(defun list-families (&optional (only_material 0) (non_empty 0))
+" Lists the current families used by geometry objects. If
+only_material is 1 then limit the listing to families used by
+materials. If non_empty is 1 then list only families which are non
+empty.
 "  
   (format
    t
