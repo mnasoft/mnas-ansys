@@ -2,20 +2,23 @@
 
 (defpackage #:ic/boco
   (:use #:cl)
-  (:export load
+  (:export ic-load
+           ic-get
+           ic-set
+           ic-append
            load-atr
            save
            save-atr
            is-loaded
            is-modified
-           set_modified
+           set-modified
            unload
            empty-boco
            solver
-           get
+
            get-boco
-           set
-           append
+
+           
            modify
            delete-bctypes
            set-boco
@@ -32,7 +35,7 @@
            replace-in-part
            replace-in-group
            add
-           replace
+           ic-repalce
            get-for-tetin
            reload
            list-families
@@ -82,7 +85,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun load (file)
+(defun ic-load (file)
   "
 Loads in the boundary condition data from the file.
 "
@@ -163,7 +166,7 @@ is given, then it returns the current solver setting.
    t
    "ic_boco_solver ~S~%" solver))
 
-(defun get (&optional (fambctypes "") (not_bctypes ""))
+(defun ic-get (&optional (fambctypes "") (not_bctypes ""))
   " Gets the boundary conditions associated with the given family. They
 are returned as a list, each element is one boco. Each boco element is
 a list where the first element is 0 or 1 whether the data is active or
@@ -185,7 +188,7 @@ This is the same as ic_boco_get (for backward compatibility only).
    t
    "ic_get_boco ~S~%" fam))
 
-(defun set (fam bocos)
+(defun ic-set (fam bocos)
   " Sets the boundary conditions associated with the given
 family. They must be given as a list, each element is one boco. Each
 boco element is a list where the first element is 0 or 1 whether the
@@ -198,7 +201,7 @@ Boundary Condition Data section for the solver you are interested in.
    t
    "ic_boco_set ~S ~S~%" fam bocos))
 
-(defun append (fam nbcs)
+(defun ic-append (fam nbcs)
   "
 Appends some boundary conditions.
 "
@@ -349,7 +352,7 @@ Adds some BCs to a family.
    t
    "ic_boco_add ~S ~S~%" fam bocos))
 
-(defun replace (fam bcarg newbcs)
+(defun ic-repalce (fam bcarg newbcs)
   "
 Replaces some BCs for a family.
 "

@@ -175,13 +175,9 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :components ((:module "src/icem/geo" 
-                :serial nil
-                :components
-                ((:file "geo")
-                 (:file "geo-doc")
-                 #+nil(:file "boundary")
-                 #+nil(:file "display")
-                 #+nil(:file "translation")))))
+  :components ((:module "src/ic/geo"   :serial nil :components ((:file "geo")))
+               (:module "src/ic/trans" :serial nil :components ((:file "trans")))
+               (:module "src/ic/dis"   :serial nil :components ((:file "dis")))
+               (:module "src/ic/boco"  :serial nil :components ((:file "boco")))))
 
 

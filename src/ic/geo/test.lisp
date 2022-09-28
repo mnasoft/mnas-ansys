@@ -7,7 +7,7 @@
  "FAM/TOOL"
  '((1.0 0.0 0.0) (1.0 1.0 0.0) (-1.0 0.0 0.0)))
 
-(ic_geo_cre_pnt "FAM/COOL" "pnt" '(50 50 50))
+(cre-pnt "FAM/COOL" "pnt" '(50 50 50))
 
 (ic_geo_cre_srf_cyl "family" "name"
                     '(100.0 100.0 50.0)

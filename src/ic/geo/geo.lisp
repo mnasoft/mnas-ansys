@@ -221,7 +221,7 @@
             ic_geo_cre_crv_arc_ctr_rad
             ic_geo_cre_srf_cyl
             ic_geo_cre_line
-            ic_geo_cre_pnt
+            cre-pnt
             cre-mat
             ic_geo_get_srf_nrm
             ic_geo_get_srf_pos
@@ -3635,7 +3635,7 @@ Notes:
   (format t "ic_geo_cre_line ~A ~A {~{~A~^ ~}} {~{~A~^ ~}}~%"
           family name p1 p2))
 
-(defun ic_geo_cre_pnt (family name pnt &optional (in_lcs 1))
+(defun cre-pnt (family name pnt &optional (in_lcs 1))
  "
 ic_geo_cre_pnt family name pnt in_lcs [1]
 
