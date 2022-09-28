@@ -8,6 +8,7 @@
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-5/cfx_N70_prj_01_D-5.tin")
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-6/cfx_N70_prj_01_D-6-01.tin")
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-7/cfx_N70_prj_01_D-7.tin")
+(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-2/cfx_N70_prj_01_D-2.tin")
 
 (defparameter *tin* (open-tin-file *tin-file*))
 
