@@ -6,6 +6,9 @@
   (:export find-in-tree
            find-in-tree-key
            find-in-tree-value)
+  (:export make-domain-interface-rotational-periodicity
+           make-domain-interface-general-connection
+           )
   (:documentation
    "STUB"))
 
@@ -105,3 +108,74 @@
   (format stream "}~%"))
 
 (domain-interface-graph *ccl*)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun make-domain-interface-rotational-periodicity (domain-interface i-reg-lst-1 i-reg-lst-2)
+  (let ((d-i domain-interface
+             #+nil(mnas-string/translit:translit domain-interface :ht mnas-string/translit:*cfx->en*)))
+    (format t
+            "
+FLOW: Flow Analysis 1
+  &replace DOMAIN INTERFACE: ~A
+    Boundary List1 = ~A Side 1
+    Boundary List2 = ~A Side 2
+    Filter Domain List1 = D1
+    Filter Domain List2 = D1
+    Interface Region List1 = ~A
+    Interface Region List2 = ~A
+    Interface Type = Fluid Fluid
+    INTERFACE MODELS: 
+      Option = Rotational Periodicity
+      AXIS DEFINITION: 
+        Option = Coordinate Axis
+        Rotation Axis = Coord 0.1
+      END
+    END
+    MESH CONNECTION: 
+      Option = Automatic
+    END
+  END
+END
+~2%
+"
+            d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
+
+(defun make-domain-interface-general-connection (domain-interface i-reg-lst-1 i-reg-lst-2)
+  (let ((d-i domain-interface
+             #+nil(mnas-string/translit:translit domain-interface :ht mnas-string/translit:*cfx->en*)))
+    (format t
+            "
+FLOW: Flow Analysis 1
+  &replace DOMAIN INTERFACE: ~A
+    Boundary List1 = ~A Side 1
+    Boundary List2 = ~A Side 2
+    Filter Domain List1 = D1
+    Filter Domain List2 = D1
+    Interface Region List1 = ~A
+    Interface Region List2 = ~A
+    Interface Type = Fluid Fluid
+    INTERFACE MODELS: 
+      Option = General Connection
+      FRAME CHANGE: 
+        Option = None
+      END
+      MASS AND MOMENTUM: 
+        Option = Conservative Interface Flux
+        MOMENTUM INTERFACE MODEL: 
+          Option = None
+        END
+      END
+      PITCH CHANGE: 
+        Option = None
+      END
+    END
+    MESH CONNECTION: 
+      Option = Automatic
+    END
+  END
+END
+~2%
+"
+            d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
