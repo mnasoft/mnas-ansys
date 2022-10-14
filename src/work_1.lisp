@@ -3,37 +3,6 @@
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/SEP/GU/cfx_N70_prj_01_GU-01.tin")
 (defparameter *tin-file* "D:/home/_namatv/CFX/a32/a32_2d_ch_opt/tin/02/a32_2d_ch_opt_02.tin")
 
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-1/cfx_N70_prj_01_D-1.tin")
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-3/cfx_N70_prj_01_D-3.tin")
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-5/cfx_N70_prj_01_D-5.tin")
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-6/cfx_N70_prj_01_D-6-01.tin")
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-7/cfx_N70_prj_01_D-7.tin")
-(defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-2/cfx_N70_prj_01_D-2.tin")
-
-(defparameter *tin* (open-tin-file *tin-file*))
-
-(defparameter *d-names*
-    (loop :for i :in (names (mnas-ansys:<tin>-families *tin*))
-      :if (let ((str (first (last (mnas-string:split "/" i)))))
-            (and (eq #\D (char str 0))
-                 (eq #\_ (char str 1))))
-        :collect i :into d-rez
-          :finally (return d-rez)))
-(progn
-  (format t "~A~%" "ic_undo_group_begin")
-  (loop :for i :in *d-names*
-        :do
-           (let ((d-size
-                   (read-from-string
-                    (first
-                     (last
-                      (mnas-string:split
-                       "_"
-                       (first (last (mnas-string:split "/" i)))))))))
-             d-size
-             (format t "ic_geo_set_family_params ~A no_crv_inf prism 0 emax ~A ehgt 0.0 hrat 0 nlay 0 erat ~A ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0~%"
-                     i (/ d-size 4) 0.0)))
-  (format t "~A~2%" "ic_undo_group_end"))
 
 "
 ic_uns_is_loaded 
