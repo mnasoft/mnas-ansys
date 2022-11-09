@@ -57,10 +57,24 @@
 (obj-number-reset)
 
 (defun for-list (stream parameter variable)
+  "@b(Описание:) функция @b(for-list) выводит в поток @b(stream) переменную @b(variable).
+
+ @b(Переменые:)
+@begin(list)
+ @item(stream - поток вывода;)
+ @item(parameter - обозначение параметра; )
+ @item(variable  - переменная (значение или список згачений).)
+@end(list)
+
+(for-list t \"    Rotation Axis From = \" '(\"0 [m]\"  \"0 [m]\" \"0 [m]\"))
+->    Rotation Axis From = 0 [m], 0 [m], 0 [m]
+"
   (format stream
           (concatenate 'string
                        parameter
-                       (cond ((consp variable) "~{~A~^, ~}") (t "~A"))
+                       (cond
+                         ((consp variable) "~{~A~^, ~}")
+                         (t "~A"))
                        "~%")
           variable))
 
