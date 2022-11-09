@@ -32,6 +32,12 @@
                                     (contour-name))))
   "@b(Описание:) функция @b(make-contour)
 
+ @b(Переменые:)
+@begin(list)
+ @item(colour-variable-boundary-values - Hybrid, Con...; )
+ @item(contour-range - Global, Local, User Specified,)
+@end(list)
+
  @b(Пример использования:)
 @begin[lang=lisp](code)
  (make-contour  \"Total Temperature\" \"SURFACE 0001\")

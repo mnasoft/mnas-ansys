@@ -2,8 +2,7 @@
 
 (defpackage #:mnas-ansys/belt
   (:use #:cl)
-  (:intern number-to-string
-           mm->m
+  (:intern mm->m
            line-name
            belt-line-name
            belt-surface-name
@@ -12,6 +11,7 @@
            char+number
            make-cells
            make-triple-cells)
+  (:export number-to-string)
   (:export obj-number
            obj-number-incf
            obj-number-reset
