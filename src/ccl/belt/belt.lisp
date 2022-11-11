@@ -849,7 +849,7 @@ END
                      (Variable "Pressure")
                      (Variable-Boundary-Values "Hybrid")
                      (Visibility "On"))
-  (for-list t  "POINT: ~A" name)
+  (for-list t  "POINT: " name)
   (for-list t  "  Apply Instancing Transform" Apply-Instancing-Transform )
   (for-list t  "  Colour" Colour )
   (for-list t  "  Colour Map" Colour-Map )
@@ -897,7 +897,7 @@ END
   (for-list t  "  END" "")
   (for-list t  "END" ""))
 
-
+(make-point "name")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Примеры использования функций
 
