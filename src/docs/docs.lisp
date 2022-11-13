@@ -17,7 +17,7 @@
       (:mnas-ansys/select    :mnas-ansys/select)
       (:mnas-ansys/utils     :mnas-ansys/utils)
       (:mnas-ansys/ccl       :mnas-ansys/ccl)
-      (:mnas-ansys/ccl-parse :mnas-ansys/ccl-parse)
+      (:mnas-ansys/ccl/parse :mnas-ansys/ccl/parse)
       (:mnas-ansys/belt      :mnas-ansys/belt)
       
       )
@@ -35,7 +35,7 @@
       :mnas-ansys/utils
       
       :mnas-ansys/ccl
-      :mnas-ansys/ccl-parse
+      :mnas-ansys/ccl/parse
       :mnas-ansys/belt
       )
     :do (progn

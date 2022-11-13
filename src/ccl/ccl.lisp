@@ -2,7 +2,7 @@
 ;;;; ./src/clim/clim.lisp
 
 (defpackage #:mnas-ansys/ccl
-  (:use #:cl #:mnas-ansys/ccl-parse)
+  (:use #:cl #:mnas-ansys/ccl/parse)
   (:export find-in-tree
            find-in-tree-key
            find-in-tree-value)
@@ -72,8 +72,8 @@
   (mnas-ansys/read:read-file-as-lines
    "~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl"))
 
-(defparameter *ccl* (mnas-ansys/ccl-parse::parse-slow *lines*))
-(defparameter *ccl* (mnas-ansys/ccl-parse::parse *lines*))
+(defparameter *ccl* (mnas-ansys/ccl/parse::parse-slow *lines*))
+(defparameter *ccl* (mnas-ansys/ccl/parse::parse *lines*))
 
 (value
  (find-in-tree-key "Option"
