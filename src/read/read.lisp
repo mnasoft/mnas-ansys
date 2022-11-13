@@ -3,6 +3,7 @@
 (defpackage #:mnas-ansys/read
   (:use #:cl)
   (:export read-file-as-lines
+           line-by-line
            read-by-key
 	   read-int-by-key
 	   read-x-by-key
@@ -22,6 +23,33 @@
  строк, представляющий содержимое файла с именем @b(filename).
 "
   (coerce (uiop:read-file-lines filename) 'vector))
+
+(defgeneric line-by-line (container  &optional coerce-to)
+  (:documentation
+   "@b(Описание:) обобщенная_функция @b(line-by-line) возвращает
+   построчное пердставление символьной информации находящейся в
+   контейнере @b(container).
+"))
+
+(defmethod line-by-line ((string string) &optional (coerce-to 'list))
+  (coerce 
+    (let ((stream (make-string-input-stream string)))
+      (loop :for line = (read-line stream nil)
+            :while line :collect line))
+    coerce-to))
+
+(defmethod line-by-line ((pathname pathname) &optional (coerce-to 'list))
+  "
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (read-line-by-line-1
+  (probe-file \"/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl\"))
+@end(code)"
+  (coerce 
+   (with-open-file (stream pathname)
+     (loop :for line = (read-line stream nil)
+           :while line :collect line))
+   coerce-to))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; reader-help-func

@@ -1,24 +1,44 @@
 * ToDo
-1. src/ccl/belt
-   1. [ ] Перенести фунции:
+1. Система mnas-ansys/ccl/belt
+   1. Для функций:
+      - [X] make-point
+      - [X] make-line
+      - [ ] make-surface-of-revolution
+      - [ ] make-table-head
+      - [ ] make-table-end
+      - [ ] make-legend
+      создать соответствующие им объекты в сситеме mnas-ansys/ccl/classes.
+   2. [ ] Перенести фунции:
       - [ ] make-point
       - [ ] make-line
       - [ ] make-surface-of-revolution
       - [ ] make-table-head
       - [ ] make-table-end
       - [ ] make-legend
-      из пакета mnas-ansys/belt в пекет mnas-ansys/core.
-   2. Для функций:
-      - [ ] make-point
-      - [ ] make-line
-      - [ ] make-surface-of-revolution
-      - [ ] make-table-head
-      - [ ] make-table-end
-      - [ ] make-legend
-      создать соответствующие им объекты.
+      из пакета mnas-ansys/belt в пекет mnas-ansys/ccl/classes/core.
    3. Манипуляции по п.1 и п.2 выполнить в отдельной ветке git.
-1. src/ccl/parse/
+2. Система mnas-ansys/ccl/parse/
    1. [ ] Улучшить парсинг
       - длинные строки с переходом на следующую строку считываются не
         полностью. Символ перехода на следующую строку - =\=.
+      - [ ] Функцию parse переопределить через одноименный метод для:
+        - [ ] вектора строк (соответствует функции parse);
+        - [ ] строки;
+        - [ ] потока.
+   2. [ ] Определить функцию результатом выполнения которой будет код
+      определения класса, представляющий объект языка CCL системы ANSYS.
+
+3. Система mnas-ansys/read:
+   1. [ ] read-file-as-lines
+      - [ ] заменить вызовы функции read-file-as-lines вызовами методов line-by-line;
+      - [ ] функцию read-file-as-lines удалить;
+   2. [ ] переименовать:
+      - [ ] read-by-key -> by-key;
+      - [ ] read-int-by-key -> int-by-key;
+      - [ ] read-x-by-key -> x-by-key;
+      - [ ] read-y-by-key -> y-by-key;
+      - [ ] read-z-by-key -> z-by-key.
+   3. [ ]  Определить функцию прохода через vector строк и возвращающую
+      вектор с объединенными строками если они заканчиваются на =\=.
+
 * DoNe

@@ -120,15 +120,30 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-ansys/ccl-parse")
+  :depends-on ("mnas-ansys/ccl/parse"
+               "mnas-ansys/ccl/classes"
+               )
   :components ((:module "src/ccl" 
                 :serial nil
                 :components
                 ((:file "ccl")))))
 
-(asdf:defsystem "mnas-ansys/ccl-parse"
+(asdf:defsystem "mnas-ansys/ccl/classes"
   :description
-  "Система @b(mnas-ansys/ccl-parse) определяет функции для разбора CCL формата ANSYS CFX."
+  "Система @b(mnas-ansys/ccl/classes) определяет классы, представляющие
+   некоторые объекты язка CCL системы ANSYS."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  ;; :depends-on ()
+  :components ((:module "src/ccl/core"
+                :serial nil
+                :components
+                ((:file "core")))))
+
+(asdf:defsystem "mnas-ansys/ccl/parse"
+  :description
+  "Система @b(mnas-ansys/ccl/parse) определяет функции для разбора CCL формата ANSYS CFX."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
