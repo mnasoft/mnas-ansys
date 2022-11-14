@@ -8,9 +8,7 @@
            belt-surface-name
            make-line-belt
            make-surface-belt
-           char+number
-           make-cells
-           make-triple-cells)
+           char+number)
   (:export number-to-string)
   (:export obj-number
            obj-number-incf
@@ -20,8 +18,12 @@
   (:export for-list)
   (:export make-point
            make-line
+           make-plane
            make-surface-of-revolution
            make-table-head
+           make-cell
+           make-cells
+           make-triple-cells           
            make-table-end)
   (:export make-legend)
   (:export make-tangent-belts
@@ -208,26 +210,28 @@
               `(1 ,(nth-value 1 (floor (1+ i) 2)) 0))))
      (nreverse min-max-lenth-from-point-1)))))
 
-(defun make-table-head (table)
+(defun make-table-head (table
+                        &key
+                          (report-caption ""))
   "@b(Описание:) функция @b(make-table-head) возвращает строку,
   которая представляет заголовок таблицы в формате пригодном для
   вставки в CCL файл системы ANSYS CFX.
 "
-  (format t "~%TABLE: Table ~A~%" table)
-    (format t "  Export Table Only = True
-  Table Exists = True
-  Table Export Format = State
-  Table Export HTML Border Width = 1
-  Table Export HTML Caption Position = Bottom
-  Table Export HTML Cell Padding = 5
-  Table Export HTML Cell Spacing = 1
-  Table Export Lines = All
-  Table Export Separator = Tab
-  Table Export Trailing Separators = True
-  OBJECT REPORT OPTIONS: 
-    Report Caption = 
-  END
-  TABLE CELLS: ~%"))
+  (for-list t "TABLE: " table)
+  (for-list t "  Export Table Only = " "True")
+  (for-list t "  Table Exists = " "True")
+  (for-list t "  Table Export Format = " "State")
+  (for-list t "  Table Export HTML Border Width = " "1")
+  (for-list t "  Table Export HTML Caption Position = " "Bottom")
+  (for-list t "  Table Export HTML Cell Padding = " "5")
+  (for-list t "  Table Export HTML Cell Spacing = " "1")
+  (for-list t "  Table Export Lines = " "All")
+  (for-list t "  Table Export Separator = " "Tab")
+  (for-list t "  Table Export Trailing Separators = " "True")
+  (for-list t "  OBJECT REPORT OPTIONS: " "")
+  (for-list t "  Report Caption = " report-caption)
+  (for-list t "  END" "")
+  (for-list t "  TABLE CELLS: " ""))
 
 (defun make-table-end ()
   (format t "  END~%END~%~%"))
@@ -850,34 +854,34 @@ END
                      (Variable-Boundary-Values "Hybrid")
                      (Visibility "On"))
   (for-list t  "POINT: " name)
-  (for-list t  "  Apply Instancing Transform" Apply-Instancing-Transform )
-  (for-list t  "  Colour" Colour )
-  (for-list t  "  Colour Map" Colour-Map )
-  (for-list t  "  Colour Mode" Colour-Mode )
-  (for-list t  "  Colour Scale" Colour-Scale )
-  (for-list t  "  Colour Variable" Colour-Variable )
-  (for-list t  "  Colour Variable Boundary Values" Colour-Variable-Boundary-Values )
-  (for-list t  "  Culling Mode" Culling-Mode )
-  (for-list t  "  Domain List" Domain-List )
-  (for-list t  "  Draw Faces" Draw-Faces )
-  (for-list t  "  Draw Lines" Draw-Lines )
-  (for-list t  "  Instancing Transform" Instancing-Transform )
-  (for-list t  "  Lighting" Lighting )
-  (for-list t  "  Line Width" Line-Width )
-  (for-list t  "  Max" Max )
-  (for-list t  "  Min" Min )
-  (for-list t  "  Node Number" Node-Number )
-  (for-list t  "  Option" Option )
-  (for-list t  "  Point" Point )
-  (for-list t  "  Point Symbol" Point-Symbol )
-  (for-list t  "  Range" Range )
-  (for-list t  "  Specular Lighting" Specular-Lighting )
-  (for-list t  "  Surface Drawing" Surface-Drawing )
-  (for-list t  "  Symbol Size" Symbol-Size )
-  (for-list t  "  Transparency" Transparency )
-  (for-list t  "  Variable" Variable )
-  (for-list t  "  Variable Boundary Values" Variable-Boundary-Values )
-  (for-list t  "  Visibility" Visibility)
+  (for-list t  "  Apply Instancing Transform = " Apply-Instancing-Transform )
+  (for-list t  "  Colour = " Colour )
+  (for-list t  "  Colour Map = " Colour-Map )
+  (for-list t  "  Colour Mode = " Colour-Mode )
+  (for-list t  "  Colour Scale = " Colour-Scale )
+  (for-list t  "  Colour Variable = " Colour-Variable )
+  (for-list t  "  Colour Variable Boundary Values = " Colour-Variable-Boundary-Values )
+  (for-list t  "  Culling Mode = " Culling-Mode )
+  (for-list t  "  Domain List = " Domain-List )
+  (for-list t  "  Draw Faces = " Draw-Faces )
+  (for-list t  "  Draw Lines = " Draw-Lines )
+  (for-list t  "  Instancing Transform = " Instancing-Transform )
+  (for-list t  "  Lighting = " Lighting )
+  (for-list t  "  Line Width = " Line-Width )
+  (for-list t  "  Max = " Max )
+  (for-list t  "  Min = " Min )
+  (for-list t  "  Node Number = " Node-Number )
+  (for-list t  "  Option = " Option )
+  (for-list t  "  Point = " Point )
+  (for-list t  "  Point Symbol = " Point-Symbol )
+  (for-list t  "  Range = " Range )
+  (for-list t  "  Specular Lighting = " Specular-Lighting )
+  (for-list t  "  Surface Drawing = " Surface-Drawing )
+  (for-list t  "  Symbol Size = " Symbol-Size )
+  (for-list t  "  Transparency = " Transparency )
+  (for-list t  "  Variable = " Variable )
+  (for-list t  "  Variable Boundary Values = " Variable-Boundary-Values )
+  (for-list t  "  Visibility = " Visibility)
   (for-list t  "  OBJECT VIEW TRANSFORM: " "")
   (for-list t  "    Apply Reflection = " "Off")
   (for-list t  "    Apply Rotation = " "Off")
@@ -960,3 +964,92 @@ END
   (for-list t "  Text Rotation = " Text-Rotation)
   (for-list t "  Visibility = " Visibility)
   (for-list t "END" (format nil "~%~%")))
+
+(defun make-plane (name
+                   &key
+                     (x "530.0 [mm]")
+                     (y "0.0 [mm]")
+                     (z "0.0 [mm]")
+                     (plane-bound "None"))
+  "@b(Описание:) функция @b(make-plane)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-plane \"foo\" :x (format nil \"~A [mm]\" 450.0))
+@end(code)
+"
+  (for-list t "PLANE: " name)
+  (for-list t "  Apply Instancing Transform = " "On")
+  (for-list t "  Apply Texture = " "Off")
+  (for-list t "  Blend Texture = " "On")
+  (for-list t "  Bound Radius = " "0.5 [m]")
+  (for-list t "  Colour = " "0.75, 0.75, 0.75")
+  (for-list t "  Colour Map = " "Default Colour Map")
+  (for-list t "  Colour Mode = " "Constant")
+  (for-list t "  Colour Scale = " "Linear")
+  (for-list t "  Colour Variable = " "Pressure")
+  (for-list t "  Colour Variable Boundary Values = " "Hybrid")
+  (for-list t "  Culling Mode = " "No Culling")
+  (for-list t "  Direction 1 Bound = " "1.0 [m]")
+  (for-list t "  Direction 1 Orientation = " "0 [degree]")
+  (for-list t "  Direction 1 Points = " "10")
+  (for-list t "  Direction 2 Bound = " "1.0 [m]")
+  (for-list t "  Direction 2 Points = " "10")
+  (for-list t "  Domain List = " "/DOMAIN GROUP:All Domains")
+  (for-list t "  Draw Faces = " "On")
+  (for-list t "  Draw Lines = " "Off")
+  (for-list t "  Instancing Transform = " "/DEFAULT INSTANCE TRANSFORM:Default Transform")
+  (for-list t "  Invert Plane Bound = " "Off")
+  (for-list t "  Lighting = " "On")
+  (for-list t "  Line Colour = " "0, 0, 0")
+  (for-list t "  Line Colour Mode = " "Default")
+  (for-list t "  Line Width = " "1")
+  (for-list t "  Max = " "0.0 [kPa]")
+  (for-list t "  Min = " "0.0 [kPa]")
+  (for-list t "  Normal = " "1 , 0 , 0")
+  (for-list t "  Option = " "YZ Plane")
+  (for-list t "  Plane Bound = " plane-bound)
+  (for-list t "  Plane Type = " "Slice")
+  (for-list t "  Point = " "0 [mm], 0 [mm], 0 [mm]")
+  (for-list t "  Point 1 = " "0 [mm], 0 [mm], 0 [mm]")
+  (for-list t "  Point 2 = " "1 [mm], 0 [mm], 0 [mm]")
+  (for-list t "  Point 3 = " "0 [mm], 1 [mm], 0 [mm]")
+  (for-list t "  Range = " "Global")
+  (for-list t "  Render Edge Angle = " "0 [degree]")
+  (for-list t "  Specular Lighting = " "On")
+  (for-list t "  Surface Drawing = " "Smooth Shading")
+  (for-list t "  Texture Angle = " "0")
+  (for-list t "  Texture Direction = " "0 , 1 , 0")
+  (for-list t "  Texture File = " "")
+  (for-list t "  Texture Material = " "Metal")
+  (for-list t "  Texture Position = " "0 , 0")
+  (for-list t "  Texture Scale = " "1")
+  (for-list t "  Texture Type = " "Predefined")
+  (for-list t "  Tile Texture = " "Off")
+  (for-list t "  Transform Texture = " "Off")
+  (for-list t "  Transparency = " "0.0")
+  (for-list t "  Visibility = " "On")
+  (for-list t "  X = " x)
+  (for-list t "  Y = " y)
+  (for-list t "  Z = " z)
+  (for-list t "  OBJECT VIEW TRANSFORM: " "")
+  (for-list t "    Apply Reflection = " "Off")
+  (for-list t "    Apply Rotation = " "Off")
+  (for-list t "    Apply Scale = " "Off")
+  (for-list t "    Apply Translation = " "Off")
+  (for-list t "    Principal Axis = " "Z")
+  (for-list t "    Reflection Plane Option = " "XY Plane")
+  (for-list t "    Rotation Angle = " "0.0 [degree]")
+  (for-list t "    Rotation Axis From = " "0 [mm], 0 [mm], 0 [mm]")
+  (for-list t "    Rotation Axis To = " "0 [mm], 0 [mm], 0 [mm]")
+  (for-list t "    Rotation Axis Type = " "Principal Axis")
+  (for-list t "    Scale Vector = " "1 , 1 , 1")
+  (for-list t "    Translation Vector = " "0 [mm], 0 [mm], 0 [mm]")
+  (for-list t "    X = " "0.0 [mm]")
+  (for-list t "    Y = " "0.0 [mm]")
+  (for-list t "    Z = " "0.0 [mm]")
+  (for-list t "  END" "")
+  (for-list t "END" "")
+  )
+
+
