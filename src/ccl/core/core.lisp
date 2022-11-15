@@ -1042,7 +1042,7 @@
     :documentation "text-colour-mode")
    (text-height
     :accessor <contour>-text-height
-    :initform "0.012"
+    :initform "0.018"
     :initarg :text-height
     :documentation "text-height")
    (transparency
@@ -1440,7 +1440,7 @@
     :documentation "visibility")))
 
 (defmethod print-object ((legend <legend>) s)
-  (format s "DEFAULT LEGEND: ~A~%" (<obj>-name legend))
+  (format s "LEGEND: ~A~%" (<obj>-name legend))
   (loop :for slot :in (sb-mop:class-direct-slots (find-class '<legend>))
         :do
            (print-slot slot legend s)))
