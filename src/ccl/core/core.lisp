@@ -5,8 +5,24 @@
   (:export for-list)
   (:export <obj>)
   (:export <obj>-name)
-  (:export <point>)
-  (:export <point>-apply-instancing-transform
+  (:export <object-view-transform>
+           <object-view-transform>-apply-reflection
+           <object-view-transform>-apply-rotation
+           <object-view-transform>-apply-scale
+           <object-view-transform>-apply-translation
+           <object-view-transform>-principal-axis
+           <object-view-transform>-reflection-plane-option
+           <object-view-transform>-rotation-angle
+           <object-view-transform>-rotation-axis-from
+           <object-view-transform>-rotation-axis-to
+           <object-view-transform>-rotation-axis-type
+           <object-view-transform>-scale-vector
+           <object-view-transform>-translation-vector
+           <object-view-transform>-x
+           <object-view-transform>-y
+           <object-view-transform>-z) 
+  (:export <point>
+           <point>-apply-instancing-transform
            <point>-colour
            <point>-colour-map
            <point>-colour-mode
@@ -120,6 +136,23 @@
            "~%")
           variable)))
 
+(defun print-slot (slot class stream)
+  (cond
+    ((eq 'built-in-class
+         (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
+     (for-list
+      stream
+      (substitute
+       #\Space #\- 
+       (string-capitalize
+        (format nil "  ~A = " (sb-mop:slot-definition-name slot))))
+      (slot-value class (sb-mop:slot-definition-name slot))))
+    ((eq 'standard-class
+         (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
+     (format stream "~A" (slot-value class (sb-mop:slot-definition-name slot))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defclass <obj> ()
   ((name :accessor <obj>-name
          :initform "Name"
@@ -207,15 +240,10 @@
 
 (defmethod print-object ((object-view-transform <object-view-transform>) s)
   (format s "  OBJECT VIEW TRANSFORM:~%")
-  (loop :for i :in (sb-mop:class-direct-slots (find-class '<object-view-transform>))
-        :do
-           (for-list
-            s
-            (substitute
-             #\Space #\- 
-             (string-capitalize
-              (format nil "    ~A = " (sb-mop:slot-definition-name i))))
-            (slot-value object-view-transform (sb-mop:slot-definition-name i))))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<object-view-transform>))
+        :do (print-slot slot object-view-transform s)))
+
+(defmethod print-object :after ((object-view-transform <object-view-transform>) s)
   (format s "  END~%"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -369,21 +397,13 @@
 
 (defmethod print-object ((point <point>) s)
   (format s "POINT: ~A~%" (<obj>-name point))
-  (loop :for i :in (sb-mop:class-direct-slots (find-class '<point>))
-        :do
-           (for-list
-            s
-            (substitute
-             #\Space #\- 
-             (string-capitalize
-              (format nil "  ~A = " (sb-mop:slot-definition-name i))))
-            (slot-value point (sb-mop:slot-definition-name i)))))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<point>))
+        :do (print-slot slot point s)))
 
 (defmethod print-object :after ((point <point>) s)
   (format s "END~%"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (defclass <line> (<obj>)
   ((apply-instancing-transform
@@ -489,15 +509,8 @@
 
 (defmethod print-object ((line <line>) s)
   (format s "LINE: ~A~%" (<obj>-name line))
-  (loop :for i :in (sb-mop:class-direct-slots (find-class '<line>))
-        :do
-           (for-list
-            s
-            (substitute
-             #\Space #\- 
-             (string-capitalize
-              (format nil "  ~A = " (sb-mop:slot-definition-name i))))
-            (slot-value line (sb-mop:slot-definition-name i)))))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<line>))
+        :do (print-slot slot line s)))
 
 (defmethod print-object :after ((line <line>) s)
   (format s "END~%"))
@@ -778,21 +791,9 @@
 
 (defmethod print-object ((plane <plane>) s)
   (format s "PLANE: ~A~%" (<obj>-name plane))
-  (loop :for i :in (sb-mop:class-direct-slots (find-class '<plane>))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<plane>))
         :do
-           (cond
-             ((eq 'built-in-class
-                  (type-of (class-of (slot-value plane (sb-mop:slot-definition-name i)))))
-              (for-list
-               s
-               (substitute
-                #\Space #\- 
-                (string-capitalize
-                 (format nil "  ~A = " (sb-mop:slot-definition-name i))))
-               (slot-value plane (sb-mop:slot-definition-name i))))
-             ((eq 'standard-class
-                  (type-of (class-of (slot-value plane (sb-mop:slot-definition-name i)))))
-              (format s "~A" (slot-value plane (sb-mop:slot-definition-name i)))))))
+           (print-slot slot plane s)))
 
 (defmethod print-object :after ((plane <plane>) s)
   (format s "END~%"))
