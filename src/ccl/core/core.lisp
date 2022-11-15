@@ -106,6 +106,39 @@
            <plane>-z
            <plane>-object-view-transform
            )
+  (:export <contour>
+           <contour>-apply-instancing-transform
+           <contour>-clip-contour
+           <contour>-colour-map
+           <contour>-colour-scale
+           <contour>-colour-variable
+           <contour>-colour-variable-boundary-values
+           <contour>-constant-contour-colour
+           <contour>-contour-range
+           <contour>-culling-mode
+           <contour>-domain-list
+           <contour>-draw-contours
+           <contour>-font
+           <contour>-fringe-fill
+           <contour>-instancing-transform
+           <contour>-lighting
+           <contour>-line-colour
+           <contour>-line-colour-mode
+           <contour>-line-width
+           <contour>-location-list
+           <contour>-max
+           <contour>-min
+           <contour>-number-of-contours
+           <contour>-show-numbers
+           <contour>-specular-lighting
+           <contour>-surface-drawing
+           <contour>-text-colour
+           <contour>-text-colour-mode
+           <contour>-text-height
+           <contour>-transparency
+           <contour>-value-list
+           <contour>-visibility
+           <contour>-object-view-transform)
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -142,10 +175,12 @@
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
      (for-list
       stream
-      (substitute
+      (mnas-string:replace-all
+       (substitute
        #\Space #\- 
        (string-capitalize
         (format nil "  ~A = " (sb-mop:slot-definition-name slot))))
+       " Of " " of ")      
       (slot-value class (sb-mop:slot-definition-name slot))))
     ((eq 'standard-class
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
@@ -798,9 +833,202 @@
 (defmethod print-object :after ((plane <plane>) s)
   (format s "END~%"))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <contour> (<obj>) 
+  ((apply-instancing-transform
+    :accessor <contour>-apply-instancing-transform
+    :initform "On"
+    :initarg :apply-instancing-transform
+    :documentation "apply-instancing-transform")
+   (clip-contour
+    :accessor <contour>-clip-contour
+    :initform "Off"
+    :initarg :clip-contour
+    :documentation "clip-contour")
+   (colour-map
+    :accessor <contour>-colour-map
+    :initform "Default Colour Map"
+    :initarg :colour-map
+    :documentation "colour-map")
+   (colour-scale
+    :accessor <contour>-colour-scale
+    :initform "Linear"
+    :initarg :colour-scale
+    :documentation "colour-scale")
+   (colour-variable
+    :accessor <contour>-colour-variable
+    :initform "Total Temperature"
+    :initarg :colour-variable
+    :documentation "colour-variable")
+   (colour-variable-boundary-values
+    :accessor <contour>-colour-variable-boundary-values
+    :initform "Hybrid"
+    :initarg :colour-variable-boundary-values
+    :documentation "colour-variable-boundary-values")
+   (constant-contour-colour
+    :accessor <contour>-constant-contour-colour
+    :initform "On"
+    :initarg :constant-contour-colour
+    :documentation "constant-contour-colour")
+   (contour-range
+    :accessor <contour>-contour-range
+    :initform "User Specified"
+    :initarg :contour-range
+    :documentation "contour-range")
+   (culling-mode
+    :accessor <contour>-culling-mode
+    :initform "No Culling"
+    :initarg :culling-mode
+    :documentation "culling-mode")
+   (domain-list
+    :accessor <contour>-domain-list
+    :initform "/DOMAIN GROUP:All Domains"
+    :initarg :domain-list
+    :documentation "domain-list")
+   (draw-contours
+    :accessor <contour>-draw-contours
+    :initform "On"
+    :initarg :draw-contours
+    :documentation "draw-contours")
+   (font
+    :accessor <contour>-font
+    :initform "Sans Serif"
+    :initarg :font
+    :documentation "font")
+   (fringe-fill
+    :accessor <contour>-fringe-fill
+    :initform "On"
+    :initarg :fringe-fill
+    :documentation "fringe-fill")
+   (instancing-transform
+    :accessor <contour>-instancing-transform
+    :initform "/DEFAULT INSTANCE TRANSFORM:Default Transform"
+    :initarg :instancing-transform
+    :documentation "instancing-transform")
+   (lighting
+    :accessor <contour>-lighting
+    :initform "On"
+    :initarg :lighting
+    :documentation "lighting")
+   (line-colour
+    :accessor <contour>-line-colour
+    :initform "0, 0, 0"
+    :initarg :line-colour
+    :documentation "line-colour")
+   (line-colour-mode
+    :accessor <contour>-line-colour-mode
+    :initform "Default"
+    :initarg :line-colour-mode
+    :documentation "line-colour-mode")
+   (line-width
+    :accessor <contour>-line-width
+    :initform "1"
+    :initarg :line-width
+    :documentation "line-width")
+   (location-list
+    :accessor <contour>-location-list
+    :initform "/PLANE:Plane X p115i50"
+    :initarg :location-list
+    :documentation "location-list")
+   (max
+    :accessor <contour>-max
+    :initform "1650 [C]"
+    :initarg :max
+    :documentation "max")
+   (min
+    :accessor <contour>-min
+    :initform "350 [C]"
+    :initarg :min
+    :documentation "min")
+   (number-of-contours
+    :accessor <contour>-number-of-contours
+    :initform "14"
+    :initarg :number-of-contours
+    :documentation "number-of-contours")
+   (show-numbers
+    :accessor <contour>-show-numbers
+    :initform "On"
+    :initarg :show-numbers
+    :documentation "show-numbers")
+   (specular-lighting
+    :accessor <contour>-specular-lighting
+    :initform "On"
+    :initarg :specular-lighting
+    :documentation "specular-lighting")
+   (surface-drawing
+    :accessor <contour>-surface-drawing
+    :initform "Smooth Shading"
+    :initarg :surface-drawing
+    :documentation "surface-drawing")
+   (text-colour
+    :accessor <contour>-text-colour
+    :initform "0, 0, 0"
+    :initarg :text-colour
+    :documentation "text-colour")
+   (text-colour-mode
+    :accessor <contour>-text-colour-mode
+    :initform "Default"
+    :initarg :text-colour-mode
+    :documentation "text-colour-mode")
+   (text-height
+    :accessor <contour>-text-height
+    :initform "0.012"
+    :initarg :text-height
+    :documentation "text-height")
+   (transparency
+    :accessor <contour>-transparency
+    :initform "0.0"
+    :initarg :transparency
+    :documentation "transparency")
+   (value-list
+    :accessor <contour>-value-list
+    :initform "0 [C],1 [C]"
+    :initarg :value-list
+    :documentation "value-list")
+   (visibility
+    :accessor <contour>-visibility
+    :initform "On"
+    :initarg :visibility
+    :documentation "visibility")
+   (object-view-transform
+    :accessor <contour>-object-view-transform
+    :initform (make-instance '<object-view-transform>)
+    :initarg :object-view-transform
+    :documentation "object-view-transform")))
+
+(defmethod print-object ((contour <contour>) s)
+  (format s "CONTOUR: ~A~%" (<obj>-name contour))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<contour>))
+        :do
+           (print-slot slot contour s)))
+
+(defmethod print-object :after ((contour <contour>) s)
+  (format s "END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(mnas-string:replace-all string " Of " " of ")
+
+(let* ((x 80.0 )
+       (plane
+         (make-instance '<plane> :name (format nil "Plane X ~A" (mnas-ansys/belt:number-to-string x))
+                                 :x (format nil "~A [mm]" x)))
+       (contour
+         (make-instance '<contour>
+  :name (format nil "Contour X ~A" (mnas-ansys/belt:number-to-string x))
+  :location-list (format nil "/PLANE:Plane X ~A" (mnas-ansys/belt:number-to-string x))))
+       )
+  (format t "~{~A~%~}" `(,contour))) ;   ,plane
+
 (defparameter *plane*
   (make-instance '<plane> :name (format nil "Plane X ~A" (mnas-ansys/belt:number-to-string 115.5))
                           :x (format nil "~A [mm]" 115.5)))
+
+(defparameter *contour*
+  (make-instance '<contour>
+  :name (format nil "Contour X ~A" (mnas-ansys/belt:number-to-string 115.5))
+  :location-list (format nil "/PLANE:Plane X ~A" (mnas-ansys/belt:number-to-string 115.5))))
 
 (defparameter *object-view-transform* (make-instance '<object-view-transform>))
 
