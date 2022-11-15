@@ -1008,9 +1008,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(mnas-string:replace-all string " Of " " of ")
+#+nil (mnas-string:replace-all string " Of " " of ")
 
-(let* ((x 80.0 )
+#+nil (let* ((x 80.0 )
        (plane
          (make-instance '<plane> :name (format nil "Plane X ~A" (mnas-ansys/belt:number-to-string x))
                                  :x (format nil "~A [mm]" x)))
@@ -1021,17 +1021,17 @@
        )
   (format t "~{~A~%~}" `(,contour))) ;   ,plane
 
-(defparameter *plane*
+#+nil (defparameter *plane*
   (make-instance '<plane> :name (format nil "Plane X ~A" (mnas-ansys/belt:number-to-string 115.5))
                           :x (format nil "~A [mm]" 115.5)))
 
-(defparameter *contour*
+#+nil (defparameter *contour*
   (make-instance '<contour>
   :name (format nil "Contour X ~A" (mnas-ansys/belt:number-to-string 115.5))
   :location-list (format nil "/PLANE:Plane X ~A" (mnas-ansys/belt:number-to-string 115.5))))
 
-(defparameter *object-view-transform* (make-instance '<object-view-transform>))
+#+nil (defparameter *object-view-transform* (make-instance '<object-view-transform>))
 
-(defparameter *point* (make-instance '<point> :name "Point 1" :apply-instancing-transform nil ))
+#+nil (defparameter *point* (make-instance '<point> :name "Point 1" :apply-instancing-transform nil ))
 
-(defparameter *line* (make-instance '<line> :name "Line 1" ))
+#+nil (defparameter *line* (make-instance '<line> :name "Line 1" ))
