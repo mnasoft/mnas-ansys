@@ -139,6 +139,75 @@
            <contour>-value-list
            <contour>-visibility
            <contour>-object-view-transform)
+  (:export <camera>
+           <camera>-option
+           <camera>-pan
+           <camera>-pivot-point
+           <camera>-rotation
+           <camera>-rotation-quaternion
+           <camera>-scale
+           <camera>-send-to-viewer
+           )
+  (:export <view>
+           <view>-angular-coord-shift
+           <view>-auto-center
+           <view>-axis-visibility
+           <view>-border-visibility
+           <view>-camera-mode
+           <view>-clip-plane
+           <view>-clip-scene
+           <view>-coord-transform
+           <view>-hide-difference-case
+           <view>-highlight-type
+           <view>-is-a-figure
+           <view>-light-angle
+           <view>-local-object-list
+           <view>-object-visibility-list
+           <view>-projection
+           <view>-ruler-visibility
+           <view>-standard-view
+           <view>-valid-case
+           <view>-camera)
+  (:export <default-legend>
+           <default-legend>-colour
+           <default-legend>-font
+           <default-legend>-legend-aspect
+           <default-legend>-legend-format
+           <default-legend>-legend-orientation
+           <default-legend>-legend-position
+           <default-legend>-legend-resolution
+           <default-legend>-legend-shading
+           <default-legend>-legend-size
+           <default-legend>-legend-ticks
+           <default-legend>-legend-title
+           <default-legend>-legend-title-mode
+           <default-legend>-legend-x-justification
+           <default-legend>-legend-y-justification
+           <default-legend>-related-object
+           <default-legend>-show-legend-units
+           <default-legend>-text-colour-mode
+           <default-legend>-text-height
+           <default-legend>-text-rotation
+           <default-legend>-visibility)
+  (:export <legend>
+           <legend>-colour
+           <legend>-font
+           <legend>-legend-aspect
+           <legend>-legend-format
+           <legend>-legend-orientation
+           <legend>-legend-plot
+           <legend>-legend-position
+           <legend>-legend-size
+           <legend>-legend-ticks
+           <legend>-legend-title
+           <legend>-legend-title-mode
+           <legend>-legend-x-justification
+           <legend>-legend-y-justification
+           <legend>-show-legend-units
+           <legend>-text-colour-mode
+           <legend>-text-height
+           <legend>-text-rotation
+           <legend>-visibility)
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -1005,6 +1074,383 @@
 
 (defmethod print-object :after ((contour <contour>) s)
   (format s "END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defclass <camera> ()
+  ((option
+    :accessor <camera>-option
+    :initform "Pivot Point and Quaternion"
+    :initarg :option
+    :documentation "option")
+   (pan
+    :accessor <camera>-pan
+    :initform "-0.00218911, 0.0109455"
+    :initarg :pan
+    :documentation "pan")
+   (pivot-point
+    :accessor <camera>-pivot-point
+    :initform "0.0495, 0.338411, 7.45058e-09"
+    :initarg :pivot-point
+    :documentation "pivot-point")
+   (rotation
+    :accessor <camera>-rotation
+    :initform "-90, 0, 0"
+    :initarg :rotation
+    :documentation "rotation")
+   (rotation-quaternion
+    :accessor <camera>-rotation-quaternion
+    :initform "0, -0.707107, 0, 0.707107"
+    :initarg :rotation-quaternion
+    :documentation "rotation-quaternion")
+   (scale
+    :accessor <camera>-scale
+    :initform "10.0214"
+    :initarg :scale
+    :documentation "scale")
+   (send-to-viewer
+    :accessor <camera>-send-to-viewer
+    :initform "True"
+    :initarg :send-to-viewer
+    :documentation "send-to-viewer")))
+
+(defmethod print-object ((camera <camera>) s)
+  (format s "  CAMERA:~%")
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<camera>))
+        :do
+           (print-slot slot camera s)))
+
+(defmethod print-object :after ((camera <camera>) s)
+  (format s "  END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <view> (<obj>)
+  (
+   (angular-coord-shift
+    :accessor <view>-angular-coord-shift
+    :initform "0.0"
+    :initarg :angular-coord-shift
+    :documentation "angular-coord-shift")
+   (auto-center
+    :accessor <view>-auto-center
+    :initform "false"
+    :initarg :auto-center
+    :documentation "auto-center")
+   (axis-visibility
+    :accessor <view>-axis-visibility
+    :initform "On"
+    :initarg :axis-visibility
+    :documentation "axis-visibility")
+   (border-visibility
+    :accessor <view>-border-visibility
+    :initform "false"
+    :initarg :border-visibility
+    :documentation "border-visibility")
+   (camera-mode
+    :accessor <view>-camera-mode
+    :initform "User Specified"
+    :initarg :camera-mode
+    :documentation "camera-mode")
+   (clip-plane
+    :accessor <view>-clip-plane
+    :initform ""
+    :initarg :clip-plane
+    :documentation "clip-plane")
+   (clip-scene
+    :accessor <view>-clip-scene
+    :initform "false"
+    :initarg :clip-scene
+    :documentation "clip-scene")
+   (coord-transform
+    :accessor <view>-coord-transform
+    :initform "Cartesian"
+    :initarg :coord-transform
+    :documentation "coord-transform")
+   (hide-difference-case
+    :accessor <view>-hide-difference-case
+    :initform "false"
+    :initarg :hide-difference-case
+    :documentation "hide-difference-case")
+   (highlight-type
+    :accessor <view>-highlight-type
+    :initform "Surface Mesh"
+    :initarg :highlight-type
+    :documentation "highlight-type")
+   (is-a-figure
+    :accessor <view>-is-a-figure
+    :initform "true"
+    :initarg :is-a-figure
+    :documentation "is-a-figure")
+   (light-angle
+    :accessor <view>-light-angle
+    :initform "50, 110"
+    :initarg :light-angle
+    :documentation "light-angle")
+   (local-object-list
+    :accessor <view>-local-object-list
+    :initform "/CONTOUR:Contour TTMP X p49i5 Figure 1,/PLANE:Plane X p49i5 Figure 1"
+    :initarg :local-object-list
+    :documentation "local-object-list")
+   (object-visibility-list
+    :accessor <view>-object-visibility-list
+    :initform "/CONTOUR:Contour TTMP X p49i5 Figure 1,/DEFAULT LEGEND:Default Legend Figure 1"
+    :initarg :object-visibility-list
+    :documentation "object-visibility-list")
+   (projection
+    :accessor <view>-projection
+    :initform "Orthographic"
+    :initarg :projection
+    :documentation "projection")
+   (ruler-visibility
+    :accessor <view>-ruler-visibility
+    :initform "On"
+    :initarg :ruler-visibility
+    :documentation "ruler-visibility")
+   (standard-view
+    :accessor <view>-standard-view
+    :initform "Isometric Y"
+    :initarg :standard-view
+    :documentation "standard-view")
+   (valid-case
+    :accessor <view>-valid-case
+    :initform ""
+    :initarg :valid-case
+    :documentation "valid-case")
+   (camera
+    :accessor <view>-camera
+    :initform (make-instance '<camera>)
+    :initarg :camera
+    :documentation "camera")
+   ))
+
+(defmethod print-object ((view <view>) s)
+  (format s "VIEW: ~A~%" (<obj>-name view))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<view>))
+        :do
+           (print-slot slot view s)))
+
+(defmethod print-object :after ((view <view>) s)
+  (format s "END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <default-legend> (<obj>)
+  ((colour
+    :accessor <default-legend>-colour
+    :initform "0, 0, 0"
+    :initarg :colour
+    :documentation "colour")
+   (font
+    :accessor <default-legend>-font
+    :initform "Sans Serif"
+    :initarg :font
+    :documentation "font")
+   (legend-aspect
+    :accessor <default-legend>-legend-aspect
+    :initform "0.04"
+    :initarg :legend-aspect
+    :documentation "legend-aspect")
+   (legend-format
+    :accessor <default-legend>-legend-format
+    :initform "%4.1f"
+    :initarg :legend-format
+    :documentation "legend-format")
+   (legend-orientation
+    :accessor <default-legend>-legend-orientation
+    :initform "Vertical"
+    :initarg :legend-orientation
+    :documentation "legend-orientation")
+   (legend-position
+    :accessor <default-legend>-legend-position
+    :initform "0.02 , 0.15"
+    :initarg :legend-position
+    :documentation "legend-position")
+   (legend-resolution
+    :accessor <default-legend>-legend-resolution
+    :initform "256"
+    :initarg :legend-resolution
+    :documentation "legend-resolution")
+   (legend-shading
+    :accessor <default-legend>-legend-shading
+    :initform "Smooth"
+    :initarg :legend-shading
+    :documentation "legend-shading")
+   (legend-size
+    :accessor <default-legend>-legend-size
+    :initform "1"
+    :initarg :legend-size
+    :documentation "legend-size")
+   (legend-ticks
+    :accessor <default-legend>-legend-ticks
+    :initform "5"
+    :initarg :legend-ticks
+    :documentation "legend-ticks")
+   (legend-title
+    :accessor <default-legend>-legend-title
+    :initform "Legend"
+    :initarg :legend-title
+    :documentation "legend-title")
+   (legend-title-mode
+    :accessor <default-legend>-legend-title-mode
+    :initform "Variable and Location"
+    :initarg :legend-title-mode
+    :documentation "legend-title-mode")
+   (legend-x-justification
+    :accessor <default-legend>-legend-x-justification
+    :initform "Left"
+    :initarg :legend-x-justification
+    :documentation "legend-x-justification")
+   (legend-y-justification
+    :accessor <default-legend>-legend-y-justification
+    :initform "Top"
+    :initarg :legend-y-justification
+    :documentation "legend-y-justification")
+   (related-object
+    :accessor <default-legend>-related-object
+    :initform "View 1"
+    :initarg :related-object
+    :documentation "related-object")
+   (show-legend-units
+    :accessor <default-legend>-show-legend-units
+    :initform "On"
+    :initarg :show-legend-units
+    :documentation "show-legend-units")
+   (text-colour-mode
+    :accessor <default-legend>-text-colour-mode
+    :initform "Default"
+    :initarg :text-colour-mode
+    :documentation "text-colour-mode")
+   (text-height
+    :accessor <default-legend>-text-height
+    :initform "0.018"
+    :initarg :text-height
+    :documentation "text-height")
+   (text-rotation
+    :accessor <default-legend>-text-rotation
+    :initform "0"
+    :initarg :text-rotation
+    :documentation "text-rotation")
+   (visibility
+    :accessor <default-legend>-visibility
+    :initform "Off"
+    :initarg :visibility
+    :documentation "visibility")))
+
+(defmethod print-object ((default-legend <default-legend>) s)
+  (format s "DEFAULT LEGEND: ~A~%" (<obj>-name default-legend))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<default-legend>))
+        :do
+           (print-slot slot default-legend s)))
+
+(defmethod print-object :after ((default-legend <default-legend>) s)
+  (format s "END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <legend> (<obj>)
+  ((colour
+    :accessor <legend>-colour
+    :initform "0, 0, 0"
+    :initarg :colour
+    :documentation "colour")
+   (font
+    :accessor <legend>-font
+    :initform "Sans Serif"
+    :initarg :font
+    :documentation "font")
+   (legend-aspect
+    :accessor <legend>-legend-aspect
+    :initform "0.05"
+    :initarg :legend-aspect
+    :documentation "legend-aspect")
+   (legend-format
+    :accessor <legend>-legend-format
+    :initform "%4.1f"
+    :initarg :legend-format
+    :documentation "legend-format")
+   (legend-orientation
+    :accessor <legend>-legend-orientation
+    :initform "Vertical"
+    :initarg :legend-orientation
+    :documentation "legend-orientation")
+   (legend-plot
+    :accessor <legend>-legend-plot
+    :initform "/CONTOUR:Contour TTMP X p49i5"
+    :initarg :legend-plot
+    :documentation "legend-plot")
+   (legend-position
+    :accessor <legend>-legend-position
+    :initform "0.02 , 0.15"
+    :initarg :legend-position
+    :documentation "legend-position")
+   (legend-size
+    :accessor <legend>-legend-size
+    :initform "1.0"
+    :initarg :legend-size
+    :documentation "legend-size")
+   (legend-ticks
+    :accessor <legend>-legend-ticks
+    :initform "5"
+    :initarg :legend-ticks
+    :documentation "legend-ticks")
+   (legend-title
+    :accessor <legend>-legend-title
+    :initform "Legend"
+    :initarg :legend-title
+    :documentation "legend-title")
+   (legend-title-mode
+    :accessor <legend>-legend-title-mode
+    :initform "Variable and Location"
+    :initarg :legend-title-mode
+    :documentation "legend-title-mode")
+   (legend-x-justification
+    :accessor <legend>-legend-x-justification
+    :initform "Left"
+    :initarg :legend-x-justification
+    :documentation "legend-x-justification")
+   (legend-y-justification
+    :accessor <legend>-legend-y-justification
+    :initform "Bottom"
+    :initarg :legend-y-justification
+    :documentation "legend-y-justification")
+   (show-legend-units
+    :accessor <legend>-show-legend-units
+    :initform "On"
+    :initarg :show-legend-units
+    :documentation "show-legend-units")
+   (text-colour-mode
+    :accessor <legend>-text-colour-mode
+    :initform "Default"
+    :initarg :text-colour-mode
+    :documentation "text-colour-mode")
+   (text-height
+    :accessor <legend>-text-height
+    :initform "0.018"
+    :initarg :text-height
+    :documentation "text-height")
+   (text-rotation
+    :accessor <legend>-text-rotation
+    :initform "0"
+    :initarg :text-rotation
+    :documentation "text-rotation")
+   (visibility
+    :accessor <legend>-visibility
+    :initform "On"
+    :initarg :visibility
+    :documentation "visibility")))
+
+(defmethod print-object ((legend <legend>) s)
+  (format s "DEFAULT LEGEND: ~A~%" (<obj>-name legend))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<legend>))
+        :do
+           (print-slot slot legend s)))
+
+(defmethod print-object :after ((legend <legend>) s)
+  (format s "END~%"))
+
+(make-instance '<legend>)
+
+(make-instance '<view>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
