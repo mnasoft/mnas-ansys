@@ -1,0 +1,92 @@
+;; Создание слотов класса
+;; Keyboard Macro Editor.  Press C-c C-c to finish; press C-x k RET to cancel.
+;; Original keys: C-s SPC RET C-SPC C-s = RET 2*<left> M-% SPC RET - RET ! C-a C-s SPC RET C-s = C-a C-s SPC RET C-SPC C-s = RET 2*<left> C-x C-l C-a C-s SPC RET ( C-s = RET 2*<left> SPC " 3*<deletechar> C-e ") C-r ( RET <right> C-SPC C-s SPC RET <left> M-w SPC : <left> RET <right> accessor SPC C-y RET :initform SPC C-s " C-s 2*RET :initarg SPC : C-y RET :documentation SPC " C-y " <down> C-a
+
+Command: last-kbd-macro
+Key: none
+
+Macro:
+
+C-s			;; isearch-forward
+SPC			;; self-insert-command
+RET			;; newline
+C-SPC			;; set-mark-command
+C-s			;; isearch-forward
+=			;; self-insert-command
+RET			;; newline
+2*<left>		;; left-char
+M-%			;; query-replace
+SPC			;; self-insert-command
+RET			;; newline
+-			;; self-insert-command
+RET			;; newline
+!			;; self-insert-command
+C-a			;; move-beginning-of-line
+C-s			;; isearch-forward
+SPC			;; self-insert-command
+RET			;; newline
+C-s			;; isearch-forward
+=			;; self-insert-command
+C-a			;; move-beginning-of-line
+C-s			;; isearch-forward
+SPC			;; self-insert-command
+RET			;; newline
+C-SPC			;; set-mark-command
+C-s			;; isearch-forward
+=			;; self-insert-command
+RET			;; newline
+2*<left>		;; left-char
+C-x C-l			;; downcase-region
+C-a			;; move-beginning-of-line
+C-s			;; isearch-forward
+SPC			;; self-insert-command
+RET			;; newline
+(			;; self-insert-command
+C-s			;; isearch-forward
+=			;; self-insert-command
+RET			;; newline
+2*<left>		;; left-char
+SPC			;; self-insert-command
+"			;; self-insert-command
+3*<deletechar>		;; delete-forward-char
+C-e			;; move-end-of-line
+")			;; self-insert-command * 2
+C-r			;; isearch-backward
+(			;; self-insert-command
+RET			;; newline
+<right>			;; right-char
+C-SPC			;; set-mark-command
+C-s			;; isearch-forward
+SPC			;; self-insert-command
+RET			;; newline
+<left>			;; left-char
+M-w			;; kill-ring-save
+SPC			;; self-insert-command
+:			;; self-insert-command
+<left>			;; left-char
+RET			;; newline
+<right>			;; right-char
+accessor		;; self-insert-command * 8
+SPC			;; self-insert-command
+C-y			;; yank
+RET			;; newline
+:initform		;; self-insert-command * 9
+SPC			;; self-insert-command
+C-s			;; isearch-forward
+"			;; self-insert-command
+C-s			;; isearch-forward
+2*RET			;; newline
+:initarg		;; self-insert-command * 8
+SPC			;; self-insert-command
+:			;; self-insert-command
+C-y			;; yank
+RET			;; newline
+:documentation		;; self-insert-command * 14
+SPC			;; self-insert-command
+"			;; self-insert-command
+C-y			;; yank
+"			;; self-insert-command
+<down>			;; next-line
+C-a			;; move-beginning-of-line
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
