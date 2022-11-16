@@ -352,6 +352,23 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defclass <object-report-options> ()
+  ((report-caption
+   :accessor <object-report-options>-report-caption
+   :initform "Caption for Report"
+   :initarg report-caption
+   :documentation "report-caption")))
+
+(defmethod print-object ((object-report-options <object-report-options>) s)
+  (format s "  OBJECT VIEW TRANSFORM:~%")
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<object-report-options>))
+        :do (print-slot slot object-report-options s)))
+
+(defmethod print-object :after ((object-report-options <object-report-options>) s)
+  (format s "  END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defclass <point> (<obj>)
   ((apply-instancing-transform
     :accessor <point>-apply-instancing-transform
