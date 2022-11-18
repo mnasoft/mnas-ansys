@@ -20,7 +20,9 @@
            <object-view-transform>-translation-vector
            <object-view-transform>-x
            <object-view-transform>-y
-           <object-view-transform>-z) 
+           <object-view-transform>-z)
+  (:export <object-report-options>
+           <object-report-options>-report-caption)
   (:export <point>
            <point>-apply-instancing-transform
            <point>-colour
@@ -167,7 +169,9 @@
            <view>-ruler-visibility
            <view>-standard-view
            <view>-valid-case
-           <view>-camera)
+           <view>-camera
+           <view>-object-report-options)
+
   (:export <default-legend>
            <default-legend>-colour
            <default-legend>-font
@@ -356,11 +360,11 @@
   ((report-caption
    :accessor <object-report-options>-report-caption
    :initform "Caption for Report"
-   :initarg report-caption
+   :initarg :report-caption
    :documentation "report-caption")))
 
 (defmethod print-object ((object-report-options <object-report-options>) s)
-  (format s "  OBJECT VIEW TRANSFORM:~%")
+  (format s "  OBJECT REPORT OPTIONS:~%")
   (loop :for slot :in (sb-mop:class-direct-slots (find-class '<object-report-options>))
         :do (print-slot slot object-report-options s)))
 
@@ -1238,7 +1242,11 @@
     :initform (make-instance '<camera>)
     :initarg :camera
     :documentation "camera")
-   ))
+   (object-report-options
+    :accessor <view>-object-report-options
+    :initform (make-instance '<object-report-options>)
+    :initarg :object-report-options
+    :documentation "object-report-options")))
 
 (defmethod print-object ((view <view>) s)
   (format s "VIEW: ~A~%" (<obj>-name view))
