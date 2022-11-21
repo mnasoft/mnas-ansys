@@ -51,7 +51,30 @@
            <point>-transparency
            <point>-variable
            <point>-variable-boundary-values
-           <point>-visibility)
+           <point>-visibility
+           )
+  (:export <line>
+           <line>-apply-instancing-transform
+           <line>-colour
+           <line>-colour-map
+           <line>-colour-mode
+           <line>-colour-scale
+           <line>-colour-variable
+           <line>-colour-variable-boundary-values
+           <line>-domain-list
+           <line>-instancing-transform
+           <line>-line-samples
+           <line>-line-type
+           <line>-line-width
+           <line>-max
+           <line>-min
+           <line>-option
+           <line>-point-1
+           <line>-point-2
+           <line>-point-2
+           <line>-visibility
+           <line>-object-view-transform
+           )
   (:export <plane>
            <plane>-apply-instancing-transform
            <plane>-apply-texture
@@ -107,6 +130,60 @@
            <plane>-y
            <plane>-z
            <plane>-object-view-transform
+           )
+  (:export <surface-of-revolution>
+           <surface-of-revolution>-apply-instancing-transform
+           <surface-of-revolution>-apply-texture
+           <surface-of-revolution>-blend-texture
+           <surface-of-revolution>-colour
+           <surface-of-revolution>-colour-map
+           <surface-of-revolution>-colour-mode
+           <surface-of-revolution>-colour-scale
+           <surface-of-revolution>-colour-variable
+           <surface-of-revolution>-colour-variable-boundary-values
+           <surface-of-revolution>-culling-mode
+           <surface-of-revolution>-domain-list
+           <surface-of-revolution>-draw-faces
+           <surface-of-revolution>-draw-lines
+           <surface-of-revolution>-ending-axial-shift
+           <surface-of-revolution>-ending-radial-shift
+           <surface-of-revolution>-instancing-transform
+           <surface-of-revolution>-lighting
+           <surface-of-revolution>-line-colour
+           <surface-of-revolution>-line-colour-mode
+           <surface-of-revolution>-line-width
+           <surface-of-revolution>-location-list
+           <surface-of-revolution>-max
+           <surface-of-revolution>-meridional-point-1
+           <surface-of-revolution>-meridional-point-2
+           <surface-of-revolution>-meridional-points
+           <surface-of-revolution>-min
+           <surface-of-revolution>-option
+           <surface-of-revolution>-principal-axis
+           <surface-of-revolution>-project-to-ar-plane
+           <surface-of-revolution>-range
+           <surface-of-revolution>-render-edge-angle
+           <surface-of-revolution>-rotation-axis-from
+           <surface-of-revolution>-rotation-axis-to
+           <surface-of-revolution>-rotation-axis-type
+           <surface-of-revolution>-specular-lighting
+           <surface-of-revolution>-starting-axial-shift
+           <surface-of-revolution>-starting-radial-shift
+           <surface-of-revolution>-surface-drawing
+           <surface-of-revolution>-texture-angle
+           <surface-of-revolution>-texture-direction
+           <surface-of-revolution>-texture-file
+           <surface-of-revolution>-texture-material
+           <surface-of-revolution>-texture-position
+           <surface-of-revolution>-texture-scale
+           <surface-of-revolution>-texture-type
+           <surface-of-revolution>-theta-points
+           <surface-of-revolution>-tile-texture
+           <surface-of-revolution>-transform-texture
+           <surface-of-revolution>-transparency
+           <surface-of-revolution>-use-angle-range
+           <surface-of-revolution>-visibility
+           <surface-of-revolution>-object-view-transform
            )
   (:export <contour>
            <contour>-apply-instancing-transform
@@ -212,6 +289,48 @@
            <legend>-text-height
            <legend>-text-rotation
            <legend>-visibility)
+  (:export <vector>
+           <vector>-apply-instancing-transform
+           <vector>-colour
+           <vector>-colour-map
+           <vector>-colour-mode
+           <vector>-colour-scale
+           <vector>-colour-variable
+           <vector>-colour-variable-boundary-values
+           <vector>-coord-frame
+           <vector>-culling-mode
+           <vector>-direction
+           <vector>-domain-list
+           <vector>-draw-faces
+           <vector>-draw-lines
+           <vector>-instancing-transform
+           <vector>-lighting
+           <vector>-line-width
+           <vector>-location-list
+           <vector>-locator-sampling-method
+           <vector>-max
+           <vector>-maximum-number-of-items
+           <vector>-min
+           <vector>-normalized
+           <vector>-number-of-samples
+           <vector>-projection-type
+           <vector>-random-seed
+           <vector>-range
+           <vector>-reduction-factor
+           <vector>-reduction-or-max-number
+           <vector>-sample-spacing
+           <vector>-sampling-aspect-ratio
+           <vector>-sampling-grid-angle
+           <vector>-specular-lighting
+           <vector>-surface-drawing
+           <vector>-symbol
+           <vector>-symbol-size
+           <vector>-transparency
+           <vector>-variable
+           <vector>-variable-boundary-values
+           <vector>-visibility
+           <vector>-object-view-transform
+           )
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -248,12 +367,15 @@
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
      (for-list
       stream
-      (mnas-string:replace-all
+      (mnas-string:replace-all-words
        (substitute
-       #\Space #\- 
-       (string-capitalize
-        (format nil "  ~A = " (sb-mop:slot-definition-name slot))))
-       " Of " " of ")      
+        #\Space #\- 
+        (string-capitalize
+         (format nil "  ~A = " (sb-mop:slot-definition-name slot))))
+       '((" Of " " of ")
+         (" Or " " or ")
+         (" To Ar " " to AR ")
+         )) 
       (slot-value class (sb-mop:slot-definition-name slot))))
     ((eq 'standard-class
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
@@ -532,7 +654,7 @@
 
 (defclass <line> (<obj>)
   ((apply-instancing-transform
-    :accessor <line>-<line>-apply-instancing-transform
+    :accessor <line>-apply-instancing-transform
     :initform "On"
     :initarg :apply-instancing-transform
     :documentation "apply-instancing-transform")
@@ -921,6 +1043,279 @@
            (print-slot slot plane s)))
 
 (defmethod print-object :after ((plane <plane>) s)
+  (format s "END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <surface-of-revolution> (<obj>)
+  ((apply-instancing-transform
+    :accessor <surface-of-revolution>-apply-instancing-transform
+    :initform "On"
+    :initarg :apply-instancing-transform
+    :documentation "apply-instancing-transform")
+   (apply-texture
+    :accessor <surface-of-revolution>-apply-texture
+    :initform "Off"
+    :initarg :apply-texture
+    :documentation "apply-texture")
+   (blend-texture
+    :accessor <surface-of-revolution>-blend-texture
+    :initform "On"
+    :initarg :blend-texture
+    :documentation "blend-texture")
+   (colour
+    :accessor <surface-of-revolution>-colour
+    :initform "0.75, 0.75, 0.75"
+    :initarg :colour
+    :documentation "colour")
+   (colour-map
+    :accessor <surface-of-revolution>-colour-map
+    :initform "Default Colour Map"
+    :initarg :colour-map
+    :documentation "colour-map")
+   (colour-mode
+    :accessor <surface-of-revolution>-colour-mode
+    :initform "Constant"
+    :initarg :colour-mode
+    :documentation "colour-mode")
+   (colour-scale
+    :accessor <surface-of-revolution>-colour-scale
+    :initform "Linear"
+    :initarg :colour-scale
+    :documentation "colour-scale")
+   (colour-variable
+    :accessor <surface-of-revolution>-colour-variable
+    :initform "Pressure"
+    :initarg :colour-variable
+    :documentation "colour-variable")
+   (colour-variable-boundary-values
+    :accessor <surface-of-revolution>-colour-variable-boundary-values
+    :initform "Hybrid"
+    :initarg :colour-variable-boundary-values
+    :documentation "colour-variable-boundary-values")
+   (culling-mode
+    :accessor <surface-of-revolution>-culling-mode
+    :initform "No Culling"
+    :initarg :culling-mode
+    :documentation "culling-mode")
+   (domain-list
+    :accessor <surface-of-revolution>-domain-list
+    :initform "/DOMAIN GROUP:All Domains"
+    :initarg :domain-list
+    :documentation "domain-list")
+   (draw-faces
+    :accessor <surface-of-revolution>-draw-faces
+    :initform "On"
+    :initarg :draw-faces
+    :documentation "draw-faces")
+   (draw-lines
+    :accessor <surface-of-revolution>-draw-lines
+    :initform "Off"
+    :initarg :draw-lines
+    :documentation "draw-lines")
+   (ending-axial-shift
+    :accessor <surface-of-revolution>-ending-axial-shift
+    :initform "0 [mm]"
+    :initarg :ending-axial-shift
+    :documentation "ending-axial-shift")
+   (ending-radial-shift
+    :accessor <surface-of-revolution>-ending-radial-shift
+    :initform "0.0 [m]"
+    :initarg :ending-radial-shift
+    :documentation "ending-radial-shift")
+   (instancing-transform
+    :accessor <surface-of-revolution>-instancing-transform
+    :initform "/DEFAULT INSTANCE TRANSFORM:Default Transform"
+    :initarg :instancing-transform
+    :documentation "instancing-transform")
+   (lighting
+    :accessor <surface-of-revolution>-lighting
+    :initform "On"
+    :initarg :lighting
+    :documentation "lighting")
+   (line-colour
+    :accessor <surface-of-revolution>-line-colour
+    :initform "0, 0, 0"
+    :initarg :line-colour
+    :documentation "line-colour")
+   (line-colour-mode
+    :accessor <surface-of-revolution>-line-colour-mode
+    :initform "Default"
+    :initarg :line-colour-mode
+    :documentation "line-colour-mode")
+   (line-width
+    :accessor <surface-of-revolution>-line-width
+    :initform "1"
+    :initarg :line-width
+    :documentation "line-width")
+   (location-list
+    :accessor <surface-of-revolution>-location-list
+    :initform "/LINE:Line Zav2 Out"
+    :initarg :location-list
+    :documentation "location-list")
+   (max
+    :accessor <surface-of-revolution>-max
+    :initform "0.0 [Pa]"
+    :initarg :max
+    :documentation "max")
+   (meridional-point-1
+    :accessor <surface-of-revolution>-meridional-point-1
+    :initform "300 [mm], 31.5 [mm]"
+    :initarg :meridional-point-1
+    :documentation "meridional-point-1")
+   (meridional-point-2
+    :accessor <surface-of-revolution>-meridional-point-2
+    :initform "1 [mm], 45 [mm]"
+    :initarg :meridional-point-2
+    :documentation "meridional-point-2")
+   (meridional-points
+    :accessor <surface-of-revolution>-meridional-points
+    :initform "50"
+    :initarg :meridional-points
+    :documentation "meridional-points")
+   (min
+    :accessor <surface-of-revolution>-min
+    :initform "0.0 [Pa]"
+    :initarg :min
+    :documentation "min")
+   (option
+    :accessor <surface-of-revolution>-option
+    :initform "From Line"
+    :initarg :option
+    :documentation "option")
+   (principal-axis
+    :accessor <surface-of-revolution>-principal-axis
+    :initform "X"
+    :initarg :principal-axis
+    :documentation "principal-axis")
+   (project-to-ar-plane
+    :accessor <surface-of-revolution>-project-to-ar-plane
+    :initform "On"
+    :initarg :project-to-ar-plane
+    :documentation "project-to-ar-plane")
+   (range
+    :accessor <surface-of-revolution>-range
+    :initform "Global"
+    :initarg :range
+    :documentation "range")
+   (render-edge-angle
+    :accessor <surface-of-revolution>-render-edge-angle
+    :initform "0 [degree]"
+    :initarg :render-edge-angle
+    :documentation "render-edge-angle")
+   (rotation-axis-from
+    :accessor <surface-of-revolution>-rotation-axis-from
+    :initform "0 [mm], 335 [mm], 0 [mm]"
+    :initarg :rotation-axis-from
+    :documentation "rotation-axis-from")
+   (rotation-axis-to
+    :accessor <surface-of-revolution>-rotation-axis-to
+    :initform "1000 [mm], 335 [mm], 0 [mm]"
+    :initarg :rotation-axis-to
+    :documentation "rotation-axis-to")
+   (rotation-axis-type
+    :accessor <surface-of-revolution>-rotation-axis-type
+    :initform "Rotation Axis"
+    :initarg :rotation-axis-type
+    :documentation "rotation-axis-type")
+   (specular-lighting
+    :accessor <surface-of-revolution>-specular-lighting
+    :initform "On"
+    :initarg :specular-lighting
+    :documentation "specular-lighting")
+   (starting-axial-shift
+    :accessor <surface-of-revolution>-starting-axial-shift
+    :initform "0 [mm]"
+    :initarg :starting-axial-shift
+    :documentation "starting-axial-shift")
+   (starting-radial-shift
+    :accessor <surface-of-revolution>-starting-radial-shift
+    :initform "0.0 [m]"
+    :initarg :starting-radial-shift
+    :documentation "starting-radial-shift")
+   (surface-drawing
+    :accessor <surface-of-revolution>-surface-drawing
+    :initform "Smooth Shading"
+    :initarg :surface-drawing
+    :documentation "surface-drawing")
+   (texture-angle
+    :accessor <surface-of-revolution>-texture-angle
+    :initform "0"
+    :initarg :texture-angle
+    :documentation "texture-angle")
+   (texture-direction
+    :accessor <surface-of-revolution>-texture-direction
+    :initform "0 , 1 , 0"
+    :initarg :texture-direction
+    :documentation "texture-direction")
+   (texture-file
+    :accessor <surface-of-revolution>-texture-file
+    :initform ""
+    :initarg :texture-file
+    :documentation "texture-file")
+   (texture-material
+    :accessor <surface-of-revolution>-texture-material
+    :initform "Metal"
+    :initarg :texture-material
+    :documentation "texture-material")
+   (texture-position
+    :accessor <surface-of-revolution>-texture-position
+    :initform "0 , 0"
+    :initarg :texture-position
+    :documentation "texture-position")
+   (texture-scale
+    :accessor <surface-of-revolution>-texture-scale
+    :initform "1"
+    :initarg :texture-scale
+    :documentation "texture-scale")
+   (texture-type
+    :accessor <surface-of-revolution>-texture-type
+    :initform "Predefined"
+    :initarg :texture-type
+    :documentation "texture-type")
+   (theta-points
+    :accessor <surface-of-revolution>-theta-points
+    :initform "50"
+    :initarg :theta-points
+    :documentation "theta-points")
+   (tile-texture
+    :accessor <surface-of-revolution>-tile-texture
+    :initform "Off"
+    :initarg :tile-texture
+    :documentation "tile-texture")
+   (transform-texture
+    :accessor <surface-of-revolution>-transform-texture
+    :initform "Off"
+    :initarg :transform-texture
+    :documentation "transform-texture")
+   (transparency
+    :accessor <surface-of-revolution>-transparency
+    :initform "0.0"
+    :initarg :transparency
+    :documentation "transparency")
+   (use-angle-range
+    :accessor <surface-of-revolution>-use-angle-range
+    :initform "Off"
+    :initarg :use-angle-range
+    :documentation "use-angle-range")
+   (visibility
+    :accessor <surface-of-revolution>-visibility
+    :initform "On"
+    :initarg :visibility
+    :documentation "visibility")
+   (object-view-transform
+    :accessor <surface-of-revolution>-object-view-transform
+    :initform (make-instance '<object-view-transform>)
+    :initarg :object-view-transform
+    :documentation "object-view-transform")))
+
+(defmethod print-object ((surface-of-revolution <surface-of-revolution>) s)
+  (format s "SURFACE OF REVOLUTION: ~A~%" (<obj>-name surface-of-revolution))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<surface-of-revolution>))
+        :do
+           (print-slot slot surface-of-revolution s)))
+
+(defmethod print-object :after ((surface-of-revolution <surface-of-revolution>) s)
   (format s "END~%"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1473,36 +1868,219 @@
 (defmethod print-object :after ((legend <legend>) s)
   (format s "END~%"))
 
-(make-instance '<legend>)
-
-(make-instance '<view>)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#+nil (mnas-string:replace-all string " Of " " of ")
+(defclass <vector> (<obj>)
+  (
+   (apply-instancing-transform
+    :accessor <vector>-apply-instancing-transform
+    :initform "On"
+    :initarg :apply-instancing-transform
+    :documentation "apply-instancing-transform")
+   (colour
+    :accessor <vector>-colour
+    :initform "0.75, 0.75, 0.75"
+    :initarg :colour
+    :documentation "colour")
+   (colour-map
+    :accessor <vector>-colour-map
+    :initform "Default Colour Map"
+    :initarg :colour-map
+    :documentation "colour-map")
+   (colour-mode
+    :accessor <vector>-colour-mode
+    :initform "Use Plot Variable"
+    :initarg :colour-mode
+    :documentation "colour-mode")
+   (colour-scale
+    :accessor <vector>-colour-scale
+    :initform "Linear"
+    :initarg :colour-scale
+    :documentation "colour-scale")
+   (colour-variable
+    :accessor <vector>-colour-variable
+    :initform "Velocity"
+    :initarg :colour-variable
+    :documentation "colour-variable")
+   (colour-variable-boundary-values
+    :accessor <vector>-colour-variable-boundary-values
+    :initform "Hybrid"
+    :initarg :colour-variable-boundary-values
+    :documentation "colour-variable-boundary-values")
+   (coord-frame
+    :accessor <vector>-coord-frame
+    :initform "Global"
+    :initarg :coord-frame
+    :documentation "coord-frame")
+   (culling-mode
+    :accessor <vector>-culling-mode
+    :initform "No Culling"
+    :initarg :culling-mode
+    :documentation "culling-mode")
+   (direction
+    :accessor <vector>-direction
+    :initform "X"
+    :initarg :direction
+    :documentation "direction")
+   (domain-list
+    :accessor <vector>-domain-list
+    :initform "/DOMAIN GROUP:All Domains"
+    :initarg :domain-list
+    :documentation "domain-list")
+   (draw-faces
+    :accessor <vector>-draw-faces
+    :initform "On"
+    :initarg :draw-faces
+    :documentation "draw-faces")
+   (draw-lines
+    :accessor <vector>-draw-lines
+    :initform "Off"
+    :initarg :draw-lines
+    :documentation "draw-lines")
+   (instancing-transform
+    :accessor <vector>-instancing-transform
+    :initform "/DEFAULT INSTANCE TRANSFORM:Default Transform"
+    :initarg :instancing-transform
+    :documentation "instancing-transform")
+   (lighting
+    :accessor <vector>-lighting
+    :initform "On"
+    :initarg :lighting
+    :documentation "lighting")
+   (line-width
+    :accessor <vector>-line-width
+    :initform "1"
+    :initarg :line-width
+    :documentation "line-width")
+   (location-list
+    :accessor <vector>-location-list
+    :initform "/PLANE:Plane V Z p0i0"
+    :initarg :location-list
+    :documentation "location-list")
+   (locator-sampling-method
+    :accessor <vector>-locator-sampling-method
+    :initform "Vertex"
+    :initarg :locator-sampling-method
+    :documentation "locator-sampling-method")
+   (max
+    :accessor <vector>-max
+    :initform "110 [m s^-1]"
+    :initarg :max
+    :documentation "max")
+   (maximum-number-of-items
+    :accessor <vector>-maximum-number-of-items
+    :initform "100"
+    :initarg :maximum-number-of-items
+    :documentation "maximum-number-of-items")
+   (min
+    :accessor <vector>-min
+    :initform "0 [m s^-1]"
+    :initarg :min
+    :documentation "min")
+   (normalized
+    :accessor <vector>-normalized
+    :initform "Off"
+    :initarg :normalized
+    :documentation "normalized")
+   (number-of-samples
+    :accessor <vector>-number-of-samples
+    :initform "100"
+    :initarg :number-of-samples
+    :documentation "number-of-samples")
+   (projection-type
+    :accessor <vector>-projection-type
+    :initform "None"
+    :initarg :projection-type
+    :documentation "projection-type")
+   (random-seed
+    :accessor <vector>-random-seed
+    :initform "1"
+    :initarg :random-seed
+    :documentation "random-seed")
+   (range
+    :accessor <vector>-range
+    :initform "User Specified"
+    :initarg :range
+    :documentation "range")
+   (reduction-factor
+    :accessor <vector>-reduction-factor
+    :initform "30"
+    :initarg :reduction-factor
+    :documentation "reduction-factor")
+   (reduction-or-max-number
+    :accessor <vector>-reduction-or-max-number
+    :initform "Reduction"
+    :initarg :reduction-or-max-number
+    :documentation "reduction-or-max-number")
+   (sample-spacing
+    :accessor <vector>-sample-spacing
+    :initform "0.1"
+    :initarg :sample-spacing
+    :documentation "sample-spacing")
+   (sampling-aspect-ratio
+    :accessor <vector>-sampling-aspect-ratio
+    :initform "1"
+    :initarg :sampling-aspect-ratio
+    :documentation "sampling-aspect-ratio")
+   (sampling-grid-angle
+    :accessor <vector>-sampling-grid-angle
+    :initform "0 [degree]"
+    :initarg :sampling-grid-angle
+    :documentation "sampling-grid-angle")
+   (specular-lighting
+    :accessor <vector>-specular-lighting
+    :initform "On"
+    :initarg :specular-lighting
+    :documentation "specular-lighting")
+   (surface-drawing
+    :accessor <vector>-surface-drawing
+    :initform "Smooth Shading"
+    :initarg :surface-drawing
+    :documentation "surface-drawing")
+   (symbol
+    :accessor <vector>-symbol
+    :initform "Line Arrow"
+    :initarg :symbol
+    :documentation "symbol")
+   (symbol-size
+    :accessor <vector>-symbol-size
+    :initform "5"
+    :initarg :symbol-size
+    :documentation "symbol-size")
+   (transparency
+    :accessor <vector>-transparency
+    :initform "0.0"
+    :initarg :transparency
+    :documentation "transparency")
+   (variable
+    :accessor <vector>-variable
+    :initform "Velocity"
+    :initarg :variable
+    :documentation "variable")
+   (variable-boundary-values
+    :accessor <vector>-variable-boundary-values
+    :initform "Hybrid"
+    :initarg :variable-boundary-values
+    :documentation "variable-boundary-values")
+   (visibility
+    :accessor <vector>-visibility
+    :initform "On"
+    :initarg :visibility
+    :documentation "visibility")
+   (object-view-transform
+    :accessor <vector>-object-view-transform
+    :initform (make-instance '<object-view-transform>)
+    :initarg :object-view-transform
+    :documentation "object-view-transform")))
 
-#+nil (let* ((x 80.0 )
-       (plane
-         (make-instance '<plane> :name (format nil "Plane X ~A" (mnas-ansys/belt:number-to-string x))
-                                 :x (format nil "~A [mm]" x)))
-       (contour
-         (make-instance '<contour>
-  :name (format nil "Contour X ~A" (mnas-ansys/belt:number-to-string x))
-  :location-list (format nil "/PLANE:Plane X ~A" (mnas-ansys/belt:number-to-string x))))
-       )
-  (format t "~{~A~%~}" `(,contour))) ;   ,plane
+(defmethod print-object ((vector <vector>) s)
+  (format s "VECTOR: ~A~%" (<obj>-name vector))
+  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<vector>))
+        :do
+           (print-slot slot vector s)))
 
-#+nil (defparameter *plane*
-  (make-instance '<plane> :name (format nil "Plane X ~A" (mnas-ansys/belt:number-to-string 115.5))
-                          :x (format nil "~A [mm]" 115.5)))
+(defmethod print-object :after ((vector <vector>) s)
+  (format s "END~%"))
 
-#+nil (defparameter *contour*
-  (make-instance '<contour>
-  :name (format nil "Contour X ~A" (mnas-ansys/belt:number-to-string 115.5))
-  :location-list (format nil "/PLANE:Plane X ~A" (mnas-ansys/belt:number-to-string 115.5))))
-
-#+nil (defparameter *object-view-transform* (make-instance '<object-view-transform>))
-
-#+nil (defparameter *point* (make-instance '<point> :name "Point 1" :apply-instancing-transform nil ))
-
-#+nil (defparameter *line* (make-instance '<line> :name "Line 1" ))
+(make-instance '<vector>)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
