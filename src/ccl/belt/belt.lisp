@@ -710,7 +710,7 @@ theta-min к theta-max.
                            (row 1)
                            (format-r "%6.2f")
                            (format-a "%6.2f")
-                           (table 1))
+                           (table "Table 1"))
   "@b(Описание:) функция @b(make-table-belts)  выводит на
  стандартный вывод данные, пригодные для формирования 
  полей значений, вычисленых по выражениям @b(equations).
