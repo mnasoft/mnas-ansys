@@ -3,8 +3,11 @@
 (defpackage #:mnas-ansys/ccl/core
   (:use #:cl)
   (:export for-list)
-  (:export <obj>)
-  (:export <obj>-name)
+  (:intern <object>
+           <object>-type)
+  (:intern <obj>)
+  (:export <obj>-name
+           <obj>-full-name)
   (:export <object-view-transform>
            <object-view-transform>-apply-reflection
            <object-view-transform>-apply-rotation
@@ -248,7 +251,6 @@
            <view>-valid-case
            <view>-camera
            <view>-object-report-options)
-
   (:export <default-legend>
            <default-legend>-colour
            <default-legend>-font
@@ -383,15 +385,38 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass <obj> ()
+(defclass <object> () ())
+
+(defmethod <object>-type ((object <object>))
+  (nsubstitute #\Space #\-
+               (string-trim "<>"
+                            (format nil "~A"
+                                    (class-name (class-of object))))))
+
+(defmethod print-object :after ((x <object>) s)
+  (loop :for slot :in (sb-mop:class-direct-slots (class-of x))
+        :do (print-slot slot x s))
+  (format s "END~%"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <obj> (<object>)
   ((name :accessor <obj>-name
          :initform "Name"
          :initarg :name
          :documentation "Имя объекта")))
 
+(defmethod print-object :after ((x <obj>) s)
+  )
+
+(defmethod <obj>-full-name ((obj <obj>))
+  (format nil "/~A: ~A"
+          (<object>-type obj)
+          (<obj>-name obj)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass <object-view-transform> ()
+(defclass <object-view-transform> (<object>)
   ((apply-reflection
     :accessor <object-view-transform>-apply-reflection
     :initform "Off"
@@ -468,29 +493,29 @@
     :initarg z
     :documentation "z")))
 
-(defmethod print-object ((object-view-transform <object-view-transform>) s)
-  (format s "  OBJECT VIEW TRANSFORM:~%")
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<object-view-transform>))
-        :do (print-slot slot object-view-transform s)))
+(defmethod print-object ((x <object-view-transform>) s)
+  (format s "  ~A:~%" (<object>-type x))
+  #+nil (loop :for slot :in (sb-mop:class-direct-slots (class-of x))
+        :do (print-slot slot x s)))
 
-(defmethod print-object :after ((object-view-transform <object-view-transform>) s)
-  (format s "  END~%"))
+(defmethod print-object :after ((x <object-view-transform>) s)
+  #+nil(format s "  END~%"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass <object-report-options> ()
+(defclass <object-report-options> (<object>)
   ((report-caption
    :accessor <object-report-options>-report-caption
    :initform "Caption for Report"
    :initarg :report-caption
    :documentation "report-caption")))
 
-(defmethod print-object ((object-report-options <object-report-options>) s)
-  (format s "  OBJECT REPORT OPTIONS:~%")
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<object-report-options>))
-        :do (print-slot slot object-report-options s)))
+(defmethod print-object ((x <object-report-options>) s)
+  (format s "  ~A:~%" (<object>-type x))
+  #+nil (loop :for slot :in (sb-mop:class-direct-slots (class-of x))
+        :do (print-slot slot x s)))
 
-(defmethod print-object :after ((object-report-options <object-report-options>) s)
+(defmethod print-object :after ((x <object-report-options>) s)
   (format s "  END~%"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -642,13 +667,12 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((point <point>) s)
-  (format s "POINT: ~A~%" (<obj>-name point))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<point>))
-        :do (print-slot slot point s)))
+(defmethod print-object ((x <point>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
-(defmethod print-object :after ((point <point>) s)
-  (format s "END~%"))
+(make-instance '<point>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -754,13 +778,10 @@
    :initarg :object-view-transform
    :documentation "object-view-transform")))
 
-(defmethod print-object ((line <line>) s)
-  (format s "LINE: ~A~%" (<obj>-name line))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<line>))
-        :do (print-slot slot line s)))
-
-(defmethod print-object :after ((line <line>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <line>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1036,14 +1057,10 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((plane <plane>) s)
-  (format s "PLANE: ~A~%" (<obj>-name plane))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<plane>))
-        :do
-           (print-slot slot plane s)))
-
-(defmethod print-object :after ((plane <plane>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <plane>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1309,14 +1326,10 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((surface-of-revolution <surface-of-revolution>) s)
-  (format s "SURFACE OF REVOLUTION: ~A~%" (<obj>-name surface-of-revolution))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<surface-of-revolution>))
-        :do
-           (print-slot slot surface-of-revolution s)))
-
-(defmethod print-object :after ((surface-of-revolution <surface-of-revolution>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <surface-of-revolution>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1482,17 +1495,14 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((contour <contour>) s)
-  (format s "CONTOUR: ~A~%" (<obj>-name contour))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<contour>))
-        :do
-           (print-slot slot contour s)))
-
-(defmethod print-object :after ((contour <contour>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <contour>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defclass <camera> ()
+
+(defclass <camera> (<object>)
   ((option
     :accessor <camera>-option
     :initform "Pivot Point and Quaternion"
@@ -1529,14 +1539,8 @@
     :initarg :send-to-viewer
     :documentation "send-to-viewer")))
 
-(defmethod print-object ((camera <camera>) s)
-  (format s "  CAMERA:~%")
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<camera>))
-        :do
-           (print-slot slot camera s)))
-
-(defmethod print-object :after ((camera <camera>) s)
-  (format s "  END~%"))
+(defmethod print-object ((x <camera>) s)
+  (format s "  ~A:~%" (<object>-type x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1643,14 +1647,10 @@
     :initarg :object-report-options
     :documentation "object-report-options")))
 
-(defmethod print-object ((view <view>) s)
-  (format s "VIEW: ~A~%" (<obj>-name view))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<view>))
-        :do
-           (print-slot slot view s)))
-
-(defmethod print-object :after ((view <view>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <view>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1756,14 +1756,10 @@
     :initarg :visibility
     :documentation "visibility")))
 
-(defmethod print-object ((default-legend <default-legend>) s)
-  (format s "DEFAULT LEGEND: ~A~%" (<obj>-name default-legend))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<default-legend>))
-        :do
-           (print-slot slot default-legend s)))
-
-(defmethod print-object :after ((default-legend <default-legend>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <default-legend>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1859,14 +1855,10 @@
     :initarg :visibility
     :documentation "visibility")))
 
-(defmethod print-object ((legend <legend>) s)
-  (format s "LEGEND: ~A~%" (<obj>-name legend))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<legend>))
-        :do
-           (print-slot slot legend s)))
-
-(defmethod print-object :after ((legend <legend>) s)
-  (format s "END~%"))
+(defmethod print-object ((x <legend>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -2073,14 +2065,9 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((vector <vector>) s)
-  (format s "VECTOR: ~A~%" (<obj>-name vector))
-  (loop :for slot :in (sb-mop:class-direct-slots (find-class '<vector>))
-        :do
-           (print-slot slot vector s)))
+(defmethod print-object ((x <vector>) s)
+  (format s "~A: ~A~%"
+          (<object>-type x)
+          (<obj>-name x)))
 
-(defmethod print-object :after ((vector <vector>) s)
-  (format s "END~%"))
-
-(make-instance '<vector>)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
