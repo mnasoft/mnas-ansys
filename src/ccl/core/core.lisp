@@ -363,6 +363,16 @@
            "~%")
           variable)))
 
+(defparameter *tabs* 1)
+
+(defun tabs () *tabs*)
+
+(defun tabs-incf ()
+  (setf *tabs* (+ 2 *tabs*)))
+
+(defun tabs-decf ()
+  (setf *tabs* (+ -2 *tabs*)))
+
 (defun print-slot (slot class stream)
   (cond
     ((eq 'built-in-class
@@ -373,11 +383,11 @@
        (substitute
         #\Space #\- 
         (string-capitalize
-         (format nil "  ~A = " (sb-mop:slot-definition-name slot))))
+         (format nil (format nil "~~~At~~A = " (tabs))
+                 (sb-mop:slot-definition-name slot))))
        '((" Of " " of ")
          (" Or " " or ")
-         (" To Ar " " to AR ")
-         )) 
+         (" To Ar " " to AR ")))
       (slot-value class (sb-mop:slot-definition-name slot))))
     ((eq 'standard-class
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
@@ -394,9 +404,11 @@
                                     (class-name (class-of object))))))
 
 (defmethod print-object :after ((x <object>) s)
+  (tabs-incf)
   (loop :for slot :in (sb-mop:class-direct-slots (class-of x))
         :do (print-slot slot x s))
-  (format s "END~%"))
+  (tabs-decf)
+  (format s (format nil "~~~AtEND~%" (tabs))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -494,12 +506,7 @@
     :documentation "z")))
 
 (defmethod print-object ((x <object-view-transform>) s)
-  (format s "  ~A:~%" (<object>-type x))
-  #+nil (loop :for slot :in (sb-mop:class-direct-slots (class-of x))
-        :do (print-slot slot x s)))
-
-(defmethod print-object :after ((x <object-view-transform>) s)
-  #+nil(format s "  END~%"))
+  (format s "  ~A:~%" (<object>-type x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -511,12 +518,7 @@
    :documentation "report-caption")))
 
 (defmethod print-object ((x <object-report-options>) s)
-  (format s "  ~A:~%" (<object>-type x))
-  #+nil (loop :for slot :in (sb-mop:class-direct-slots (class-of x))
-        :do (print-slot slot x s)))
-
-(defmethod print-object :after ((x <object-report-options>) s)
-  (format s "  END~%"))
+  (format s "  ~A:~%" (<object>-type x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -672,6 +674,7 @@
           (<object>-type x)
           (<obj>-name x)))
 
+(setf *tabs* 1)
 (make-instance '<point>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
