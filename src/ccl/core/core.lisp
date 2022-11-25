@@ -396,13 +396,26 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass <object> () ())
+(defclass <object> ()
+  ((name :accessor <obj>-name
+         :initform ""
+         :initarg :name
+         :documentation "<obj>-name")))
 
 (defmethod <object>-type ((object <object>))
   (nsubstitute #\Space #\-
                (string-trim "<>"
                             (format nil "~A"
                                     (class-name (class-of object))))))
+
+(defmethod print-object :before ((x <object>) s)
+)
+
+(defmethod print-object ((x <object>) s)
+    (format s (format nil "~~~At~~A:" (tabs))
+               (<object>-type x))
+  (format s " ~A~%" (<obj>-name x))
+  )
 
 (defmethod print-object :after ((x <object>) s)
   (tabs-incf)
@@ -414,15 +427,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <obj> (<object>)
-  ((name :accessor <obj>-name
-         :initform "Name"
-         :initarg :name
+  ((name :initform "Name"
          :documentation "<obj>-name")))
-
-(defmethod print-object :before ((x <obj>) s)
-  (format s (format nil "~~~At~~A:" (tabs))
-          (<object>-type x))
-  (format s " ~A~%" (<obj>-name x)))
 
 (defmethod <obj>-full-name ((obj <obj>))
   (format nil "/~A: ~A"
@@ -508,9 +514,6 @@
     :initarg z
     :documentation "z")))
 
-(defmethod print-object ((x <object-view-transform>) s)
-  (format s "  ~A:~%" (<object>-type x)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <object-report-options> (<object>)
@@ -519,9 +522,6 @@
    :initform "Caption for Report"
    :initarg :report-caption
    :documentation "report-caption")))
-
-(defmethod print-object ((x <object-report-options>) s)
-  (format s "  ~A:~%" (<object>-type x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1517,10 +1517,6 @@
     :initarg :send-to-viewer
     :documentation "send-to-viewer")))
 
-(defmethod print-object ((x <camera>) s)
-  (format s (format nil "~~~At~~A:~~%" (tabs))
-               #+nil"  ~A:~%" (<object>-type x)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <view> (<obj>)
@@ -2030,3 +2026,5 @@
     :documentation "object-view-transform")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(make-instance '<line>)
