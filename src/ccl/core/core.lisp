@@ -391,7 +391,8 @@
       (slot-value class (sb-mop:slot-definition-name slot))))
     ((eq 'standard-class
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
-     (format stream "~A" (slot-value class (sb-mop:slot-definition-name slot))))))
+     (format stream (format nil "~~~At~~A" (tabs))
+             (slot-value class (sb-mop:slot-definition-name slot))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -416,10 +417,12 @@
   ((name :accessor <obj>-name
          :initform "Name"
          :initarg :name
-         :documentation "Имя объекта")))
+         :documentation "<obj>-name")))
 
-(defmethod print-object :after ((x <obj>) s)
-  )
+(defmethod print-object :before ((x <obj>) s)
+  (format s (format nil "~~~At~~A:" (tabs))
+          (<object>-type x))
+  (format s " ~A~%" (<obj>-name x)))
 
 (defmethod <obj>-full-name ((obj <obj>))
   (format nil "/~A: ~A"
@@ -669,14 +672,6 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((x <point>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
-
-(setf *tabs* 1)
-(make-instance '<point>)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <line> (<obj>)
@@ -780,11 +775,6 @@
    :initform (make-instance '<object-view-transform>)
    :initarg :object-view-transform
    :documentation "object-view-transform")))
-
-(defmethod print-object ((x <line>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1060,11 +1050,6 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((x <plane>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <surface-of-revolution> (<obj>)
@@ -1329,11 +1314,6 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((x <surface-of-revolution>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <contour> (<obj>) 
@@ -1498,11 +1478,6 @@
     :initarg :object-view-transform
     :documentation "object-view-transform")))
 
-(defmethod print-object ((x <contour>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <camera> (<object>)
@@ -1543,9 +1518,10 @@
     :documentation "send-to-viewer")))
 
 (defmethod print-object ((x <camera>) s)
-  (format s "  ~A:~%" (<object>-type x)))
+  (format s (format nil "~~~At~~A:~~%" (tabs))
+               #+nil"  ~A:~%" (<object>-type x)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <view> (<obj>)
   (
@@ -1649,11 +1625,6 @@
     :initform (make-instance '<object-report-options>)
     :initarg :object-report-options
     :documentation "object-report-options")))
-
-(defmethod print-object ((x <view>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1759,11 +1730,6 @@
     :initarg :visibility
     :documentation "visibility")))
 
-(defmethod print-object ((x <default-legend>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <legend> (<obj>)
@@ -1857,11 +1823,6 @@
     :initform "On"
     :initarg :visibility
     :documentation "visibility")))
-
-(defmethod print-object ((x <legend>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -2067,10 +2028,5 @@
     :initform (make-instance '<object-view-transform>)
     :initarg :object-view-transform
     :documentation "object-view-transform")))
-
-(defmethod print-object ((x <vector>) s)
-  (format s "~A: ~A~%"
-          (<object>-type x)
-          (<obj>-name x)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
