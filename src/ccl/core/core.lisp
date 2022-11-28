@@ -387,7 +387,8 @@
                  (sb-mop:slot-definition-name slot))))
        '((" Of " " of ")
          (" Or " " or ")
-         (" To Ar " " to AR ")))
+         (" To Ar " " to AR ")
+         (" Html " " HTML ")))
       (slot-value class (sb-mop:slot-definition-name slot))))
     ((eq 'standard-class
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
@@ -408,14 +409,12 @@
                             (format nil "~A"
                                     (class-name (class-of object))))))
 
-(defmethod print-object :before ((x <object>) s)
-)
+
 
 (defmethod print-object ((x <object>) s)
-    (format s (format nil "~~~At~~A:" (tabs))
-               (<object>-type x))
-  (format s " ~A~%" (<obj>-name x))
-  )
+  (format s (format nil "~~~At~~A:" (tabs))
+          (<object>-type x))
+  (format s " ~A~%" (<obj>-name x)))
 
 (defmethod print-object :after ((x <object>) s)
   (tabs-incf)
@@ -2031,37 +2030,135 @@
   ((row
     :accessor <table-cell>-row
     :initform 1
-    :initarg :row
-    )
+    :initarg :row)
    (col
     :accessor <table-cell>-col
     :initform 1
-    :initarg :col
-    )
+    :initarg :col)
    (equation
     :accessor <table-cell>-equation
     :initform ""
-    :initarg :equation
-    )
-   (fmt
-    :accessor <table-cell>-fmt
-    :initform "e10.6"
-    :initarg :fmt
-    )
+    :initarg :equation)
+   (bold
+    :accessor <table-cell>-bold
+    :initform "False"
+    :initarg :bold)
+   (italics
+    :accessor <table-cell>-italics
+    :initform "False"
+    :initarg :italics)
+   (underline
+    :accessor <table-cell>-underline
+    :initform "False"
+    :initarg :underline)
+   (justification
+    :accessor <table-cell>-justification
+    :initform "Left"
+    :initarg :justification
+    :documentation "Left, Center, Right")
+   (warp
+    :accessor <table-cell>-warp
+    :initform "False"
+    :initarg :warp
+    :documentation "True, False")
+   (font-size
+    :accessor <table-cell>-font-size
+    :initform 0
+    :initarg :font-size
+    :documentation "-3, -2 -1, 0, 1, 2, 3")
+   (font-name
+    :accessor <table-cell>-font-name
+    :initform "Font Name"
+    :initarg :font-name)
+   (rows
+    :accessor <table-cell>-rows
+    :initform 1
+    :initarg :rows)
+   (cols
+    :accessor <table-cell>-cols
+    :initform 1
+    :initarg :cols)
+   (format
+    :accessor <table-cell>-format
+    :initform "%10.3e"
+    :initarg :format
+    :documentation "%10.3e, %10.3f")
    (show-units
     :accessor <table-cell>-show-units
     :initform "True"
-    :initarg :show-units
-    ))
-  )
+    :initarg :show-units)
+   (background
+    :accessor <table-cell>-background
+    :initform '(#X00 #X00 #X00)
+    :initarg :background)
+   (foreground
+    :accessor <table-cell>-foreground
+    :initform '(#Xff #Xff #Xff)
+    :initarg :foreground)
+   (show-value
+    :accessor <table-cell>-show-value
+    :initform "True"
+    :initarg :show-value))
+  (:documentation
+   "
+  D10 = \"=massFlow()@C_1_3_1 Side 2\", False, False,  False,     Left  , False, 2,        Font Name, 1|1, %10.3e, False,     ffffff    , 000000     , True
+  D10 = \"=massFlow()@C_1_3_1 Side 2\", True, False,   False,     Left  , False, 0,        Font Name, 1|1, %10.3e, False,     ffffff    , 000000     , True
+                                        Bold, Italics, Underline, Left  , Warp , font-size,Font Name, rows|cols, format, show-units,Background, Foreground , show-value
+                                                                  Center,
+                                                                  Right ,
+"))
 
-(defclass <table-cells> (<obj>)
+(defmethod print-object ((x <table-cell>) s)
+  (format s "~A~A = "
+          (mnas-ansys/belt::char+number "A" (1- (<table-cell>-col x)))
+          (<table-cell>-row x))
+  (format s "\"~A\"," (<table-cell>-equation x))
+  (format s "~A," (<table-cell>-bold x))
+  (format s "~A," (<table-cell>-italics x))
+  (format s "~A," (<table-cell>-underline x))
+  (format s "~A," (<table-cell>-justification x))
+  (format s "~A," (<table-cell>-warp x))
+  (format s "~A," (<table-cell>-font-size x))
+  (format s "~A," (<table-cell>-font-name x))
+  (format s "~A|~A," (<table-cell>-rows x) (<table-cell>-cols x))
+  (format s "~A," (<table-cell>-format x))
+  (format s "~A," (<table-cell>-show-units x))
+  (format s "~A," (string-downcase (format nil "~{~2,'0X~}" (<table-cell>-foreground x))))
+  (format s "~A," (string-downcase (format nil "~{~2,'0X~}" (<table-cell>-background x))))  
+  (format s "~A" (<table-cell>-show-value x)))
+
+
+(make-instance '<table-cell> :equation "=massFlow()@C_1_2 X_071i5 Side 2")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <table-cells> ()
   ((cells
     :accessor <table-cells>-cells
     :initform nil
-    :initarg :cells
-    )
-   ))
+    :initarg :cells))
+  (:documentation
+   "
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (defparameter *cells* (make-instance '<table-cells>))
+ (push (make-instance '<table-cell>
+   :equation \"massFlow()@C_1_2 X_071i5 Side 2\"
+   :row 1
+   :col 2)
+      (<table-cells>-cells *cells*))
+@end(code)
+"))
+
+(defmethod print-object ((x <table-cells>) s)
+  (format s (format nil "~~~At~~A: ~%" (tabs)) "TABLE CELLS")
+  (tabs-incf)
+  (loop :for i :in (<table-cells>-cells x) :do
+    (format s (format nil "~~~At~~A~%" (tabs)) i))
+  (tabs-decf)
+  (format s (format nil "~~~At~~A~%" (tabs)) "END"))
+ 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <table> (<obj>)
   (
@@ -2124,14 +2221,17 @@
     :accessor <table>-table-cells
     :initform (make-instance '<table-cells>)
     :initarg :table-cells
-    :documentation "table-cells")))
+    :documentation "table-cells"))
+  (:documentation
+   "
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (defparameter *table* (make-instance '<table>))
 
-
-
-(defun make-table-end ()
-  (format t "  END~%END~%~%"))
-
-
-#+nil (make-instance '<point>)
-#+nil (make-instance '<line>)
-#+nil (make-instance '<object-view-transform>)
+ (push (make-instance '<table-cell>
+                     :row 1 :col 1
+                     :equation
+                     \"=massFlow()@C_1_3_1 Side 2\")
+      (<table-cells>-cells (<table>-table-cells *table*)))
+@end(code)
+"))
