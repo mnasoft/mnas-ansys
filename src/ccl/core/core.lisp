@@ -2027,4 +2027,111 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(make-instance '<line>)
+(defclass <table-cell> ()
+  ((row
+    :accessor <table-cell>-row
+    :initform 1
+    :initarg :row
+    )
+   (col
+    :accessor <table-cell>-col
+    :initform 1
+    :initarg :col
+    )
+   (equation
+    :accessor <table-cell>-equation
+    :initform ""
+    :initarg :equation
+    )
+   (fmt
+    :accessor <table-cell>-fmt
+    :initform "e10.6"
+    :initarg :fmt
+    )
+   (show-units
+    :accessor <table-cell>-show-units
+    :initform "True"
+    :initarg :show-units
+    ))
+  )
+
+(defclass <table-cells> (<obj>)
+  ((cells
+    :accessor <table-cells>-cells
+    :initform nil
+    :initarg :cells
+    )
+   ))
+
+(defclass <table> (<obj>)
+  (
+   (export-table-only 
+    :accessor <table>-export-table-only 
+    :initform "True"
+    :initarg :export-table-only 
+    :documentation "export-table-only")
+   (table-exists
+    :accessor <table>-table-exists
+    :initform "True"
+    :initarg :table-exists
+    :documentation "table-exists")
+   (table-export-format
+    :accessor <table>-table-export-format
+    :initform "State"
+    :initarg :table-export-format
+    :documentation "table-export-format")
+   (table-export-html-border-width
+    :accessor <table>-table-export-html-border-width
+    :initform "1"
+    :initarg :table-export-html-border-width
+    :documentation "table-export-html-border-width")
+   (table-export-html-caption-position
+    :accessor <table>-table-export-html-caption-position
+    :initform "Bottom"
+    :initarg :table-export-html-caption-position
+    :documentation "table-export-html-caption-position")
+   (table-export-html-cell-padding
+    :accessor <table>-table-export-html-cell-padding
+    :initform "5"
+    :initarg :table-export-html-cell-padding
+    :documentation "table-export-html-cell-padding")
+   (table-export-html-cell-spacing
+    :accessor <table>-table-export-html-cell-spacing
+    :initform "1"
+    :initarg :table-export-html-cell-spacing
+    :documentation "table-export-html-cell-spacing")
+   (table-export-lines
+    :accessor <table>-table-export-lines
+    :initform "All"
+    :initarg :table-export-lines
+    :documentation "table-export-lines")
+   (table-export-separator
+    :accessor <table>-table-export-separator
+    :initform "Tab"
+    :initarg :table-export-separator
+    :documentation "table-export-separator")
+   (table-export-trailing-separators
+    :accessor <table>-table-export-trailing-separators
+    :initform "True"
+    :initarg :table-export-trailing-separators
+    :documentation "table-export-trailing-separators")
+   (object-report-options
+    :accessor <table>-object-report-options
+    :initform (make-instance '<object-report-options>)
+    :initarg :object-report-options
+    :documentation "object-report-options")
+   (table-cells
+    :accessor <table>-table-cells
+    :initform (make-instance '<table-cells>)
+    :initarg :table-cells
+    :documentation "table-cells")))
+
+
+
+(defun make-table-end ()
+  (format t "  END~%END~%~%"))
+
+
+#+nil (make-instance '<point>)
+#+nil (make-instance '<line>)
+#+nil (make-instance '<object-view-transform>)
