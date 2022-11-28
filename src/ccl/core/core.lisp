@@ -2087,14 +2087,14 @@
     :accessor <table-cell>-show-units
     :initform "True"
     :initarg :show-units)
-   (background
-    :accessor <table-cell>-background
-    :initform '(#X00 #X00 #X00)
-    :initarg :background)
    (foreground
     :accessor <table-cell>-foreground
     :initform '(#Xff #Xff #Xff)
     :initarg :foreground)
+   (background
+    :accessor <table-cell>-background
+    :initform '(#X00 #X00 #X00)
+    :initarg :background)   
    (show-value
     :accessor <table-cell>-show-value
     :initform "True"
