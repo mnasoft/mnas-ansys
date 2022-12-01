@@ -69,7 +69,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter *lines*
-  (mnas-ansys/read:read-file-as-lines
+  (mnas-ansys/tin/read:read-file-as-lines
    "~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl"))
 
 (defparameter *ccl* (mnas-ansys/ccl/parse::parse-slow *lines*))

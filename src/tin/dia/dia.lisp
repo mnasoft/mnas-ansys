@@ -1,15 +1,15 @@
 ;;;; ./src/dia/dia.lisp
 
-(defpackage #:mnas-ansys/dia
-  (:use #:cl)
+(defpackage #:mnas-ansys/tin/dia
+  (:use #:cl #:mnas-ansys/tin)
   (:export open-dia
            choose-directory)
   (:export *tin*
            *initial-directory*)
   (:documentation
-   "Пакет @b(mnas-ansys/dia) выполнения команд в диалоговом режиме."))
+   "Пакет @b(mnas-ansys/tin/dia) выполнения команд в диалоговом режиме."))
 
-(in-package :mnas-ansys/dia)
+(in-package :mnas-ansys/tin/dia)
 
 (defparameter *tin* nil)
 
@@ -25,7 +25,7 @@
 @end(code)
 "
   (setf *tin*
-        (mnas-ansys:open-tin-file
+        (open-tin-file
          (mnas-file-dialog:get-open-file
           :filetypes
           '(("tin Files" "*.tin")
@@ -47,4 +47,4 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; (mnas-ansys:families (mnas-ansys:<tin>-curves *trd*)) 
+;;;; (mnas-ansys/tin:families (mnas-ansys/tin:<tin>-curves *trd*)) 

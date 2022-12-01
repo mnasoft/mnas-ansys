@@ -21,68 +21,68 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.10"
+  :version "0.0.11"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
                "mnas-package/sys"
-               "mnas-ansys/read"
-               "mnas-ansys/core"
-               "mnas-ansys/utils"
+               #+nil "mnas-ansys/tin/read"
+               "mnas-ansys/tin"
+               "mnas-ansys/tin/utils"
                "mnas-ansys/ccl"
                "mnas-ansys/belt"
-               "mnas-ansys/dia"
+               "mnas-ansys/tin/dia"
                "mnas-ansys/icem"
                ))
 
-(asdf:defsystem "mnas-ansys/read"
+(asdf:defsystem "mnas-ansys/tin/read"
   :description
-  "Подсистема @(mnas-ansys/read) определяет вспомогательные функции для парсинга tin-файла."
+  "Подсистема @(mnas-ansys/tin/read) определяет вспомогательные функции для парсинга tin-файла."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on ("mnas-string" "mnas-package/sys")
-  :components ((:module "src/read" 
+  :components ((:module "src/tin/read" 
                 :serial nil
                 :components
                 ((:file "read")))))
 
-(asdf:defsystem "mnas-ansys/core"
-  :description "Подсистема @(mnas-ansys/core) определяет базовые
+(asdf:defsystem "mnas-ansys/tin"
+  :description "Подсистема @(mnas-ansys/tin) определяет базовые
   функции и методы работы с геометрией <tin>-объекта."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/read")
-  :components ((:module "src/core" 
+  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin/read")
+  :components ((:module "src/tin/core" 
                 :serial nil
                 :components
                 ((:file "core")
                  ))))
 
-(asdf:defsystem "mnas-ansys/select"
+(asdf:defsystem "mnas-ansys/tin/select"
   :description
-  "Система @(mnas-ansys/select) определяет функции для выбора объектов из контейнера геометрии."
+  "Система @(mnas-ansys/tin/select) определяет функции для выбора объектов из контейнера геометрии."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/core")
-  :components ((:module "src/select" 
+  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin")
+  :components ((:module "src/tin/select" 
                 :serial nil
                 :components
                 ((:file "select")))))
 
-(asdf:defsystem "mnas-ansys/utils"
+(asdf:defsystem "mnas-ansys/tin/utils"
   :description
-  "Система @(mnas-ansys/utils) определяет пользовательские функции для
+  "Система @(mnas-ansys/tin/utils) определяет пользовательские функции для
    взаимодействия с контейнером геометрии (tin-файлом)."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-ansys/core"
-               "mnas-ansys/select"
+  :depends-on ("mnas-ansys/tin"
+               "mnas-ansys/tin/select"
                "math/geom")
-  :components ((:module "src/utils" 
+  :components ((:module "src/tin/utils" 
                 :serial nil
                 :components
                 ((:file "utils")))))
@@ -120,7 +120,8 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-ansys/ccl/parse"
+  :depends-on ("mnas-ansys/tin/read"
+               "mnas-ansys/ccl/parse"
                "mnas-ansys/ccl/classes"
                )
   :components ((:module "src/ccl" 
@@ -167,19 +168,19 @@ CFX-PRE.
                 ((:file "belt")
                  (:file "contour")))))
 
-(asdf:defsystem "mnas-ansys/dia"
+(asdf:defsystem "mnas-ansys/tin/dia"
   :description
-  "Подсистема @(mnas-ansys/read) определяет вспомогательные функции для парсинга tin-файла."
+  "Подсистема @(mnas-ansys/tin/read) определяет вспомогательные функции для парсинга tin-файла."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on (#+nil "mnas-ansys/read"
+  :depends-on (#+nil "mnas-ansys/tin/read"
                "mnas-file-dialog"
-               "mnas-ansys/core"
-               "mnas-ansys/utils"
-               "mnas-ansys/ccl"
-               "mnas-ansys/belt")
-  :components ((:module "src/dia" 
+               "mnas-ansys/tin"
+               #+nil "mnas-ansys/tin/utils"
+               #+nil "mnas-ansys/ccl"
+               #+nil "mnas-ansys/belt")
+  :components ((:module "src/tin/dia"
                 :serial nil
                 :components
                 ((:file "dia")))))

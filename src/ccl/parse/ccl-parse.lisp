@@ -276,7 +276,7 @@
  (parse-file \"~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl\")
 @end(code)
 "
-  (parse (mnas-ansys/read:read-file-as-lines file-name)))
+  (parse (mnas-ansys/tin/read:read-file-as-lines file-name)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; package
 
-(defpackage #:mnas-ansys
-  (:use #:cl #:mnas-ansys/read)
+(defpackage #:mnas-ansys/tin
+  (:use #:cl #:mnas-ansys/tin/read)
   (:export open-tin-file)
 ;;;; generics
   (:export <object>-tag
@@ -98,7 +98,7 @@
  функции @b(open-tin-file)."
    ))
 
-(in-package #:mnas-ansys)
+(in-package #:mnas-ansys/tin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; parameters 
@@ -699,9 +699,9 @@
   "@b(Описание:) метод @b(init-curves) выполняет инициализацию кривых."
   (map nil #'(lambda (surf)
                (map nil #'(lambda (curv)
-                            (push surf (mnas-ansys::<curve>-surfaces curv)))
-                    (mnas-ansys:coedged surf tin)))
-       (mnas-ansys::tin-surfaces tin)))
+                            (push surf (<curve>-surfaces curv)))
+                    (coedged surf tin)))
+       (tin-surfaces tin)))
 
 (defmethod read-object (lines n-start (tin <tin>))
   "@b(Описание:) метод @b(read-object) возвращает два значения:
@@ -832,8 +832,8 @@
          (surfaces-excluded excluded)
          (start-surfaces family-surfaces))
     (loop :for i :from 0 :below times :do
-          (let* ((curves  (mnas-ansys::find-curves-coeged-with-surfases start-surfaces tin))
-                 (sufaces (mnas-ansys::find-surfaces-coeged-with-curves curves tin)))
+          (let* ((curves  (find-curves-coeged-with-surfases start-surfaces tin))
+                 (sufaces (find-surfaces-coeged-with-curves curves tin)))
             (map nil #'(lambda (el) (setf sufaces (remove el sufaces))) surfaces-excluded)
             (setf start-surfaces sufaces)))
     (map nil #'(lambda (el) (setf start-surfaces (remove el start-surfaces))) family-surfaces)

@@ -1,7 +1,7 @@
 ;;;; ./src/utils/utils.lisp
 
-(defpackage #:mnas-ansys/utils
-  (:use #:cl #:mnas-ansys #:mnas-ansys/select #:math/geom)
+(defpackage #:mnas-ansys/tin/utils
+  (:use #:cl #:mnas-ansys/tin #:mnas-ansys/tin/select #:math/geom)
   (:export surface-names-coeged-with-surface-in-family
            surface-names-coeged-with-surfaces 
            surface-names-coedged-with-curve-by-number
@@ -14,12 +14,12 @@
            curve-names-coeged-with-surface-in-family
            curve-names-coeged-with-surfaces-in-families)
   (:documentation
-   " Пакет @b(mnas-ansys/utils) определяет функции, предназаченные для
+   " Пакет @b(mnas-ansys/tin/utils) определяет функции, предназаченные для
    манипулирования графическими объектами при взаимодействии
    пользователя с программой ANSYS ICEM."
    ))
 
-(in-package :mnas-ansys/utils)
+(in-package :mnas-ansys/tin/utils)
 
 (defmethod curve-names-coeged-with-surface-in-family (families (tin <tin>))
   "@b(Описание:) функция @b(curve-names-coeged-with-surface-in-family)
@@ -42,11 +42,11 @@
 		     lst))
 	     (mapcar
 	      #'(lambda (el)
-		  (list (mnas-ansys::<obj>-name el)
+		  (list (<obj>-name el)
 			(sort
-			 (mapcar #'mnas-ansys::<ent>-family (coedged el tin))
+			 (mapcar #'<ent>-family (coedged el tin))
 			 #'string<)))
-              (mnas-ansys::tin-curves tin))
+              (tin-curves tin))
 	      ;; (<tin>-curves tin))
 	     :initial-value ()))))
 

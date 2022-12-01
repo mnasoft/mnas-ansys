@@ -28,8 +28,7 @@
         - [ ] потока.
    2. [ ] Определить функцию результатом выполнения которой будет код
       определения класса, представляющий объект языка CCL системы ANSYS.
-
-3. Система mnas-ansys/read:
+3. Система mnas-ansys/tin/read:
    1. [ ] read-file-as-lines
       - [ ] заменить вызовы функции read-file-as-lines вызовами методов line-by-line;
       - [ ] функцию read-file-as-lines удалить;
@@ -41,5 +40,19 @@
       - [ ] read-z-by-key -> z-by-key.
    3. [ ]  Определить функцию прохода через vector строк и возвращающую
       вектор с объединенными строками если они заканчиваются на =\=.
-
+      
 * DoNe
+1. Системы переименовать:
+   - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
+   - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
+   - [X] mnas-ansys/select -> mnas-ansys/tin/select;
+   - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
+   - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
+
+2. Пакеты переименовать:
+   - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
+   - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
+   - [X] mnas-ansys/select -> mnas-ansys/tin/select;
+   - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
+   - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
+     

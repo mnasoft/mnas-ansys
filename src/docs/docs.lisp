@@ -12,14 +12,15 @@
   (loop
     :for j :from 1
     :for i :in
-    '((:mnas-ansys           :mnas-ansys)
-      (:mnas-ansys/read      :mnas-ansys/read)
-      (:mnas-ansys/select    :mnas-ansys/select)
-      (:mnas-ansys/utils     :mnas-ansys/utils)
-      (:mnas-ansys/ccl       :mnas-ansys/ccl)
-      (:mnas-ansys/ccl/parse :mnas-ansys/ccl/parse)
-      (:mnas-ansys/belt      :mnas-ansys/belt)
+    '((:mnas-ansys/tin           :mnas-ansys/tin)
+      (:mnas-ansys/tin/read      :mnas-ansys/tin/read)
+      (:mnas-ansys/tin/select    :mnas-ansys/tin/select)
+      (:mnas-ansys/tin/utils     :mnas-ansys/tin/utils)
+      (:mnas-ansys/tin/dia       :mnas-ansys/tin/dia)
       
+      (:mnas-ansys/ccl           :mnas-ansys/ccl)
+      (:mnas-ansys/ccl/parse     :mnas-ansys/ccl/parse)
+      (:mnas-ansys/belt          :mnas-ansys/belt)
       )
     :do (progn
           (apply #'mnas-package:document i)
@@ -29,10 +30,10 @@
   (loop
     :for j :from 1    
     :for i :in
-    '(:mnas-ansys
-      :mnas-ansys/read
-      :mnas-ansys/select
-      :mnas-ansys/utils
+    '(:mnas-ansys/tin
+      :mnas-ansys/tin/read
+      :mnas-ansys/tin/select
+      :mnas-ansys/tin/utils
       
       :mnas-ansys/ccl
       :mnas-ansys/ccl/parse

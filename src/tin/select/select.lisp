@@ -1,5 +1,5 @@
-(defpackage #:mnas-ansys/select
-  (:use #:cl #:mnas-ansys)
+(defpackage #:mnas-ansys/tin/select
+  (:use #:cl #:mnas-ansys/tin)
   (:export entities-by-families
            curves-by-families
            surfaces-by-families
@@ -9,10 +9,10 @@
            surfaces-coedged-with-curve-by-number
            )
   (:documentation
-   " Пакет @b(mnas-ansys/select) определяет функции для выбора объектов
+   " Пакет @b(mnas-ansys/tin/select) определяет функции для выбора объектов
    из контейнера геометрии."))
 
-(in-package #:mnas-ansys/select)
+(in-package #:mnas-ansys/tin/select)
 
 (defmethod entities-by-families (families entities)
   " @b(Описание:) метод @b(entities-by-families) возвращает
@@ -40,7 +40,7 @@
               (if (find (<ent>-family curve) families :test #'string=)
                   (cons curve lst)
                   lst))
-          (mnas-ansys::tin-curves tin)
+          (tin-curves tin)
           ;; (<tin>-curves tin)
           :initial-value ()))
 
@@ -49,10 +49,10 @@
   список поверхностей, принадлежащих семействам @b(families) объекта
   @b(tin)."
   (reduce #'(lambda (lst surf)
-              (if (find (mnas-ansys::<ent>-family surf) families :test #'string=)
+              (if (find (<ent>-family surf) families :test #'string=)
                   (cons surf lst)
                   lst))
-          (mnas-ansys::tin-surfaces tin)
+          (tin-surfaces tin)
           ;; (<tin>-surfaces tin)
           :initial-value ()))
 
@@ -61,8 +61,8 @@
  список кривых tin-файла @b(tin) с числом сопряженных поверностей
  равным @b(coedges-number)."
   (let ((rez nil))
-    (loop :for curv :in (mnas-ansys::tin-curves tin)
-          :do (when (= coedges-number (length (mnas-ansys::<curve>-surfaces curv)))
+    (loop :for curv :in (tin-curves tin)
+          :do (when (= coedges-number (length (<curve>-surfaces curv)))
                (push curv rez)))
     rez))
 
@@ -75,7 +75,7 @@
 
  @b(Переменые:)
 @begin(list)
- @item(entyties - список объектов, являющихся потомками mnas-ansys:<ent>;)
+ @item(entyties - список объектов, являющихся потомками mnas-ansys/tin:<ent>;)
  @item(families - список строк, содержащих имена семейтсв.)
 @end(list)"
   (loop :for i :in entyties
@@ -89,7 +89,7 @@
 
  @b(Переменые:)
 @begin(list)
- @item(entyties - список объектов, являющихся потомками mnas-ansys:<ent>;)
+ @item(entyties - список объектов, являющихся потомками mnas-ansys/tin:<ent>;)
  @item(families - список строк, содержащих имена семейтсв.)
 @end(list) "
   (loop :for i :in entyties
@@ -103,5 +103,5 @@
   (remove-duplicates
    (apply #'append
           (mapcar #'(lambda (curv)
-                      (mnas-ansys::<curve>-surfaces curv))
-                  (mnas-ansys/select:curves-by-coedges-number number tin)))))
+                      (<curve>-surfaces curv))
+                  (curves-by-coedges-number number tin)))))
