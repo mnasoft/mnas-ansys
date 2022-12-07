@@ -1,7 +1,6 @@
 (in-package #:mnas-ansys)
 
 ;; (defparameter *tin-file* "~/quicklisp/local-projects/ANSYS/mnas-ansys/tin/a32_GT-13.tin")
-
 (defparameter *tin-file*
   "D:/home/_namatv/CFX/a32/PR-02/tin/SM/pr-02-A32-SM_01.tin"
   )

@@ -1,7 +1,8 @@
 ;;;; ./src/icem/display.lisp
 
-(defpackage #:ic/dis
+(defpackage #:mnas-ansys/ic/dis
   (:use #:cl)
+  (:nicknames "IC/DIS" "DIS")
   (:export  view
             visible
             set_family_color_for_name
@@ -11,7 +12,7 @@
    "@b(Описание:) пакет @b(ic/dis) содержит функции отображения (Display
  Functions)."))
 
-(in-package #:ic/dis)
+(in-package #:mnas-ansys/ic/dis)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

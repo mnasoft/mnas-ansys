@@ -1,6 +1,6 @@
 ;;;; mnas-ansys.asd
 
-(asdf:defsystem "mnas-ansys"
+(defsystem "mnas-ansys"
   :description
   " Система @b(mnas-ansys) предназначена для выполнения операций с
  представлением геометрии tin-файлов системы ANSYS ICEM.
@@ -21,21 +21,22 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.11"
+  :version "0.0.14"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
                "mnas-package/sys"
-               #+nil "mnas-ansys/tin/read"
                "mnas-ansys/tin"
-               "mnas-ansys/tin/utils"
                "mnas-ansys/ccl"
                "mnas-ansys/belt"
-               "mnas-ansys/tin/dia"
-               "mnas-ansys/icem"
-               ))
+               "mnas-ansys/dia"
+               "mnas-ansys/ic")
+  :components ((:module "src" 
+                :serial nil
+                :components
+                ((:file "mnas-ansys")))))
 
-(asdf:defsystem "mnas-ansys/tin/read"
+(defsystem "mnas-ansys/tin/read"
   :description
   "Подсистема @(mnas-ansys/tin/read) определяет вспомогательные функции для парсинга tin-файла."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
@@ -47,39 +48,48 @@ CFX-PRE.
                 :components
                 ((:file "read")))))
 
-(asdf:defsystem "mnas-ansys/tin"
+(defsystem "mnas-ansys/tin"
   :description "Подсистема @(mnas-ansys/tin) определяет базовые
   функции и методы работы с геометрией <tin>-объекта."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
-  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :license "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin/read")
+  :depends-on ("mnas-ansys/tin/core" "mnas-ansys/tin/utils"))
+
+(defsystem "mnas-ansys/tin/core"
+  :description "Подсистема @(mnas-ansys/tin) определяет базовые
+  функции и методы работы с геометрией <tin>-объекта."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("mnas-string"
+               "mnas-package/sys"
+               "mnas-ansys/tin/read")
   :components ((:module "src/tin/core" 
                 :serial nil
                 :components
-                ((:file "core")
-                 ))))
+                ((:file "core")))))
 
-(asdf:defsystem "mnas-ansys/tin/select"
+(defsystem "mnas-ansys/tin/select"
   :description
   "Система @(mnas-ansys/tin/select) определяет функции для выбора объектов из контейнера геометрии."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin")
+  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin/core")
   :components ((:module "src/tin/select" 
                 :serial nil
                 :components
                 ((:file "select")))))
 
-(asdf:defsystem "mnas-ansys/tin/utils"
+(defsystem "mnas-ansys/tin/utils"
   :description
   "Система @(mnas-ansys/tin/utils) определяет пользовательские функции для
    взаимодействия с контейнером геометрии (tin-файлом)."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-ansys/tin"
+  :depends-on ("mnas-ansys/tin/core"
                "mnas-ansys/tin/select"
                "math/geom")
   :components ((:module "src/tin/utils" 
@@ -87,7 +97,7 @@ CFX-PRE.
                 :components
                 ((:file "utils")))))
 
-(asdf:defsystem "mnas-ansys/clim"
+(defsystem "mnas-ansys/clim"
   :description
   "Система @(mnas-ansys/clim) определяет функции дотупные в диалоговом
    режиме для взаимодействия пользователя с контейнером геометрии (tin-файлом)."
@@ -114,7 +124,7 @@ CFX-PRE.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(asdf:defsystem "mnas-ansys/ccl"
+(defsystem "mnas-ansys/ccl"
   :description
   "Система @b(mnas-ansys/ccl) функции для извлечения и преобразования данных в формате CCL ANSYS CFX."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
@@ -129,7 +139,7 @@ CFX-PRE.
                 :components
                 ((:file "ccl")))))
 
-(asdf:defsystem "mnas-ansys/ccl/classes"
+(defsystem "mnas-ansys/ccl/classes"
   :description
   "Система @b(mnas-ansys/ccl/classes) определяет классы, представляющие
    некоторые объекты язка CCL системы ANSYS."
@@ -142,7 +152,7 @@ CFX-PRE.
                 :components
                 ((:file "core")))))
 
-(asdf:defsystem "mnas-ansys/ccl/parse"
+(defsystem "mnas-ansys/ccl/parse"
   :description
   "Система @b(mnas-ansys/ccl/parse) определяет функции для разбора CCL формата ANSYS CFX."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
@@ -154,7 +164,7 @@ CFX-PRE.
                 :components
                 ((:file "ccl-parse")))))
 
-(asdf:defsystem "mnas-ansys/belt"
+(defsystem "mnas-ansys/belt"
   :description
   "Система @b(mnas-ansys/belt) определяет функции для генерирования
  поверхностей в системе ANSYS CFX при помощи языка CCL."
@@ -167,33 +177,67 @@ CFX-PRE.
                 :components
                 ((:file "belt")
                  (:file "contour")))))
-
-(asdf:defsystem "mnas-ansys/tin/dia"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defsystem "mnas-ansys/ic"
   :description
-  "Подсистема @(mnas-ansys/tin/read) определяет вспомогательные функции для парсинга tin-файла."
+  "Подсистема @(mnas-ansys/ic)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("mnas-ansys/ic/geo"
+               "mnas-ansys/ic/trans"
+               "mnas-ansys/ic/boco"
+               "mnas-ansys/ic/dis"))
+
+(defsystem "mnas-ansys/ic/geo"
+  :description
+  "Подсистема @(mnas-ansys/ic/geo)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :components ((:module "src/ic/geo"   :serial nil :components ((:file "geo")))))
+
+(defsystem "mnas-ansys/ic/trans"
+  :description
+  "Подсистема @(mnas-ansys/ic/trans)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :components ((:module "src/ic/trans" :serial nil :components ((:file "trans")))))
+
+(defsystem "mnas-ansys/ic/boco"
+  :description
+  "Подсистема @(mnas-ansys/ic/boco)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :components ((:module "src/ic/boco"  :serial nil :components ((:file "boco")))))
+
+(defsystem "mnas-ansys/ic/dis"
+  :description
+  "Подсистема @(mnas-ansys/ic/dis)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :components ((:module "src/ic/dis"   :serial nil :components ((:file "dis")))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(asdf:defsystem "mnas-ansys/dia"
+  :description
+  "Подсистема @(mnas-ansys/dia) определяет функции, выполняющиеся при
+помощи диалога выбора файла."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on (#+nil "mnas-ansys/tin/read"
                "mnas-file-dialog"
+               "mnas-hash-table"
                "mnas-ansys/tin"
+               "mnas-ansys/ic/geo"
                #+nil "mnas-ansys/tin/utils"
                #+nil "mnas-ansys/ccl"
                #+nil "mnas-ansys/belt")
-  :components ((:module "src/tin/dia"
+  :components ((:module "src/dia"
                 :serial nil
                 :components
                 ((:file "dia")))))
-
-(asdf:defsystem "mnas-ansys/icem"
-  :description
-  "Подсистема @(mnas-ansys/icem)."
-  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
-  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :serial nil
-  :components ((:module "src/ic/geo"   :serial nil :components ((:file "geo")))
-               (:module "src/ic/trans" :serial nil :components ((:file "trans")))
-               (:module "src/ic/dis"   :serial nil :components ((:file "dis")))
-               (:module "src/ic/boco"  :serial nil :components ((:file "boco")))))
-
-

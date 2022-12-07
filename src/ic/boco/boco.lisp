@@ -1,7 +1,8 @@
 ;;;; ./src/icem/boundary.lisp
 
-(defpackage #:ic/boco
+(defpackage #:mnas-ansys/ic/boco
   (:use #:cl)
+  (:nicknames "IC/BOCO" "BOCO")
   (:export ic-load
            ic-get
            ic-set
@@ -81,7 +82,7 @@
    " Пакет содержит функции для редактирования и изменения граничных
    условий (Boundary Condition Editing and Modification Functions)."))
 
-(in-package #:ic/boco)
+(in-package #:mnas-ansys/ic/boco)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

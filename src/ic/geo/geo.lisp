@@ -1,7 +1,8 @@
 ;;;; ./src/icem/geometry.lisp
 
-(defpackage #:ic/geo
+(defpackage #:mnas-ansys/ic/geo
   (:use #:cl)
+  (:nicknames "IC/GEO" "GEO")
   (:export  load-tetin
             empty-tetin
             save-tetin
@@ -375,11 +376,12 @@
             curve
             get-crv-data-at-par
             )
+  (:export set-meshing-params-global)
   (:documentation
    " Пакет предназначен для создания геометрии через API системы ANSYS ICEM CFD."
    ))
 
-(in-package #:ic/geo)
+(in-package #:mnas-ansys/ic/geo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1214,15 +1216,20 @@ GUI. The type can be one of the following:
 
         hrat: the height expansion ratio
 
-    density: set or get the parameters on density volume num The parameters that are accepted are:
+    density: set or get the parameters on density volume num The
+    parameters that are accepted are:
 
         emax: the maximum element size
 
-    loop: set or get the parameters on loop num The parameters that are accepted are:
+    loop: set or get the parameters on loop num The parameters that
+    are accepted are:
 
         etyp: the element type
 
-    curve_fam, surface_fam, point_fam: set or get the parameters on all objects of the family num (in this case num is not a number but a family name). The accepted parameters are the same as the ones listed for individual objects.
+    curve_fam, surface_fam, point_fam: set or get the parameters on
+    all objects of the family num (in this case num is not a number
+    but a family name). The accepted parameters are the same as the
+    ones listed for individual objects.
 
 The return value of this function is a list of names and values in the
 same format as the arguments, which are the values after the
@@ -1238,6 +1245,165 @@ parameters only for one of the objects in that family.
    "ic_set_meshing_params ~A ~A ~A~%"
    type num args ))
 
+(defun set-meshing-params-global (&key
+                                    (gref 1)
+                                    (gmax 2)
+                                    (gnat 0)
+                                    (gnatref 10)
+                                    (gedgec 0.2)
+                                    (gcgap 1)
+                                    (gttol 0.001)
+                                    (gfast 0)
+                                    (igwall 0)
+                                    (gtrel 1)
+                                    (grat 1.5))
+"
+    global: set or get the global parameters like natural size,
+    etc. The num argument is ignored. The parameters that are accepted
+    are:
+
+ @b(Переменые:)
+@begin(list)
+ @item(gref - the reference size for the model;)
+ @item(gmax - the maximum size of any element in the mesh;)
+ @item(gnat - the natural size value;)
+ @item(gnatref - the natural size refinement factor;)
+ @item(gedgec - the edge criterion;)
+ @item(gcgap - the number of cells allowed in a gap;)
+ @item(gttol - the triangularization tolerance;)
+ @item(gfast - if the value is 1 then set fast transition;)
+ @item(igwall - if the value is 1 then ignore wall thickness;)
+ @item(grat - the growth ratio value.)
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (set-meshing-params-global
+ :gref 1 :gmax 2
+ :gnat 0 :gnatref 10 :gedgec 0.2 :gcgap 1
+ :gttol 0.001 :gfast 0 :igwall 0 :gtrel 1 :grat 1.5)
+@end(code)
+
+"
+  (format t "ic_set_meshing_params global 0")
+  (loop :for (name value) :in `(("gref" ,gref) ("gmax" ,gmax) ("gnat" ,gnat)
+                                ("gnatref" ,gnatref) ("gedgec" ,gedgec) ("gcgap" ,gcgap)
+                                ("gttol" ,gttol) ("gfast" ,gfast) ("igwall" ,igwall)
+                                ("gtrel" ,gtrel)
+                                ("grat" ,grat))
+        :do
+    (when value
+      (format t " ~A ~A" name value)))
+  (format t "~%"))
+
+(defun set-meshing-params-curve (type num args )
+"
+    curve: set or get the parameters on curve num The parameters that are accepted are:
+
+        emax: the maximum element size
+
+        ehgt: the maximum height
+
+        erat: the size expansion ratio
+
+        ewid: the number of layers of tetrahedra of the same size that should surround a surface
+
+        nlay: the number of quad offset layers
+
+        emin: the minimum size
+
+        edev: the deviation value
+"  
+
+  (format
+   t
+   "ic_set_meshing_params ~A ~A ~A~%"
+   type num args ))
+
+(defun set-meshing-params-surface (type num args )
+"
+    surface: set or get the parameters on surface num The parameters
+    that are accepted are:
+
+        emax: the maximum element size
+
+        ehgt: the maximum height
+
+        erat: the size expansion ratio
+
+        hrat: the height expansion ratio
+
+        ewid: the number of layers of tetrahedra of the same size that should surround a surface
+
+        nlay: the number of prism layers
+
+        emin: the minimum size
+
+        edev: the deviation value
+"  
+  (format
+   t
+   "ic_set_meshing_params ~A ~A ~A~%"
+   type num args ))
+
+(defun set-meshing-params-point (type num args )
+"
+    point: set or get the parameters on prescribed point num The
+    parameters that are accepted are:
+
+        ehgt: the maximum height
+
+        erat: the size expansion ratio
+
+        hrat: the height expansion ratio
+
+"  
+
+  (format
+   t
+   "ic_set_meshing_params ~A ~A ~A~%"
+   type num args ))
+
+(defun set-meshing-params-density (type num args )
+"
+    density: set or get the parameters on density volume num The
+    parameters that are accepted are:
+
+        emax: the maximum element size
+"  
+
+  (format
+   t
+   "ic_set_meshing_params ~A ~A ~A~%"
+   type num args ))
+
+(defun set-meshing-params-loop (type num args )
+" Set or get the meshing parameters associated with the model or the
+geometry. The type and num arguments define what the parameters are
+being defined for. The remaining arguments are name/value pairs, so
+that the function call might look like
+
+ic_set_meshing_params surface 2 emax 10 erat 13
+
+The num argument can also be a name. Any or all of the meshing
+parameters can be specified, and the ones not given are not
+modified. Note that all the sizes are in absolute units, not factors
+of the reference size. This is different from what you see in the
+GUI. The type can be one of the following:
+
+    loop: set or get the parameters on loop num The parameters that
+    are accepted are:
+
+        etyp: the element type
+"  
+
+  (format
+   t
+   "ic_set_meshing_params ~A ~A ~A~%"
+   type num args ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun get-mesh-growth-ratio ()
 "
 Returns mesh growth ratio.
@@ -1248,8 +1414,8 @@ Returns mesh growth ratio.
    ))
 
 (defun get-meshing-params (type num )
-"
-Returns the meshing parameters. This has the advantage over ic_set_meshing_params that it is not recorded in the replay file.
+" Returns the meshing parameters. This has the advantage over
+ic_set_meshing_params that it is not recorded in the replay file.
 "  
   (format
    t
@@ -2507,19 +2673,20 @@ Returns the family parameters.
    "ic_geo_get_family_param ~A ~A~%"
    fam name ))
 
-(defun set-family-params (fam &key
-                                no_crv_inf
-                                (prism 0)
-                                (emax 2.0)
-                                (ehgt 0.0)
-                                (hrat 0)
-                                (nlay 0)
-                                (erat 1.5)
-                                (ewid 0)
-                                (emin 0.0)
-                                (edev 0.0)
-                                (split_wall 0)
-                                (internal_wall 0))
+(defun set-family-params (fam
+                          &key
+                            (no_crv_inf "no_crv_inf")
+                            (prism 0)
+                            (emax 2.0)
+                            (ehgt 0.0)
+                            (hrat 0)
+                            (nlay 0)
+                            (erat 1.5)
+                            (ewid 0)
+                            (emin 0.0)
+                            (edev 0.0)
+                            (split_wall 0)
+                            (internal_wall 0))
   "ic_geo_set_family_params
 
  Sets the family parameters. If there is no such family, nothing will be done.
@@ -2528,10 +2695,19 @@ ic_undo_group_begin
 ic_geo_set_family_params B/AIR_RL_OUT/N2/D_10.000 no_crv_inf prism 0 emax 2.0 ehgt 0.0 hrat 0 nlay 0 erat 1.5 ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0
 ic_undo_group_end 
 "
-  (format
-   t
-   "ic_geo_set_family_params ~A ~A~%"
-   fam args ))
+  (format t "ic_geo_set_family_params ~A" fam)
+  (format t " ~A" no_crv_inf)
+  (format t " prism ~A" prism)
+  (format t " emax ~A" emax)
+  (format t " ehgt ~A" ehgt)
+  (format t " hrat ~A" hrat)
+  (format t " nlay ~A" nlay)
+  (format t " erat ~A" erat)
+  (format t " ewid ~A" ewid)
+  (format t " emin ~A" emin)
+  (format t " edev ~A" edev)
+  (format t " split_wall ~A" split_wall)
+  (format t " internal_wall ~A" internal_wall))
 
 (defun reset-family-params (fams params )
 "
