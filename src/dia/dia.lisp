@@ -3,11 +3,12 @@
 (defpackage #:mnas-ansys/dia
   (:use #:cl)
   (:nicknames "DIA")
-  (:export open-dia
+  (:export open-tin-file
            choose-directory)
   (:export *tin*
            *initial-directory*)
-  (:export setup-family-parameters)
+  (:export setup-family-parameters
+           families)
   (:documentation
    "Пакет @b(mnas-ansys/tin/dia) выполнения команд в диалоговом режиме."))
 
@@ -19,12 +20,12 @@
   "@b(Описание:) переменная @b(*initial-directory*) определяет стартовый
 каталог для поиска файлов.")
 
-(defun open-dia ()
-  "@b(Описание:) функция @b(open-dia) возвращает открытый tin-файл.
+(defun open-tin-file ()
+  "@b(Описание:) функция @b(open-tin-file) возвращает открытый tin-файл.
 
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (open-dia)
+ (open-tin-file)
 @end(code)
 "
   (setf *tin*
@@ -69,7 +70,7 @@
 @begin[lang=lisp](code)
  (tin/dia:setup-family-parameters :d-scale 1/4)
 @end(code) "
-  (let* ((tin (open-dia))
+  (let* ((tin (open-tin-file))
          (d-names
            (loop :for i :in (mnas-ansys/tin:names (mnas-ansys/tin:<tin>-families tin))
                  :if (let ((str (first (last (mnas-string:split "/" i)))))
@@ -97,8 +98,27 @@
                          i (* d-size d-scale) 0.0)))
       (format t "~A~2%" "ic_undo_group_end"))))
 
+(defun families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (let ((names
+          (mnas-ansys/tin:names
+           (mnas-ansys/tin:<tin>-families
+            (open-tin-file)))))
+    (format t "~2%~{~A~^~%~}~2%" names)
+    names))
 
-#+nil (setup-family-parameters :d-scale 1/4 :gmax 16)
+#+nil (setup-family-parameters :d-scale 1/4 :gmax 2)
 #+nil (choose-directory)
+"
+ic_undo_group_begin 
+ic_coords_dir_into_global {1 0 0} global
+ic_geo_set_periodic_data {axis {1 0 0} type none angle 36 base {0 0 0}}
+ic_undo_group_end 
 
-
+ic_undo_group_begin 
+ic_coords_dir_into_global {1 0 0} global
+ic_geo_set_periodic_data {axis {1 0 0} type rot angle 36 base {0 0 0}}
+ic_undo_group_end 
+"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

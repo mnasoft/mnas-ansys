@@ -2590,16 +2590,18 @@ Translates coordinates from the current or given system into the global system.
    "ic_coords_into_global ~A ~A~%"
    pt system ))
 
-(defun coords-dir-into-global (pt
-                                  &optional
-                                    (system ""))
-"
-Translates a vector from the current or given system into the global system.
-"  
+(defun coords-dir-into-global (vector &optional (system "global"))
+" Translates a vector from the current or given system into the global
+system.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (coords-dir-into-global '(1 0 0) \"global\")
+@end(code)" 
   (format
    t
-   "ic_coords_dir_into_global ~A ~A~%"
-   pt system ))
+   "ic_coords_dir_into_global {~{~A~^ ~}} ~A~%"
+   vector system ))
 
 (defun coords-into-local (pt &optional (system ""))
 "

@@ -434,6 +434,24 @@
   (100.0 133.33334 \"Surface 000000000415\"))
 @end(code)
 
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-tangent-belts 50 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+@end(code)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+@end(code)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+(make-table-tangent-belts
+ 50 1200.0 0.0 0.0 200.0 -180 +180 0.0
+ :equations '(\"=massFlowAve(Velocity u)@\" \"=massFlowAve(Velocity v)@\" \"=massFlowAve(Velocity w)@\"
+ \"=areaAve(Velocity u)@\" \"=areaAve(Velocity v)@\" \"=areaAve(Velocity w)@\"))
+@end(code)
+
  @image[src=make-tangent-belts.png]()
 "
   (let ((ri-rj-snames nil)
@@ -853,6 +871,13 @@ END
                      (Variable "Pressure")
                      (Variable-Boundary-Values "Hybrid")
                      (Visibility "On"))
+  "
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-point \"name\")
+@end(code)
+"
   (for-list t  "POINT: " name)
   (for-list t  "  Apply Instancing Transform = " Apply-Instancing-Transform )
   (for-list t  "  Colour = " Colour )
@@ -900,21 +925,6 @@ END
   (for-list t  "    Z = " "0.0 [mm]")
   (for-list t  "  END" "")
   (for-list t  "END" ""))
-
-(make-point "name")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; Примеры использования функций
-
-(make-tangent-belts 50 1200.0 0.0 0.0 200.0 -180 +180 0.0)
-
-(make-table-tangent-belts
- 50 1200.0 0.0 0.0 200.0 -180 +180 0.0
- :equations '("=massFlowAve(Velocity u)@" "=massFlowAve(Velocity v)@" "=massFlowAve(Velocity w)@"
- "=areaAve(Velocity u)@" "=areaAve(Velocity v)@" "=areaAve(Velocity w)@"))
-
-(make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun make-legend (&key
 		      (name "Legend 1")
@@ -1051,5 +1061,3 @@ END
   (for-list t "  END" "")
   (for-list t "END" "")
   )
-
-

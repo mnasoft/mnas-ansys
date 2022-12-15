@@ -12,8 +12,7 @@
 
 (mnas-ansys/tin/dia:choose-directory)
 
-(defparameter *tin* (mnas-ansys/tin/dia:open-dia))
-
+(defparameter *tin* (mnas-ansys/dia:open-tin-file))
 
 (defparameter *d-names*
     (loop :for i :in (names (mnas-ansys/tin:<tin>-families *tin*))
@@ -22,7 +21,6 @@
                  (eq #\_ (char str 1))))
         :collect i :into d-rez
           :finally (return d-rez)))
-
 
 (progn
   (format t "~A~%" "ic_undo_group_begin")

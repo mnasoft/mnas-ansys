@@ -68,17 +68,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defparameter *lines*
-  (mnas-ansys/tin/read:read-file-as-lines
-   "~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl"))
-
-(defparameter *ccl* (mnas-ansys/ccl/parse::parse-slow *lines*))
-(defparameter *ccl* (mnas-ansys/ccl/parse::parse *lines*))
-
-(value
- (find-in-tree-key "Option"
-                  (find-in-tree-key "INTERFACE MODELS" (elt *ccl* 1))))
-
 (defun interface-models-option (domain-interface)
   (second
    (find-in-tree-key "Option"
@@ -109,15 +98,28 @@
       )))
 
 (defun domain-interface-graph (ccl &key (stream t))
+  "
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+   (defparameter *lines*
+    (mnas-ansys/tin/read:read-file-as-lines
+     \"~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl\"))
+  (defparameter *ccl* (mnas-ansys/ccl/parse::parse-slow *lines*))
+  (defparameter *ccl* (mnas-ansys/ccl/parse::parse *lines*))
+
+  (value
+   (find-in-tree-key \"Option\"
+                     (find-in-tree-key \"INTERFACE MODELS\" (elt *ccl* 1))))
+  (domain-interface-graph *ccl*)
+@end(code)
+"
   (format stream "graph {~%")  
   (mapcar
    #'(lambda (item)
-            (domain-interface-item item :stream stream))
+       (domain-interface-item item :stream stream))
    ccl)
   (format stream "}~%"))
-
-(domain-interface-graph *ccl*)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -690,3 +692,4 @@ LIBRARY:
 END"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
