@@ -1108,8 +1108,8 @@ Change the geometry with the given type and name to name newname. If make_new is
    type name newname make_new warn))
 
 (defun rename-family (fam newfam &optional (rename_ents 1) )
-"
-Rename the family. All objects in fam will now be in nfam. If rename_ents is set, family entities will be renamed.
+" Rename the family. All objects in fam will now be in nfam. If
+rename_ents is set, family entities will be renamed.
 "  
   (format
    t

@@ -3,6 +3,7 @@
 
 (defpackage #:mnas-ansys/tin
   (:use #:cl #:mnas-ansys/tin/read)
+  (:nicknames "TIN")
   (:export open-tin-file)
 ;;;; generics
   (:export <object>-tag
@@ -790,7 +791,7 @@
 
 
 
-(defmethod families (entytes)
+(defmethod families ((entytes cons))
   "@b(Описание:) метод @b(families) возвращает список семейств,
   содержащий уникальные имена.
 
@@ -800,9 +801,29 @@
  (families (<tin>-curves  *tin*))
  (families (<tin>-points  *tin*))
 @end(code)"
-  (remove-duplicates 
-   (mapcar #'(lambda(el) (<ent>-family el)) entytes)
-   :test #'equal))
+  (let ((rez (sort 
+              (remove-duplicates 
+               (mapcar #'(lambda(el) (<ent>-family el)) entytes)
+               :test #'equal)
+              #'string<)))
+    (format t "~{~A~%~}~2%" rez)
+    rez))
+
+(defmethod families ((entytes hash-table))
+  "@b(Описание:) метод @b(families) возвращает список семейств,
+  содержащий уникальные имена.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (dia:open-tin-file)
+ (families (<tin>-surfaces dia:*tin*))
+ (families (<tin>-curves   dia:*tin*))
+ (families (<tin>-points   dia:*tin*))
+@end(code)"
+  (families (loop :for k :being :the :hash-key
+        :using (hash-value v)
+          :of entytes
+      :collect v)))
 
 (defun names (entities &optional (stream t))
   "@b(Описание:) функция @b(entities) 

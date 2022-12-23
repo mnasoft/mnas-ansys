@@ -1,5 +1,6 @@
 (defpackage #:mnas-ansys/tin/select
   (:use #:cl #:mnas-ansys/tin)
+  (:nicknames "SELECT")
   (:export entities-by-families
            curves-by-families
            surfaces-by-families
@@ -7,6 +8,7 @@
            exclude-by-families
            include-by-families
            surfaces-coedged-with-curve-by-number
+           families-by-assembly-name
            )
   (:documentation
    " Пакет @b(mnas-ansys/tin/select) определяет функции для выбора объектов
@@ -105,3 +107,9 @@
           (mapcar #'(lambda (curv)
                       (<curve>-surfaces curv))
                   (curves-by-coedges-number number tin)))))
+
+(defun families-by-assembly-name (assembly families)
+  "@b(Описание:) функция @b(families-by-assembly-name) 
+"
+  (loop :for i :in families
+        :when (member assembly (mnas-string:split "/" i) :test #'equal) :collect i))

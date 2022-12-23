@@ -5,8 +5,9 @@
   (:nicknames "IC/DIS" "DIS")
   (:export  view
             visible
-            set_family_color_for_name
-            display_update
+            visible-family
+            set-family-color-for-name
+            display-update
             )
   (:documentation
    "@b(Описание:) пакет @b(ic/dis) содержит функции отображения (Display
@@ -16,7 +17,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun ic_view (what)
+(defun view (what)
 "
 Sets the current viewing position. what may be home, which sets the home position.
 "
@@ -35,6 +36,17 @@ should be a family name.
   (format t
           "ic_visible ~S ~S ~S~%" type what on))
 
+(defun visible-family (family-name on)
+" Enable/disable visibility for different objects. The on argument
+should be 0 or 1. type is one of geometry, unstruct, or family. In the
+case of geometry, what should be one of surface, curve, point,
+material, density, or loop. In the case of unstruct, it should be one
+of the element type names like TETRA_4. In the case of family, it
+should be a family name.
+"
+  (format t
+          "ic_visible family ~S ~S;" family-name on))
+
 (defun set-family-color-for-name (name color)
 " Sets the color to use for drawing objects in the named family. This
 applies to geometry and mesh.
@@ -50,4 +62,5 @@ update the family list in the GUI. types allows you to make visible
 entity types appropriate to the mode (e.g.: {TRI_3} for unstruct).
 "
   (format t
-          "ic_display_update ~S ~S ~S~%" mode new_fams types))
+          "ic_display_update ~S ~S ~S;~2%" mode new_fams types))
+
