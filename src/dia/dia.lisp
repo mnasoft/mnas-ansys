@@ -8,7 +8,9 @@
   (:export *tin*
            *initial-directory*)
   (:export setup-family-parameters
-           families)
+           families
+           surface-families
+           curves-families)
   (:documentation
    "Пакет @b(mnas-ansys/tin/dia) выполнения команд в диалоговом режиме."))
 
@@ -107,6 +109,27 @@
             (open-tin-file)))))
     (format t "~2%~{~A~^~%~}~2%" names)
     names))
+
+(defun surface-families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (progn
+    (dia:open-tin-file)
+    (tin:families (tin:<tin>-surfaces dia:*tin*))))
+
+(defun curves-families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (progn
+    (dia:open-tin-file)
+    (tin:families (tin:<tin>-curves dia:*tin*))))
+
+(defun points-families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (progn
+    (dia:open-tin-file)
+    (tin:families (tin:<tin>-points dia:*tin*))))
 
 #+nil (setup-family-parameters :d-scale 1/4 :gmax 2)
 #+nil (choose-directory)

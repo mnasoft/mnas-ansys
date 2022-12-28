@@ -185,9 +185,11 @@
 на выходе из КС с ЖТ А32038002 и ГУ А32038004 по результатам
 CFD-расчета за нечетной и четной ЖТ выраженное в процентах
 "
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (dia:open-tin-file)
 (families (<tin>-surfaces dia:*tin*))
+
 
 G3
 
@@ -225,6 +227,10 @@ ic_geo_rename_family GU/ZAV_1/IN/WALL/G3-M0/D_00.000 GU/ZAV_1/IN/WALL/G3-M1000/D
 ic_geo_rename_family GU/ZAV_1/IN/WALL/G3-M0/D_02.000 GU/ZAV_1/IN/WALL/G3-M1000/D_02.000 0
 ic_geo_rename_family GU/ZAV_1/IN/WALL/G3-M0 GU/ZAV_1/IN/WALL/G3-M1000 1
 
+
+B1/AIR_IN/D_00.000
+B1/AIR_RL_OUT/N2/D_05.000
+B1/AIR_SL_OUT/D_06.000
 
 
 
