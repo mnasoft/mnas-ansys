@@ -435,7 +435,7 @@ Creates an empty geometry database.
 "  
   (format
    t
-   "ic_load_tetin ~A ~A ~A ~A ~A~%"
+   "ic_load_tetin ~A ~A ~A ~A ~A;~%"
    filenames tri_tolerance keep_model_params blanks quiet))
 
 (defun empty-tetin ()
@@ -444,7 +444,7 @@ Creates an empty geometry database.
  Creates an empty geometry database."  
   (format
    t
-   "ic_empty_tetin~%"))
+   "ic_empty_tetin;~%"))
 
 (defun save-tetin (file &optional (only_visible 0) (v4 0) (only_fams "") (only_ents "") (v10 0) (quiet 0) (clear_undo 1))
 " 
@@ -459,7 +459,7 @@ of the backslash \"\\\" character. For example:
 ic_save_tetin c:/speed_racer/mach5.tin"  
   (format
    t
-   "ic_save_tetin ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_save_tetin ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    file only_visible v4 only_fams only_ents v10 quiet clear_undo))
 
 (defun unload-tetin (&optional (quiet 0))
@@ -467,7 +467,7 @@ ic_save_tetin c:/speed_racer/mach5.tin"
 Unloads the current geometry data."  
   (format
    t
-   "ic_unload_tetin ~A~%"
+   "ic_unload_tetin ~A;~%"
    quiet))
 
 
@@ -483,7 +483,7 @@ object per family. If no_orfn is 1, then any elements that were in the
 ORFN (0) family will be moved to a new family called MOVED_ORFN."  
     (format
      t
-     "ic_geo_import_mesh ~A ~A ~A ~A ~%"
+     "ic_geo_import_mesh ~A ~A ~A ~A;~%"
      domains do_seg no_orfn do_merge))
 
 (defun update-surface-display (obj)
@@ -492,7 +492,7 @@ ORFN (0) family will be moved to a new family called MOVED_ORFN."
 Utility to update display of surface and related edges, vertices."  
   (format
    t
-   "update_surface_display ~A~%"
+   "update_surface_display ~A;~%"
    obj))
 
 (defun export-to-mesh (merge &optional (fams "") (quiet 0))
@@ -508,7 +508,7 @@ then the geometric objects will each be mapped
 mesh."  
   (format
    t
-   "ic_geo_export_to_mesh ~A ~A ~A~%"
+   "ic_geo_export_to_mesh ~A ~A ~A;~%"
    merge fams quiet))
 
 (defun ddn-app (type partname partdir extra_cmds &optional (batch 1))
@@ -565,14 +565,14 @@ return	List of DDN parts
 "  
   (format
    t
-   "ic_ddn_app ~A ~A ~A ~A ~A~%"
+   "ic_ddn_app ~A ~A ~A ~A ~A;~%"
    type partname partdir extra_cmds batch))
 
 (defun summary ()
  "Prints"  
   (format
    t
-   "ic_geo_summary~%"
+   "ic_geo_summary;~%"
    ))
 
 (defun lookup-family-pid (fam)
@@ -581,14 +581,14 @@ Returns the internal numeric id (pid) of the family. This is not a safe function
 "  
   (format
    t
-   "ic_geo_lookup_family_pid ~A~%"
+   "ic_geo_lookup_family_pid ~A;~%"
    fam))
 
 (defun is-loaded ()
  " Reports "  
   (format
    t
-   "ic_geo_is_loaded~%"
+   "ic_geo_is_loaded;~%"
    ))
 
 (defun is-modified ()
@@ -597,7 +597,7 @@ Reports if the current geometry has been modified since the last save.
 "  
   (format
    t
-   "ic_geo_is_modified~%"
+   "ic_geo_is_modified;~%"
    ))
 
 (defun valid-name (name no_colon )
@@ -606,7 +606,7 @@ Changes a name into a valid family/entity name.
 "  
   (format
    t
-   "ic_geo_valid_name ~A ~A~%"
+   "ic_geo_valid_name ~A ~A;~%"
    name no_colon ))
 
 (defun set-modified (on )
@@ -615,7 +615,7 @@ Sets the modified flag for the current geometry. This should not be used for mos
 "  
   (format
    t
-   "ic_geo_set_modified ~A~%"
+   "ic_geo_set_modified ~A;~%"
    on ))
 
 (defun check-family (name )
@@ -624,7 +624,7 @@ Checks whether a family exists.
 "  
   (format
    t
-   "ic_geo_check_family ~A~%"
+   "ic_geo_check_family ~A;~%"
    name))
 
 (defun check-part (name )
@@ -633,7 +633,7 @@ Checks if a part exists.
 "  
   (format
    t
-   "ic_geo_check_part ~A~%"
+   "ic_geo_check_part ~A;~%"
    name ))
 
 (defun new-family (name &optional (do_update 1) )
@@ -645,7 +645,7 @@ Note:   The newly created family will not appear in the interactive family list 
 
   (format
    t
-   "ic_geo_new_family ~A ~A~%"
+   "ic_geo_new_family ~A ~A;~%"
    name do_update))
 
 (defun new-name (type prefix )
@@ -664,7 +664,7 @@ Creates a new unused part or family name.
 "  
   (format
    t
-   "ic_geo_get_unused_part ~A ~A~%"
+   "ic_geo_get_unused_part ~A ~A;~%"
    prefix no_first_num ))
 
 (defun delete-family (names )
@@ -673,7 +673,7 @@ Deletes a family, or a list of families.
 "  
   (format
    t
-   "ic_geo_delete_family ~A~%"
+   "ic_geo_delete_family ~A;~%"
    names ))
 
 (defun params-blank-done (type &optional (reset 0) )
@@ -682,7 +682,7 @@ Blanks those entities that have some meshing parameters already defined. If rese
 "  
   (format
    t
-   "ic_geo_params_blank_done ~A ~A~%"
+   "ic_geo_params_blank_done ~A ~A;~%"
    type reset))
 
 (defun match-name (type pat )
@@ -691,7 +691,7 @@ Returns the names of the objects that match a given pattern.
 "  
   (format
    t
-   "ic_geo_match_name ~A ~A~%"
+   "ic_geo_match_name ~A ~A;~%"
    type pat ))
 
 (defun update-visibility (type vis_fams visible )
@@ -700,7 +700,7 @@ Changes the visibility so that only objects with the given families and type are
 "  
   (format
    t
-   "ic_geo_update_visibility ~A ~A ~A~%"
+   "ic_geo_update_visibility ~A ~A ~A;~%"
    type vis_fams visible ))
 
 (defun get-visibility (type name)
@@ -709,7 +709,7 @@ Returns whether an object is visible or not.
 "  
   (format
    t
-   "ic_geo_get_visibility ~A ~A~%"
+   "ic_geo_get_visibility ~A ~A;~%"
    type name))
 
 (defun set-visible-override (type name val )
@@ -718,7 +718,7 @@ Sets or unsets the visible_override flag. If this flag is set for an object then
 "  
   (format
    t
-   "ic_geo_set_visible_override ~A ~A ~A~%"
+   "ic_geo_set_visible_override ~A ~A ~A;~%"
    type name val ))
 
 (defun temporary-visible (type objects vis &optional (force 0) )
@@ -727,7 +727,7 @@ Temporarily blanks or unblanks an object. This will not go away when you change 
 "  
   (format
    t
-   "ic_geo_temporary_visible ~A ~A ~A ~A~%"
+   "ic_geo_temporary_visible ~A ~A ~A ~A;~%"
    type objects vis force ))
 
 (defun get-temporary-invisible (type &optional (entity ""))
@@ -738,7 +738,7 @@ Example usage: ic_geo_get_temporary_invisible [type]
 "  
   (format
    t
-   "ic_geo_get_temporary_invisible ~A ~A~%"
+   "ic_geo_get_temporary_invisible ~A ~A;~%"
    type entity))
 
 (defun set-visible-override-families-and-types (fams types )
@@ -747,7 +747,7 @@ This is a helper function that sets the visible_override flag for all objects in
 "  
   (format
    t
-   "ic_geo_set_visible_override_families_and_types ~A ~A~%"
+   "ic_geo_set_visible_override_families_and_types ~A ~A;~%"
    fams types ))
 
 (defun redraw-geometry (type name )
@@ -756,7 +756,7 @@ This redraws the geometry in case something changes.
 "  
   (format
    t
-   "ic_redraw_geometry ~A ~A~%"
+   "ic_redraw_geometry ~A ~A;~%"
    type name ))
 
 (defun incident (type names &optional (even_if_dormant 0))
@@ -766,7 +766,7 @@ Returns what objects of higher dimensionality are incident to this one. Surfaces
 
   (format
    t
-   "ic_geo_incident ~A ~A~%"
+   "ic_geo_incident ~A ~A;~%"
    type names even_if_dormant))
 
 (defun surface-get-objects (surface type &optional (embedded_points "") )
@@ -776,7 +776,7 @@ Returns a list of objects associated to a surface.
 
   (format
    t
-   "ic_geo_surface_get_objects ~A ~A ~A~%"
+   "ic_geo_surface_get_objects ~A ~A ~A;~%"
    surface type embedded_points))
 
 (defun loop-get-objects (loop type &optional (surface ""))
@@ -785,7 +785,7 @@ Returns a list of objects associated to a loop.
 "  
   (format
    t
-   "ic_geo_loop_get_objects ~A ~A ~A~%"
+   "ic_geo_loop_get_objects ~A ~A ~A;~%"
    loop type surface ))
 
 (defun surface-edges-incident-to-curve (surfname curvename )
@@ -794,7 +794,7 @@ Returns the edges in a triangulated surface which are incident to a given curve.
 "  
   (format
    t
-   "ic_geo_surface_edges_incident_to_curve ~A ~A~%"
+   "ic_geo_surface_edges_incident_to_curve ~A ~A;~%"
    surfname curvename ))
 
 (defun surface-normals-orient (&optional (refsurfname "") (outward 1) )
@@ -804,7 +804,7 @@ Reorients the normals of surfaces in a model with respect to the given reference
 
   (format
    t
-   "ic_geo_surface_normals_orient ~A ~A~%"
+   "ic_geo_surface_normals_orient ~A ~A;~%"
    refsurfname outward))
 
 (defun get-side-surfaces (tol how &optional (list "") )
@@ -813,7 +813,7 @@ Returns a list of surfaces whose normal of magnitude tol does not intersect anot
 "  
   (format
    t
-   "ic_geo_get_side_surfaces ~A ~A ~A~%"
+   "ic_geo_get_side_surfaces ~A ~A ~A;~%"
    tol how list))
 
 (defun boundary (type &optional (names "") (outer 0) (even_if_dormant 0) (embedded 0))
@@ -829,7 +829,7 @@ indicating which additional boundaries.
 "  
   (format
    t
-   "ic_geo_boundary ~A ~A ~A ~A ~A~%"
+   "ic_geo_boundary ~A ~A ~A ~A ~A;~%"
    type names outer even_if_dormant embedded))
 
 (defun object-visible (type names visible )
@@ -838,7 +838,7 @@ Changes the visibility of a specific object or objects. The visible argument is 
 "  
   (format
    t
-   "ic_geo_object_visible ~A ~A ~A~%"
+   "ic_geo_object_visible ~A ~A ~A;~%"
    type names visible ))
 
 (defun configure-objects (type simp shade st sp sh sq
@@ -905,7 +905,7 @@ Configures the attributes of all the visible objects of a given type. The argume
 "  
   (format
    t
-   "ic_geo_configure_objects ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_configure_objects ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    type simp shade st sp sh sq
    names wide dnodes count nnum tnum norms
    thickness lshow lfull lst lsq
@@ -920,7 +920,7 @@ Configure one attribute of a whole type.
 "  
   (format
    t
-   "ic_geo_configure_one_attribute ~A ~A ~A~%"
+   "ic_geo_configure_one_attribute ~A ~A ~A;~%"
    type what val ))
 
 (defun configure-one-object (type name what &optional (val "-"))
@@ -929,7 +929,7 @@ Configure the attributes of one object.
 "  
   (format
    t
-   "ic_geo_configure_one_object ~A ~A ~A ~A~%"
+   "ic_geo_configure_one_object ~A ~A ~A ~A;~%"
    type name what val))
 
 (defun list-families (&optional (only_material 0) (non_empty 0))
@@ -940,7 +940,7 @@ empty.
 "  
   (format
    t
-   "ic_geo_list_families ~A ~A~%"
+   "ic_geo_list_families ~A ~A;~%"
    only_material non_empty ))
 
 (defun list-parts (&optional (prefix "") (non_empty 0))
@@ -949,7 +949,7 @@ Lists the current parts.
 "  
   (format
    t
-   "ic_geo_list_parts ~A ~A~%"
+   "ic_geo_list_parts ~A ~A;~%"
    prefix non_empty ))
 
 (defun check-part (name )
@@ -958,7 +958,7 @@ Checks whether a part exists.
 "  
   (format
    t
-   "ic_geo_check_part ~A~%"
+   "ic_geo_check_part ~A;~%"
    name ))
 
 (defun list-families-in-part (part )
@@ -968,7 +968,7 @@ Lists the current families in a part.
 
   (format
    t
-   "ic_geo_list_families_in_part ~A~%"
+   "ic_geo_list_families_in_part ~A;~%"
    part ))
 
 (defun list-families-with-group (gname )
@@ -977,7 +977,7 @@ Lists the families in a group.
 "  
   (format
    t
-   "ic_geo_list_families_with_group ~A~%"
+   "ic_geo_list_families_with_group ~A;~%"
    gname ))
 
 (defun list-parts-with-group (gname )
@@ -986,7 +986,7 @@ Lists the parts that have some family in a group.
 "  
   (format
    t
-   "ic_geo_list_parts_with_group ~A~%"
+   "ic_geo_list_parts_with_group ~A;~%"
    gname ))
 
 (defun family-is-empty (fam )
@@ -995,7 +995,7 @@ Returns whether or not the family is empty of entities.
 "  
   (format
    t
-   "ic_geo_family_is_empty ~A~%"
+   "ic_geo_family_is_empty ~A;~%"
    fam ))
 
 (defun family-is-empty-except-dormant (fam )
@@ -1005,7 +1005,7 @@ Returns whether or not the family contains only dormant entities.
 
   (format
    t
-   "ic_geo_family_is_empty_except_dormant ~A~%"
+   "ic_geo_family_is_empty_except_dormant ~A;~%"
    fam ))
 
 (defun non-empty-families ()
@@ -1016,7 +1016,7 @@ Note:  This does not check whether there are directives.
 "  
   (format
    t
-   "ic_geo_non_empty_families~%"
+   "ic_geo_non_empty_families;~%"
    ))
 
 (defun non-empty-families-except-dormant ()
@@ -1027,7 +1027,7 @@ Note:  This does not check whether there are directives.
 "  
   (format
    t
-   "ic_geo_non_empty_families_except_dormant~%"
+   "ic_geo_non_empty_families_except_dormant;~%"
    ))
 
 (defun num-objects (type )
@@ -1036,7 +1036,7 @@ Returns the number of objects of the given type.
 "  
   (format
    t
-   "ic_geo_num_objects ~A~%"
+   "ic_geo_num_objects ~A;~%"
    type ))
 
 (defun list-visible-objects (type &optional (even_if_dormant 1))
@@ -1045,7 +1045,7 @@ Returns the number of visible objects of the given type.
 "  
   (format
    t
-   "ic_geo_list_visible_objects ~A ~A~%"
+   "ic_geo_list_visible_objects ~A ~A;~%"
    type even_if_dormant ))
 
 (defun num-visible-objects (type &optional (any 0) )
@@ -1054,7 +1054,7 @@ Returns the number of visible objects of the given type. If any is 1, specify wh
 "  
   (format
    t
-   "ic_geo_num_visible_objects ~A ~A~%"
+   "ic_geo_num_visible_objects ~A ~A;~%"
    type any))
 
 (defun num-segments (type name )
@@ -1063,7 +1063,7 @@ Returns the number of segments or triangles in the object. This returns 2 number
 "  
   (format
    t
-   "ic_geo_num_segments ~A ~A~%"
+   "ic_geo_num_segments ~A ~A;~%"
    type name ))
 
 (defun set-family (type newfam how objs &optional (rename 1) )
@@ -1086,7 +1086,7 @@ Changes the geometry with the given type and name to family newfam. The first ar
 "  
   (format
    t
-   "ic_geo_set_family ~A ~A ~A ~A ~A~%"
+   "ic_geo_set_family ~A ~A ~A ~A ~A;~%"
    type newfam how objs rename ))
 
 (defun set-part (type names newpart &optional (rename_part 1) )
@@ -1095,7 +1095,7 @@ Moves geometry from one part to a new one. This has to create the new part name 
 "  
   (format
    t
-   "ic_geo_set_part ~A ~A ~A ~A~%"
+   "ic_geo_set_part ~A ~A ~A ~A;~%"
    type names newpart rename_part ))
 
 (defun set-name (type name newname &optional (make_new 0) (warn 1))
@@ -1104,7 +1104,7 @@ Change the geometry with the given type and name to name newname. If make_new is
 "  
   (format
    t
-   "ic_geo_set_name ~A ~A ~A ~A ~A~%"
+   "ic_geo_set_name ~A ~A ~A ~A ~A;~%"
    type name newname make_new warn))
 
 (defun rename-family (fam newfam &optional (rename_ents 1) )
@@ -1113,7 +1113,7 @@ rename_ents is set, family entities will be renamed.
 "  
   (format
    t
-   "ic_geo_rename_family ~A ~A ~A~%"
+   "ic_geo_rename_family ~A ~A ~A;~%"
    fam newfam rename_ents ))
 
 (defun replace-entity (type e1name e2name )
@@ -1122,7 +1122,7 @@ For two geometry entities of type, the first, of name e1name, will be replaced b
 "  
   (format
    t
-   "ic_geo_replace_entity ~A ~A ~A~%"
+   "ic_geo_replace_entity ~A ~A ~A;~%"
    type e1name e2name ))
 
 (defun get-ref-size ()
@@ -1131,7 +1131,7 @@ Returns the reference mesh size. This is used to scale all meshing parameter val
 "  
   (format
    t
-   "ic_geo_get_ref_size ~%"
+   "ic_geo_get_ref_size ;~%"
    ))
 
 (defun set-meshing-params (type num args )
@@ -1242,7 +1242,7 @@ parameters only for one of the objects in that family.
 
   (format
    t
-   "ic_set_meshing_params ~A ~A ~A~%"
+   "ic_set_meshing_params ~A ~A ~A;~%"
    type num args ))
 
 (defun set-meshing-params-global (&key
@@ -1294,7 +1294,7 @@ parameters only for one of the objects in that family.
         :do
     (when value
       (format t " ~A ~A" name value)))
-  (format t "~%"))
+  (format t ";~%"))
 
 (defun set-meshing-params-curve (type num args )
 "
@@ -1317,7 +1317,7 @@ parameters only for one of the objects in that family.
 
   (format
    t
-   "ic_set_meshing_params ~A ~A ~A~%"
+   "ic_set_meshing_params ~A ~A ~A;~%"
    type num args ))
 
 (defun set-meshing-params-surface (type num args )
@@ -1343,7 +1343,7 @@ parameters only for one of the objects in that family.
 "  
   (format
    t
-   "ic_set_meshing_params ~A ~A ~A~%"
+   "ic_set_meshing_params ~A ~A ~A;~%"
    type num args ))
 
 (defun set-meshing-params-point (type num args )
@@ -1361,7 +1361,7 @@ parameters only for one of the objects in that family.
 
   (format
    t
-   "ic_set_meshing_params ~A ~A ~A~%"
+   "ic_set_meshing_params ~A ~A ~A;~%"
    type num args ))
 
 (defun set-meshing-params-density (type num args )
@@ -1374,7 +1374,7 @@ parameters only for one of the objects in that family.
 
   (format
    t
-   "ic_set_meshing_params ~A ~A ~A~%"
+   "ic_set_meshing_params ~A ~A ~A;~%"
    type num args ))
 
 (defun set-meshing-params-loop (type num args )
@@ -1399,7 +1399,7 @@ GUI. The type can be one of the following:
 
   (format
    t
-   "ic_set_meshing_params ~A ~A ~A~%"
+   "ic_set_meshing_params ~A ~A ~A;~%"
    type num args ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1410,7 +1410,7 @@ Returns mesh growth ratio.
 "  
   (format
    t
-   "ic_get_mesh_growth_ratio~%"
+   "ic_get_mesh_growth_ratio;~%"
    ))
 
 (defun get-meshing-params (type num )
@@ -1419,7 +1419,7 @@ ic_set_meshing_params that it is not recorded in the replay file.
 "  
   (format
    t
-   "ic_get_meshing_params ~A ~A~%"
+   "ic_get_meshing_params ~A ~A;~%"
    type num ))
 
 (defun scale-meshing-params (types factor )
@@ -1429,7 +1429,7 @@ curve point material density loop\".
 "  
   (format
    t
-   "ic_geo_scale_meshing_params ~A ~A~%"
+   "ic_geo_scale_meshing_params ~A ~A;~%"
    types factor ))
 
 (defun set-curve-bunching (curves args )
@@ -1438,7 +1438,7 @@ Sets curve bunching.
 "  
   (format
    t
-   "ic_geo_set_curve_bunching ~A ~A~%"
+   "ic_geo_set_curve_bunching ~A ~A;~%"
    curves args ))
 
 (defun get-curve-bunching (name )
@@ -1447,7 +1447,7 @@ Gets curve bunching.
 "  
   (format
    t
-   "ic_geo_get_curve_bunching ~A~%"
+   "ic_geo_get_curve_bunching ~A;~%"
    name ))
 
 (defun create-surface-segment (name how args )
@@ -1480,7 +1480,7 @@ The return value is a list of numbers which are the newly created surfaces.
 "  
   (format
    t
-   "ic_geo_create_surface_segment ~A ~A ~A~%"
+   "ic_geo_create_surface_segment ~A ~A ~A;~%"
    name how args ))
 
 (defun create-curve-segment (name how args )
@@ -1511,7 +1511,7 @@ The return value is a list of numbers which are the newly created curves.
 "  
   (format
    t
-   "ic_geo_create_curve_segment ~A ~A ~A~%"
+   "ic_geo_create_curve_segment ~A ~A ~A;~%"
    name how args ))
 
 (defun split-curve (curve points )
@@ -1523,7 +1523,7 @@ Note:   This splits the curve in the specified order of the points
 "  
   (format
    t
-   "ic_geo_split_curve ~A ~A~%"
+   "ic_geo_split_curve ~A ~A;~%"
    curve points ))
 
 (defun split-curve-at-point (curve point &optional (tol 0) )
@@ -1544,7 +1544,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_split_curve_at_point ~A ~A ~A~%"
+   "ic_geo_split_curve_at_point ~A ~A ~A;~%"
    curve point tol ))
 
 (defun create-loop (name fam how curves all_separate surfs
@@ -1554,7 +1554,7 @@ Creates a loop with the given name and family using the specified curves. If how
 "  
   (format
    t
-   "ic_geo_create_loop ~A ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_create_loop ~A ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    name fam how curves all_separate surfs
    fams  pts  crs ))
 
@@ -1568,7 +1568,7 @@ Modify 1 loop with the given name using the specified curves, points and surface
 "  
   (format
    t
-   "ic_geo_modify_loop ~A ~A ~A ~A ~A~%"
+   "ic_geo_modify_loop ~A ~A ~A ~A ~A;~%"
    name curves surfs pts crs ))
 
 (defun pick-location (args )
@@ -1584,7 +1584,7 @@ The return value is a list that contains the type, name, and location on the obj
 
   (format
    t
-   "ic_geo_pick_location ~A~%"
+   "ic_geo_pick_location ~A;~%"
    args ))
 
 (defun get-object-type (type names )
@@ -1594,7 +1594,7 @@ Determines whether an object is type param (a trimmed NURBS curve or surface) or
 
   (format
    t
-   "ic_geo_get_object_type ~A ~A~%"
+   "ic_geo_get_object_type ~A ~A;~%"
    type names ))
 
 (defun trim-surface (surf curves &optional (build_topo 1) )
@@ -1603,7 +1603,7 @@ Trims the surface by the curves. This creates a new surface with the name of the
 "  
   (format
    t
-   "ic_geo_trim_surface ~A ~A ~A~%"
+   "ic_geo_trim_surface ~A ~A ~A;~%"
    surf curves build_topo))
 
 (defun intersect-surfaces (fam surfs
@@ -1628,7 +1628,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_intersect_surfaces ~A ~A ~A ~A~%"
+   "ic_geo_intersect_surfaces ~A ~A ~A ~A;~%"
    fam surfs bsp_flag  multi_flag ))
 
 (defun intersect-surfs-by-groups (groups &optional
@@ -1648,7 +1648,7 @@ In the first form, every surface is intersected with each other, but curves crea
 "  
   (format
    t
-   "ic_geo_intersect_surfs_by_groups ~A ~A ~A ~A~%"
+   "ic_geo_intersect_surfs_by_groups ~A ~A ~A ~A;~%"
    groups fam bsp_flag multi_flag ))
 
 (defun create-unstruct-curve-from-points (name fam pts)
@@ -1662,7 +1662,7 @@ system.
 "
 Creates a piecewise linear curve from the points. This curve is given the specified name and family. pts is a list of triples of floating point numbers or list of prescribed point names and they are connected in order. The points are in the current local coordinate system.
 "  
-  (format t "ic_geo_create_unstruct_curve_from_points ~A ~A {~{ {~{~A~^ ~}} ~}}~%"
+  (format t "ic_geo_create_unstruct_curve_from_points ~A ~A {~{ {~{~A~^ ~}} ~}};~%"
           name fam pts)
   (format
    t
@@ -1675,7 +1675,7 @@ Creates a surface from 4 points, with the given name and family. pts is a list o
 "  
   (format
    t
-   "ic_geo_create_unstruct_surface_from_points ~A ~A ~A~%"
+   "ic_geo_create_unstruct_surface_from_points ~A ~A ~A;~%"
    name fam pts ))
 
 (defun create-empty-unstruct-surface (name fam )
@@ -1684,7 +1684,7 @@ Creates an empty surface, with the given name and family.
 "  
   (format
    t
-   "ic_geo_create_empty_unstruct_surface ~A ~A ~%"
+   "ic_geo_create_empty_unstruct_surface ~A ~A;~%"
    name fam ))
 
 (defun create-empty-unstruct-curve (name fam )
@@ -1693,7 +1693,7 @@ Creates an empty curve, with the given name and family.
 "  
   (format
    t
-   "ic_geo_create_empty_unstruct_curve ~A ~A~%"
+   "ic_geo_create_empty_unstruct_curve ~A ~A;~%"
    name fam ))
 
 (defun create-curve-ends (names )
@@ -1706,7 +1706,7 @@ Note:   This function creates new points at curve endpoints as needed. See also 
 "  
   (format
    t
-   "ic_geo_create_curve_ends {~{~A~^ ~}}~%"
+   "ic_geo_create_curve_ends {~{~A~^ ~}};~%"
    names ))
 
 (defun mod-crv-set-end (crv pnt crvend &optional (tol -1)] )
@@ -1735,7 +1735,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_mod_crv_set_end ~A ~A ~A ~A~%"
+   "ic_geo_mod_crv_set_end ~A ~A ~A ~A;~%"
    crv pnt crvend tol))
 
 (defun crv-get-end (crv crvend )
@@ -1757,7 +1757,7 @@ Notes:
 
   (format
    t
-   "ic_geo_crv_get_end ~A ~A~%"
+   "ic_geo_crv_get_end ~A ~A;~%"
    crv crvend ))
 
 (defun create-points-curveinter (curves tol fam &optional (name) )
@@ -1766,7 +1766,7 @@ Creates points at the intersection of curves. curves is a list of curves to inte
 "  
   (format
    t
-   "ic_geo_create_points_curveinter ~A ~A ~A ~A~%"
+   "ic_geo_create_points_curveinter ~A ~A ~A ~A;~%"
    curves tol fam name))
 
 (defun create-point-location (fam pt &optional (in_lcs 1) )
@@ -1775,7 +1775,7 @@ This function has been replaced by ic_geo_cre_pnt
 "  
   (format
    t
-   "ic_geo_create_point_location ~A ~A ~A~%"
+   "ic_geo_create_point_location ~A ~A ~A;~%"
    fam pt in_lcs))
 
 (defun create-material-location (fam pt )
@@ -1784,7 +1784,7 @@ This function has been replaced by ic_geo_cre_mat
 "  
   (format
    t
-   "ic_geo_create_material_location ~A~A~%"
+   "ic_geo_create_material_location ~A~A;~%"
    fam pt ))
 
 (defun create-density (name size pts
@@ -1808,7 +1808,7 @@ Note:   Points may be passed either as 3-tuples or as names of prescribed points
 
   (format
    t
-   "ic_geo_create_density ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_create_density ~A ~A ~A ~A ~A ~A ~A;~%"
    name size pts width ratio strfac strvec  ))
 
 (defun extract-points (names angle )
@@ -1827,7 +1827,7 @@ Extracts curves from mesh surfaces. If bound is 1 then only the boundary of the 
 "  
   (format
    t
-   "ic_geo_extract_curves ~A ~A ~A ~A~%"
+   "ic_geo_extract_curves ~A ~A ~A ~A;~%"
    names bound angle minedge ))
 
 (defun create-surface-edges (names )
@@ -1836,7 +1836,7 @@ Creates curves based on the edges of a surface.
 "  
   (format
    t
-   "ic_geo_create_surface_edges ~A~%"
+   "ic_geo_create_surface_edges ~A;~%"
    names ))
 
 (defun get-srf-edges (srf )
@@ -1845,7 +1845,7 @@ Get any curves associated as edges to a surface.
 "  
   (format
    t
-   "ic_geo_get_srf_edges ~A~%"
+   "ic_geo_get_srf_edges ~A;~%"
    srf ))
 
 (defun stats (type name )
@@ -1854,7 +1854,7 @@ Returns some statistics about the object. This is a readable string that says wh
 "  
   (format
    t
-   "ic_geo_stats ~A ~A~%"
+   "ic_geo_stats ~A ~A;~%"
    type name ))
 
 (defun get-point-location (name )
@@ -1863,7 +1863,7 @@ Given the name of a point, returns its location.
 "  
   (format
    t
-   "ic_geo_get_point_location ~A~%"
+   "ic_geo_get_point_location ~A;~%"
    name ))
 
 (defun get-material-location (name )
@@ -1872,7 +1872,7 @@ Given the name of a material point, returns its location.
 "  
   (format
    t
-   "ic_geo_get_material_location ~A~%"
+   "ic_geo_get_material_location ~A;~%"
    name ))
 
 (defun set-point-location (args )
@@ -1881,7 +1881,7 @@ Sets the location of a point or points. The names and locations must come in pai
 "  
   (format
    t
-   "ic_set_point_location ~A~%"
+   "ic_set_point_location ~A;~%"
    args ))
 
 (defun set-material-location (args )
@@ -1890,7 +1890,7 @@ Sets the location of one or more material points. The names and locations must c
 "  
   (format
    t
-   "ic_set_material_location ~A~%"
+   "ic_set_material_location ~A;~%"
    args ))
 
 (defun delete-material (names )
@@ -1899,7 +1899,7 @@ Deletes a material.
 "  
   (format
    t
-   "ic_delete_material ~A~%"
+   "ic_delete_material ~A;~%"
    names ))
 
 (defun check-objects-exist (type args )
@@ -1908,7 +1908,7 @@ This function checks to make sure the objects exist - it returns the list of nam
 "  
   (format
    t
-   "ic_geo_check_objects_exist ~A ~A~%"
+   "ic_geo_check_objects_exist ~A ~A;~%"
    type args ))
 
 (defun get-objects (types
@@ -1921,7 +1921,7 @@ it is \"\" then it returns all objects of all families.
 "  
   (format
    t
-   "ic_geo_get_objects ~A ~A ~A~%"
+   "ic_geo_get_objects ~A ~A ~A;~%"
    types fams even_if_dormant))
 
 (defun count-in-family (types fams )
@@ -1930,7 +1930,7 @@ Returns the number of objects of the given type in the given family.
 "  
   (format
    t
-   "ic_geo_count_in_family ~A ~A~%"
+   "ic_geo_count_in_family ~A ~A;~%"
    types fams ))
 
 (defun objects-in-family (types fams )
@@ -1939,7 +1939,7 @@ Returns a list of objects in the given family name.
 "  
   (format
    t
-   "ic_geo_objects_in_family ~A ~A~%"
+   "ic_geo_objects_in_family ~A ~A;~%"
    types fams ))
 
 (defun objects-in-parts (types parts )
@@ -1948,7 +1948,7 @@ Returns a list of objects (type/name pairs) in the given parts.
 "  
   (format
    t
-   "ic_geo_objects_in_parts ~A ~A~%"
+   "ic_geo_objects_in_parts ~A ~A;~%"
    types parts ))
 
 (defun get-internal-object (type name )
@@ -1957,7 +1957,7 @@ Returns the internal object associated with a name. This is a bit of a back door
 "  
   (format
    t
-   "ic_geo_get_internal_object ~A ~A~%"
+   "ic_geo_get_internal_object ~A ~A;~%"
    type name ))
 
 (defun get-name-of-internal-object (obj )
@@ -1966,7 +1966,7 @@ Returns the name of an internal object. This is a bit of a back door.
 "  
   (format
    t
-   "ic_geo_get_name_of_internal_object ~A~%"
+   "ic_geo_get_name_of_internal_object ~A;~%"
    obj ))
 
 (defun get-text-point (type name )
@@ -1975,7 +1975,7 @@ Returns the text point list for an object, specified by type and name. The list 
 "  
   (format
    t
-   "ic_geo_get_text_point ~A ~A~~%"
+   "ic_geo_get_text_point ~A ~A~;~%"
    type name ))
 
 (defun get-centroid (type name )
@@ -1995,7 +1995,7 @@ Returns the number of triangles or bars, and nodes in this object.
 
   (format
    t
-   "ic_geo_num_segments ~A ~A~%"
+   "ic_geo_num_segments ~A ~A;~%"
    type name ))
 
 (defun num-nodes (type name )
@@ -2004,7 +2004,7 @@ Returns number of nodes in the object.
 "  
   (format
    t
-   "ic_geo_num_nodes ~A ~A~%"
+   "ic_geo_num_nodes ~A ~A;~%"
    type name ))
 
 (defun get-node (type name num )
@@ -2013,7 +2013,7 @@ Returns a node in a mesh curve, surface or density polygon.
 "  
   (format
    t
-   "ic_geo_get_node ~A ~A ~A~%"
+   "ic_geo_get_node ~A ~A ~A;~%"
    type name num ))
 
 (defun drag-nodes (type name ptnums startpts startmouse spos svec how )
@@ -2022,7 +2022,7 @@ Allows you to interactively drag nodes in surfaces and curves.
 "  
   (format
    t
-   "ic_geo_drag_nodes ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_drag_nodes ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    type name ptnums startpts startmouse spos svec how ))
 
 (defun drag-point (name startpt startmouse spos svec )
@@ -2041,7 +2041,7 @@ Allows you to interactively drag material points.
 "  
   (format
    t
-   "ic_geo_drag_material ~A ~A~%"
+   "ic_geo_drag_material ~A ~A;~%"
    name startpt startmouse spos svec ))
 
 (defun drag-body (name startpt startmouse spos svec )
@@ -2050,7 +2050,7 @@ Allows you to interactively drag body points.
 "  
   (format
    t
-   "ic_geo_drag_body ~A ~A ~A ~A ~A~%"
+   "ic_geo_drag_body ~A ~A ~A ~A ~A;~%"
    name startpt startmouse spos svec ))
 
 (defun project-point (type names pt &optional
@@ -2066,7 +2066,7 @@ tan_ext 	project to tangential extension (curves only)
 "  
   (format
    t
-   "ic_geo_project_point ~A ~A ~A ~A ~A~%"
+   "ic_geo_project_point ~A ~A ~A ~A ~A;~%"
    type names pt dir tan_ext ))
 
 (defun project-and-move-point (type names pt
@@ -2085,7 +2085,7 @@ fam 	part name (if blank, use the part name of the point)
 "  
   (format
    t
-   "ic_geo_project_and_move_point ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_project_and_move_point ~A ~A ~A ~A ~A ~A;~%"
    type names pt dir tan_ext fam ))
 
 (defun project-coords (type names ptloc
@@ -2097,7 +2097,7 @@ Project coordinates to a set of objects. dir is the vector along which to projec
 "  
   (format
    t
-   "ic_geo_project_coords ~A ~A ~A ~A ~A~%"
+   "ic_geo_project_coords ~A ~A ~A ~A ~A;~%"
    type names ptloc dir tan_ext))
 
 (defun nearest-object (type pt
@@ -2111,7 +2111,7 @@ Note:  Curve projection is not yet implemented.
 "  
   (format
    t
-   "ic_geo_nearest_object ~A~A~A~A~%"
+   "ic_geo_nearest_object ~A~A~A~A;~%"
    type pt dir tol))
 
 (defun project-curve-to-surface (crvs surfs name
@@ -2131,7 +2131,7 @@ return	name(s) of created curve(s)
 "  
   (format
    t
-   "ic_geo_project_curve_to_surface ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_project_curve_to_surface ~A ~A ~A ~A ~A ~A;~%"
    crvs surfs name fam new_name bld_topo))
 
 (defun create-surface-curves (crv1 crv2 name )
@@ -2161,7 +2161,7 @@ quiet	suppress diagnostic messages
 "  
   (format
    t
-   "ic_geo_create_surface_curtain ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_create_surface_curtain ~A ~A ~A ~A ~A ~A;~%"
    crvs surfs name fam bld_topo quiet ))
 
 (defun set-node (type name num pt )
@@ -2171,7 +2171,7 @@ Moves a node on an object.
 
   (format
    t
-   "ic_geo_set_node ~A ~A ~A ~A~%"
+   "ic_geo_set_node ~A ~A ~A ~A;~%"
    type name num pt ))
 
 (defun get-family (type name )
@@ -2180,7 +2180,7 @@ Returns the family for an object.
 "  
   (format
    t
-   "ic_geo_get_family ~A ~A~%"
+   "ic_geo_get_family ~A ~A;~%"
    type name ))
 
 (defun get-part (type name )
@@ -2189,7 +2189,7 @@ Returns the part for an object (just the family with stuff after the first : rem
 "  
   (format
    t
-   "ic_geo_get_part ~A ~A~%"
+   "ic_geo_get_part ~A ~A;~%"
    type name ))
 
 (defun build-topo (args)
@@ -2220,7 +2220,7 @@ Builds the topology information from the geometry data. Arguments are:
 "  
   (format
    t
-   "ic_build_topo ~A~%"
+   "ic_build_topo ~A;~%"
    args ))
 
 (defun default-topo-tolerance-old ()
@@ -2229,7 +2229,7 @@ Get a good tolerance for the current geometry.
 "  
   (format
    t
-   "ic_geo_default_topo_tolerance_old~%"
+   "ic_geo_default_topo_tolerance_old;~%"
    ))
 
 (defun delete-geometry (type how &optional
@@ -2259,7 +2259,7 @@ Deletes geometry objects. The first argument tells what kind of objects to delet
 "  
   (format
    t
-   "ic_delete_geometry ~A ~A ~A ~A ~A~%"
+   "ic_delete_geometry ~A ~A ~A ~A ~A;~%"
    type how objects report_err even_if_dormant))
 
 (defun pnt-mrg-inc-crv (how objects )
@@ -2273,7 +2273,7 @@ Deletes a point and joins incident curves.
 
   (format
    t
-   "ic_geo_pnt_mrg_inc_crv ~A ~A~%"
+   "ic_geo_pnt_mrg_inc_crv ~A ~A;~%"
    how objects ))
 
 (defun facetize-geometry (type name args )
@@ -2287,7 +2287,7 @@ Makes a new geometric entity that is the faceted or piecewise linear equivalent 
 
   (format
    t
-   "ic_facetize_geometry ~A ~A ~A~%"
+   "ic_facetize_geometry ~A ~A ~A;~%"
    type name args ))
 
 (defun move-geometry (type args )
@@ -2323,7 +2323,7 @@ The translation vector, center of rotation, and rotate axis should be specified 
 
   (format
    t
-   "ic_move_geometry ~A ~A~%"
+   "ic_move_geometry ~A ~A;~%"
    type args ))
 
 (defun duplicate (type name &optional
@@ -2346,7 +2346,7 @@ Fix problems in surfaces and curves like duplicate triangles, unused nodes, etc.
 "  
   (format
    t
-   "ic_geo_fixup ~A~%"
+   "ic_geo_fixup ~A;~%"
    mesh))
 
 (defun min-edge-length (args )
@@ -2361,7 +2361,7 @@ Example usage: set surfaces \"surf1 surf2 surf3\" set curves \"curv1\" ic_geo_mi
 "  
   (format
    t
-   "ic_geo_min_edge_length ~A~%"
+   "ic_geo_min_edge_length ~A;~%"
    args ))
 
 (defun coarsen (args )
@@ -2386,7 +2386,7 @@ Simplify surfaces or curves by coarsening them. The arguments are:
 "  
   (format
    t
-   "ic_geo_coarsen ~A~%"
+   "ic_geo_coarsen ~A;~%"
    args ))
 
 (defun gap-repair (args )
@@ -2419,7 +2419,7 @@ Return value is 0 if there was an error and 1 if it was OK.
 "  
   (format
    t
-   "ic_geo_gap_repair ~A~%"
+   "ic_geo_gap_repair ~A;~%"
    args ))
 
 (defun midsurface (args )
@@ -2456,7 +2456,7 @@ Return value is 0 if there was an error and 1 if it was OK.
 "  
   (format
    t
-   "ic_geo_midsurface ~A~%"
+   "ic_geo_midsurface ~A;~%"
    args ))
 
 (defun lookup (types how spec)
@@ -2477,7 +2477,7 @@ Looks up geometry objects based on certain criteria. type may be one of the geom
 "  
   (format
    t
-   "ic_geo_lookup ~A ~A ~A~%"
+   "ic_geo_lookup ~A ~A ~A;~%"
    types how spec))
 
 (defun get-entity-types (entnames)
@@ -2486,7 +2486,7 @@ For the given list of entities, return a *flat* list of \"type entname\" pairs, 
 "  
   (format
    t
-   "ic_geo_get_entity_types ~A~%"
+   "ic_geo_get_entity_types ~A;~%"
    entnames ))
 
 (defun memory-used ()
@@ -2495,7 +2495,7 @@ Specifies how much memory is used for the geometry data.
 "  
   (format
    t
-   "ic_geo_memory_used~%"
+   "ic_geo_memory_used;~%"
    ))
 
 (defun project-mode (which )
@@ -2504,7 +2504,7 @@ Sets the projection mode.
 "  
   (format
    t
-   "ic_geo_project_mode ~A~%"
+   "ic_geo_project_mode ~A;~%"
    which ))
 
 (defun csystem-get-current ()
@@ -2513,7 +2513,7 @@ Specifies the current coordinate system.
 "  
   (format
    t
-   "ic_csystem_get_current~%"
+   "ic_csystem_get_current;~%"
    ))
 
 (defun csystem-set-current (what )
@@ -2522,7 +2522,7 @@ Sets the current coordinate system.
 "  
   (format
    t
-   "ic_csystem_set_current ~A~%"
+   "ic_csystem_set_current ~A;~%"
    what ))
 
 (defun csystem-list ()
@@ -2531,7 +2531,7 @@ Lists the existing coordinate systems.
 "  
   (format
    t
-   "ic_csystem_list~%"
+   "ic_csystem_list;~%"
    ))
 
 (defun csystem-get (name )
@@ -2548,7 +2548,7 @@ Returns information on the named coordinate system. This returns a list of 4 ite
 "  
   (format
    t
-   "ic_csystem_get ~A~%"
+   "ic_csystem_get ~A;~%"
    name ))
 
 (defun csystem-delete (name )
@@ -2557,7 +2557,7 @@ Deletes the named coordinate system.
 "  
   (format
    t
-   "ic_csystem_delete ~A~%"
+   "ic_csystem_delete ~A;~%"
    name ))
 
 (defun csystem-create (name type center axis0 axis1 axis2 )
@@ -2578,7 +2578,7 @@ Creates a new coordinate system with the given parameters.
 "  
   (format
    t
-   "ic_csystem_create ~A ~A ~A ~A ~A ~A~%"
+   "ic_csystem_create ~A ~A ~A ~A ~A ~A;~%"
    name type center axis0 axis1 axis2 ))
 
 (defun coords-into-global (pt &optional (system "") )
@@ -2587,7 +2587,7 @@ Translates coordinates from the current or given system into the global system.
 "  
   (format
    t
-   "ic_coords_into_global ~A ~A~%"
+   "ic_coords_into_global ~A ~A;~%"
    pt system ))
 
 (defun coords-dir-into-global (vector &optional (system "global"))
@@ -2600,7 +2600,7 @@ system.
 @end(code)" 
   (format
    t
-   "ic_coords_dir_into_global {~{~A~^ ~}} ~A~%"
+   "ic_coords_dir_into_global {~{~A~^ ~}} ~A;~%"
    vector system ))
 
 (defun coords-into-local (pt &optional (system ""))
@@ -2609,7 +2609,7 @@ Translates coordinates from the global system into the current or given local sy
 "  
   (format
    t
-   "ic_coords_into_local ~A ~A~%"
+   "ic_coords_into_local ~A ~A;~%"
    pt system ))
 
 (defun csystem-display (name on )
@@ -2619,7 +2619,7 @@ Displays the specified coordinate system. If name is all and on is 0 then erase 
 
   (format
    t
-   "ic_csystem_display ~A ~A~%"
+   "ic_csystem_display ~A ~A;~%"
    name on ))
 
 (defun untrim-surface (surf )
@@ -2637,7 +2637,7 @@ Returns the thincut data.
 "  
   (format
    t
-   "ic_geo_get_thincuts~%"))
+   "ic_geo_get_thincuts;;~%"))
 
 (defun set-thincuts (data )
 "
@@ -2645,7 +2645,7 @@ Sets the thincut data.
 "  
   (format
    t
-   "ic_geo_set_thincuts ~A~%"
+   "ic_geo_set_thincuts ~A;~%"
    data ))
 
 (defun get-periodic-data ()
@@ -2654,7 +2654,7 @@ Returns the periodic data.
 "  
   (format
    t
-   "ic_geo_get_periodic_data~%"
+   "ic_geo_get_periodic_data;~%"
    ))
 
 (defun set-periodic-data (data )
@@ -2663,7 +2663,7 @@ Sets the periodic data.
 "  
   (format
    t
-   "ic_geo_set_periodic_data ~A~%"
+   "ic_geo_set_periodic_data ~A;~%"
    data ))
 
 (defun get-family-param (fam name )
@@ -2672,7 +2672,7 @@ Returns the family parameters.
 "  
   (format
    t
-   "ic_geo_get_family_param ~A ~A~%"
+   "ic_geo_get_family_param ~A ~A;~%"
    fam name ))
 
 (defun set-family-params (fam
@@ -2717,7 +2717,7 @@ Reset family parameters on families fams for parameters params.
 "  
   (format
    t
-   "ic_geo_reset_family_params ~A ~A~%"
+   "ic_geo_reset_family_params ~A ~A;~%"
    fams params ))
 
 (defun delete-unattached (&optional
@@ -2729,7 +2729,7 @@ Deletes unattached geometry.
 "  
   (format
    t
-   "ic_geo_delete_unattached ~A ~A ~A~%"
+   "ic_geo_delete_unattached ~A ~A ~A;~%"
    fams quiet only_if_dormant))
 
 (defun remove-feature (curves )
@@ -2738,7 +2738,7 @@ Removes features.
 "  
   (format
    t
-   "ic_geo_remove_feature ~A~%"
+   "ic_geo_remove_feature ~A;~%"
    curves ))
 
 (defun merge-curves (curves )
@@ -2747,7 +2747,7 @@ Merges curves.
 "  
   (format
    t
-   "ic_geo_merge_curves ~A~%"
+   "ic_geo_merge_curves ~A;~%"
    curves ))
 
 (defun modify-curve-reappr (curves tol
@@ -2766,7 +2766,7 @@ Note:   In interactive mode, if the ask parameter is 1 (default), the applicatio
 "  
   (format
    t
-   "ic_geo_modify_curve_reappr ~A ~A ~A ~A~%"
+   "ic_geo_modify_curve_reappr ~A ~A ~A ~A;~%"
    curves tol ask quiet ))
 
 (defun modify-surface-reappr (surfaces tol
@@ -2784,7 +2784,7 @@ Note:   In interactive mode, if the ask parameter is 1 (default), the applicatio
 "  
   (format
    t
-   "ic_geo_modify_surface_reappr ~A ~A ~A ~A~%"
+   "ic_geo_modify_surface_reappr ~A ~A ~A ~A;~%"
    surfaces tol ask  each  curves ))
 
 (defun reset-data-structures ()
@@ -2793,7 +2793,7 @@ Resets the Tcl data structures after making big changes to the proj database.
 "  
   (format
    t
-   "ic_geo_reset_data_structures~%"
+   "ic_geo_reset_data_structures;~%"
    ))
 
 (defun params-update-show-size (type size )
@@ -2803,7 +2803,7 @@ Modifies the display of the size icons for ref, natural, and max size. Can also 
 
   (format
    t
-   "ic_geo_params_update_show_size ~A ~A~%"
+   "ic_geo_params_update_show_size ~A ~A;~%"
    type size ))
 
 (defun stlrepair-holes (type segs add_nodes int_surf
@@ -2817,7 +2817,7 @@ Repairs holes using the stlrepair functionality. type indicates the entity type 
 "  
   (format
    t
-   "ic_geo_stlrepair_holes ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_stlrepair_holes ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    type segs add_nodes int_surf complete_edges dcurves toler part ))
 
 (defun stlrepair-edges (type segs merge_tol &optional (merge_ends -1))
@@ -2826,7 +2826,7 @@ Repairs edges using the stlrepair functionality. type indicates the entity type 
 "  
   (format
    t
-   "ic_geo_stlrepair_edges ~A ~A ~A ~A~%"
+   "ic_geo_stlrepair_edges ~A ~A ~A ~A;~%"
    type segs merge_tol merge_ends))
 
 (defun show-geo-selected (type names on
@@ -2838,7 +2838,7 @@ Displays some geometry selected or not.
 "  
   (format
    t
-   "ic_show_geo_selected ~A ~A ~A ~A ~A~%"
+   "ic_show_geo_selected ~A ~A ~A ~A ~A;~%"
    type names on color force_visible))
 
 (defun reset-geo-selected ()
@@ -2847,7 +2847,7 @@ Resets all selection display.
 "  
   (format
    t
-   "ic_reset_geo_selected~%"
+   "ic_reset_geo_selected;~%"
    ))
 
 (defun get-geo-selected ()
@@ -2857,7 +2857,7 @@ Returns all current geometry selections.
 
   (format
    t
-   "ic_get_geo_selected~%"
+   "ic_get_geo_selected;~%"
    ))
 
 (defun set-geo-selected (selected on )
@@ -2866,7 +2866,7 @@ Sets all previous geometry selections.
 "  
   (format
    t
-   "ic_set_geo_selected ~A ~A~%"
+   "ic_set_geo_selected ~A ~A;~%"
    selected on ))
 
 (defun select-geometry-option ()
@@ -2875,7 +2875,7 @@ Returns the previously used selection option.
 "  
   (format
    t
-   "ic_select_geometry_option~%"
+   "ic_select_geometry_option;~%"
    ))
 
 (defun add-segment (type name item pts )
@@ -2884,7 +2884,7 @@ Adds segments or triangles to a surface or curve.
 "  
   (format
    t
-   "ic_geo_add_segment ~A ~A ~A ~A~%"
+   "ic_geo_add_segment ~A ~A ~A ~A;~%"
    type name item pts ))
 
 (defun delete-segments (type name item pts )
@@ -2893,7 +2893,7 @@ Deletes segments or triangles from a curve or surface.
 "  
   (format
    t
-   "ic_geo_delete_segments ~A ~A ~A ~A~%"
+   "ic_geo_delete_segments ~A ~A ~A ~A;~%"
    type name item pts ))
 
 (defun restrict-segments (type name item pts )
@@ -2902,7 +2902,7 @@ Restrict to segments or triangles from a surface or curve.
 "  
   (format
    t
-   "ic_geo_restrict_segments ~A ~A ~A ~A~%"
+   "ic_geo_restrict_segments ~A ~A ~A ~A;~%"
    type name item pts))
 
 (defun split-segments (type name item how pts )
@@ -2911,7 +2911,7 @@ Splits some segments in a surface or curve.
 "  
   (format
    t
-   "ic_geo_split_segments ~A ~A ~A ~A ~A~%"
+   "ic_geo_split_segments ~A ~A ~A ~A ~A;~%"
    type name item how pts ))
 
 (defun split-edges (type name pts )
@@ -2920,7 +2920,7 @@ Splits some edges in a surface.
 "  
   (format
    t
-   "ic_geo_split_edges ~A ~A ~A~%"
+   "ic_geo_split_edges ~A ~A ~A;~%"
    type name pts ))
 
 (defun split-one-edge (type name ed )
@@ -2929,7 +2929,7 @@ Splits one edge in a surface.
 "  
   (format
    t
-   "ic_geo_split_one_edge ~A ~A ~A~%"
+   "ic_geo_split_one_edge ~A ~A ~A;~%"
    type name ed ))
 
 (defun swap-edges (type name pts )
@@ -2939,7 +2939,7 @@ Swaps some edges in a surface.
 
   (format
    t
-   "ic_geo_swap_edges ~A ~A ~A~%"
+   "ic_geo_swap_edges ~A ~A ~A;~%"
    type name pts ))
 
 (defun move-segments (type name1 name2 item pts )
@@ -2949,7 +2949,7 @@ Moves some segments from one surface to another.
 
   (format
    t
-   "ic_geo_move_segments ~A ~A ~A ~A ~A~%"
+   "ic_geo_move_segments ~A ~A ~A ~A ~A;~%"
    type name1 name2 item pts ))
 
 (defun move-node (type name nodes args )
@@ -2958,7 +2958,7 @@ Moves a node in a surface or curve. nodes is a list of the node numbers. After t
 "  
   (format
    t
-   "ic_geo_move_node ~A ~A ~A ~A~%"
+   "ic_geo_move_node ~A ~A ~A ~A;~%"
    type name nodes args ))
 
 (defun merge-nodes (type name nodes )
@@ -2967,7 +2967,7 @@ Merges nodes in a surface or curve.
 "  
   (format
    t
-   "ic_geo_merge_nodes ~A ~A ~A~%"
+   "ic_geo_merge_nodes ~A ~A ~A;~%"
    type name nodes ))
 
 (defun merge-nodes-tol (type name tol )
@@ -2976,7 +2976,7 @@ Merges nodes in a surface or curve by tolerance.
 "  
   (format
    t
-   "ic_geo_merge_nodes_tol ~A ~A ~A~%"
+   "ic_geo_merge_nodes_tol ~A ~A ~A;~%"
    type name tol ))
 
 (defun merge-surfaces (to from )
@@ -2985,7 +2985,7 @@ Merges multiple surfaces.
 "  
   (format
    t
-   "ic_geo_merge_surfaces ~A ~A~%"
+   "ic_geo_merge_surfaces ~A ~A;~%"
    to from))
 
 (defun merge-objects (type dest objs )
@@ -2994,7 +2994,7 @@ Merges multiple curves, or surfaces.
 "  
   (format
    t
-   "ic_geo_merge_objects ~A ~A ~A~%"
+   "ic_geo_merge_objects ~A ~A ~A;~%"
    type dest objs ))
 
 (defun merge-points-tol (pts tol )
@@ -3003,7 +3003,7 @@ Merges multiple points using a tolerance.
 "  
   (format
    t
-   "ic_geo_merge_points_tol ~A ~A~%"
+   "ic_geo_merge_points_tol ~A ~A;~%"
    pts tol ))
 
 (defun finish-edit (type name )
@@ -3012,7 +3012,7 @@ Cleans up a surface or curve after editing operations.
 "  
   (format
    t
-   "ic_geo_finish_edit ~A ~A~%"
+   "ic_geo_finish_edit ~A ~A;~%"
    type name ))
 
 (defun delete-if-empty (type name )
@@ -3021,7 +3021,7 @@ Deletes a surface or curve if it is empty.
 "  
   (format
    t
-   "ic_geo_delete_if_empty ~A ~A~%"
+   "ic_geo_delete_if_empty ~A ~A;~%"
    type name ))
 
 (defun smallest-segment (type name )
@@ -3030,7 +3030,7 @@ Returns the smallest triangle in a surface.
 "  
   (format
    t
-   "ic_geo_smallest_segment ~A ~A~%"
+   "ic_geo_smallest_segment ~A ~A;~%"
    type name ))
 
 (defun get-config-param (type name param )
@@ -3039,7 +3039,7 @@ This is kind of an escape.
 "  
   (format
    t
-   "ic_geo_get_config_param ~A ~A ~A~%"
+   "ic_geo_get_config_param ~A ~A ~A;~%"
    type name param ))
 
 (defun set-config-param (type name param val )
@@ -3049,7 +3049,7 @@ This is kind of an escape.
 
   (format
    t
-   "ic_geo_set_config_param ~A ~A ~A ~A~%"
+   "ic_geo_set_config_param ~A ~A ~A ~A;~%"
    type name param val ))
 
 (defun set-tag (type names tagname on )
@@ -3068,7 +3068,7 @@ Highlights some segments of an image.
 "  
   (format
    t
-   "ic_geo_highlight_segments ~A ~A ~A ~A ~A~%"
+   "ic_geo_highlight_segments ~A ~A ~A ~A ~A;~%"
    type name add hsmode segs ))
 
 (defun bounding-box (objlist )
@@ -3077,7 +3077,7 @@ Returns the bounding box of a set of objects. objlist is a list of type names pa
 "  
   (format
    t
-   "ic_geo_bounding_box ~A~%"
+   "ic_geo_bounding_box ~A;~%"
    objlist ))
 
 (defun bounding-box2 (objlist )
@@ -3086,7 +3086,7 @@ This is the more rigorous version of the boundary box calculation.
 "  
   (format
    t
-   "ic_geo_bounding_box2 ~A~%"
+   "ic_geo_bounding_box2 ~A;~%"
    objlist ))
 
 (defun model-bounding-box ()
@@ -3095,7 +3095,7 @@ This gives the bounding box of all objects in projlib.
 "  
   (format
    t
-   "ic_geo_model_bounding_box~%"
+   "ic_geo_model_bounding_box;~%"
    ))
 
 (defun feature-size (type name )
@@ -3104,7 +3104,7 @@ Returns the feature size of an object.
 "  
   (format
    t
-   "ic_geo_feature_size ~A ~A~%"
+   "ic_geo_feature_size ~A ~A;~%"
    type name ))
 
 (defun replace-surface-mesh (name pts tris )
@@ -3113,7 +3113,7 @@ Replaces a surface mesh. pts is a list of x y z triples. tris is a list of 3 poi
 "  
   (format
    t
-   "ic_geo_replace_surface_mesh ~A ~A ~A~%"
+   "ic_geo_replace_surface_mesh ~A ~A ~A;~%"
    name pts tris ))
 
 (defun replace-curve-mesh (name pts bars )
@@ -3122,7 +3122,7 @@ Replaces a curve mesh. pts is a list of x y z triples. bars is a list of 2 point
 "  
   (format
    t
-   "ic_geo_replace_curve_mesh ~A ~A ~A~%"
+   "ic_geo_replace_curve_mesh ~A ~A ~A;~%"
    name pts bars ))
 
 (defun vec-diff (p1 p2 )
@@ -3146,7 +3146,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_diff ~A ~A~%"
+   "ic_geo_vec_diff ~A ~A;~%"
    p1 p2 ))
 
 (defun vec-dot (v1 v2 )
@@ -3170,7 +3170,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_dot ~A ~A~%"
+   "ic_geo_vec_dot ~A ~A;~%"
    v1 v2 ))
 
 (defun vec-mult (v1 v2 )
@@ -3195,7 +3195,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_mult ~A ~A~%"
+   "ic_geo_vec_mult ~A ~A;~%"
    v1 v2 ))
 
 (defun vec-nrm (vec )
@@ -3219,7 +3219,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_nrm ~A~%"
+   "ic_geo_vec_nrm ~A;~%"
    vec ))
 
 (defun vec-len (vec )
@@ -3241,7 +3241,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_len ~A~%"
+   "ic_geo_vec_len ~A;~%"
    vec ))
 
 (defun pnt-dist (pnt1 pnt2 )
@@ -3264,7 +3264,7 @@ Example
 "  
   (format
    t
-   "ic_geo_pnt_dist ~A ~A~%"
+   "ic_geo_pnt_dist ~A ~A;~%"
    pnt1 pnt2 ))
 
 (defun vec-smult (vec scal )
@@ -3288,7 +3288,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_smult ~A ~A~%"
+   "ic_geo_vec_smult ~A ~A;~%"
    vec scal ))
 
 (defun vec-sum (v1 v2 )
@@ -3313,7 +3313,7 @@ Example
 "  
   (format
    t
-   "ic_geo_vec_sum ~A ~A~%"
+   "ic_geo_vec_sum ~A ~A;~%"
    v1 v2 ))
 
 (defun crv-length (crvs &optional (t_min 0) (t_max 1) )
@@ -3333,7 +3333,7 @@ Notes:
 
   (format
    t
-   "ic_geo_crv_length ~A ~A ~A~%"
+   "ic_geo_crv_length ~A ~A ~A;~%"
    crvs t_min t_max ))
 
 (defun cre-srf-rev (family name gen base zaxis srtang endang
@@ -3365,7 +3365,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_rev ~A ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_rev ~A ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    family name gen base zaxis srtang endang dxn bld_topo))
 
 (defun cre-crv-iso-crv (family name srfs par sel
@@ -3405,7 +3405,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_crv_iso_crv ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_crv_iso_crv ~A ~A ~A ~A ~A ~A ~A;~%"
    family name srfs par sel do_split coord ))
 
 (defun cre-srf-pln-3pnts (family name p1 p2 p3 rad )
@@ -3428,7 +3428,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_pln_3pnts ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_pln_3pnts ~A ~A ~A ~A ~A ~A;~%"
    family name p1 p2 p3 rad ))
 
 (defun cre-srf-pln-nrm-pnt (family name pnt nrm rad )
@@ -3450,7 +3450,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_pln_nrm_pnt ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_pln_nrm_pnt ~A ~A ~A ~A ~A;~%"
    family name pnt nrm rad ))
 
 (defun cre-srf-pln-nrm-dist (family name nrm dist rad )
@@ -3486,7 +3486,7 @@ Example
 "  
   (format
    t
-   "ic_geo_cre_srf_pln_nrm_dist ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_pln_nrm_dist ~A ~A ~A ~A ~A;~%"
    family name nrm dist rad ))
 
 (defun cre-arc-from-pnts (family name p1 p2 p3)
@@ -3531,7 +3531,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_arc_from_pnts ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}}~%"
+   "ic_geo_cre_arc_from_pnts ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}};~%"
    family name p1 p2 p3))
 
 (defun cre-bsp-crv-n-pnts (family name pnts &optional (tol 0.0001) (deg 3))
@@ -3579,7 +3579,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_bsp_crv_n_pnts ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_bsp_crv_n_pnts ~A ~A ~A ~A ~A;~%"
    family name pnts tol deg))
 
 (defun cre-bsp-crv-n-pnts-cons (family name pnts fixPnts tanCons tanIndx &optional (tol 0.001))
@@ -3669,7 +3669,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_bsp_crv_n_pnts_cons ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_bsp_crv_n_pnts_cons ~A ~A ~A ~A ~A ~A ~A;~%"
    family name pnts fixPnts tanCons tanIndx tol))
 
 (defun cre-crv-arc-ctr-rad (family name center x_ax normal radius srtang endang )
@@ -3699,7 +3699,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_crv_arc_ctr_rad ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A ~A~%"
+   "ic_geo_cre_crv_arc_ctr_rad ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A ~A;~%"
    family name center x_ax normal radius srtang endang ))
 
 (defun cre-srf-cyl (family name center x_ax z_ax radius srtang endang length)
@@ -3763,7 +3763,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_cyl ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_cyl ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A ~A ~A;~%"
    family name center x_ax z_ax radius srtang endang length))
 
 (defun cre-line (family name p1 p2)
@@ -3810,7 +3810,7 @@ Notes:
 
     For an annotated example of usage, refer to ic_geo_cre_line.tcl in the Ansys installation directory under v221/icemcfd/Samples/ProgrammersGuide/med_test.
 "  
-  (format t "ic_geo_cre_line ~A ~A {~{~A~^ ~}} {~{~A~^ ~}}~%"
+  (format t "ic_geo_cre_line ~A ~A {~{~A~^ ~}} {~{~A~^ ~}};~%"
           family name p1 p2))
 
 (defun cre-pnt (family name pnt &optional (in_lcs 1))
@@ -3870,7 +3870,7 @@ Example
 "  
   (format
    t
-   "ic_geo_cre_pnt ~A ~A {~{~A~^ ~}} ~A~%" family name pnt in_lcs)
+   "ic_geo_cre_pnt ~A ~A {~{~A~^ ~}} ~A;~%" family name pnt in_lcs)
   name)
 
 (defun cre-mat (fam name pt &optional (in_lcs 1))
@@ -3929,7 +3929,7 @@ Example
 "  
   (format
    t
-   "ic_geo_cre_mat ~A ~A {~{~A~^ ~}} ~A~%"
+   "ic_geo_cre_mat ~A ~A {~{~A~^ ~}} ~A;~%"
    fam name pt in_lcs)
   name)
 
@@ -3954,7 +3954,7 @@ Notes:
 
   (format
    t
-   "ic_geo_get_srf_nrm ~A ~A ~A~%"
+   "ic_geo_get_srf_nrm ~A ~A ~A;~%"
    upar vpar srf ))
 
 (defun get-srf-pos (upar vpar srf )
@@ -3977,7 +3977,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_get_srf_pos ~A ~A ~A~%"
+   "ic_geo_get_srf_pos ~A ~A ~A;~%"
    upar vpar srf ))
 
 (defun cre-pnt-on-srf-at-par (family name upar vpar srf )
@@ -4002,7 +4002,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_pnt_on_srf_at_par ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_pnt_on_srf_at_par ~A ~A ~A ~A ~A;~%"
    family name upar vpar srf ))
 
 (defun cre-pnt-on-crv-at-par (family name par crv )
@@ -4024,7 +4024,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_pnt_on_crv_at_par ~A ~A ~A ~A~%"
+   "ic_geo_cre_pnt_on_crv_at_par ~A ~A ~A ~A;~%"
    family name par crv ))
 
 (defun cre-crv-concat (family name tol crvs )
@@ -4048,7 +4048,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_crv_concat ~A ~A ~A ~A~%"
+   "ic_geo_cre_crv_concat ~A ~A ~A ~A;~%"
    family name tol crvs ))
 
 (defun create-curve-concat (family name tol crvs )
@@ -4057,7 +4057,7 @@ Deprecated version of ic_geo_cre_crv_concat. This function has been replaced by 
 "  
   (format
    t
-   "ic_geo_create_curve_concat ~A ~A ~A ~A~%"
+   "ic_geo_create_curve_concat ~A ~A ~A ~A;~%"
    family name tol crvs ))
 
 (defun cre-srf-from-contour (family name tol crvs )
@@ -4080,7 +4080,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_from_contour ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_from_contour ~A ~A ~A ~A;~%"
    family name tol crvs ))
 
 (defun create-surface-from-curves (family name tol crvs &optional (bld_topo 0) )
@@ -4104,7 +4104,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_create_surface_from_curves ~A ~A ~A ~A ~A~%"
+   "ic_geo_create_surface_from_curves ~A ~A ~A ~A ~A;~%"
    family name tol crvs bld_topo ))
 
 (defun create-param-surface (family name nu nv ord_u ord_v rational u_knots v_knots control_pts loops )
@@ -4126,7 +4126,7 @@ loops	loops to trim
 "  
   (format
    t
-   "ic_geo_create_param_surface ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_create_param_surface ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    family name nu nv ord_u ord_v rational u_knots v_knots control_pts loops ))
 
 (defun list-crv-data (file format crvs )
@@ -4170,7 +4170,7 @@ Example
 "  
   (format
    t
-   "ic_geo_list_crv_data ~A ~A ~A~%"
+   "ic_geo_list_crv_data ~A ~A ~A;~%"
    file format crvs ))
 
 (defun list-srf-data (file format srfs )
@@ -4192,7 +4192,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_list_srf_data ~A ~A ~A~%"
+   "ic_geo_list_srf_data ~A ~A ~A;~%"
    file format srfs ))
 
 (defun make-conn-regions (type entities
@@ -4202,7 +4202,7 @@ Makes connected regions of type: surface or curve entities are a list of the typ
 "  
   (format
    t
-   "ic_geo_make_conn_regions ~A ~A ~A ~A~%"
+   "ic_geo_make_conn_regions ~A ~A ~A ~A;~%"
    type entities surf_angle surf_curvature ))
 
 (defun get-attached-entities (attach_type orig_type entities )
@@ -4211,7 +4211,7 @@ Gets all attached entities based on attach_type and orig_type to a list of entit
 "  
   (format
    t
-   "ic_geo_get_attached_entities ~A ~A ~A~%"
+   "ic_geo_get_attached_entities ~A ~A ~A;~%"
    attach_type orig_type entities ))
 
 (defun get-entities-by-attach-num (type num &optional (entities ""))
@@ -4220,7 +4220,7 @@ Gets all entities of a type: point or curve; that have defined number of entitie
 "  
   (format
    t
-   "ic_geo_get_entities_by_attach_num ~A~A~A~%"
+   "ic_geo_get_entities_by_attach_num ~A~A~A;~%"
    type num entities ))
 
 (defun get-internal-surface-boundary (surf &optional (not_single 0) )
@@ -4232,7 +4232,7 @@ limit the returned curves to only those that are attached to more than
 "  
   (format
    t
-   "ic_geo_get_internal_surface_boundary ~A ~A~%"
+   "ic_geo_get_internal_surface_boundary ~A ~A;~%"
    surf not_single))
 
 (defun find-internal-outer-loops (surfs &optional (not_single 0) (all_boundary 0) )
@@ -4241,7 +4241,7 @@ This procedure returns a list of outer curves and inner curves attached to a set
 "  
   (format
    t
-   "ic_geo_find_internal_outer_loops ~A ~A ~A~%"
+   "ic_geo_find_internal_outer_loops ~A ~A ~A;~%"
    surfs not_single all_boundary ))
 
 (defun find-internal-surfaces (loop surrounding_surfs
@@ -4252,7 +4252,7 @@ This function will find a set of surfaces enclosed by a loop of curves.
 "  
   (format
    t
-   "ic_geo_find_internal_surfaces ~A ~A ~A ~A~%"
+   "ic_geo_find_internal_surfaces ~A ~A ~A ~A;~%"
    loop surrounding_surfs outer_curves exclusion_surfs ))
 
 (defun make-conn-buttons (loop &optional (exclusion_surfs "") )
@@ -4261,7 +4261,7 @@ This function will take a curve list (loop), and find all surfaces attached to i
 "  
   (format
    t
-   "ic_geo_make_conn_buttons ~A ~A~%"
+   "ic_geo_make_conn_buttons ~A ~A;~%"
    loop exclusion_surfs ))
 
 (defun split-surfaces-at-thin-regions (srfs tolerance min_res_curve_len )
@@ -4270,7 +4270,7 @@ Splits boundaries of the given surfaces at thin regions, that is, where a surfac
 "  
   (format
    t
-   "ic_geo_split_surfaces_at_thin_regions ~A ~A ~A~%"
+   "ic_geo_split_surfaces_at_thin_regions ~A ~A ~A;~%"
    srfs tolerance min_res_curve_len ))
 
 (defun surface-create-smart-nodes (srfs tolerance min_res_curve_len )
@@ -4279,7 +4279,7 @@ Split boundaries of the given surfaces at thin regions, that is, where a surface
 "  
   (format
    t
-   "ic_geo_surface_create_smart_nodes ~A ~A ~A~%"
+   "ic_geo_surface_create_smart_nodes ~A ~A ~A;~%"
    srfs tolerance min_res_curve_len ))
 
 (defun surface-topological-corners (surfs )
@@ -4292,7 +4292,7 @@ counter-clockwise. The form of the list returned is: \"{surf_name_1
 "  
   (format
    t
-   "ic_geo_surface_topological_corners ~A~%"
+   "ic_geo_surface_topological_corners ~A;~%"
    surfs ))
 
 (defun flanges-notch-critical-points (surfs )
@@ -4301,7 +4301,7 @@ Returns the critical point of the notch in a given flange surface.
 "  
   (format
    t
-   "ic_geo_flanges_notch_critical_points ~A~%"
+   "ic_geo_flanges_notch_critical_points ~A;~%"
    surfs ))
 
 (defun trm-srf-at-par (srf par sel )
@@ -4321,7 +4321,7 @@ Example
 "  
   (format
    t
-   "ic_geo_trm_srf_at_par ~A ~A ~A~%"
+   "ic_geo_trm_srf_at_par ~A ~A ~A;~%"
    srf par sel ))
 
 (defun trm-srfs-by-curvature (srfs ang )
@@ -4332,7 +4332,7 @@ ang	maximum total curvature
 "  
   (format
    t
-   "ic_geo_trm_srfs_by_curvature ~A ~A~%"
+   "ic_geo_trm_srfs_by_curvature ~A ~A;~%"
    srfs ang ))
 
 (defun surface-curvature (surf &optional (tol 100) (debug 0) )
@@ -4343,7 +4343,7 @@ btol	relative boundary tolerance (100 -> 1/100 -> 1%)
 "  
   (format
    t
-   "ic_surface_curvature ~A ~A ~A~%"
+   "ic_surface_curvature ~A ~A ~A;~%"
    surf tol debug ))
 
 (defun hull-2d (entities
@@ -4358,7 +4358,7 @@ shrink	relative shrink tolerance (0 ... 1)
 "  
   (format
    t
-   "ic_hull_2d ~A ~A ~A ~A ~A ~A~%"
+   "ic_hull_2d ~A ~A ~A ~A ~A ~A;~%"
    entities tol four type shrink debug ))
 
 (defun surface-from-points (points &optional
@@ -4370,7 +4370,7 @@ points	point names
 "  
   (format
    t
-   "ic_surface_from_points ~A ~A ~A~%"
+   "ic_surface_from_points ~A ~A ~A;~%"
    points part name ))
 
 (defun surface-extend (curve surfaces
@@ -4389,7 +4389,7 @@ concat_crvs	clean points on surface edges if set
 "  
   (format
    t
-   "ic_geo_surface_extend ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_surface_extend ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    curve surfaces toler bld_topo perpendicular connect concat_crvs db ))
 
 (defun cre-srf-crv-drv-srf (family name gencrv ctrcrv
@@ -4410,7 +4410,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_crv_drv_srf ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_crv_drv_srf ~A ~A ~A ~A ~A;~%"
    family name gencrv ctrcrv bld_topo  ))
 
 (defun get-types (&optional (which "all"))
@@ -4419,7 +4419,7 @@ This function returns a list of all geometric entity types available in the load
 "  
   (format
    t
-   "ic_geo_get_types ~A~%"
+   "ic_geo_get_types ~A;~%"
    which  ))
 
 (defun flood-fill-surface-angle (surf curve angle )
@@ -4454,7 +4454,7 @@ Returns the list of entities connected by the lower dimension entities. For exam
 "  
   (format
    t
-   "ic_geo_flood_fill ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_flood_fill ~A ~A ~A ~A ~A ~A;~%"
    what ents all feat_angle bound_mode nedges ))
 
 (defun get-triangulation-tolerance ()
@@ -4463,7 +4463,7 @@ Returns a two-element list containing the triangulation tolerance of the model, 
 "  
   (format
    t
-   "ic_geo_get_triangulation_tolerance~%"
+   "ic_geo_get_triangulation_tolerance;~%"
    ))
 
 (defun convex-hull (entities name fam )
@@ -4472,7 +4472,7 @@ Creates the convex hull of the objects. entities is a list of pairs, where the f
 "  
   (format
    t
-   "ic_geo_convex_hull ~A ~A ~A~%"
+   "ic_geo_convex_hull ~A ~A ~A;~%"
    entities name fam ))
 
 (defun remove-triangles-on-plane (surf plane tol )
@@ -4481,7 +4481,7 @@ Remove triangles on a plane in the named surface.
 "  
   (format
    t
-   "ic_geo_remove_triangles_on_plane ~A ~A ~A~%"
+   "ic_geo_remove_triangles_on_plane ~A ~A ~A;~%"
    surf plane tol ))
 
 (defun bbox-of-entities (ents )
@@ -4490,7 +4490,7 @@ Return the bounding box of some objects. The ents argument is a list of the form
 "  
   (format
    t
-   "ic_geo_bbox_of_entities ~A~%"
+   "ic_geo_bbox_of_entities ~A;~%"
    ents ))
 
 (defun classify-by-regions (planes entities how )
@@ -4499,7 +4499,7 @@ Used by convex hull.
 "  
   (format
    t
-   "ic_geo_classify_by_regions ~A ~A ~A~%"
+   "ic_geo_classify_by_regions ~A ~A ~A;~%"
    planes entities how ))
 
 (defun split-surfaces (surfs planes )
@@ -4508,7 +4508,7 @@ Used by convex hull.
 "  
   (format
    t
-   "ic_geo_split_surfaces ~A ~A~%"
+   "ic_geo_split_surfaces ~A ~A;~%"
    surfs planes ))
 
 (defun elem-assoc (domain assoc )
@@ -4519,7 +4519,7 @@ assoc	output associativity file
 "  
   (format
    t
-   "ic_geo_elem_assoc ~A~A~%"
+   "ic_geo_elem_assoc ~A~A;~%"
    domain assoc ))
 
 (defun cre-bsp-srf-by-pnt-array (family name n_ptu n_ptv pnts
@@ -4545,7 +4545,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_bsp_srf_by_pnt_array ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_bsp_srf_by_pnt_array ~A ~A ~A ~A ~A ~A;~%"
    family name n_ptu n_ptv pnts tol ))
 
 (defun cre-geom-input (in_file
@@ -4583,7 +4583,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_geom_input ~A ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_geom_input ~A ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    in_file fit_tol mode pnt_fam pnt_prefix crv_fam crv_prefix srf_fam srf_prefix))
 
 (defun import-str-to-cad (doms &optional
@@ -4595,7 +4595,7 @@ Converts structured surface domains to b-spline geometry. If successful, the cur
 "  
   (format
    t
-   "ic_geo_import_str_to_cad ~A ~A ~A ~A~%"
+   "ic_geo_import_str_to_cad ~A ~A ~A ~A;~%"
    doms srf_fam crv_fam pnt_fam  ))
 
 (defun crv-data (crvs datums )
@@ -4628,7 +4628,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_crv_data ~A ~A~%"
+   "ic_geo_crv_data ~A ~A;~%"
    crvs datums ))
 
 (defun srf-data (srfs datums )
@@ -4663,7 +4663,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_srf_data ~A ~A~%"
+   "ic_geo_srf_data ~A ~A;~%"
    srfs datums ))
 
 (defun cre-srf-loft-crvs (family name tol crvs
@@ -4693,7 +4693,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_loft_crvs ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_loft_crvs ~A ~A ~A ~A ~A ~A ~A;~%"
    family name tol crvs sec_ord form bld_topo ))
 
 (defun cre-crv-test-project-surface (family name surface curve dir )
@@ -4709,7 +4709,7 @@ Return value is the name of the new curve.
 "  
   (format
    t
-   "ic_geo_cre_crv_test_project_surface ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_crv_test_project_surface ~A ~A ~A ~A ~A;~%"
    family name surface curve dir ))
 
 (defun cre-surface-section (family name surface mode P0 P1
@@ -4733,7 +4733,7 @@ Return value is the name of the new curve.
 "  
   (format
    t
-   "ic_geo_cre_surface_section ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_surface_section ~A ~A ~A ~A ~A ~A ~A;~%"
    family name surface mode P0 P1 P2 trim ))
 
 (defun offset (family name surface_to_offset offset
@@ -4744,7 +4744,7 @@ Offset surface using mesh representation.
 "  
   (format
    t
-   "ic_geo_offset ~A ~A ~A ~A ~A~%"
+   "ic_geo_offset ~A ~A ~A ~A ~A;~%"
    family name surface_to_offset offset max_factor ))
 
 (defun cre-crv-datred (family name crvs
@@ -4769,7 +4769,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_crv_datred ~A ~A ~A ~A~%"
+   "ic_geo_cre_crv_datred ~A ~A ~A ~A;~%"
    family name crvs tol ))
 
 (defun cre-srf-datred (family name srfs &optional (tol 0.001) )
@@ -4793,7 +4793,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_datred ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_datred ~A ~A ~A ~A;~%"
    family name srfs tol ))
 
 (defun cre-srf-sweep (family name gen drv &optional (bld_topo 0) )
@@ -4818,7 +4818,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_sweep ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_sweep ~A ~A ~A ~A ~A;~%"
    family name gen drv bld_topo  ))
 
 (defun crv-is-opposite (crv1 crv2 )
@@ -4836,7 +4836,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_crv_is_opposite ~A ~A~%"
+   "ic_geo_crv_is_opposite ~A ~A;~%"
    crv1 crv2 ))
 
 (defun crv-is-edge (crv )
@@ -4847,7 +4847,7 @@ return	number of surfaces bounded
 "  
   (format
    t
-   "ic_geo_crv_is_edge ~A~%"
+   "ic_geo_crv_is_edge ~A;~%"
    crv ))
 
 (defun fix-degen-geom (&optional (switch 0) )
@@ -4857,7 +4857,7 @@ switch	0 for off; 1 for on
 "  
   (format
    t
-   "ic_geo_fix_degen_geom ~A~%"
+   "ic_geo_fix_degen_geom ~A;~%"
    switch ))
 
 (defun find-nearest-srf-pnt (srf pnt &optional (want_ext 0) )
@@ -4878,7 +4878,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_find_nearest_srf_pnt ~A~A~A~%"
+   "ic_geo_find_nearest_srf_pnt ~A~A~A;~%"
    srf pnt want_ext))
 
 (defun find-nearest-crv-pnt (crv pnt )
@@ -4898,7 +4898,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_find_nearest_crv_pnt ~A ~A~%"
+   "ic_geo_find_nearest_crv_pnt ~A ~A;~%"
    crv pnt ))
 
 (defun distance-from-surfaces (surfs coords )
@@ -4907,7 +4907,7 @@ Gets the distance of coords from the nearest surface in surface_family
 "  
   (format
    t
-   "ic_geo_distance_from_surfaces ~A ~A~%"
+   "ic_geo_distance_from_surfaces ~A ~A;~%"
    surfs coords ))
 
 (defun nearest-surface-list (coords surfaces )
@@ -4916,7 +4916,7 @@ Gets nearest surface to coords from a list of surfaces.
 "  
   (format
    t
-   "ic_geo_nearest_surface_list ~A ~A~%"
+   "ic_geo_nearest_surface_list ~A ~A;~%"
    coords surfaces ))
 
 (defun get-crv-nrm (par crv )
@@ -4936,7 +4936,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_get_crv_nrm ~A ~A~%"
+   "ic_geo_get_crv_nrm ~A ~A;~%"
    par crv ))
 
 (defun get-crv-pos (par crv )
@@ -4958,7 +4958,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_get_crv_pos ~A ~A~%"
+   "ic_geo_get_crv_pos ~A ~A;~%"
    par crv ))
 
 (defun get-crv-binrm (par crv )
@@ -4976,7 +4976,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_get_crv_binrm ~A ~A~%"
+   "ic_geo_get_crv_binrm ~A ~A;~%"
    par crv ))
 
 (defun cvt-uns-to-bsc (family base uns )
@@ -4997,7 +4997,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cvt_uns_to_bsc ~A ~A ~A~%"
+   "ic_geo_cvt_uns_to_bsc ~A ~A ~A;~%"
    family base uns ))
 
 (defun srf-area (srfs )
@@ -5014,7 +5014,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_srf_area ~A~%"
+   "ic_geo_srf_area ~A;~%"
    srfs ))
 
 (defun sort-by-srf-area (surf_list &optional (args "") )
@@ -5023,7 +5023,7 @@ Sorts surfaces by their surface area. args is arguments for the sort.
 "  
   (format
    t
-   "ic_geo_sort_by_srf_area ~A ~A~%"
+   "ic_geo_sort_by_srf_area ~A ~A;~%"
    surf_list args ))
 
 (defun reduce-face (srfs )
@@ -5041,7 +5041,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_reduce_face ~A~%"
+   "ic_geo_reduce_face ~A;~%"
    srfs ))
 
 (defun get-crv-tan (par crv )
@@ -5061,7 +5061,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_get_crv_tan ~A ~A~%"
+   "ic_geo_get_crv_tan ~A ~A;~%"
    par crv ))
 
 (defun mod-crv-tanext (crvs dist srtend )
@@ -5088,7 +5088,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_mod_crv_tanext ~A ~A ~A~%"
+   "ic_geo_mod_crv_tanext ~A ~A ~A;~%"
    crvs dist srtend ))
 
 (defun mod-srf-tanext (srfs dist srtend &optional (bld_topo 0) )
@@ -5122,7 +5122,7 @@ Notes:
 
   (format
    t
-   "ic_geo_mod_srf_tanext ~A ~A ~A ~A~%"
+   "ic_geo_mod_srf_tanext ~A ~A ~A ~A;~%"
    srfs dist srtend bld_topo ))
 
 (defun mod-srf-ext (srfs dist edge &optional (bld_topo 0) )
@@ -5135,7 +5135,7 @@ return	names of modified surfaces
 "  
   (format
    t
-   "ic_geo_mod_srf_ext ~A ~A ~A ~A~%"
+   "ic_geo_mod_srf_ext ~A ~A ~A ~A;~%"
    srfs dist edge bld_topo ))
 
 (defun mod-crv-match-crv (crv1 crv2 &optional (crv1end 0) (crv2end 0) (modes "") )
@@ -5176,7 +5176,7 @@ Notes:
 
   (format
    t
-   "ic_geo_mod_crv_match_crv ~A ~A ~A ~A ~A~%"
+   "ic_geo_mod_crv_match_crv ~A ~A ~A ~A ~A;~%"
    crv1 crv2 crv1end crv2end modes ))
 
 (defun mod-crv-match-pnt (crv pnt &optional (crvend 0) (modes "") )
@@ -5198,7 +5198,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_mod_crv_match_pnt ~A ~A ~A ~A~%"
+   "ic_geo_mod_crv_match_pnt ~A ~A ~A ~A;~%"
    crv pnt crvend modes ))
 
 (defun cre-srf-offset (family name base offset
@@ -5232,7 +5232,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_offset ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_srf_offset ~A ~A ~A ~A ~A ~A;~%"
    family name base offset all_conn  stitch  ))
 
 (defun build-bodies (&optional
@@ -5250,7 +5250,7 @@ surf	Initial surface
 "  
   (format
    t
-   "ic_geo_build_bodies ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_build_bodies ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    fam buildtopo tol multi newm surf assem from_solids ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -5262,7 +5262,7 @@ Creates volume from material point name, matlpt.
 
   (format
    t
-   "ic_geo_create_volume ~A ~A ~A~%"
+   "ic_geo_create_volume ~A ~A ~A;~%"
    matlpt name fam ))
 
 (defun reset-bodies ()
@@ -5272,7 +5272,7 @@ Updates the current defined bodies in the model, by removing nonexistent ones an
 
   (format
    t
-   "ic_geo_reset_bodies~%"
+   "ic_geo_reset_bodies;~%"
    ))
 
 (defun create-body (surfs &optional (name "") (fam "") (quiet 0) )
@@ -5281,7 +5281,7 @@ Creates a body from the collection of surfaces, surfs. The new body will be give
 "  
   (format
    t
-   "ic_geo_create_body ~A ~A ~A ~A~%"
+   "ic_geo_create_body ~A ~A ~A ~A;~%"
    surfs name fam quiet ))
 
 (defun get-body-matlpnt (bdy )
@@ -5290,7 +5290,7 @@ Returns the material point name associated with the body, bdy.
 "  
   (format
    t
-   "ic_geo_get_body_matlpnt ~A~%"
+   "ic_geo_get_body_matlpnt ~A;~%"
    bdy ))
 
 (defun srf-radius (srfs )
@@ -5307,7 +5307,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_srf_radius ~A~%"
+   "ic_geo_srf_radius ~A;~%"
    srfs ))
 
 (defun cre-srf-offset-edge (family name crv offset )
@@ -5334,7 +5334,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_offset_edge ~A~A~A~A~%"
+   "ic_geo_cre_srf_offset_edge ~A~A~A~A;~%"
    family name crv offset ))
 
 (defun body-lower-entities (bdy )
@@ -5343,7 +5343,7 @@ Given a body name, bdy, it returns the names of the surfaces, curves, and points
 "  
   (format
    t
-   "ic_geo_body_lower_entities ~A~%"
+   "ic_geo_body_lower_entities ~A;~%"
    bdy ))
 
 (defun cre-geom-plot3d (in_file
@@ -5375,7 +5375,7 @@ Notes:
 
   (format
    t
-   "ic_geo_cre_geom_plot3d ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_geom_plot3d ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    in_file fit_tol pnt_fam pnt_prefix crv_fam crv_prefix srf_fam srf_prefix ))
 
 (defun cre-srf-db-pnts (srfs )
@@ -5386,7 +5386,7 @@ return	names of created points
 "  
   (format
    t
-   "ic_geo_cre_srf_db_pnts ~A~%"
+   "ic_geo_cre_srf_db_pnts ~A;~%"
    srfs ))
 
 (defun cre-crv-db-pnts (crvs )
@@ -5397,7 +5397,7 @@ return	names of created points
 "  
   (format
    t
-   "ic_geo_cre_crv_db_pnts ~A~%"
+   "ic_geo_cre_crv_db_pnts ~A;~%"
    crvs ))
 
 (defun read-off-file (fam name in_file )
@@ -5417,7 +5417,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_read_off_file ~A ~A ~A~%"
+   "ic_geo_read_off_file ~A ~A ~A;~%"
    fam name in_file ))
 
 (defun read-xyz-file (fam name in_file off_file &optional (mode "") )
@@ -5441,7 +5441,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_read_xyz_file ~A ~A ~A ~A ~A~%"
+   "ic_geo_read_xyz_file ~A ~A ~A ~A ~A;~%"
    fam name in_file off_file mode ))
 
 (defun crv-is-arc (crvs &optional (tol -1) )
@@ -5459,7 +5459,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_crv_is_arc ~A ~A~%"
+   "ic_geo_crv_is_arc ~A ~A;~%"
    crvs tol ))
 
 (defun get-keypoints (dir border &optional (bb ""))
@@ -5468,7 +5468,7 @@ Gets keypoints for the current geometry. dir is 0, 1, or 2. If border is non zer
 "  
   (format
    t
-   "ic_geo_get_keypoints ~A ~A ~A~%"
+   "ic_geo_get_keypoints ~A ~A ~A;~%"
    dir border bb ))
 
 (defun reverse-crv (crvs )
@@ -5481,7 +5481,7 @@ For example usage, refer to ic_geo_reverse_crv.tcl in the Ansys installation dir
 "  
   (format
    t
-   "ic_geo_reverse_crv ~A~%"
+   "ic_geo_reverse_crv ~A;~%"
    crvs ))
 
 (defun cre-edge-concat (crvs &optional (require_topo 0) )
@@ -5505,7 +5505,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_edge_concat ~A ~A~%"
+   "ic_geo_cre_edge_concat ~A ~A;~%"
    crvs require_topo ))
 
 (defun create-histogram-box (min max lblList )
@@ -5523,7 +5523,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_create_histogram_box ~A ~A ~A~%"
+   "ic_geo_create_histogram_box ~A ~A ~A;~%"
    min max lblList ))
 
 (defun build-topo-on-srfs (srfs
@@ -5547,7 +5547,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_build_topo_on_srfs ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_build_topo_on_srfs ~A ~A ~A ~A ~A ~A;~%"
    srfs crvs tol trim_srfs concat_crvs quiet ))
 
 (defun contact-surfaces (surfaces &optional (distance 0) (family "") (debug 0) )
@@ -5560,7 +5560,7 @@ return	list of surface pairs
 "  
   (format
    t
-   "ic_geo_contact_surfaces ~A ~A ~A ~A~%"
+   "ic_geo_contact_surfaces ~A ~A ~A ~A;~%"
    surfaces distance family debug ))
 
 (defun map-tetin-sizes (tetin &optional (what 0) )
@@ -5578,7 +5578,7 @@ For example usage, refer to ic_geo_map_tetin_sizes.tcl in the Ansys installation
 "  
   (format
    t
-   "ic_geo_map_tetin_sizes ~A ~A~%"
+   "ic_geo_map_tetin_sizes ~A ~A;~%"
    tetin what ))
 
 (defun surface-thickness (surfaces order &optional (thickness "") )
@@ -5590,7 +5590,7 @@ thickness	order * order thickness values
 "  
   (format
    t
-   "ic_geo_surface_thickness ~A ~A ~A~%"
+   "ic_geo_surface_thickness ~A ~A ~A;~%"
    surfaces order thickness ))
 
 (defun srf-in-srf-fam-set (srf fams )
@@ -5601,7 +5601,7 @@ fams	list of families
 "  
   (format
    t
-   "ic_geo_srf_in_srf_fam_set ~A ~A~%"
+   "ic_geo_srf_in_srf_fam_set ~A ~A;~%"
    srf fams ))
 
 (defun cre-srf-over-holes (fam srfs )
@@ -5612,7 +5612,7 @@ fams	list of families
 "  
   (format
    t
-   "ic_geo_cre_srf_over_holes ~A ~A~%"
+   "ic_geo_cre_srf_over_holes ~A ~A;~%"
    fam srfs ))
 
 (defun subset-exists (name )
@@ -5621,7 +5621,7 @@ Checks if a geometry subset exists.
 "  
   (format
    t
-   "ic_geo_subset_exists ~A~%"
+   "ic_geo_subset_exists ~A;~%"
    name ))
 
 (defun subset-copy (oldname newname )
@@ -5630,7 +5630,7 @@ Copies the geometry from one subset to another.
 "  
   (format
    t
-   "ic_geo_subset_copy ~A ~A~%"
+   "ic_geo_subset_copy ~A ~A;~%"
    oldname newname ))
 
 (defun subset-clear (name )
@@ -5640,7 +5640,7 @@ Clears out everything from a subset.
 
   (format
    t
-   "ic_geo_subset_clear ~A~%"
+   "ic_geo_subset_clear ~A;~%"
    name ))
 
 (defun subset-unused-name (&optional (pref "subset") )
@@ -5649,7 +5649,7 @@ Returns an unused geometry subset name with the given prefix Note that this give
 "  
   (format
    t
-   "ic_geo_subset_unused_name ~A~%"
+   "ic_geo_subset_unused_name ~A;~%"
    pref ))
 
 (defun subset-delete (name )
@@ -5658,7 +5658,7 @@ Deletes a geometry subset.
 "  
   (format
    t
-   "ic_geo_subset_delete ~A~%"
+   "ic_geo_subset_delete ~A;~%"
    name ))
 
 (defun subset-visible (name vis )
@@ -5667,7 +5667,7 @@ Makes a geometry subset visible (or not).
 "  
   (format
    t
-   "ic_geo_subset_visible ~A ~A~%"
+   "ic_geo_subset_visible ~A ~A;~%"
    name vis ))
 
 (defun subset-list-families (name )
@@ -5676,7 +5676,7 @@ Lists all the families that are represented in the named subset.
 "  
   (format
    t
-   "ic_geo_subset_list_families ~A~%"
+   "ic_geo_subset_list_families ~A;~%"
    name ))
 
 (defun subset-list (&optional (pat "*" ))
@@ -5685,7 +5685,7 @@ Lists all existing geometry subset names.
 "  
   (format
    t
-   "ic_geo_subset_list ~A~%"
+   "ic_geo_subset_list ~A;~%"
    pat ))
 
 (defun subset-add-items (name items )
@@ -5694,7 +5694,7 @@ Adds items to a geometry subset. If the subset does not exist, it will be create
 "  
   (format
    t
-   "ic_geo_subset_add_items ~A ~A~%"
+   "ic_geo_subset_add_items ~A ~A;~%"
    name items ))
 
 (defun subset-remove-items (name items )
@@ -5703,7 +5703,7 @@ Removes items from a geometry subset. The items list is the same as for ic_geo_s
 "  
   (format
    t
-   "ic_geo_subset_remove_items ~A ~A~%"
+   "ic_geo_subset_remove_items ~A ~A;~%"
    name items ))
 
 (defun subset-handle-bc-changes (items subset add )
@@ -5712,7 +5712,7 @@ Adds or removes bc icons and groups based on addition or removal of objects in s
 "  
   (format
    t
-   "ic_geo_subset_handle_bc_changes ~A ~A ~A~%"
+   "ic_geo_subset_handle_bc_changes ~A ~A ~A;~%"
    items subset add))
 
 (defun subset-get-items (name )
@@ -5721,7 +5721,7 @@ Gets items in a geometry subset. This returns a list of type/name pairs.
 "  
   (format
    t
-   "ic_geo_subset_get_items ~A~%"
+   "ic_geo_subset_get_items ~A;~%"
    name ))
 
 (defun subset-bbox (name )
@@ -5730,7 +5730,7 @@ Returns the bounding box of all geometry in a named subset.
 "  
   (format
    t
-   "ic_geo_subset_bbox ~A~%"
+   "ic_geo_subset_bbox ~A;~%"
    name ))
 
 (defun subset-add-layer (name all feat_angle bound_mode )
@@ -5739,7 +5739,7 @@ Adds one or more layers to a geom subset. Arguments are the same as ic_geo_flood
 "  
   (format
    t
-   "ic_geo_subset_add_layer ~A ~A ~A ~A~%"
+   "ic_geo_subset_add_layer ~A ~A ~A ~A;~%"
    name all feat_angle bound_mode ))
 
 (defun subset-remove-layer (name )
@@ -5757,7 +5757,7 @@ Move the contents of all subsets to a part (name of subset)
 "  
   (format
    t
-   "ic_geo_subset_names_to_parts ~A~%"
+   "ic_geo_subset_names_to_parts ~A;~%"
    name ))
 
 (defun get-srf-edges (srf )
@@ -5766,7 +5766,7 @@ Returns any curves associated as edges to a surface.
 "  
   (format
    t
-   "ic_geo_get_srf_edges ~A~%"
+   "ic_geo_get_srf_edges ~A;~%"
    srf ))
 
 (defun get-vert-edges (pnt )
@@ -5775,7 +5775,7 @@ Get any curves associated as edges to a vertex.
 "  
   (format
    t
-   "ic_geo_get_vert_edges ~A~%"
+   "ic_geo_get_vert_edges ~A;~%"
    pnt ))
 
 (defun calc-bisector-pnt (pnt1 pnt2 pnt3 len inverse )
@@ -5784,7 +5784,7 @@ Calculates node lying on the bisector of the angle formed by nodes pnt1, pnt2, p
 "  
   (format
    t
-   "ic_geo_calc_bisector_pnt ~A ~A ~A ~A ~A~%"
+   "ic_geo_calc_bisector_pnt ~A ~A ~A ~A ~A;~%"
    pnt1 pnt2 pnt3 len inverse ))
 
 (defun cre-srf-simple-trim (families names srf crvs )
@@ -5812,7 +5812,7 @@ Sets the simplification level in pixels (surfaces smaller than this size will be
 "  
   (format
    t
-   "ic_geo_set_simplification_level ~A~%"
+   "ic_geo_set_simplification_level ~A;~%"
    pixels ))
 
 (defun surface-thickness-check (names &optional (newfam "") (return_unassigned 0) )
@@ -5821,7 +5821,7 @@ Checks for zero thickness surfaces and assigns to new family. newfam is family n
 "  
   (format
    t
-   "ic_surface_thickness_check ~A ~A ~A~%"
+   "ic_surface_thickness_check ~A ~A ~A;~%"
    names newfam return_unassigned ))
 
 (defun close-contour (crvs srf )
@@ -5838,7 +5838,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_close_contour ~A ~A~%"
+   "ic_geo_close_contour ~A ~A;~%"
    crvs srf ))
 
 (defun find-srf-prc-pnt (srf pnt vec )
@@ -5859,7 +5859,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_find_srf_prc_pnt ~A ~A ~A~%"
+   "ic_geo_find_srf_prc_pnt ~A ~A ~A;~%"
    srf pnt vec ))
 
 (defun get-dormant (type &optional (only_if_visible "") )
@@ -5868,7 +5868,7 @@ Returns list of dormant points or curves.
 "  
   (format
    t
-   "ic_geo_get_dormant ~A ~A~%"
+   "ic_geo_get_dormant ~A ~A;~%"
    type only_if_visible ))
 
 (defun get-dormant-entity (type name )
@@ -5877,7 +5877,7 @@ Determines whether an entity is dormant Only points and curves can be dormant sy
 "  
   (format
    t
-   "ic_geo_get_dormant_entity ~A ~A~%"
+   "ic_geo_get_dormant_entity ~A ~A;~%"
    type name ))
 
 (defun get-facets (type list )
@@ -5886,7 +5886,7 @@ Returns list of faceted surfaces.
 "  
   (format
    t
-   "ic_get_facets ~A ~A~%"
+   "ic_get_facets ~A ~A;~%"
    type list ))
 
 (defun filter-curves (angle fams )
@@ -5897,7 +5897,7 @@ fams	names of families to search
 "  
   (format
    t
-   "ic_geo_filter_curves ~A ~A~%"
+   "ic_geo_filter_curves ~A ~A;~%"
    angle fams ))
 
 (defun cre-bridge-crv (fam name crv1 crv2
@@ -5926,7 +5926,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_bridge_crv ~A ~A ~A ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_bridge_crv ~A ~A ~A ~A ~A ~A ~A ~A;~%"
    fam name crv1 crv2 end1 end2 mag1 mag2 ))
 
 (defun cre-pln-crv (fam name crv base nrm )
@@ -5939,7 +5939,7 @@ return	name of created curve
 "  
   (format
    t
-   "ic_geo_cre_pln_crv ~A ~A ~A ~A ~A~%"
+   "ic_geo_cre_pln_crv ~A ~A ~A ~A ~A;~%"
    fam name crv base nrm ))
 
 (defun pln-n-pnts (pnts )
@@ -5950,7 +5950,7 @@ return	{base} {normal} of plane
 "  
   (format
    t
-   "ic_geo_pln_n_pnts ~A~%"
+   "ic_geo_pln_n_pnts ~A;~%"
    pnts ))
 
 (defun sub-get-numbers-by-names (type ent_names )
@@ -5959,7 +5959,7 @@ Returns each entity number (recognized in the batch interpreter) associated with
 "  
   (format
    t
-   "ic_geo_sub_get_numbers_by_names ~A ~A~%"
+   "ic_geo_sub_get_numbers_by_names ~A ~A;~%"
    type ent_names ))
 
 (defun get-pnt-marked (name )
@@ -5968,7 +5968,7 @@ Determines whether a point is marked.
 "  
   (format
    t
-   "ic_geo_get_pnt_marked ~A~%"
+   "ic_geo_get_pnt_marked ~A;~%"
    name ))
 
 (defun set-pnt-marked (name set_to )
@@ -5977,7 +5977,7 @@ Sets the marked flag on a point.
 "  
   (format
    t
-   "ic_geo_set_pnt_marked ~A ~A~%"
+   "ic_geo_set_pnt_marked ~A ~A;~%"
    name set_to ))
 
 (defun get-all-marked-pnts ()
@@ -5986,7 +5986,7 @@ Returns a list of all marked points.
 "  
   (format
    t
-   "ic_geo_get_all_marked_pnts~%"
+   "ic_geo_get_all_marked_pnts;~%"
    ))
 
 (defun add-embedded-crv (srf crvs )
@@ -5999,7 +5999,7 @@ Note:   No checks are performed to determine whether the curves are on the surfa
 "  
   (format
    t
-   "ic_geo_add_embedded_crv ~A ~A~%"
+   "ic_geo_add_embedded_crv ~A ~A;~%"
    srf crvs ))
 
 (defun add-embedded-pnt (srf pnts )
@@ -6012,7 +6012,7 @@ Note:   No checks are performed to determine whether the points are on the surfa
 "  
   (format
    t
-   "ic_geo_add_embedded_pnt ~A ~A~%"
+   "ic_geo_add_embedded_pnt ~A ~A;~%"
    srf pnts ))
 
 (defun is-crv-on-srf (crv srf &optional (tol -1) )
@@ -6026,7 +6026,7 @@ Note:   If a negative value is passed for the tolerance, the utility will use an
 "  
   (format
    t
-   "ic_geo_is_crv_on_srf ~A ~A ~A~%"
+   "ic_geo_is_crv_on_srf ~A ~A ~A;~%"
    crv srf tol ))
 
 (defun register-crv (crv_name new_fam )
@@ -6036,7 +6036,7 @@ crv_name	name of created curve
 "  
   (format
    t
-   "ic_geo_register_crv ~A ~A~%"
+   "ic_geo_register_crv ~A ~A;~%"
    crv_name new_fam ))
 
 (defun cre-midline-crv (&optional (crvs "") (toldebug 0) (crvs2 "") (fam "") )
@@ -6059,7 +6059,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_midline_crv ~A ~A ~A ~A~%"
+   "ic_geo_cre_midline_crv ~A ~A ~A ~A;~%"
    crvs toldebug crvs2 fam ))
 
 (defun get-points-from-curves (curves )
@@ -6068,7 +6068,7 @@ This finds all the points attached to a list of curves.
 "  
   (format
    t
-   "ic_geo_get_points_from_curves ~A~%"
+   "ic_geo_get_points_from_curves ~A;~%"
    curves ))
 
 (defun test-cmd (vec pnt crvs srfs )
@@ -6077,7 +6077,7 @@ Test routine.
 "  
   (format
    t
-   "ic_geo_test_cmd ~A ~A ~A ~A~%"
+   "ic_geo_test_cmd ~A ~A ~A ~A;~%"
    vec pnt crvs srfs ))
 
 (defun cre-crv-ell (family name center srt_pnt next_pnt
@@ -6108,7 +6108,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_crv_ell ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A~%"
+   "ic_geo_cre_crv_ell ~A ~A {~{~A~^ ~}} {~{~A~^ ~}} {~{~A~^ ~}} ~A ~A;~%"
    family name center srt_pnt next_pnt srtang endang ))
 
 (defun improve-edge (crvs )
@@ -6118,7 +6118,7 @@ crvs	list of one or more curves
 "  
   (format
    t
-   "ic_geo_improve_edge ~A~%"
+   "ic_geo_improve_edge ~A;~%"
    crvs ))
 
 (defun just-do-it (srfs )
@@ -6128,7 +6128,7 @@ srfs	list of one or more surfaces
 "  
   (format
    t
-   "ic_geo_just_do_it ~A~%"
+   "ic_geo_just_do_it ~A;~%"
    srfs ))
 
 (defun get-prism-families ()
@@ -6137,7 +6137,7 @@ Returns the list of families for prism meshing.
 "  
   (format
    t
-   "ic_geo_get_prism_families~%"
+   "ic_geo_get_prism_families;~%"
    ))
 
 (defun set-prism-families (prism_fams &optional (excl 1) )
@@ -6146,7 +6146,7 @@ Sets the list of families for prism meshing. If excl==1, then any previous prism
 "  
   (format
    t
-   "ic_geo_set_prism_families ~A ~A~%"
+   "ic_geo_set_prism_families ~A ~A;~%"
    prism_fams excl ))
 
 (defun get-prism-family-params (fam )
@@ -6164,7 +6164,7 @@ Sets the prism meshing parameters for a family.
 "  
   (format
    t
-   "ic_geo_set_prism_family_params ~A ~A~%"
+   "ic_geo_set_prism_family_params ~A ~A;~%"
    fam args ))
 
 (defun create-tglib-sfbgrid (args )
@@ -6184,7 +6184,7 @@ Optional arguments:
 "  
   (format
    t
-   "ic_geo_create_tglib_sfbgrid ~A~%"
+   "ic_geo_create_tglib_sfbgrid ~A;~%"
    args ))
 
 (defun vcalc (&optional (op "") args )
@@ -6211,7 +6211,7 @@ vec_norm p1 	some vector normal to p1
 "  
   (format
    t
-   "ic_vcalc ~A ~A~%"
+   "ic_vcalc ~A ~A;~%"
    op args ))
 
 (defun highlight (args )
@@ -6226,7 +6226,7 @@ Temporary change color and/or \"width\" of points, curves, surfaces
 "  
   (format
    t
-   "ic_highlight ~A~%"
+   "ic_highlight ~A;~%"
    args ))
 
 (defun vset (args )
@@ -6241,7 +6241,7 @@ ic_vfile read filename : read Vid file into current database ic_vfile write file
 "  
   (format
    t
-   "ic_vset ~A~%"
+   "ic_vset ~A;~%"
    args ))
 
 (defun curve (method part name def args )
@@ -6258,7 +6258,7 @@ From start/end points and radius: ic_curvearc_ctr_rad PART_NAME NEW_CURVE_NAME {
 "  
   (format
    t
-   "ic_curve ~A ~A ~A ~A ~A~%"
+   "ic_curve ~A ~A ~A ~A ~A;~%"
    method part name def args ))
   
 (defun get-crv-data-at-par (par crv)
@@ -6279,5 +6279,5 @@ Notes:
 "  
   (format
    t
-   "ic_geo_get_crv_data_at_par ~A ~A~%"
+   "ic_geo_get_crv_data_at_par ~A ~A;~%"
    par crv))
