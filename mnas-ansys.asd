@@ -187,7 +187,8 @@ CFX-PRE.
   :depends-on ("mnas-ansys/ic/geo"
                "mnas-ansys/ic/trans"
                "mnas-ansys/ic/boco"
-               "mnas-ansys/ic/dis"))
+               "mnas-ansys/ic/dis"
+               "mnas-ansys/ic/util"))
 
 (defsystem "mnas-ansys/ic/geo"
   :description
@@ -196,6 +197,15 @@ CFX-PRE.
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :components ((:module "src/ic/geo"   :serial nil :components ((:file "geo")))))
+
+(defsystem "mnas-ansys/ic/util"
+  :description
+  "Подсистема @(mnas-ansys/ic/util)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :components ((:module "src/ic/util" :serial nil :components ((:file "util")))))
+
 
 (defsystem "mnas-ansys/ic/trans"
   :description

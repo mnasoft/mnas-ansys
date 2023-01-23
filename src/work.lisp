@@ -10,7 +10,7 @@
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-7/cfx_N70_prj_01_D-7.tin")
 (defparameter *tin-file* "Z:/_namatv/CFX/n70/tin/DOMAINS/D-2/cfx_N70_prj_01_D-2.tin")
 
-(mnas-ansys/tin/dia:choose-directory)
+(mnas-ansys/dia:choose-directory)
 
 (defparameter *tin* (mnas-ansys/dia:open-tin-file))
 

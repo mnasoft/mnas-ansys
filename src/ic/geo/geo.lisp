@@ -1294,7 +1294,7 @@ parameters only for one of the objects in that family.
         :do
     (when value
       (format t " ~A ~A" name value)))
-  (format t "~%"))
+  (format t ";~%"))
 
 (defun set-meshing-params-curve (type num args )
 "
@@ -2665,6 +2665,9 @@ Sets the periodic data.
    t
    "ic_geo_set_periodic_data ~A~%"
    data ))
+
+
+
 
 (defun get-family-param (fam name )
 "
