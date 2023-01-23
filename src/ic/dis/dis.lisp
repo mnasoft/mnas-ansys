@@ -23,7 +23,7 @@ Sets the current viewing position. what may be home, which sets the home positio
 "
    (format
    t
-   "ic_view ~S~%" what))
+   "ic_view ~S;~%" what))
 
 (defun visible (type what on)
 " Enable/disable visibility for different objects. The on argument
@@ -34,7 +34,7 @@ of the element type names like TETRA_4. In the case of family, it
 should be a family name.
 "
   (format t
-          "ic_visible ~S ~S ~S~%" type what on))
+          "ic_visible ~S ~S ~S;~%" type what on))
 
 (defun visible-family (family-name on)
 " Enable/disable visibility for different objects. The on argument
@@ -52,7 +52,7 @@ should be a family name.
 applies to geometry and mesh.
 "
   (format t
-          "ic_set_family_color_for_name ~S ~S~%" name color))
+          "ic_set_family_color_for_name ~S ~S;~%" name color))
 
 (defun display-update (&optional (mode "") (new_fams 1) (types ""))
 " 
