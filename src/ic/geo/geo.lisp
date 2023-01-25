@@ -1975,7 +1975,7 @@ Returns the text point list for an object, specified by type and name. The list 
 "  
   (format
    t
-   "ic_geo_get_text_point ~A ~A~;~%"
+   "ic_geo_get_text_point ~A ~A;~%"
    type name))
 
 (defun get-centroid (type name)
