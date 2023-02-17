@@ -160,7 +160,7 @@ returns."
 
 (defun undo-group-end (&optional (text "") (undo_group ""))
   "Sets undo group end."
-  (format t "ic_undo_group_end ~A ~A~2%" text undo_group))
+  (format t "ic_undo_group_end ~A ~A;~2%" text undo_group))
 
 (defun undo-suspend ()
   " Suspends undo logging."
