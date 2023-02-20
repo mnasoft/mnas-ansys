@@ -27,3 +27,5 @@ rsync.exe -Pavzhe ssh namatv@hp1:/_gas/CFX/otd11/namatv/a32_base/PR-01/GT/*.tin 
 rsync.exe -Pavzhe ssh namatv@hp1:/_gas/CFX/otd11/namatv/a32_base/PR-01/GU/*.tin .
 #+END_SRC
 #+RESULTS:
+
+http://www.pivlab.net/upload_file/ANSYS%20CFX%20Solving%20I.pdf

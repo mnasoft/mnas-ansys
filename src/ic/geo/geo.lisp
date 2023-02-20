@@ -1975,7 +1975,7 @@ Returns the text point list for an object, specified by type and name. The list 
 "  
   (format
    t
-   "ic_geo_get_text_point ~A ~A~;~%"
+   "ic_geo_get_text_point ~A ~A;~%"
    type name))
 
 (defun get-centroid (type name)
@@ -6248,13 +6248,13 @@ ic_vfile read filename : read Vid file into current database ic_vfile write file
  "
 Create a bspline arc.
 
-Usage: From a center point and two points: ic_curvearc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 0.0 \"\" \"\" 0}
+Usage: From a center point and two points: ic_curv earc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 0.0 \"\" \"\" 0}
 
-From a center point and two points and radius: ic_curvearc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 RADIUS \"\" \"\" 0} Note: in case of a radius of 0.0, the arc radius will be calculated from the distance between CENTER_POINT and POINT_1
+From a center point and two points and radius: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 RADIUS \"\" \"\" 0} Note: in case of a radius of 0.0, the arc radius will be calculated from the distance between CENTER_POINT and POINT_1
 
-From start/end points: ic_curvearc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 0.0 \"\" \"\" 1}
+From start/end points: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 0.0 \"\" \"\" 1}
 
-From start/end points and radius: ic_curvearc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 RADIUS \"\" \"\" 1}
+From start/end points and radius: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 RADIUS \"\" \"\" 1}
 "  
   (format
    t
