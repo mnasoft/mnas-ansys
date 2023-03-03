@@ -119,18 +119,21 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod curves-coeged-ally  ((family string) (tin <tin>))
+(defmethod curves-coeged-ally  ((family string) (tin <tin>) &optional (new-family family))
   "@b(Описание:) метод @b(curves-coeged-ally) печатает на стандартный
    вывод и возвращает имена кривых сопряженных любым образом с
    поверхностями из семейства @b(family)."
-  (names 
-   (remove-duplicates
-    (apply #'append
-           (loop :for i :in (surfaces-by-families `(,family) tin)
-                 :collect
-                 (coedged i tin))))))
+  (let ((names
+          (names 
+           (remove-duplicates
+            (apply #'append
+                   (loop :for i :in (surfaces-by-families `(,family) tin)
+                         :collect
+                         (coedged i tin)))))))
+    (geo:set-part-curve names new-family)
+    names))
 
-(defmethod curves-coeged-ally ((family cons) (tin <tin>))
+(defmethod curves-coeged-ally ((family cons) (tin <tin>) &optional (new-family family))
   "@b(Описание:) метод @b(curves-coeged-ally) печатает на стандартный
    вывод и возвращает имена кривых сопряженных любым образом с
    поверхностями из семейства @b(family)."
@@ -141,23 +144,25 @@
                  :collect
                  (coedged i tin))))))
 
-(defmethod curves-coeged-internally ((family string) (tin <tin>))
+(defmethod curves-coeged-internally ((family string) (tin <tin>) &optional (new-family family))
   "@b(Описание:) метод @b(curves-coeged-internally) печатает на
    стандартный вывод и возвращает имена кривых сопряженных
    исключительно с поверхностями из семейства @(family)."
-  (let ((curves
+  (let* ((curves
           (loop :for i
                   :in (remove-duplicates
-  (apply #'append
-         (loop :for s :in (select:surfaces-by-families `(,family) tin)
-               :collect (tin:coedged s dia:*tin*))))
+                       (apply #'append
+                              (loop :for s :in (select:surfaces-by-families `(,family) tin)
+                                    :collect (tin:coedged s tin))))
                 :when
                 (every #'(lambda (el)
                            (string=  el family))
                        (loop :for j :in (tin:coedged i tin)
                              :collect (tin:<ent>-family j)))
-                :collect i)))
-    (tin:names curves)))
+                :collect i))
+         (names (names curves)))
+    (geo:set-part-curve names new-family)
+    names))
 
 (defmethod curves-coeged-externally ((family string) (tin <tin>))
   "@b(Описание:) метод @b(curves-coeged-externally) печатает на
@@ -168,7 +173,7 @@
                   :in (remove-duplicates
   (apply #'append
          (loop :for s :in (select:surfaces-by-families `(,family) tin)
-               :collect (tin:coedged s dia:*tin*))))
+               :collect (tin:coedged s tin))))
                 :when
                 (notevery #'(lambda (el)
                            (string=  el family))

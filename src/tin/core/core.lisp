@@ -831,7 +831,7 @@
   (let ((names (sort (loop :for i :in entities
                            :collect (<obj>-name i))
                      #'string<)))
-    (format stream "~{~A~^ ~}~2%" names)
+    (format stream "~{~S~^ ~}~2%" names)
     names))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

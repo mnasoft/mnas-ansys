@@ -76,7 +76,7 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin/core")
+  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin/core" "mnas-ansys/ic/geo")
   :components ((:module "src/tin/select" 
                 :serial nil
                 :components

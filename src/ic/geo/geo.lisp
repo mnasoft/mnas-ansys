@@ -1105,11 +1105,13 @@ the other groups in the family are not disturbed.
 new part name and copy the boundary conditions if necessary so that
 the other groups in the family are not disturbed.
 "
+  #+nil
   (ic/util:undo-group-begin)
   (format
    t
-   "ic_geo_set_part curve {~{~A~^ ~}} ~A ~A;~%"
+   "ic_geo_set_part curve {~{~S~^ ~}} ~S ~A;~%"
    names newpart rename_part)
+  #+nil
   (ic/util:undo-group-end))
 
 (defun set-name (type name newname &optional (make_new 0) (warn 1))
