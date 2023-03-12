@@ -15,8 +15,6 @@
                        (1/3 int))))
   (:geometry :width 800 :height 400))
 
-
-
 (defgeneric display (frame pane)
   (:method ((frame app) pane)
     (clim:draw-rectangle* pane
