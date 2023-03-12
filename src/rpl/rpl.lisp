@@ -1,6 +1,6 @@
 ;;;; ./src/rpl/rpl.lisp
 
-(defpackage #:mnas-ansys/rpl
+(defpackage :mnas-ansys/rpl
   (:use #:cl )
   (:export 
    ))

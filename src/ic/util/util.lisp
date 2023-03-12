@@ -1,6 +1,6 @@
 ;;;; ./src/ic/util/util.lisp
 
-(defpackage #:mnas-ansys/ic/util
+(defpackage :mnas-ansys/ic/util
   (:use #:cl)
   (:nicknames "IC/UTIL" "UTIL")
   (:export mess
@@ -49,7 +49,7 @@
    " Пакет предназначен для создания геометрии через API системы ANSYS ICEM CFD."
    ))
 
-(in-package #:mnas-ansys/ic/util)
+(in-package :mnas-ansys/ic/util)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

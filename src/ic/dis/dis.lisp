@@ -1,6 +1,6 @@
 ;;;; ./src/icem/display.lisp
 
-(defpackage #:mnas-ansys/ic/dis
+(defpackage :mnas-ansys/ic/dis
   (:use #:cl)
   (:nicknames "IC/DIS" "DIS")
   (:export  view
@@ -13,7 +13,7 @@
    "@b(Описание:) пакет @b(ic/dis) содержит функции отображения (Display
  Functions)."))
 
-(in-package #:mnas-ansys/ic/dis)
+(in-package :mnas-ansys/ic/dis)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

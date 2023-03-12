@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/core/core.lisp
 
-(defpackage #:mnas-ansys/ccl/core
+(defpackage :mnas-ansys/ccl/core
   (:use #:cl)
   (:export for-list)
   (:intern <object>

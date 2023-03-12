@@ -1,6 +1,6 @@
 ;;;; ./src/icem/geometry.lisp
 
-(defpackage #:mnas-ansys/ic/geo
+(defpackage :mnas-ansys/ic/geo
   (:use #:cl)
   (:nicknames "IC/GEO" "GEO")
   (:export  load-tetin
@@ -382,7 +382,7 @@
    " Пакет предназначен для создания геометрии через API системы ANSYS ICEM CFD."
    ))
 
-(in-package #:mnas-ansys/ic/geo)
+(in-package :mnas-ansys/ic/geo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

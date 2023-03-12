@@ -1,4 +1,4 @@
-(defpackage #:mnas-ansys/tin/select
+(defpackage :mnas-ansys/tin/select
   (:use #:cl #:mnas-ansys/tin)
   (:nicknames "SELECT")
   (:export entities-by-families
@@ -17,7 +17,7 @@
    " Пакет @b(mnas-ansys/tin/select) определяет функции для выбора объектов
    из контейнера геометрии."))
 
-(in-package #:mnas-ansys/tin/select)
+(in-package :mnas-ansys/tin/select)
 
 (defmethod entities-by-families (families entities)
   " @b(Описание:) метод @b(entities-by-families) возвращает

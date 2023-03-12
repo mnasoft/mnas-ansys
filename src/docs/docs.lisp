@@ -1,4 +1,4 @@
-(defpackage #:mnas-ansys/docs
+(defpackage :mnas-ansys/docs
   (:use #:cl ) 
   (:nicknames "M-ANSYS/DOCS")
   (:export make-all)

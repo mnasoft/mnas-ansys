@@ -1,4 +1,4 @@
-(defpackage #:mnas-ansys
+(defpackage :mnas-ansys
   (:use #:cl)
   (:documentation
    " Пакет предназначен для коммуницирования с различными подсистемами ANSYS:

@@ -1,6 +1,6 @@
 ;;;; ./src/dia/dia.lisp
 
-(defpackage #:mnas-ansys/dia
+(defpackage :mnas-ansys/dia
   (:use #:cl)
   (:nicknames "DIA")
   (:export open-tin-file

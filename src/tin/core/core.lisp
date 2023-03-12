@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; package
 
-(defpackage #:mnas-ansys/tin
+(defpackage :mnas-ansys/tin
   (:use #:cl #:mnas-ansys/tin/read)
   (:nicknames "TIN")
   (:export open-tin-file)
@@ -99,7 +99,7 @@
  функции @b(open-tin-file)."
    ))
 
-(in-package #:mnas-ansys/tin)
+(in-package :mnas-ansys/tin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; parameters 
