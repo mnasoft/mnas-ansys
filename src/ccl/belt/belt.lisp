@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/belt/belt.lisp
 
-(defpackage #:mnas-ansys/belt
+(defpackage :mnas-ansys/belt
   (:use #:cl)
   (:intern mm->m
            line-name
@@ -38,7 +38,7 @@
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-ansys/belt)
+(in-package :mnas-ansys/belt)
 
 (defvar *obj-number* 1)
 

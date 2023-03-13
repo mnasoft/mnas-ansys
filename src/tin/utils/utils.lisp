@@ -1,6 +1,6 @@
 ;;;; ./src/utils/utils.lisp
 
-(defpackage #:mnas-ansys/tin/utils
+(defpackage :mnas-ansys/tin/utils
   (:use #:cl #:mnas-ansys/tin #:mnas-ansys/tin/select #:math/geom)
   (:export surface-names-coeged-with-surface-in-family
            surface-names-coeged-with-surfaces 

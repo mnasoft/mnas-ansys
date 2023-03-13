@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/test.lisp
 
-(defpackage #:mnas-ansys/ccl-belt
+(defpackage :mnas-ansys/ccl-belt
   (:use #:cl )
   (:intern mm->m)
   (:export make-tangent-belts
@@ -12,7 +12,7 @@
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-ansys/ccl-belt)
+(in-package :mnas-ansys/ccl-belt)
 
 (require :mnas-string)
 (require :math/coord)

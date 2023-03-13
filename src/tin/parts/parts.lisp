@@ -1,6 +1,6 @@
 ;;;; ./src/parts/parts.lisp
 
-(in-package #:mnas-ansys)
+(in-package :mnas-ansys)
 
 (defun filter-c (surface-number-lst)
   (reduce

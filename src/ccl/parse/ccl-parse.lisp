@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/parse/ccl-parse.lisp
 
-(defpackage #:mnas-ansys/ccl/parse
+(defpackage :mnas-ansys/ccl/parse
   (:use #:cl)
   (:intern start-char
            string-depth
@@ -23,7 +23,7 @@
    "@b(Описание:) пакет @b(mnas-ansys/ccl/parse) предназначен для
  парсинга (разбора) данных и файлов в формате ccl."))
 
-(in-package #:mnas-ansys/ccl/parse)
+(in-package :mnas-ansys/ccl/parse)
  
 (defun start-char (char string)
   "@b(Описание:) функция @b(start-chars) возвращает количество

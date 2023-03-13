@@ -1,6 +1,6 @@
 ;;;; ./src/icem/geometry-test.lisp
 
-(in-package #:ic/geo)
+(in-package :ic/geo)
 
 (ic_geo_create_unstruct_curve_from_points
  "curve"
