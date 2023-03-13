@@ -68,7 +68,9 @@
            <tin>-points
            <tin>-curves
            <tin>-surfaces
-           <tin>-triangulation-tolerance
+           <tin>-triangulation-tolerance)
+  (:export
+           tin-points
            tin-curves
            tin-surfaces           
            )
@@ -117,8 +119,10 @@
     "define_family"
     "define_model"
     "define_prism_meshing_parameters"
-    "define_solid" "define_subset"
+    "define_solid"
+    "define_subset"
     "define_surface"
+    "prescribed_point"
     "return")
   "@b(Описание:) глобальная переменная содержит типы объектов начинающиеся с
 @b(define) плюс @b(return).
@@ -728,10 +732,7 @@
 	(<family>  (push object families))
         (<curve>   (add-obj-to-ht-by-name object (<tin>-curves   tin)))
        	(<surface> (add-obj-to-ht-by-name object (<tin>-surfaces tin)))
-        (<point>
-         nil
-         ;; (add-obj-to-ht-by-name object (<tin>-points   tin))
-         )))))
+        (<point>   (add-obj-to-ht-by-name object (<tin>-points   tin)))))))
 
 (defmethod coedged ((curve <curve>) (surface <surface>))
   "@b(Описание:) метод @b(coedged) возвращает объект типа @b(surface),
