@@ -1,10 +1,12 @@
 ;;;; ./src/rpl/rpl.lisp
 
-(defpackage #:mnas-ansys/rpl
+(defpackage :mnas-ansys/rpl
   (:use #:cl )
   (:export 
    ))
 
+(in-package :mnas-ansys/rpl)
+  
 (defun ic-undo-group-end (stream)
   "ic_undo_group_end text [undo_group]
 

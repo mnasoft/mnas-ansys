@@ -1,0 +1,38 @@
+graph {
+D1L -- D1R [label="GC RP"]
+D2L -- D2R [label="GC RP"]
+D1L -- D2L [label="GC:18"]
+D1R -- D2R [label="GC:18"]
+
+D1L -- D5L [label="GC:2"]
+D1R -- D5R [label="GC:2"]
+
+D7 -- D7 [label="RP"]
+D8 -- D8 [label="RP"]
+D9 -- D9 [label="RP"]
+DA -- DA [label="RP"]
+D1L -- D2R [label="GC"]
+D1R -- D2L [label="RP"]
+
+D1L -- D3L [label="GC"]
+D1R -- D3R [label="GC"]
+D1L -- D4L [label="GC"]
+D1R -- D4R [label="GC"]
+
+D1L -- D6L [label="GC", width=1.0]
+D1R -- D6R [label="GC"]
+
+D1L,D1R -- DA [label="GC"]
+D1L,D1R -- DB [label="GC"]
+D2L -- D4L [label="GC"]
+D2R -- D4R [label="GC"]
+D2L -- D5L [label="GC"]
+D2R -- D5R [label="GC"]
+D2L -- D6L [label="GC"]
+D2R -- D6R [label="GC"]
+D2L,D2R -- D7 [label="GC"]
+D3L -- D5L [label="GC"]
+D3R -- D5R [label="GC"]
+D7 -- D8 [label="GC"]
+D9 -- DA [label="GC"]
+}

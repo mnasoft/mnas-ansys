@@ -1,8 +1,8 @@
 ;;;; ./src/ccl/test.lisp
 
-(defpackage #:mnas-ansys/ccl-belt
+(defpackage :mnas-ansys/ccl-belt
   (:use #:cl )
-  (:intern number-to-string mm->m)
+  (:intern mm->m)
   (:export make-tangent-belts
            make-radial-belts
            )
@@ -12,25 +12,10 @@
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-ansys/ccl-belt)
+(in-package :mnas-ansys/ccl-belt)
 
 (require :mnas-string)
 (require :math/coord)
-
-(defun number-to-string (val &key (fmt "~,2@F"))
-  "@b(Описание:) функция @b(number-to-string) возвращает строку,
-  которая представляет вещественое число в формате пригодном для
-  вставки в CCL файл системы ANSYS CFX.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (number-to-string  90.5645) => \"p90i56\"
- (number-to-string -90.5645) => \"m90i56\"
-@end(code)
-"
-  (mnas-string/translit:translit
-   (string-trim " " (format nil fmt val))
-   :ht mnas-string/translit:*cfx->en*))
 
 (defun mm->m (value)
   "@b(Описание:) функция @b(mm->m) переводит милиметры в метры."
@@ -103,11 +88,11 @@ alfa
   END
 END
 "
-              (number-to-string alpha)
-              (number-to-string x)
-              (number-to-string y)
-              (number-to-string r-i)
-              (number-to-string r-i+1)       ;; Header
+              (mnas-string/print:number-to-string alpha)
+              (mnas-string/print:number-to-string x)
+              (mnas-string/print:number-to-string y)
+              (mnas-string/print:number-to-string r-i)
+              (mnas-string/print:number-to-string r-i+1)       ;; Header
               (nth-value 1 (floor (1+ i) 2)) ;; Color
               (mm->m x)                      ;; x Point 1
               (* (cos (math/coord:dtr alpha)) (mm->m (+ y r-i))) ;; y Point 1
@@ -190,20 +175,20 @@ SURFACE OF REVOLUTION: SURFACE ~A ~A ~A ~A ~A ~A
   END
 END
 "
-              (number-to-string alpha)
-              (number-to-string x)
-              (number-to-string r-i)
-              (number-to-string r-i+1)
-              (number-to-string theta-min)
-              (number-to-string theta-max) ;; SURFACE OF REVOLUTION:
+              (mnas-string/print:number-to-string alpha)
+              (mnas-string/print:number-to-string x)
+              (mnas-string/print:number-to-string r-i)
+              (mnas-string/print:number-to-string r-i+1)
+              (mnas-string/print:number-to-string theta-min)
+              (mnas-string/print:number-to-string theta-max) ;; SURFACE OF REVOLUTION:
               
               (nth-value 1 (floor (1+ i) 2)) ;; Colour
 
-              (number-to-string alpha)
-              (number-to-string x)
-              (number-to-string y)
-              (number-to-string r-i)
-              (number-to-string r-i+1) ;; Location
+              (mnas-string/print:number-to-string alpha)
+              (mnas-string/print:number-to-string x)
+              (mnas-string/print:number-to-string y)
+              (mnas-string/print:number-to-string r-i)
+              (mnas-string/print:number-to-string r-i+1) ;; Location
               
               (* (cos (math/coord:dtr alpha)) (mm->m y)) ;; y Rotation Axis From 
               (* (sin (math/coord:dtr alpha)) (mm->m y)) ;; z Rotation Axis From
@@ -269,11 +254,11 @@ END
   END
 END
 "
-          (number-to-string alpha)
-          (number-to-string x)
-          (number-to-string y)
-          (number-to-string r-min)
-          (number-to-string r-max)
+          (mnas-string/print:number-to-string alpha)
+          (mnas-string/print:number-to-string x)
+          (mnas-string/print:number-to-string y)
+          (mnas-string/print:number-to-string r-min)
+          (mnas-string/print:number-to-string r-max)
           
           (nth-value 1 (floor 1 2)) ;; color
           ;; x y z Point 1
@@ -364,20 +349,20 @@ SURFACE OF REVOLUTION: SURFACE ~A ~A ~A ~A ~A ~A
   END
 END
 "
-              (number-to-string alpha)
-              (number-to-string x)
-              (number-to-string r-min)
-              (number-to-string r-max)
-              (number-to-string theta-i)
-              (number-to-string theta-i+1)
+              (mnas-string/print:number-to-string alpha)
+              (mnas-string/print:number-to-string x)
+              (mnas-string/print:number-to-string r-min)
+              (mnas-string/print:number-to-string r-max)
+              (mnas-string/print:number-to-string theta-i)
+              (mnas-string/print:number-to-string theta-i+1)
               ;; Color
               (nth-value 1 (floor (1+ i) 2)) 
               ;; Location
-              (number-to-string alpha)
-              (number-to-string x)
-              (number-to-string y)
-              (number-to-string r-min)
-              (number-to-string r-max)
+              (mnas-string/print:number-to-string alpha)
+              (mnas-string/print:number-to-string x)
+              (mnas-string/print:number-to-string y)
+              (mnas-string/print:number-to-string r-min)
+              (mnas-string/print:number-to-string r-max)
               ;; y z Rotation Axis From 
               (* (cos (math/coord:dtr alpha)) (mm->m y))
               (* (sin (math/coord:dtr alpha)) (mm->m y))

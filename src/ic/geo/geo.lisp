@@ -1,6 +1,6 @@
 ;;;; ./src/icem/geometry.lisp
 
-(defpackage #:mnas-ansys/ic/geo
+(defpackage :mnas-ansys/ic/geo
   (:use #:cl)
   (:nicknames "IC/GEO" "GEO")
   (:export  load-tetin
@@ -59,6 +59,7 @@
             num-segments
             set-family
             set-part
+            set-part-curve
             set-name
             rename-family
             replace-entity
@@ -381,7 +382,7 @@
    " Пакет предназначен для создания геометрии через API системы ANSYS ICEM CFD."
    ))
 
-(in-package #:mnas-ansys/ic/geo)
+(in-package :mnas-ansys/ic/geo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1090,13 +1091,28 @@ Changes the geometry with the given type and name to family newfam. The first ar
    type newfam how objs rename))
 
 (defun set-part (type names newpart &optional (rename_part 1))
-"
-Moves geometry from one part to a new one. This has to create the new part name and copy the boundary conditions if necessary so that the other groups in the family are not disturbed.
+" Moves geometry from one part to a new one. This has to create the
+new part name and copy the boundary conditions if necessary so that
+the other groups in the family are not disturbed.
 "  
   (format
    t
    "ic_geo_set_part ~A ~A ~A ~A;~%"
    type names newpart rename_part))
+
+(defun set-part-curve (names newpart &optional (rename_part 0))
+" Moves geometry from one part to a new one. This has to create the
+new part name and copy the boundary conditions if necessary so that
+the other groups in the family are not disturbed.
+"
+  #+nil
+  (ic/util:undo-group-begin)
+  (format
+   t
+   "ic_geo_set_part curve {~{~S~^ ~}} ~S ~A;~%"
+   names newpart rename_part)
+  #+nil
+  (ic/util:undo-group-end))
 
 (defun set-name (type name newname &optional (make_new 0) (warn 1))
 "
@@ -2666,7 +2682,7 @@ Sets the periodic data.
    "ic_geo_set_periodic_data ~A;~%"
    data))
 
-(defun get-family-param (fam name)
+(defun get-family-param (fam name )
 "
 Returns the family parameters.
 "  

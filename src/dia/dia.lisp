@@ -1,6 +1,6 @@
 ;;;; ./src/dia/dia.lisp
 
-(defpackage #:mnas-ansys/dia
+(defpackage :mnas-ansys/dia
   (:use #:cl)
   (:nicknames "DIA")
   (:export open-tin-file
@@ -8,7 +8,9 @@
   (:export *tin*
            *initial-directory*)
   (:export setup-family-parameters
-           families)
+           families
+           surface-families
+           curves-families)
   (:documentation
    "Пакет @b(mnas-ansys/tin/dia) выполнения команд в диалоговом режиме."))
 
@@ -53,7 +55,11 @@
 
 (defun setup-family-parameters (&key (d-scale 1/4)
                                   (gref 1)
-                                  (gmax 2))
+                                  (gmax 2)
+                                  periodic-angle
+                                  (gnatref 10)
+                                  (gnat 0)
+                                  (igwall 0))
   " @b(Описание:) функция @b(setup-family-parameters) печатает на
 стандартный вывод скрипт, устанавливающий параметры на поверхностях
 определенных семейств, содержащихся в tin- файле.
@@ -79,11 +85,18 @@
                    :collect i :into d-rez
                  :finally (return d-rez))))
     (progn
-      (format t "~A~%" "ic_undo_group_begin")
-      (mnas-ansys/ic/geo:set-meshing-params-global :gref 1 :gmax gmax)
-      (format t "~A~2%" "ic_undo_group_end"))
+      (format t "ic_undo_group_begin~%")
+      (format t "ic_coords_dir_into_global {1 0 0} global~%")
+      (if periodic-angle
+        (format t "ic_geo_set_periodic_data {axis {1 0 0} type rot angle ~A base {0 0 0}}~%" periodic-angle)
+        (format t "ic_geo_set_periodic_data {axis {1 0 0} type ~A angle 36 base {0 0 0}}~%" "none"))
+      (format t "ic_undo_group_end~2%"))
     (progn
-      (format t "~A~%" "ic_undo_group_begin")
+      (format t "~A~%" "ic_undo_group_begin;")
+      (geo:set-meshing-params-global :gref gref :gmax gmax :gnatref gnatref :gnat gnat :igwall igwall)
+      (format t "~A~2%" "ic_undo_group_end;"))
+    (progn
+      (format t "~A~%" "ic_undo_group_begin;")
       (loop :for i :in d-names
             :do
                (let ((d-size
@@ -94,9 +107,14 @@
                            "_"
                            (first (last (mnas-string:split "/" i)))))))))
                  d-size
-                 (format t "ic_geo_set_family_params ~A no_crv_inf prism 0 emax ~A ehgt 0.0 hrat 0 nlay 0 erat ~A ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0~%"
+                 (format t "ic_geo_set_family_params ~A no_crv_inf prism 0 emax ~A ehgt 0.0 hrat 0 nlay 0 erat ~A ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0;~%"
                          i (* d-size d-scale) 0.0)))
-      (format t "~A~2%" "ic_undo_group_end"))))
+      (format t "~A~2%" "ic_undo_group_end;"))))
+"
+1. ic_undo_group_begin 
+2. ic_set_meshing_params global 0 gref 1.0 gmax 2.0 gfast 0 gedgec 0.2 gnat 0.2 gcgap 1 gnatref 12 igwall 0
+3. ic_undo_group_end
+"
 
 (defun families ()
   "@b(Описание:) функция @b(families) возвращает список имен семейств,
@@ -107,6 +125,27 @@
             (open-tin-file)))))
     (format t "~2%~{~A~^~%~}~2%" names)
     names))
+
+(defun surface-families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (progn
+    (dia:open-tin-file)
+    (tin:families (tin:<tin>-surfaces dia:*tin*))))
+
+(defun curves-families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (progn
+    (dia:open-tin-file)
+    (tin:families (tin:<tin>-curves dia:*tin*))))
+
+(defun points-families ()
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+выбранного в диалоге tin-файла."
+  (progn
+    (dia:open-tin-file)
+    (tin:families (tin:<tin>-points dia:*tin*))))
 
 #+nil (setup-family-parameters :d-scale 1/4 :gmax 2)
 #+nil (choose-directory)

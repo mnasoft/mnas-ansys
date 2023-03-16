@@ -1,6 +1,6 @@
 ;;;; ./src/read/read.lisp
 
-(defpackage #:mnas-ansys/tin/read
+(defpackage :mnas-ansys/tin/read
   (:use #:cl)
   (:export read-file-as-lines
            line-by-line

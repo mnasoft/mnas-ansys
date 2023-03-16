@@ -1,7 +1,7 @@
 
 ;;;; ./src/clim/clim.lisp
 
-(defpackage #:mnas-ansys/ccl
+(defpackage :mnas-ansys/ccl
   (:use #:cl #:mnas-ansys/ccl/parse)
   (:export find-in-tree
            find-in-tree-key
@@ -21,7 +21,7 @@
   (:documentation
    "STUB"))
 
-(in-package #:mnas-ansys/ccl)
+(in-package :mnas-ansys/ccl)
 
 (defun find-in-tree (item tree &key (test #'eql) (key #'identity))
   "@b(Описание:) функция @b(find-in-tree) выполняет рекурсивый поиск

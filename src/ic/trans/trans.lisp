@@ -1,6 +1,6 @@
 ;;;; ./src/icem/translation.lisp
 
-(defpackage #:ic/trans
+(defpackage :ic/trans
   (:use #:cl)
   (:export ddn-tetin
            ug-tetin
@@ -33,7 +33,7 @@
    " Пакет содержит функции преобразования (перевода, экспорта-импорта)."
    ))
 
-(in-package #:ic/trans)
+(in-package :ic/trans)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

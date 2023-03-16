@@ -1,4 +1,4 @@
-(in-package #:mnas-ansys)
+(in-package :mnas-ansys)
 
 ;; (defparameter *tin-file* "~/quicklisp/local-projects/ANSYS/mnas-ansys/tin/a32_GT-13.tin")
 (defparameter *tin-file*

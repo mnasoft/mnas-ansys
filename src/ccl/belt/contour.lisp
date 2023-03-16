@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/belt/contour.lisp
 
-(defpackage #:mnas-ansys/contour
+(defpackage :mnas-ansys/contour
   (:use #:cl #:mnas-ansys/belt)
   (:export make-contour)
   (:documentation
@@ -9,7 +9,7 @@
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-ansys/contour)
+(in-package :mnas-ansys/contour)
 
 (defun contour-name ()
   "@b(Описание:) функция @b(line-name) возвращает строку, обозначающую

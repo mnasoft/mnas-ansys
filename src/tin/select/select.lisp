@@ -1,4 +1,4 @@
-(defpackage #:mnas-ansys/tin/select
+(defpackage :mnas-ansys/tin/select
   (:use #:cl #:mnas-ansys/tin)
   (:nicknames "SELECT")
   (:export entities-by-families
@@ -10,11 +10,14 @@
            surfaces-coedged-with-curve-by-number
            families-by-assembly-name
            )
+  (:export curves-coeged-ally
+           curves-coeged-internally
+           curves-coeged-externally)
   (:documentation
    " Пакет @b(mnas-ansys/tin/select) определяет функции для выбора объектов
    из контейнера геометрии."))
 
-(in-package #:mnas-ansys/tin/select)
+(in-package :mnas-ansys/tin/select)
 
 (defmethod entities-by-families (families entities)
   " @b(Описание:) метод @b(entities-by-families) возвращает
@@ -113,3 +116,88 @@
 "
   (loop :for i :in families
         :when (member assembly (mnas-string:split "/" i) :test #'equal) :collect i))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod curves-coeged-ally  ((family string) (tin <tin>) &optional (new-family family))
+  "@b(Описание:) метод @b(curves-coeged-ally) печатает на стандартный
+   вывод и возвращает имена кривых сопряженных любым образом с
+   поверхностями из семейства @b(family)."
+  (let ((names
+          (names 
+           (remove-duplicates
+            (apply #'append
+                   (loop :for i :in (surfaces-by-families `(,family) tin)
+                         :collect
+                         (coedged i tin)))))))
+    (geo:set-part-curve names new-family)
+    names))
+
+(defmethod curves-coeged-ally ((family cons) (tin <tin>) &optional (new-family family))
+  "@b(Описание:) метод @b(curves-coeged-ally) печатает на стандартный
+   вывод и возвращает имена кривых сопряженных любым образом с
+   поверхностями из семейства @b(family)."
+  (names 
+   (remove-duplicates
+    (apply #'append
+           (loop :for i :in (surfaces-by-families family tin)
+                 :collect
+                 (coedged i tin))))))
+
+(defmethod curves-coeged-internally ((family string) (tin <tin>) &optional (new-family family))
+  "@b(Описание:) метод @b(curves-coeged-internally) печатает на
+   стандартный вывод и возвращает имена кривых сопряженных
+   исключительно с поверхностями из семейства @(family)."
+  (let* ((curves
+          (loop :for i
+                  :in (remove-duplicates
+                       (apply #'append
+                              (loop :for s :in (select:surfaces-by-families `(,family) tin)
+                                    :collect (tin:coedged s tin))))
+                :when
+                (every #'(lambda (el)
+                           (string=  el family))
+                       (loop :for j :in (tin:coedged i tin)
+                             :collect (tin:<ent>-family j)))
+                :collect i))
+         (names (names curves)))
+    (geo:set-part-curve names new-family)
+    names))
+
+(defmethod curves-coeged-externally ((family string) (tin <tin>))
+  "@b(Описание:) метод @b(curves-coeged-externally) печатает на
+   стандартный вывод и возвращает имена кривых сопряженных
+   исключительно с поверхностями из семейства @(family)."
+  (let ((curves
+          (loop :for i
+                  :in (remove-duplicates
+  (apply #'append
+         (loop :for s :in (select:surfaces-by-families `(,family) tin)
+               :collect (tin:coedged s tin))))
+                :when
+                (notevery #'(lambda (el)
+                           (string=  el family))
+                       (loop :for j :in (tin:coedged i tin)
+                             :collect (tin:<ent>-family j)))
+                :collect i)))
+    (tin:names curves)))
+
+
+
+#+nil
+(defmethod curves-with-same-family-surface ((family string) (tin <tin>))
+  "@b(Описание:) метод @b(curves-with-same-family-surface) возвращает
+ имена кривых из семейства @(family), сопряженных с поверхностями
+ семейтсва @(family)."
+  (let ((curves
+          (loop :for i
+                  :in (mnas-ansys/tin/select:curves-by-families `(,family) tin)
+                :when
+                (every #'(lambda (el)
+                           (string=  el family))
+                       (loop :for j :in (tin:coedged i tin)
+                             :collect (tin:<ent>-family j)))
+                :collect i)))
+    (tin:names curves)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
