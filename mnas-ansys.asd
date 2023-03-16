@@ -21,7 +21,7 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.15"
+  :version "0.0.16"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
@@ -62,14 +62,33 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string"
-               "mnas-package/sys"
-               "mnas-ansys/tin/read")
-  :components ((:module "src/tin/core" 
+  :depends-on ("mnas-string" "mnas-package/sys" "mnas-ansys/tin/read")
+  :components ((:module "src/tin"
+                :serial nil
+                :components ((:file "package")))
+               (:module "src/tin/src"
+                :serial nil
+                :depends-on ("src/tin")
                 :serial nil
                 :components
-                ((:file "core")))))
-
+                ((:file "classes")
+                 (:file "parameters" :depends-on ("classes"))
+                 (:file "generics")))
+               (:module "src/tin/src/methods"
+                :serial nil
+                :depends-on ("src/tin/src")
+                :components
+                ((:file "object-tag")
+                 (:file "coedged")
+                 (:file "print-object")
+                 (:file "read-object")
+                 (:file "methods")))
+               (:module "src/tin/src/open"
+                :serial nil
+                :depends-on ("src/tin/src/methods")
+                :components
+                ((:file "open")))))
+                   
 (defsystem "mnas-ansys/tin/select"
   :description
   "Система @(mnas-ansys/tin/select) определяет функции для выбора объектов из контейнера геометрии."
