@@ -42,5 +42,20 @@
  Для поверхностей типа @b(<point>) должны возвращаться кривые типа @b(<curve>),
 находящиеся в контейненре @b(container)."))
 
-;;;; generics
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defgeneric find-point-by-name (name container)
+  (:documentation
+   "@b(Описание:) обобщенная_функция @b(find-point-by-name) возвращает
+    объект типа @b(<point>) из контейнера @b(container) по имени
+    @(name)."))
+
+(defgeneric find-curve-by-name (name container)
+  (:documentation
+   "@b(Описание:) обобщенная_функция @b(find-curve-by-name) возвращает
+    объект типа @b(<curve>) из контейнера @b(container) по имени
+    @(name)."))
+
+(defgeneric find-surface-by-name (name container)
+    (:documentation
+   "@b(Описание:) обобщенная_функция @b(find-surface-by-name) возвращает
+    объект типа @b(<surface>) из контейнера @b(container) по имени
+    @(name)."))

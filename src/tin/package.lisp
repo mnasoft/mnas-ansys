@@ -71,7 +71,8 @@
            tin-surfaces           
            )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (:export find-curve-by-name
+  (:export find-point-by-name
+           find-curve-by-name
            find-surface-by-name
            )
   (:export find-coincidense)

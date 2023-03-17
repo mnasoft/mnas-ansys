@@ -43,13 +43,14 @@
                     (coedged surf tin)))
        (tin-surfaces tin)))
 
+(defmethod find-point-by-name ((name string) (tin <tin>))
+  (gethash name (<tin>-points tin)))
+
 (defmethod find-curve-by-name ((name string) (tin <tin>))
-  (gethash name (<tin>-curves tin))
-  )
+  (gethash name (<tin>-curves tin)))
 
 (defmethod find-surface-by-name ((name string) (tin <tin>))
-  (gethash name (<tin>-surfaces tin))
-  )
+  (gethash name (<tin>-surfaces tin)))
 
 (defmethod find-curves-coeged-with-surfases (surfaces (tin <tin>))
   (remove-duplicates
