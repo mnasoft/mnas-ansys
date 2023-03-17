@@ -80,6 +80,7 @@ CFX-PRE.
                 :components
                 ((:file "object-tag")
                  (:file "coedged")
+                 (:file "coincident")
                  (:file "print-object")
                  (:file "read-object")
                  (:file "methods")))
