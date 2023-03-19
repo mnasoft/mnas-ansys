@@ -26,7 +26,7 @@
          (point (find-point-by-name \"GEOM.60\" tin)))
     (coincident point tin))
 @end(code)"
-  (loop :for curve :in (tin-curves dia:*tin*)
+  (loop :for curve :in (tin-curves tin)
         :when (some #'(lambda (pnt) (eq pnt point))
                     (coincident curve tin))
           :collect curve))
