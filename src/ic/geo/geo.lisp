@@ -1105,14 +1105,12 @@ the other groups in the family are not disturbed.
 new part name and copy the boundary conditions if necessary so that
 the other groups in the family are not disturbed.
 "
-  #+nil
-  (ic/util:undo-group-begin)
+  #+nil (ic/util:undo-group-begin)
   (format
    t
-   "ic_geo_set_part curve {~{~S~^ ~}} ~S ~A;~%"
+   "ic_geo_set_part curve {~{~S~^ ~}} ~S ~A;"
    names newpart rename_part)
-  #+nil
-  (ic/util:undo-group-end))
+  #+nil (ic/util:undo-group-end))
 
 (defun set-name (type name newname &optional (make_new 0) (warn 1))
 "
@@ -1129,7 +1127,7 @@ rename_ents is set, family entities will be renamed.
 "  
   (format
    t
-   "ic_geo_rename_family ~A ~A ~A;~%"
+   "ic_geo_rename_family ~S ~S ~A;~%"
    fam newfam rename_ents))
 
 (defun replace-entity (type e1name e2name)

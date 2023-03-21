@@ -129,8 +129,9 @@
             (apply #'append
                    (loop :for i :in (surfaces-by-families `(,family) tin)
                          :collect
-                         (coedged i tin)))))))
-    (geo:set-part-curve names new-family)
+                         (coedged i tin))))
+           nil)))
+    (when names (geo:set-part-curve names new-family))
     names))
 
 (defmethod curves-coeged-ally ((family cons) (tin <tin>) &optional (new-family family))
@@ -160,8 +161,8 @@
                        (loop :for j :in (tin:coedged i tin)
                              :collect (tin:<ent>-family j)))
                 :collect i))
-         (names (names curves)))
-    (geo:set-part-curve names new-family)
+         (names (names curves nil)))
+    (when names (geo:set-part-curve names new-family))
     names))
 
 (defmethod curves-coeged-externally ((family string) (tin <tin>))

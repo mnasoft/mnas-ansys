@@ -261,6 +261,7 @@ CFX-PRE.
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   :depends-on (#+nil "mnas-ansys/tin/read"
+               "cl-fad"
                "mnas-file-dialog"
                "mnas-hash-table"
                "mnas-ansys/tin"
