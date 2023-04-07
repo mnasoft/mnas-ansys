@@ -5,7 +5,9 @@
   (:use #:cl #:mnas-ansys/ccl/parse)
   (:export find-in-tree
            find-in-tree-key
-           find-in-tree-value)
+           find-in-tree-value
+           find-in-tree-key-value)
+  (:export value)
   (:export make-domain-interface-rotational-periodicity
            make-domain-interface-general-connection
            )
@@ -57,12 +59,23 @@
     (find-in-tree-aux tree)))
 
 (defun find-in-tree-key (key tree &key (test #'equal))
+    "Поиск по ключу"
   (find-in-tree key tree :test test
                          :key (lambda (i) (when (consp i) (first i)))))
 
 (defun find-in-tree-value (value tree &key (test #'equal))
+  "Поиск по значению"
   (find-in-tree value tree :test test
                            :key (lambda (i) (when (consp i) (second i)))))
+
+(defun find-in-tree-key-value (key value tree)
+  "Поиск по ключу и значению"
+  (find-in-tree
+   `(,key
+     ,value)
+   tree
+   :test #'equal
+   :key (lambda (i) (when (consp i) (list (first i)(second i))))))
 
 (defun value (x) (cadr x))
 

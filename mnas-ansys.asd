@@ -21,7 +21,7 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.16"
+  :version "0.0.17"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
@@ -29,6 +29,7 @@ CFX-PRE.
                "mnas-ansys/tin"
                "mnas-ansys/ccl"
                "mnas-ansys/belt"
+               "mnas-ansys/exchange"
                "mnas-ansys/dia"
                "mnas-ansys/ic")
   :components ((:module "src" 
@@ -253,7 +254,7 @@ CFX-PRE.
   :components ((:module "src/ic/dis"   :serial nil :components ((:file "dis")))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(asdf:defsystem "mnas-ansys/dia"
+(defsystem "mnas-ansys/dia"
   :description
   "Подсистема @(mnas-ansys/dia) определяет функции, выполняющиеся при
 помощи диалога выбора файла."
@@ -266,6 +267,7 @@ CFX-PRE.
                "mnas-hash-table"
                "mnas-ansys/tin"
                "mnas-ansys/ic/geo"
+               "mnas-ansys/exchange"
                #+nil "mnas-ansys/tin/utils"
                #+nil "mnas-ansys/ccl"
                #+nil "mnas-ansys/belt")
@@ -273,3 +275,20 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "dia")))))
+
+(defsystem "mnas-ansys/exchange"
+  :description
+  "Подсистема @(mnas-ansys/exchande) определяет функции, позволяющие
+ извлечь информацию из файлов которые экспортирует Ansys."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("mnas-string"
+               "math/stat"
+               "math/matr") 
+  :components ((:module "src/exchange"
+                :serial nil
+                :components
+                ((:file "exchange")))))
+
+

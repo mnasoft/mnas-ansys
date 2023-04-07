@@ -13,6 +13,7 @@
            families
            surface-families
            curves-families)
+  (:export average-value-from-dat-file) 
   (:documentation
    "Пакет @b(mnas-ansys/tin/dia) выполнения команд в диалоговом режиме."))
 
@@ -177,3 +178,13 @@ ic_geo_set_periodic_data {axis {1 0 0} type rot angle 36 base {0 0 0}}
 ic_undo_group_end 
 "
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun average-value-from-dat-file (col
+                                    &key
+                                      (last 500))
+  "@b(Описание:) функция @b(dia-mid-value-from-dat-file) 
+"
+  (let ((dat-file
+          (mnas-file-dialog:get-open-file
+           :filetypes '(("tin Files" "*.dat") ("All Files" "*")))))
+    (exch:average-value-from-dat-file dat-file col :last last)))
