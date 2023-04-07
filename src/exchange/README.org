@@ -1,0 +1,93 @@
+
+Расположение 
+#+begin_src shell
+  cfx5dfile <file> -read-monitor
+#+end_src
+
+D:\ANSYS\v145\CFX\bin\cfx5.exe
+
+//n133905/home/_namatv/CFX/n70/cfx/N70_prj_01/hot/prj_01_Tair_0_G1_17/rez-bak/N70_prj_01_Ne_10_Tair_0_D_FaS_Mesh_good_GTD_bad_CMB_FRCaED_002.res
+
+
+#+begin_src sh
+ "D:\ANSYS\v145\CFX\bin\cfx5mondata" -help
+#+end_src
+
+
+ D:\ANSYS\v145\CFX\etc\workspace-basic.mst
+
+[[file:d:/ANSYS/v145/CFX/etc/workspace-basic.mst]] 
+
+
+* D:\ANSYS\v145\CFX\bin\cfx5mondata
+
+Name:
+cfx5mondata
+
+
+Purpose:
+Run the CFX Monitor Data Exporter.  Monitor data will be output in
+Excel-compatible CSV (comma-separated values) format
+
+Synopsis:
+
+cfx5mondata -res <file> | -dir <directory> | -mon <file> [-showvars]
+            [-nocoeffloops] [-lastvalueonly] [-varlist <variables>]
+            [-varrule <rule>] [-out <file>] [-help] [-v]
+
+[]  denotes an optional argument.
+|   separates mutually exclusive arguments.
+... following an argument indicates that it may be repeated.
+<>  denotes that substitution of a suitable value is required. All other
+    arguments are keywords, some of which have a short form.
+
+Arguments:
+
+-def <file>
+-res <file>
+    Retrieve solver monitor data from CFX Solver Results file <file>.
+-dir <directory>
+    Retrieve solver monitor data from CFX Solver run directory <directory>.
+-mon <file>
+    Retrieve solver monitor data from a monitor data text file <file>.
+
+-output <file>
+-out <file>
+    Send output to <file>.  If you omit this argument, output will be sent
+    to the console.
+
+-showvars
+    Instead of extracting variable data, simply output all monitor variables
+    found in the results file.
+
+-lastvaluesonly
+    Instead of extracting variable data per timestep, locate the last valid
+    value for each variable and output in CSV format.
+
+-nocoeffloops
+    Coefficient loop data, if present, should be omitted.  Only the last value
+    per timestep will be output.
+
+-varlist <variable list>
+    Lists variables by name that should be selected for export.  If neither
+    -varlist nor -varrule are specified, all variables will be selected.
+    Multiple variables should be separated by semi-colon, and quoted to allow for
+    shell parsing, ie:
+       -varlist "RESIDUAL,RMS,U-Mom;RESIDUAL,RMS,V-Mom"
+
+-varrule <variable rule>
+    Selects variables that match Monitor Variable rule <variable rule>.  If
+    neither -varlist nor -varrule are specified, all variables will be
+    selected.
+    See $CFX5ROOT/etc/workspace-basic.mst for examples of Monitor Variable
+    rules.  Example:
+       -varrule "CATEGORY = USER POINT"
+
+-help
+-h
+    Print this message.
+
+-verbose
+-v
+    Specifying this option may result in additional output being sent to
+    the UNIX standard output file (normally the screen).
