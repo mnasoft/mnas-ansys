@@ -4,9 +4,22 @@
   (:use #:cl)
   (:nicknames "EXCH")
   (:export read-dat-file
-           average-value-from-dat-file)
+           average-value-from-dat-file
+           )
   (:export select-first-n
            select-last-n)
+  (:export read-res-file
+           setect-matches
+           average-value-from-headered-tabel
+           average-values-from-headered-tabel
+           average-value-from-headered-tabel-by-col-name
+           average-value-from-headered-tabel-by-col-names
+           ave-average-value-from-headered-tabel-by-col-names
+           max-average-value-from-headered-tabel-by-col-names
+           ave-max-average-value-from-headered-tabel-by-col-names
+           )
+  (:export convert-coord)
+  (:export res->ccl)
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
     информацию из файлов которые экспортирует Ansys"))
@@ -90,10 +103,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defparameter *res-fname*
-  "//n133905/home/_namatv/CFX/n70/cfx/N70_prj_01/hot/prj_01_Tair_0_G1_17/rez-bak/N70_prj_01_Ne_10_Tair_0_D_FaS_Mesh_good_GTD_bad_CMB_FRCaED_002.res")
-
-
 (defun read-res-file (res-file
                       &key
                         (rec-number 500)
@@ -115,10 +124,12 @@
                   (when (= j 0)
                     (let* ((str-01 (ppcre:regex-replace-all "\",\""  i  "\" \""))
                            (str-02 (ppcre:regex-replace-all "\"\"" str-01  "\\\"")))
-                      (format os "~A" (concatenate 'string "(" str-02 ")"))))
+                      #+nil(format os "~A" (concatenate 'string "(" str-02 ")"))
+                      (format os "~A" (concatenate 'string "#(" str-02 ")"))))
                   (when (> j (max 1 (- is-length 1 rec-number)))
                     (let* ((str-01 (ppcre:regex-replace-all ","  i  " ")))
-                      (format os "~A" (concatenate 'string "(" str-01 ")")))))
+                      #+nil(format os "~A" (concatenate 'string "(" str-01 ")"))
+                      (format os "~A" (concatenate 'string "#(" str-01 ")")))))
          (delete-file file-name)
          (read-from-string
           (concatenate 'string "(" (get-output-stream-string os) ")"))))
@@ -128,46 +139,145 @@
                               "-varrule" varrule))
     (scan-res-file file-name)))
 
-(defparameter *h-d*
-  (read-res-file *res-fname*))
+(defun setect-matches (regex headered-tabel)
+  "@b(Описание:) функция @b(setect-matches) возвращает, список, каждый элемент которого
+является 2d-списком, содержащим номер и заголовок колонки, удовлетворяющей @b(regex)
+для строки заголовков headered-tabel.
 
-(defun setect-mathed (regex headered-tabel)
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (setect-matches \"GT1\" *h-d*)
+=> ((1124 \"USER POINT,Temperature GT1 F T01 p46i5 p415i5 p0i0,D1,\"x= 4.65E-02,y= 4.16E-01,z= 0.00E+00\",Temperature\")
+    (1125   \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
+    ...
+   )
+@end(code)
+"
   (let ((rgx (ppcre:create-scanner regex)))
     
-  (loop :for i :in (first headered-tabel)
+  (loop :for i :across (first headered-tabel)
         :for j :from 0
         :when (ppcre:scan rgx i)
           :collect `(,j ,i))))
 
-(setect-mathed "USER POINT,T03" *h-d*)
-(setect-mathed "USER POINT,P02" *h-d*) 
-(setect-mathed "USER POINT,P03" *h-d*) 
-
-
 (defun average-value-from-headered-tabel
     (regex headered-tabel
      &aux
-       (col (first
-             (first
-              (setect-mathed regex headered-tabel))))
-       (col-name (second
-                  (first
-                   (setect-mathed regex headered-tabel))))
+       (mathed (setect-matches regex headered-tabel))
+       (col (first (first mathed)))
+       (col-name (second (first mathed)))
        (tabel (cdr headered-tabel)))
-  (let ((data (mapcar #'(lambda (el) (nth col el)) tabel)))
+  (let ((data (mapcar #'(lambda (el)
+                          #+nil(nth col el)
+                          (svref el col))
+                      tabel)))
     (list col-name
      (math/stat:average-value data)
-     (math/stat:variation-coefficient data))))
+     (math/stat:standard-deviation data))))
 
 (defun average-values-from-headered-tabel (regexes headered-tabel)
   (mapcar #'(lambda (regex)
               (average-value-from-headered-tabel regex headered-tabel))
           regexes))
 
-(average-values-from-headered-tabel
- '("USER POINT,T03" "USER POINT,P02" "USER POINT,P03")
- *h-d*)
+(defun average-value-from-headered-tabel-by-col-name
+    (col-name headered-tabel
+     &aux
+       (col (first col-name))
+       (col-name (second col-name))
+       (tabel (cdr headered-tabel)))
+  (let ((data (mapcar #'(lambda (el)
+                          #+nil(nth col el)
+                          (svref el col))
+                      tabel)))
+    (list col-name
+          (math/stat:average-value data)
+          (math/stat:standard-deviation data))))
 
-(with-open-file (str "~/h-d.lisp" :direction :output :if-exists :supersede)
-  (format str "~S" *h-d*))
+(defun average-value-from-headered-tabel-by-col-names
+    (col-names headered-tabel)
+  (mapcar
+   #'(lambda (col-name)
+       (average-value-from-headered-tabel-by-col-name col-name headered-tabel))
+   col-names))
 
+(defun ave-average-value-from-headered-tabel-by-col-names
+    (number col-names headered-tabel)
+  (list
+   number
+   (math/stat:average-value
+    (mapcar #'second
+            (average-value-from-headered-tabel-by-col-names col-names headered-tabel)))))
+
+(defun max-average-value-from-headered-tabel-by-col-names
+    (number col-names headered-tabel)
+  (list
+   number
+   (math/stat:max-value
+    (mapcar #'second
+            (average-value-from-headered-tabel-by-col-names col-names headered-tabel)))))
+
+(defun ave-max-average-value-from-headered-tabel-by-col-names
+    (number col-names headered-tabel
+     &aux
+       (rez (mapcar #'second
+                    (average-value-from-headered-tabel-by-col-names
+                     col-names
+                     headered-tabel))))
+      (list
+     number
+     (math/stat:average-value rez)
+     (math/stat:max-value rez)))
+
+(defun convert-coord (x)
+  "Преобразует строковое представление значения в число.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (convert-coord \"p179i5\")
+ (convert-coord \"m258i3\") 
+@end(code)
+"
+  (read-from-string
+   (ppcre:regex-replace-all
+    "m"
+    (ppcre:regex-replace-all
+     "p"
+     (ppcre:regex-replace-all "i" x ".") "+")
+    "-")))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun res->ccl (res-file
+                 &key
+                   (program "D:/ANSYS/v145/CFX/bin/cfx5cmds.exe")
+                   (file-name
+                    (namestring
+                     (fad:with-output-to-temporary-file (stream))))
+                   (file-name-ccl (concatenate 'string file-name ".ccl")))
+  "@b(Описание:) функция @b(res->ccl) возвращает списковое представление
+   ccl, извлекаемое из @b(res-file).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (res->ccl \"//n133905/home/_namatv/CFX/n70/cfx/N70_prj_03/hot/prj_03_Tair_15_G1_12_GTD_good/res-bak/5980_full.bak\")
+=>((\"LIBRARY\" \"\"
+   (\"CEL\" \"\"
+    (\"EXPRESSIONS\" \"\"
+     (\"Expression 1\"
+      \"massFlowAve(Total Pressure )@REGION:B AIR_IN D_16.000+massFlow()@REGION:C C_1_4 C_1_4_1 D_16.000\")
+    ...
+   ))))
+@end(code)
+"
+  (delete-file file-name)  
+  (sb-ext:run-program program 
+                      (list "-read"
+                            "-def"
+                            res-file
+                            "-text"
+                            file-name-ccl))
+  (let ((rez (mnas-ansys/ccl/parse:parse-file file-name-ccl)))
+    (delete-file file-name-ccl)
+    rez))

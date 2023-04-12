@@ -283,7 +283,8 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("mnas-string"
+  :depends-on ("cl-fad"
+               "mnas-string"
                "math/stat"
                "math/matr") 
   :components ((:module "src/exchange"
