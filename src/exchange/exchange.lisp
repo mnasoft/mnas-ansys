@@ -111,7 +111,14 @@
                          (namestring
                           (fad:with-output-to-temporary-file (stream))
                           ))
-                        (varrule  "CATEGORY = USER POINT"))
+                        (varrule  "CATEGORY = USER POINT")
+                      &aux
+                        (regex-0-1 (ppcre:create-scanner "\",\""))
+                        (regex-0-2 (ppcre:create-scanner "\"\""))
+                        (regex-n-1 (ppcre:create-scanner ",(?=,)|,$"))
+                        (regex-n-1 (ppcre:create-scanner ",(?=,)|,$"))
+                        (regex-n-2 (ppcre:create-scanner ","))
+                        )
   (labels
       ((scan-res-file (file-name                                   
                        &aux
@@ -122,13 +129,14 @@
                :for j :from 0 :below is-length
                :do
                   (when (= j 0)
-                    (let* ((str-01 (ppcre:regex-replace-all "\",\""  i  "\" \""))
-                           (str-02 (ppcre:regex-replace-all "\"\"" str-01  "\\\"")))
-                      #+nil(format os "~A" (concatenate 'string "(" str-02 ")"))
+                    (let* ((str-01 (ppcre:regex-replace-all regex-0-1 i  "\" \""))
+                           (str-02 (ppcre:regex-replace-all regex-0-2 str-01  "\\\"")))
                       (format os "~A" (concatenate 'string "#(" str-02 ")"))))
                   (when (> j (max 1 (- is-length 1 rec-number)))
-                    (let* ((str-01 (ppcre:regex-replace-all ","  i  " ")))
-                      #+nil(format os "~A" (concatenate 'string "(" str-01 ")"))
+                    (let* ((str-01
+                             (ppcre:regex-replace-all
+                              regex-n-2 (ppcre:regex-replace-all regex-n-1 i ",nil")
+                              " ")))
                       (format os "~A" (concatenate 'string "#(" str-01 ")")))))
          (delete-file file-name)
          (read-from-string
@@ -172,8 +180,8 @@
                           (svref el col))
                       tabel)))
     (list col-name
-     (math/stat:average-value data)
-     (math/stat:standard-deviation data))))
+     (math/stat:average-not-nil-value data)
+     (math/stat:standard-deviation-not-nil data))))
 
 (defun average-values-from-headered-tabel (regexes headered-tabel)
   (mapcar #'(lambda (regex)
@@ -191,8 +199,8 @@
                           (svref el col))
                       tabel)))
     (list col-name
-          (math/stat:average-value data)
-          (math/stat:standard-deviation data))))
+          (math/stat:average-not-nil-value data)
+          (math/stat:standard-deviation-not-nil data))))
 
 (defun average-value-from-headered-tabel-by-col-names
     (col-names headered-tabel)
