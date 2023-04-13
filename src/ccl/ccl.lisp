@@ -7,7 +7,8 @@
            find-in-tree-key
            find-in-tree-value
            find-in-tree-key-value)
-  (:export value)
+  (:export value
+           digits-dimension)
   (:export make-domain-interface-rotational-periodicity
            make-domain-interface-general-connection
            )
@@ -78,6 +79,12 @@
    :key (lambda (i) (when (consp i) (list (first i)(second i))))))
 
 (defun value (x) (cadr x))
+
+(defun digits-dimension (x)
+  (let ((str-list (mnas-string:split "[]" (value x))))
+    (values 
+     (read-from-string (first str-list))
+     (second str-list))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
