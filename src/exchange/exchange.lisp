@@ -10,6 +10,7 @@
            select-last-n)
   (:export read-res-file
            setect-matches
+           setect-matches-vector
            average-value-from-headered-tabel
            average-values-from-headered-tabel
            average-value-from-headered-tabel-by-col-name
@@ -162,11 +163,30 @@
 @end(code)
 "
   (let ((rgx (ppcre:create-scanner regex)))
-    
-  (loop :for i :across (first headered-tabel)
-        :for j :from 0
-        :when (ppcre:scan rgx i)
-          :collect `(,j ,i))))
+    (loop :for i :across (first headered-tabel)
+          :for j :from 0
+          :when (ppcre:scan rgx i)
+            :collect `(,j ,i))))
+
+(defun setect-matches-vector (regex headered-tabel)
+  "@b(Описание:) функция @b(setect-matches) возвращает, список, каждый элемент которого
+является 2d-списком, содержащим номер и заголовок колонки, удовлетворяющей @b(regex)
+для строки заголовков headered-tabel.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (setect-matches \"GT1\" *h-d*)
+=> ((1124 \"USER POINT,Temperature GT1 F T01 p46i5 p415i5 p0i0,D1,\"x= 4.65E-02,y= 4.16E-01,z= 0.00E+00\",Temperature\")
+    (1125   \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
+    ...
+   )
+@end(code)
+"
+  (let ((rgx (ppcre:create-scanner regex)))
+    (loop :for i :across (svref headered-tabel 0)
+          :for j :from 0
+          :when (ppcre:scan rgx i)
+            :collect `(,j ,i))))
 
 (defun average-value-from-headered-tabel
     (regex headered-tabel
