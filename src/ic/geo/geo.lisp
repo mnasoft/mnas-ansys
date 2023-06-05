@@ -1097,7 +1097,7 @@ the other groups in the family are not disturbed.
 "  
   (format
    t
-   "ic_geo_set_part ~A ~A ~A ~A;~%"
+   "ic_geo_set_part ~A {~{~A~^ ~}} ~A ~A; "
    type names newpart rename_part))
 
 (defun set-part-curve (names newpart &optional (rename_part 0))
@@ -1270,7 +1270,9 @@ parameters only for one of the objects in that family.
                                     (gfast 0)
                                     (igwall 0)
                                     (gtrel 1)
-                                    (grat 1.5))
+                                    (grat 1.5)
+                                    (stream t)
+                                    )
 "
     global: set or get the global parameters like natural size,
     etc. The num argument is ignored. The parameters that are accepted
@@ -1299,7 +1301,7 @@ parameters only for one of the objects in that family.
 @end(code)
 
 "
-  (format t "ic_set_meshing_params global 0")
+  (format stream "ic_set_meshing_params global 0")
   (loop :for (name value) :in `(("gref" ,gref) ("gmax" ,gmax) ("gnat" ,gnat)
                                 ("gnatref" ,gnatref) ("gedgec" ,gedgec) ("gcgap" ,gcgap)
                                 ("gttol" ,gttol) ("gfast" ,gfast) ("igwall" ,igwall)
@@ -1307,8 +1309,8 @@ parameters only for one of the objects in that family.
                                 ("grat" ,grat))
         :do
     (when value
-      (format t " ~A ~A" name value)))
-  (format t ";~%"))
+      (format stream " ~A ~A" name value)))
+  (format stream ";~%"))
 
 (defun set-meshing-params-curve (type num args)
 "
@@ -3379,7 +3381,7 @@ Notes:
 "  
   (format
    t
-   "ic_geo_cre_srf_rev ~A ~A ~A ~A ~A ~A ~A ~A ~A;~%"
+   "ic_geo_cre_srf_rev ~A ~A {~{~A~^ ~}} ~A {~{~A~^ ~}} ~A ~A ~A ~A; "
    family name gen base zaxis srtang endang dxn bld_topo))
 
 (defun cre-crv-iso-crv (family name srfs par sel

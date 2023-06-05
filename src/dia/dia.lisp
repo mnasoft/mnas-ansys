@@ -101,37 +101,41 @@
                        (and (eq #\D (char str 0))
                             (eq #\_ (char str 1))))
                    :collect i :into d-rez
-                 :finally (return d-rez))))
-    (progn
-      (format t "ic_undo_group_begin~%")
-      (format t "ic_coords_dir_into_global {1 0 0} global~%")
-      (if periodic-angle
-          (format t "ic_geo_set_periodic_data {axis {1 0 0} type rot angle ~A base {0 0 0}}~%" periodic-angle)
-          (format t "ic_geo_set_periodic_data {axis {1 0 0} type ~A angle 36 base {0 0 0}}~%" "none"))
-      (format t "ic_undo_group_end~2%"))
-    (progn
-      (format t "~A~%" "ic_undo_group_begin;")
-      (geo:set-meshing-params-global :gref gref :gmax gmax :gnatref gnatref :gnat gnat :igwall igwall)
-      (format t "~A~2%" "ic_undo_group_end;"))
-    (progn
-      (format t "~A~%" "ic_undo_group_begin;")
-      (loop :for i :in d-names
-            :do
-               (let ((d-size
-                       (read-from-string
-                        (first
-                         (last
-                          (mnas-string:split
-                           "_"
-                           (first (last (mnas-string:split "/" i)))))))))
-                 #+nil (break "1000: ~A" d-size)
-                 (format t "ic_geo_set_family_params ~A no_crv_inf prism 0 emax ~A ehgt 0.0 hrat 0 nlay 0 erat ~A ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0;~%"
-                         i
-                         (if (and default-d-size (< default-d-size (* d-size d-scale)))
-                             default-d-size
-                             (* d-size d-scale))
-                         0.0)))
-      (format t "~A~2%" "ic_undo_group_end;"))))
+                 :finally (return d-rez)))
+         (f-name-rpl (concatenate 'string dia:*tin-fname* ".rpl"))
+         )
+    (with-open-file (stream f-name-rpl :direction :output :if-exists :supersede)
+      (progn
+        (format stream "ic_undo_group_begin~%")
+        (format stream "ic_coords_dir_into_global {1 0 0} global~%")
+        (if periodic-angle
+            (format stream "ic_geo_set_periodic_data {axis {1 0 0} type rot angle ~A base {0 0 0}}~%" periodic-angle)
+            (format stream "ic_geo_set_periodic_data {axis {1 0 0} type ~A angle 36 base {0 0 0}}~%" "none"))
+        (format stream "ic_undo_group_end~2%"))
+      (progn
+        (format stream "~A~%" "ic_undo_group_begin;")
+        (geo:set-meshing-params-global :gref gref :gmax gmax :gnatref gnatref :gnat gnat :igwall igwall :stream stream)
+        (format stream "~A~2%" "ic_undo_group_end;"))
+      (progn
+        (format stream "~A~%" "ic_undo_group_begin;")
+        (loop :for i :in d-names
+              :do
+                 (let ((d-size
+                         (read-from-string
+                          (first
+                           (last
+                            (mnas-string:split
+                             "_"
+                             (first (last (mnas-string:split "/" i)))))))))
+                   #+nil (break "1000: ~A" d-size)
+                   (format stream "ic_geo_set_family_params ~A no_crv_inf prism 0 emax ~A ehgt 0.0 hrat 0 nlay 0 erat ~A ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0;~%"
+                           i
+                           (if (and default-d-size (< default-d-size (* d-size d-scale)))
+                               default-d-size
+                               (* d-size d-scale))
+                           0.0)))
+        (format stream "~A~2%" "ic_undo_group_end;")))
+      (format t "~A~3%" (ppcre:regex-replace-all "/" f-name-rpl "\\"))))
 
 (defun families ()
   "@b(Описание:) функция @b(families) возвращает список имен семейств,
