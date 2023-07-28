@@ -1,4 +1,4 @@
-(in-package #:mnas-ansys/icem/geometry)
+(in-package :mnas-ansys/icem/geometry)
 
 (ic_trans_tetin_step "D:/home/_namatv/CFX/test/test_01.tin"
                      "D:/home/_namatv/CFX/test/test_01.step")

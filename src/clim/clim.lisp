@@ -1,9 +1,9 @@
 ;;;; ./src/clim/clim.lisp
 
-(defpackage #:mnas-ansys/clim
+(defpackage :mnas-ansys/clim
   (:use #:clim-lisp #:alexandria))
 
-(in-package #:mnas-ansys/clim)
+(in-package :mnas-ansys/clim)
 
 (clim:define-application-frame app ()
   ((a :initform 100 :accessor a)
@@ -14,8 +14,6 @@
                        (2/3 app)
                        (1/3 int))))
   (:geometry :width 800 :height 400))
-
-
 
 (defgeneric display (frame pane)
   (:method ((frame app) pane)

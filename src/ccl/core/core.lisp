@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/core/core.lisp
 
-(defpackage #:mnas-ansys/ccl/core
+(defpackage :mnas-ansys/ccl/core
   (:use #:cl)
   (:export for-list)
   (:intern <object>
@@ -333,6 +333,37 @@
            <vector>-visibility
            <vector>-object-view-transform
            )
+  (:export <table-cell>
+           <table-cell>-row
+           <table-cell>-col
+           <table-cell>-equation
+           <table-cell>-bold
+           <table-cell>-italics
+           <table-cell>-underline
+           <table-cell>-justification
+           <table-cell>-warp
+           <table-cell>-font-size
+           <table-cell>-font-name
+           <table-cell>-rows
+           <table-cell>-cols
+           <table-cell>-format
+           <table-cell>-show-units
+           <table-cell>-foreground
+           <table-cell>-background
+           <table-cell>-show-value)
+  (:export <table-cells>-cells)
+  (:export <table>-export-table-only
+           <table>-table-exists
+           <table>-table-export-format
+           <table>-table-export-html-border-width
+           <table>-table-export-html-caption-position
+           <table>-table-export-html-cell-padding
+           <table>-table-export-html-cell-spacing
+           <table>-table-export-lines
+           <table>-table-export-separator
+           <table>-table-export-trailing-separators
+           <table>-object-report-options
+           <table>-table-cells)
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -408,8 +439,6 @@
                (string-trim "<>"
                             (format nil "~A"
                                     (class-name (class-of object))))))
-
-
 
 (defmethod print-object ((x <object>) s)
   (format s (format nil "~~~At~~A:" (tabs))
@@ -2106,6 +2135,7 @@
                                         Bold, Italics, Underline, Left  , Warp , font-size,Font Name, rows|cols, format, show-units,Background, Foreground , show-value
                                                                   Center,
                                                                   Right ,
+(make-instance '<table-cell> :equation \"=massFlow()@C_1_2 X_071i5 Side 2\")
 "))
 
 (defmethod print-object ((x <table-cell>) s)
@@ -2128,9 +2158,6 @@
     (format s "~A," (string-downcase (format nil "~{~2,'0X~}" (<table-cell>-foreground x))))
     (format s "~A," (string-downcase (format nil "~{~2,'0X~}" (<table-cell>-background x))))  
     (format s "~A" (<table-cell>-show-value x))))
-
-
-(make-instance '<table-cell> :equation "=massFlow()@C_1_2 X_071i5 Side 2")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

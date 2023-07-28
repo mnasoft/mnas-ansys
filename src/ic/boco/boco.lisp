@@ -1,7 +1,8 @@
 ;;;; ./src/icem/boundary.lisp
 
-(defpackage #:ic/boco
+(defpackage :mnas-ansys/ic/boco
   (:use #:cl)
+  (:nicknames "IC/BOCO" "BOCO")
   (:export ic-load
            ic-get
            ic-set
@@ -81,7 +82,7 @@
    " Пакет содержит функции для редактирования и изменения граничных
    условий (Boundary Condition Editing and Modification Functions)."))
 
-(in-package #:ic/boco)
+(in-package :mnas-ansys/ic/boco)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -91,7 +92,7 @@ Loads in the boundary condition data from the file.
 "
   (format
    t
-   "ic_boco_load ~S~%"
+   "ic_boco_load ~S;~%"
    file))
 
 (defun load-atr (file)
@@ -100,7 +101,7 @@ Loads in the attribute data from the file.
 "
   (format
    t
-   "ic_boco_load_atr ~S~%" file))
+   "ic_boco_load_atr ~S;~%" file))
 
 (defun save (file)
   "
@@ -108,7 +109,7 @@ Saves the current boundary condition data to the given file name.
 "
   (format
    t
-   "ic_boco_save ~S~%" file))
+   "ic_boco_save ~S;~%" file))
 
 (defun save-atr (file &optional (ss ""))
   "
@@ -116,7 +117,7 @@ Saves a new format bc (.atr) file.
 "
   (format
    t
-   "ic_boco_save_atr ~S ~A~%" file ss))
+   "ic_boco_save_atr ~S ~A;~%" file ss))
 
 (defun is-loaded ()
   "
@@ -124,7 +125,7 @@ Checks if a family boco file has been loaded.
 "
   (format
    t
-   "ic_boco_is_loaded~%"))
+   "ic_boco_is_loaded;~%"))
 
 (defun is-modified ()
   "
@@ -132,7 +133,7 @@ Checks if the current boco data has been modified since the last save.
 "
   (format
    t
-   "ic_boco_is_modified~%"))
+   "ic_boco_is_modified;~%"))
 
 (defun set-modified ()
   "
@@ -140,7 +141,7 @@ Forces the current boco data to be dirty.
 "
   (format
    t
-   "ic_boco_set_modified~%"))
+   "ic_boco_set_modified;~%"))
 
 (defun unload ()
   "
@@ -148,7 +149,7 @@ Unloads the current family boco data.
 "
   (format
    t
-   "ic_boco_unload~%"))
+   "ic_boco_unload;~%"))
 
 (defun empty-boco ()
   "
@@ -156,7 +157,7 @@ Creates an empty boco database.
 "
   (format
    t
-   "ic_empty_boco~%"))
+   "ic_empty_boco;~%"))
 
 (defun solver (&optional (solver ""))
   " Sets the default solver for an existing boco database. If no solver
@@ -164,7 +165,7 @@ is given, then it returns the current solver setting.
 "
   (format
    t
-   "ic_boco_solver ~S~%" solver))
+   "ic_boco_solver ~S;~%" solver))
 
 (defun ic-get (&optional (fambctypes "") (not_bctypes ""))
   " Gets the boundary conditions associated with the given family. They
@@ -178,7 +179,7 @@ is given then only the matching boundary conditions are returned.
 "
   (format
    t
-   "ic_boco_get ~S ~S~%" fambctypes not_bctypes))
+   "ic_boco_get ~S ~S;~%" fambctypes not_bctypes))
   
 (defun get-boco (fam)
   "
@@ -186,7 +187,7 @@ This is the same as ic_boco_get (for backward compatibility only).
 "
   (format
    t
-   "ic_get_boco ~S~%" fam))
+   "ic_get_boco ~S;~%" fam))
 
 (defun ic-set (fam bocos)
   " Sets the boundary conditions associated with the given
@@ -199,7 +200,7 @@ Boundary Condition Data section for the solver you are interested in.
 "
   (format
    t
-   "ic_boco_set ~S ~S~%" fam bocos))
+   "ic_boco_set ~S ~S;~%" fam bocos))
 
 (defun ic-append (fam nbcs)
   "
@@ -207,7 +208,7 @@ Appends some boundary conditions.
 "
   (format
    t
-   "ic_boco_append ~S ~S~%" fam nbcs))
+   "ic_boco_append ~S ~S;~%" fam nbcs))
 
 (defun modify (fam obc nbc)
   "
@@ -215,7 +216,7 @@ Changes one boundary condition.
 "
   (format
    t
-   "ic_boco_modify ~S ~S ~S~%" fam obc nbc))
+   "ic_boco_modify ~S ~S ~S;~%" fam obc nbc))
 
 (defun delete-bctypes (fam bctypes)
   "
@@ -223,7 +224,7 @@ Deletes boundary conditions with a given set of types from a family.
 "
   (format
    t
-   "ic_boco_delete_bctypes ~S ~S~%" fam bctypes))
+   "ic_boco_delete_bctypes ~S ~S;~%" fam bctypes))
 
 (defun set-boco (fam bocos)
   "
@@ -239,7 +240,7 @@ Deletes all boundary conditions on all families of a given type.
 "
   (format
    t
-   "ic_boco_delete_all_bctype ~S~%" bctype))
+   "ic_boco_delete_all_bctype ~S;~%" bctype))
 
 (defun bctypes-used-by-families (&optional (which ""))
   " Returns a list of bctype famlist bctype famlist ... pairs If which
@@ -249,7 +250,7 @@ has the BC twice.
 "
   (format
    t
-   "ic_boco_bctypes_used_by_families ~S~%" which))
+   "ic_boco_bctypes_used_by_families ~S;~%" which))
 
 
 (defun list-with-bctype (bcargs &optional (exclude_fam_pattern ""))
@@ -260,7 +261,7 @@ families that match that pattern. Generally this will be *:* .
 "
   (format
    t
-   "ic_boco_list_with_bctype ~S ~S~%" bcargs exclude_fam_pattern))
+   "ic_boco_list_with_bctype ~S ~S;~%" bcargs exclude_fam_pattern))
 
 (defun classify-by-bctype (bctype &optional (exclude_fam_pattern ""))
   "
@@ -268,7 +269,7 @@ Lists the families by bctype.
 "
   (format
    t
-   "ic_boco_classify_by_bctype ~S ~S~%" bctype exclude_fam_pattern))
+   "ic_boco_classify_by_bctype ~S ~S;~%" bctype exclude_fam_pattern))
 
 (defun unused-groups-with-bctype (bcargs &optional (exclude "*:*"))
   " A convenience function that just returns the group names with a
@@ -277,7 +278,7 @@ FORCE_NAME ff1]
 "
   (format
    t
-   "unused__ic_boco_groups_with_bctype ~S ~S~%" bcargs exclude))
+   "unused__ic_boco_groups_with_bctype ~S ~S;~%" bcargs exclude))
 
 (defun list-bcargs-for-bctypes (types pos)
   " Gets all the possible values for an argument at a specific
@@ -286,7 +287,7 @@ sets.
 "
   (format
    t
-   "ic_boco_list_bcargs_for_bctypes ~S ~S~%" types pos))
+   "ic_boco_list_bcargs_for_bctypes ~S ~S;~%" types pos))
 
 (defun unused-get-with-matching-name (t1s t2 v2)
   " Returns the BCs of the types t1s, which are in families whose BC of
@@ -304,7 +305,7 @@ Gets an unused name for a given BC type.
 "
   (format
    t
-   "unused__ic_boco_get_unused_bcarg ~S ~S~%" bctype prefix))
+   "unused__ic_boco_get_unused_bcarg ~S ~S;~%" bctype prefix))
 
 (defun get-unused-group (prefix &optional (avoid ""))
   " Gets an unused name with a given prefix. Avoid the ones given in the
@@ -312,7 +313,7 @@ second argument
 "
   (format
    t
-   "ic_boco_get_unused_group ~S ~S~%" prefix avoid))
+   "ic_boco_get_unused_group ~S ~S;~%" prefix avoid))
 
 (defun unused-replace-with-matching-name (newbcs t2 v2 &optional (replace_these ""))
   " Finds all families that have a bctype named t2 with a value v2 and
@@ -326,7 +327,7 @@ so modified.
 "
   (format
    t
-   "unused__ic_boco_replace_with_matching_name ~S ~S ~S ~S~%" newbcs t2 v2 replace_these))
+   "unused__ic_boco_replace_with_matching_name ~S ~S ~S ~S;~%" newbcs t2 v2 replace_these))
 
 (defun replace-in-part (newbcs part &optional (replace_these ""))
   "
@@ -334,7 +335,7 @@ Same as above but does it for all families in a part.
 "
   (format
    t
-   "ic_boco_replace_in_part ~S ~S ~S~%" newbcs part replace_these))
+   "ic_boco_replace_in_part ~S ~S ~S;~%" newbcs part replace_these))
 
 (defun replace-in-group (newbcs group &optional (replace_these ""))
   "
@@ -342,7 +343,7 @@ Same as above but does it for all families in a group.
 "
   (format
    t
-   "ic_boco_replace_in_group ~S ~S ~S~%" newbcs group replace_these))
+   "ic_boco_replace_in_group ~S ~S ~S;~%" newbcs group replace_these))
 
 (defun add (fam bocos)
   "
@@ -350,7 +351,7 @@ Adds some BCs to a family.
 "
   (format
    t
-   "ic_boco_add ~S ~S~%" fam bocos))
+   "ic_boco_add ~S ~S;~%" fam bocos))
 
 (defun ic-repalce (fam bcarg newbcs)
   "
@@ -358,7 +359,7 @@ Replaces some BCs for a family.
 "
   (format
    t
-   "ic_boco_replace ~S ~S ~S~%" fam bcarg newbcs))
+   "ic_boco_replace ~S ~S ~S;~%" fam bcarg newbcs))
 
 (defun get-for-tetin ()
   "
@@ -366,7 +367,7 @@ Returns the current default family_boco file which was loaded (if any).
 "
   (format
    t
-   "ic_boco_get_for_tetin~%"))
+   "ic_boco_get_for_tetin;~%"))
 
 (defun reload ()
   "
@@ -374,7 +375,7 @@ Reloads the family boco file which has already been loaded (if any).
 "
   (format
    t
-   "ic_boco_reload~%"))
+   "ic_boco_reload;~%"))
 
 (defun list-families (&optional (pat ""))
   " Lists the current families which have boundary conditions associated
@@ -384,7 +385,7 @@ matching the pattern, as part of a :-separated list. pat may also be
 "
   (format
    t
-   "ic_boco_list_families ~S~%" pat))
+   "ic_boco_list_families ~S;~%" pat))
   
 (defun list_families_only ()
   "
@@ -392,7 +393,7 @@ Changes the family_boco file that is associated with the tetin file.
 "
   (format
    t
-   "ic_boco_list_families_only~%"))
+   "ic_boco_list_families_only;~%"))
 
 (defun fam-dim (fam &optional (all_dim 0))
   "
@@ -406,7 +407,7 @@ parameter is set to 1
 "
   (format
    t
-   "ic_boco_fam_dim ~S ~S~%" fam all_dim))
+   "ic_boco_fam_dim ~S ~S;~%" fam all_dim))
 
 (defun parts-dim (parts)
   "
@@ -414,7 +415,7 @@ Returns the dimensions of the part.
 "
   (format
    t
-   "ic_boco_parts_dim ~S~%" parts))
+   "ic_boco_parts_dim ~S;~%" parts))
 
 (defun reset-fam-dim ()
   "
@@ -428,7 +429,7 @@ ic_boco_reset_fam_dim to clear out the old data.
 "
   (format
    t
-   "ic_boco_reset_fam_dim~%"))
+   "ic_boco_reset_fam_dim;~%"))
 
 (defun clear-icons ()
   "
@@ -436,7 +437,7 @@ Deletes all the BC icons that currently exist.
 "
   (format
    t
-   "ic_boco_clear_icons~%"))
+   "ic_boco_clear_icons;~%"))
 
 (defun rename-family (old new)
   "
@@ -444,7 +445,7 @@ Renames a family - this has to move all the icons
 "
   (format
    t
-   "ic_boco_rename_family ~S ~S~%" old new))
+   "ic_boco_rename_family ~S ~S;~%" old new))
 
 (defun add-icon (type fam icontype locations scale maxnum color label params vis only_dims)
   "
@@ -513,7 +514,7 @@ radius: the radius as a factor of the length
 "
   (format
    t
-   "ic_boco_add_icon ~S ~S ~S ~S ~S ~S ~S ~S ~S ~S ~S~%" type fam icontype locations scale maxnum color label params vis only_dims))
+   "ic_boco_add_icon ~S ~S ~S ~S ~S ~S ~S ~S ~S ~S ~S;~%" type fam icontype locations scale maxnum color label params vis only_dims))
 
 (defun apply-attr-symbol (group bctype setname icontype parsed params labels vis lvis)
   "
@@ -521,7 +522,7 @@ Smarter wrapper around the below functions.
 "
   (format
    t
-   "ic_boco_apply_attr_symbol ~S ~S ~S ~S ~S ~S ~S ~S ~S~%" group bctype setname icontype parsed params labels vis lvis))
+   "ic_boco_apply_attr_symbol ~S ~S ~S ~S ~S ~S ~S ~S ~S;~%" group bctype setname icontype parsed params labels vis lvis))
 
 (defun set-attr-symbol-group-visible (group bctype vis lvis)
   "
@@ -529,7 +530,7 @@ Easier way to set visibility by group and bctype
 "
   (format
    t
-   "ic_boco_set_attr_symbol_group_visible ~S ~S ~S ~S~%" group bctype vis lvis))
+   "ic_boco_set_attr_symbol_group_visible ~S ~S ~S ~S;~%" group bctype vis lvis))
 
 (defun add-attr-symbol (bctype group icontype set params label vis lvis)
   " The new version which can pull out distributed values from nodes and
@@ -545,7 +546,7 @@ functions below.
 "
   (format
    t
-   "ic_boco_add_attr_symbol ~S ~S ~S ~S ~S ~S ~S ~S~%" bctype group icontype set params label vis lvis))
+   "ic_boco_add_attr_symbol ~S ~S ~S ~S ~S ~S ~S ~S;~%" bctype group icontype set params label vis lvis))
 
 (defun delete-attr-symbol (id)
   "
@@ -553,7 +554,7 @@ Deletes a symbol.
 "
   (format
    t
-   "ic_boco_delete_attr_symbol ~S~%" id))
+   "ic_boco_delete_attr_symbol ~S;~%" id))
 
 (defun list-attr-symbols (&optional (bctype "") (group "") (set ""))
   "
@@ -561,7 +562,7 @@ Lists symbols.
 "
   (format
    t
-   "ic_boco_list_attr_symbols ~S ~S ~S~%" bctype group set))
+   "ic_boco_list_attr_symbols ~S ~S ~S;~%" bctype group set))
 
 (defun modify-attr-symbol-params (id params)
   "
@@ -569,7 +570,7 @@ Modifies params.
 "
   (format
    t
-   "ic_boco_modify_attr_symbol_params ~S ~S~%" id params))
+   "ic_boco_modify_attr_symbol_params ~S ~S;~%" id params))
 
 (defun modify-attr-symbol-label (id label)
   "
@@ -577,7 +578,7 @@ Modifies labels.
 "
   (format
    t
-   "ic_boco_modify_attr_symbol_label ~S ~S~%" id label))
+   "ic_boco_modify_attr_symbol_label ~S ~S;~%" id label))
 
 (defun modify-attr-symbol-visible (id vis lvis)
   "
@@ -585,7 +586,7 @@ Modifies visibility.
 "
   (format
    t
-   "ic_boco_modify_attr_symbol_visible ~S ~S ~S~%" id vis lvis))
+   "ic_boco_modify_attr_symbol_visible ~S ~S ~S;~%" id vis lvis))
 
 (defun apply-solver-icon-to-group (group bctype icontype iconparams vis &optional (bcargs ""))
   "
@@ -593,7 +594,7 @@ Applies a solver specific icon to a particular group.
 "
   (format
    t
-   "ic_boco_apply_solver_icon_to_group ~S ~S ~S ~S ~S ~S~%" group bctype icontype iconparams vis bcargs))
+   "ic_boco_apply_solver_icon_to_group ~S ~S ~S ~S ~S ~S;~%" group bctype icontype iconparams vis bcargs))
 
 (defun apply-solver-icon-to-part (part bctype icontype iconparams vis &optional (bcargs ""))
   "
@@ -605,14 +606,14 @@ Sets the icon visibility. bcargs are something like FORCE_NAME F1
 "
   (format
    t
-   "ic_boco_apply_solver_icon_to_part ~S ~S ~S ~S ~S ~S~%" part bctype icontype iconparams vis bcargs))
+   "ic_boco_apply_solver_icon_to_part ~S ~S ~S ~S ~S ~S;~%" part bctype icontype iconparams vis bcargs))
 
 (defun delete-icons-for-bctypes (fam bctypes)
   " Removes the icons for a particular family/bctype combination.
 "
   (format
    t
-   "ic_boco_delete_icons_for_bctypes ~S ~S~%" fam bctypes))
+   "ic_boco_delete_icons_for_bctypes ~S ~S;~%" fam bctypes))
 
 (defun set-family-visible (fams bctypes on)
   " Sets the icon visibility by family. If fams is empty then this
@@ -620,7 +621,7 @@ implies all families.
 "
   (format
    t
-   "ic_boco_set_family_visible ~S ~S ~S~%" fams bctypes on))
+   "ic_boco_set_family_visible ~S ~S ~S;~%" fams bctypes on))
 
 (defun remove-objects-from-groups (objlist bcargs)
   "
@@ -628,7 +629,7 @@ Removes the given objects from all groups that have a BC with a specified name.
 "
   (format
    t
-   "ic_boco_remove_objects_from_groups ~S ~S~%" objlist bcargs))
+   "ic_boco_remove_objects_from_groups ~S ~S;~%" objlist bcargs))
 
 (defun add-parts-and-subsets-to-group (name parts_or_subsets)
   " Adds the parts and subsets to the APPLY_TO_PARTS and
@@ -636,7 +637,7 @@ APPLY_TO_SUBSETS pseudo-BC's on the named group.
 "
   (format
    t
-   "ic_boco_add_parts_and_subsets_to_group ~S ~S~%" name parts_or_subsets))
+   "ic_boco_add_parts_and_subsets_to_group ~S ~S;~%" name parts_or_subsets))
 
 (defun what-groups-go-with-part-or-subset (type name)
   "
@@ -644,7 +645,7 @@ This routine is called when objects are moved into and out of parts and subsets.
 "
   (format
    t
-   "ic_boco_what_groups_go_with_part_or_subset ~S ~S~%" type name))
+   "ic_boco_what_groups_go_with_part_or_subset ~S ~S;~%" type name))
 
 (defun change-part (oldfam newpart)
   "
@@ -652,7 +653,7 @@ Utility function to move stuff from one part to another.
 "
   (format
    t
-   "ic_boco_change_part ~S ~S~%" oldfam newpart))
+   "ic_boco_change_part ~S ~S;~%" oldfam newpart))
 
 (defun change-subset (oldfam subset add)
   " For a given family, if you move something in that family into or
@@ -660,7 +661,7 @@ out of a subset, this returns the new family.
 "
   (format
    t
-   "ic_boco_change_subset ~S ~S ~S~%" oldfam subset add))
+   "ic_boco_change_subset ~S ~S ~S;~%" oldfam subset add))
 
 (defun add_or_remove_bc_icons (on_fam add objects)
   " For every icon on family oldfam, remove the locations of the
@@ -668,7 +669,7 @@ objects. For every icon on newfam, add the locations.
 "
   (format
    t
-   "ic_boco_add_or_remove_bc_icons ~S ~S ~S~%" on_fam add objects))
+   "ic_boco_add_or_remove_bc_icons ~S ~S ~S;~%" on_fam add objects))
 
 (defun replace-arg (fams replace_types replace_pos replace_val)
   " Replaces a certain argument in the BCs for a given set of families
@@ -676,7 +677,7 @@ with a different value.
 "
   (format
    t
-   "ic_boco_replace_arg ~S ~S ~S ~S~%" fams replace_types replace_pos replace_val))
+   "ic_boco_replace_arg ~S ~S ~S ~S;~%" fams replace_types replace_pos replace_val))
 
 (defun delete-group-with-bcs (bcargs)
   " Removes everything from groups that have a specific bctype and set
@@ -685,7 +686,7 @@ called with part groups.
 "
   (format
    t
-   "ic_boco_delete_group_with_bcs ~S~%" bcargs))
+   "ic_boco_delete_group_with_bcs ~S;~%" bcargs))
 
 (defun list-icons (&optional (fam "") (type ""))
   "
@@ -693,7 +694,7 @@ Lists all the BC icons.
 "
   (format
    t
-   "ic_boco_list_icons ~S ~S~%" fam type))
+   "ic_boco_list_icons ~S ~S;~%" fam type))
 
 (defun delete-group (group)
   "
@@ -701,7 +702,7 @@ Removes everything from groups and delete those groups.
 "
   (format
    t
-   "ic_boco_delete_group ~S~%" group))
+   "ic_boco_delete_group ~S;~%" group))
 
 (defun clear-family (fam)
   "
@@ -709,7 +710,7 @@ Clears the BCs and icons from one family.
 "
   (format
    t
-   "ic_boco_clear_family ~S~%" fam))
+   "ic_boco_clear_family ~S;~%" fam))
 
 (defun set_part_color (famname &optional (update_uns 1))
   " Looks for a group inside this family that is a part name, and define
@@ -719,7 +720,7 @@ shift around when you put them in assemblies.
 "
   (format
    t
-   "ic_boco_set_part_color ~S ~S~%" famname update_uns))
+   "ic_boco_set_part_color ~S ~S;~%" famname update_uns))
 
 (defun nastran-csystem (what args)
   "
@@ -727,7 +728,7 @@ Sets Nastran-type coordinate systems.
 "
   (format
    t
-   "ic_boco_nastran_csystem ~S ~S~%" what args))
+   "ic_boco_nastran_csystem ~S ~S;~%" what args))
 
 (defun delete-unused (keep_groups)
   "
@@ -735,7 +736,7 @@ Cleans up the set of BCs a bit. Keeps the singleton groups if keep_groups is 1.
 "
   (format
    t
-   "ic_boco_delete_unused ~S~%" keep_groups))
+   "ic_boco_delete_unused ~S;~%" keep_groups))
 
 (defun list-unused ()
   "
@@ -743,7 +744,7 @@ Lists the families that have no mesh or geometry in them.
 "
   (format
    t
-   "ic_boco_list_unused~%"))
+   "ic_boco_list_unused;~%"))
 
 (defun get-fams-of-part (partname)
   "
@@ -751,7 +752,7 @@ Returns the list of families belonging to the given partname.
 "
   (format
    t
-   "ic_boco_get_fams_of_part ~S~%" partname))
+   "ic_boco_get_fams_of_part ~S;~%" partname))
 
 (defun get-part-of-fam (famname)
   "
@@ -759,10 +760,10 @@ Returns the part to which the given family famname belongs.
 "
   (format
    t
-   "ic_boco_get_part_of_fam ~S~%" famname))
+   "ic_boco_get_part_of_fam ~S;~%" famname))
 
 (defun solver-mesh-info (solver)
   ""
   (format
    t
-   "ic_solver_mesh_info ~S~%" solver))
+   "ic_solver_mesh_info ~S;~%" solver))

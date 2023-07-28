@@ -1,11 +1,14 @@
 
 ;;;; ./src/clim/clim.lisp
 
-(defpackage #:mnas-ansys/ccl
+(defpackage :mnas-ansys/ccl
   (:use #:cl #:mnas-ansys/ccl/parse)
   (:export find-in-tree
            find-in-tree-key
-           find-in-tree-value)
+           find-in-tree-value
+           find-in-tree-key-value)
+  (:export value
+           digits-dimension)
   (:export make-domain-interface-rotational-periodicity
            make-domain-interface-general-connection
            )
@@ -21,7 +24,7 @@
   (:documentation
    "STUB"))
 
-(in-package #:mnas-ansys/ccl)
+(in-package :mnas-ansys/ccl)
 
 (defun find-in-tree (item tree &key (test #'eql) (key #'identity))
   "@b(Описание:) функция @b(find-in-tree) выполняет рекурсивый поиск
@@ -57,27 +60,33 @@
     (find-in-tree-aux tree)))
 
 (defun find-in-tree-key (key tree &key (test #'equal))
+    "Поиск по ключу"
   (find-in-tree key tree :test test
                          :key (lambda (i) (when (consp i) (first i)))))
 
 (defun find-in-tree-value (value tree &key (test #'equal))
+  "Поиск по значению"
   (find-in-tree value tree :test test
                            :key (lambda (i) (when (consp i) (second i)))))
 
+(defun find-in-tree-key-value (key value tree)
+  "Поиск по ключу и значению"
+  (find-in-tree
+   `(,key
+     ,value)
+   tree
+   :test #'equal
+   :key (lambda (i) (when (consp i) (list (first i)(second i))))))
+
 (defun value (x) (cadr x))
 
+(defun digits-dimension (x)
+  (let ((str-list (mnas-string:split "[]" (value x))))
+    (values 
+     (read-from-string (first str-list))
+     (second str-list))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defparameter *lines*
-  (mnas-ansys/tin/read:read-file-as-lines
-   "~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl"))
-
-(defparameter *ccl* (mnas-ansys/ccl/parse::parse-slow *lines*))
-(defparameter *ccl* (mnas-ansys/ccl/parse::parse *lines*))
-
-(value
- (find-in-tree-key "Option"
-                  (find-in-tree-key "INTERFACE MODELS" (elt *ccl* 1))))
 
 (defun interface-models-option (domain-interface)
   (second
@@ -109,15 +118,28 @@
       )))
 
 (defun domain-interface-graph (ccl &key (stream t))
+  "
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+   (defparameter *lines*
+    (mnas-ansys/tin/read:read-file-as-lines
+     \"~/quicklisp/local-projects/ANSYS/mnas-ansys/data/ccl/interfaces.ccl\"))
+  (defparameter *ccl* (mnas-ansys/ccl/parse::parse-slow *lines*))
+  (defparameter *ccl* (mnas-ansys/ccl/parse::parse *lines*))
+
+  (value
+   (find-in-tree-key \"Option\"
+                     (find-in-tree-key \"INTERFACE MODELS\" (elt *ccl* 1))))
+  (domain-interface-graph *ccl*)
+@end(code)
+"
   (format stream "graph {~%")  
   (mapcar
    #'(lambda (item)
-            (domain-interface-item item :stream stream))
+       (domain-interface-item item :stream stream))
    ccl)
   (format stream "}~%"))
-
-(domain-interface-graph *ccl*)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -690,3 +712,4 @@ LIBRARY:
 END"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+

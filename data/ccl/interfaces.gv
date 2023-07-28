@@ -35,10 +35,4 @@ D3L -- D5L [label="GC"]
 D3R -- D5R [label="GC"]
 D7 -- D8 [label="GC"]
 D9 -- DA [label="GC"]
-
 }
-
-
-
-
-

@@ -1,6 +1,6 @@
 ;;;; ./src/utils/utils.lisp
 
-(defpackage #:mnas-ansys/tin/utils
+(defpackage :mnas-ansys/tin/utils
   (:use #:cl #:mnas-ansys/tin #:mnas-ansys/tin/select #:math/geom)
   (:export surface-names-coeged-with-surface-in-family
            surface-names-coeged-with-surfaces 
@@ -13,6 +13,9 @@
   (:export secect-surfaces-by-families 
            curve-names-coeged-with-surface-in-family
            curve-names-coeged-with-surfaces-in-families)
+  (:export surface-families
+           curves-families
+           points-families)
   (:documentation
    " Пакет @b(mnas-ansys/tin/utils) определяет функции, предназаченные для
    манипулирования графическими объектами при взаимодействии
@@ -191,3 +194,21 @@
       tin))
     ((eq operation :intersection)
      (curve-names-coeged-with-surface-in-family families tin))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod surface-families ((tin <tin>))
+  "@b(Описание:) функция @b(families) возвращает список имен семейств,
+   содержащих поверхности."
+  (tin:families (tin:<tin>-surfaces tin)))
+
+(defmethod curves-families ((tin <tin>))
+  "@b(Описание:) функция @b(curves-families) возвращает список имен семейств,
+   содержащих кривые."
+      (tin:families (tin:<tin>-curves tin)))
+
+(defmethod points-families ((tin <tin>))
+  "@b(Описание:) функция @b(points-families) возвращает список имен семейств,
+   содержащих точки."
+  (tin:families (tin:<tin>-points tin)))
+

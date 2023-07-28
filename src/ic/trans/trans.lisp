@@ -1,6 +1,6 @@
 ;;;; ./src/icem/translation.lisp
 
-(defpackage #:ic/trans
+(defpackage :ic/trans
   (:use #:cl)
   (:export ddn-tetin
            ug-tetin
@@ -33,7 +33,7 @@
    " Пакет содержит функции преобразования (перевода, экспорта-импорта)."
    ))
 
-(in-package #:ic/trans)
+(in-package :ic/trans)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -42,7 +42,7 @@
 Transfers the given DDN part file into the named tetin file.
 "
   (format t
-          "ic_trans_ddn_tetin ~S ~S~%" ddn tetin))
+          "ic_trans_ddn_tetin ~S ~S;~%" ddn tetin))
 
 (defun ug-tetin (prt tetin &optional (mode "ug_default") (usr_script "")  (usr_opts ""))
   "
@@ -65,7 +65,7 @@ usr_opts options supplied for user script
 For example usage, refer to ic_trans_ug_tetin.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
 "
   (format t
-          "ic_trans_ug_tetin ~S ~S ~S ~S ~S~%" prt tetin mode usr_script usr_opts))
+          "ic_trans_ug_tetin ~S ~S ~S ~S ~S;~%" prt tetin mode usr_script usr_opts))
 
 (defun gems-tetin (prt &optional (tetin "") (tol 0.0001) (isRel 1))
   "
@@ -79,7 +79,7 @@ isRel when set, the triangulation tolerance is scaled by the part radius, defaul
 For example usage, refer to ic_trans_gems_tetin.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
 "
   (format t
-          "ic_trans_gems_tetin ~S ~S ~S ~S~%" prt tetin tol isRel))
+          "ic_trans_gems_tetin ~S ~S ~S ~S;~%" prt tetin tol isRel))
 
 (defun tetin-ddn (tetin iparta &optional (pname "") (units "-mm"))
   "
@@ -106,7 +106,7 @@ For example usage, refer to ic_trans_tetin_ddn.tcl in the ANSYS installation dir
 "
 
   (format t
-          "ic_trans_tetin_ddn ~S ~S ~S ~S~%" tetin iparta pname units))
+          "ic_trans_tetin_ddn ~S ~S ~S ~S;~%" tetin iparta pname units))
 
 (defun tetin-brepxml (tetin brepxmlfile &optional  (light_export ""))
   " Transfers the given tetin file into the named DesignSpace BrepXML
@@ -116,7 +116,7 @@ specified, then the graphics only BrepXML file is written.
 "
 
   (format t
-          "ic_trans_tetin_brepxml ~S ~S ~S~%" tetin brepxmlfile light_export))
+          "ic_trans_tetin_brepxml ~S ~S ~S;~%" tetin brepxmlfile light_export))
 
 (defun iges-ddn (igesfile ddnpart ddnfile &optional (dir_file "default") (dir_file_user "") (data_red 0) (listing_file "") (run_icempt 0) (trans_dos 0))
   " Transfers the given IGES file igesfile into the DDN file
@@ -128,7 +128,7 @@ run_icempt after the translation, and the option to translate DOS text
 trans_dos.
 "
   (format t
-          "ic_trans_iges_ddn ~S ~S ~S ~S ~S ~S ~S ~S ~S~%"
+          "ic_trans_iges_ddn ~S ~S ~S ~S ~S ~S ~S ~S ~S;~%"
           igesfile ddnpart ddnfile dir_file dir_file_user data_red listing_file run_icempt trans_dos ))
 
 (defun iges-tetin (igesfile tetinfile &optional (dir_file "default") (dir_file_user "") (data_red 0) (list_file "") (run_icempt 0) (trans_dos 0))
@@ -141,7 +141,7 @@ run_icempt after the translation, and the option to translate DOS text
 trans_dos.
 "
   (format t
-          "ic_trans_iges_tetin ~S ~S ~S ~S ~S ~S ~S ~S~%"
+          "ic_trans_iges_tetin ~S ~S ~S ~S ~S ~S ~S ~S;~%"
           igesfile tetinfile dir_file dir_file_user data_red list_file run_icempt trans_dos))
   
 (defun ddn-iges (ddn_file iges_name &optional (listing_file "") (dir_file ""))
@@ -151,7 +151,7 @@ iges_name. The listing file listing_file will be saved if specified,
 and the directive file dir_file if specified.
 "
   (format t
-          "ic_trans_ddn_iges ~S ~S ~S ~S~%" ddn_file iges_name listing_file dir_file))
+          "ic_trans_ddn_iges ~S ~S ~S ~S;~%" ddn_file iges_name listing_file dir_file))
 
 
 (defun ddn-tvda (infile outfile selected &optional (tvda_dir "") (tvda_list ""))
@@ -162,7 +162,7 @@ list file tvda_list.
 "
 
   (format t
-          "ic_trans_ddn_tvda ~S ~S ~S ~S ~S~%" infile outfile selected tvda_dir tvda_list))
+          "ic_trans_ddn_tvda ~S ~S ~S ~S ~S;~%" infile outfile selected tvda_dir tvda_list))
 
 
 (defun tvda-ddn (infile outfile &optional ( tvda_dir "") (tvda_list ""))
@@ -173,7 +173,7 @@ tvda_list.
 "
 
   (format t
-          "ic_trans_tvda_ddn ~S ~S ~S ~S~%" infile outfile tvda_dir tvda_list))
+          "ic_trans_tvda_ddn ~S ~S ~S ~S;~%" infile outfile tvda_dir tvda_list))
 
 (defun ddn-dxf (file outfile &optional (dxf_list "" ) (directive_file ""))
   " 
@@ -197,10 +197,12 @@ directive_file may also be specified."
   "
 Transfers the given IDI surface file into the named tetin file.
 
-prt the IDI file 
-tetin the output file, defaults to a filename derived from the idi filename, prt. 
+prt the IDI file tetin the output file, defaults to a filename derived
+from the idi filename, prt.
 
-For example usage, refer to ic_trans_idi_tetin.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+For example usage, refer to ic_trans_idi_tetin.tcl in the ANSYS
+installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
 "
   (format t
           "ic_trans_idi_tetin (prt &optional (tetin "") (tol 0.0001) (isRel 1) (idi_options ""))"))
@@ -210,15 +212,17 @@ For example usage, refer to ic_trans_idi_tetin.tcl in the ANSYS installation dir
   "
 Transfers the given Creo Parametric part file into the named tetin file.
 
-prt the Creo Parametric file 
-tetin the output file, defaults to a filename derived from the Creo Parametric filename, prt. 
+prt the Creo Parametric file tetin the output file, defaults to a
+filename derived from the Creo Parametric filename, prt.
 
-For example usage, refer to ic_trans_proe_tetin.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+For example usage, refer to ic_trans_proe_tetin.tcl in the ANSYS
+installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
 
 Automatically uses the part file to generate the tetin file.
 "
   (format t
-          "ic_trans_proe_tetin_protcl ~S ~S~%" prt tetin))
+          "ic_trans_proe_tetin_protcl ~S ~S;~%" prt tetin))
 
 (defun read-esf-file (prt &optional (do_tri 0) (fam ""))
   "
@@ -230,12 +234,15 @@ return list of created surfaces
 
 Notes: 
 
-If the fam parameter is omitted, a family will be created for each surface.
+If the fam parameter is omitted, a family will be created for each
+surface.
 
-For example usage, refer to ic_trans_read_esf_file.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+For example usage, refer to ic_trans_read_esf_file.tcl in the ANSYS
+installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
 "
   (format t
-          "ic_trans_read_esf_file ~S ~S ~S~%" prt do_tri fam))
+          "ic_trans_read_esf_file ~S ~S ~S;~%" prt do_tri fam))
 
 
 (defun acis-tetin (acisfile outfile)
@@ -246,11 +253,13 @@ acisfile the SAT file
 outfile the tetin output file 
 
 --------------------------------------------------------------------------------
-Note:   For example usage, refer to ic_trans_acis_tetin.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+Note: For example usage, refer to ic_trans_acis_tetin.tcl in the ANSYS
+installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
 --------------------------------------------------------------------------------
 "
   (format t
-          "ic_trans_acis_tetin ~S ~S~%" acisfile outfile))
+          "ic_trans_acis_tetin ~S ~S;~%" acisfile outfile))
 
 
 (defun dwg-tetin (dwgfile outfile)
@@ -261,12 +270,14 @@ dwgfile the DWG file
 outfile the tetin output file 
 
 --------------------------------------------------------------------------------
-Note:   For example usage, refer to ic_trans_dwg_tetin.tcl in the ANSYS installation directory under v145/icemcfd/Samples/ProgrammersGuide/med_test.
+Note: For example usage, refer to ic_trans_dwg_tetin.tcl in the ANSYS
+installation directory under
+v145/icemcfd/Samples/ProgrammersGuide/med_test.
 --------------------------------------------------------------------------------
 "
 
   (format t
-          "ic_trans_dwg_tetin ~S ~S~%" dwgfile outfile))
+          "ic_trans_dwg_tetin ~S ~S;~%" dwgfile outfile))
 
 
 (defun anf-tetin (anffile outfile)
@@ -300,9 +311,7 @@ v145/icemcfd/Samples/ProgrammersGuide/med_test.
 --------------------------------------------------------------------------------
 "
   (format t
-          "ic_trans_step_tetin ~S ~S ~S ~S ~S ~S~%" infile outfile facet tolarg stepver args))
-
-  
+          "ic_trans_step_tetin ~S ~S ~S ~S ~S ~S;~%" infile outfile facet tolarg stepver args))
   
 (defun tetin-step (infile outfile &optional (tolarg ""))
   "
@@ -313,10 +322,11 @@ outfile the STEP or IGES file
 
 Notes:
 
-The type of output (i.e. step or iges) is determined by the extension (i.e. .stp or .igs) of the output file
+The type of output (i.e. step or iges) is determined by the
+extension (i.e. .stp or .igs) of the output file
 "
   (format t
-          "ic_trans_tetin_step ~S ~S ~A~%" infile outfile tolarg))
+          "ic_trans_tetin_step ~S ~S ~A;~%" infile outfile tolarg))
 
 (defun ps-tetin (infile outfile &optional (units "meter"))
   "
@@ -332,7 +342,7 @@ v145/icemcfd/Samples/ProgrammersGuide/med_test.
 --------------------------------------------------------------------------------
 "
   (format t
-          "ic_trans_ps_tetin ~S ~S ~S~%" infile outfile units))
+          "ic_trans_ps_tetin ~S ~S ~S;~%" infile outfile units))
 
 (defun tetin-ps (infile outfile)
   "
@@ -348,7 +358,7 @@ v145/icemcfd/Samples/ProgrammersGuide/med_test.
 --------------------------------------------------------------------------------
 "
   (format t
-          "ic_trans_tetin_ps ~S ~S~%" infile outfile))
+          "ic_trans_tetin_ps ~S ~S;~%" infile outfile))
 
 
 (defun wb-brep-read (prt &optional (make_absolute_paths 1) (merge 0) (mesh 0) (subset 0) (geom 1) (executable 0))
@@ -356,16 +366,16 @@ v145/icemcfd/Samples/ProgrammersGuide/med_test.
 Imports an ANSYS Workbench model.
 "
   (format t
-          "ic_wb_brep_read ~S ~S ~S ~S ~S ~S ~S~%"
+          "ic_wb_brep_read ~S ~S ~S ~S ~S ~S ~S;~%"
           prt make_absolute_paths merge mesh subset geom executable))
 
 
 (defun wb-brep-load (&optional (load_file "") (module_name "") (doUpdate 0) (assemId "0xFFFFFFFF"))
-  "
-Imports a ANSYS Workbench model Returns 1 if build topology is required as a postprocessing step. Returns 0 otherwise.
+  " Imports a ANSYS Workbench model Returns 1 if build topology is
+required as a postprocessing step. Returns 0 otherwise.
 "
   (format t
-          "ic_wb_brep_load ~S ~S ~S ~S~%" load_file module_name doUpdate assemId))
+          "ic_wb_brep_load ~S ~S ~S ~S;~%" load_file module_name doUpdate assemId))
 
 
 (defun wb-brep-attach (&optional (load_file ""))
@@ -373,12 +383,12 @@ Imports a ANSYS Workbench model Returns 1 if build topology is required as a pos
 Attach to an ANSYS Workbench model.
 "
   (format t
-          "ic_wb_brep_attach ~S~%" load_file))
+          "ic_wb_brep_attach ~S;~%" load_file))
 
 (defun cos-ccl (file)
   "
 Saves the coordinate system to a CFX Command Language (CCL) file.
 "
   (format t
-          "ic_trans_cos_ccl ~S~%" file))
+          "ic_trans_cos_ccl ~S;~%" file))
 

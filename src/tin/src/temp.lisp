@@ -1,5 +1,5 @@
 ;;;; ./src/core/temp.lisp
-(in-package #:mnas-ansys)
+(in-package :mnas-ansys/tin)
 
 (defun z-plane-x-axis (point)
   "@b(Описание:) функция @b(z-plane-x-axis) возвращает координаты точки,
@@ -185,3 +185,52 @@
 на выходе из КС с ЖТ А32038002 и ГУ А32038004 по результатам
 CFD-расчета за нечетной и четной ЖТ выраженное в процентах
 "
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(dia:open-tin-file)
+(families (<tin>-surfaces dia:*tin*))
+
+
+G3
+
+B/GAS_1/D_07.000
+C3/C_1_3/C_1_3_1/D_04.000
+C3/C_1_3/C_1_3_2/D_08.000
+C3/C_1_3/C_1_3_3/D_01.200
+C3/C_2_3/C_2_3_1/D_04.000
+GU/COOL_1/G3-M3/G3-M3_2/D_02.000
+GU/COOL_1/HOLES/G3-M3/G3-M3_3/D_01.000
+GU/COOL_1/HOLES/G3-M3/G3-M3_3/D_01.200
+GU/COOL_1/HOLES/G3-M3/G3-M3_3/D_11.000
+GU/COOL_1/RADIUS/G3-M3/G3-M3/G3-M3_4/D_02.000
+GU/COOL_1/WALL/G3-M3/G3-M3_5/D_04.000
+GU/COOL_2/HOLES/D_01.200
+GU/COOL_2/PAZ/D_01.000
+GU/COOL_2/WALL/D_02.000
+GU/G1/HOLES/D_00.600
+GU/G1/HOLES/D_02.500
+GU/G1/HOLES/D_05.000
+GU/G1/HOLES/D_07.000
+GU/G1/WALL/D_00.000
+GU/G1/WALL/D_01.000
+GU/ZAV_1/IN/WALL/D_00.000
+GU/ZAV_1/IN/WALL/D_02.000
+GU/ZAV_1/IN/WALL/G3-M3/G3-M3_1/D_00.000
+GU/ZAV_1/LOP/WALL/D_00.000
+GU/ZAV_1/OUT/WALL/D_00.000
+GU/ZAV_1/OUT/WALL/D_01.000
+GU/ZAV_1/OUT/WALL/D_02.000
+
+
+ic_geo_get_valid_namelen 
+ic_geo_rename_family GU/ZAV_1/IN/WALL/G3-M0/D_00.000 GU/ZAV_1/IN/WALL/G3-M1000/D_00.000 0
+ic_geo_rename_family GU/ZAV_1/IN/WALL/G3-M0/D_02.000 GU/ZAV_1/IN/WALL/G3-M1000/D_02.000 0
+ic_geo_rename_family GU/ZAV_1/IN/WALL/G3-M0 GU/ZAV_1/IN/WALL/G3-M1000 1
+
+
+B1/AIR_IN/D_00.000
+B1/AIR_RL_OUT/N2/D_05.000
+B1/AIR_SL_OUT/D_06.000
+
+
+

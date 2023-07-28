@@ -1,8 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; package
 
-(defpackage #:mnas-ansys/tin
+(defpackage :mnas-ansys/tin
   (:use #:cl #:mnas-ansys/tin/read)
+  (:nicknames "TIN")
   (:export open-tin-file)
 ;;;; generics
   (:export <object>-tag
@@ -67,7 +68,9 @@
            <tin>-points
            <tin>-curves
            <tin>-surfaces
-           <tin>-triangulation-tolerance
+           <tin>-triangulation-tolerance)
+  (:export
+           tin-points
            tin-curves
            tin-surfaces           
            )
@@ -98,7 +101,7 @@
  функции @b(open-tin-file)."
    ))
 
-(in-package #:mnas-ansys/tin)
+(in-package :mnas-ansys/tin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; parameters 
@@ -116,8 +119,10 @@
     "define_family"
     "define_model"
     "define_prism_meshing_parameters"
-    "define_solid" "define_subset"
+    "define_solid"
+    "define_subset"
     "define_surface"
+    "prescribed_point"
     "return")
   "@b(Описание:) глобальная переменная содержит типы объектов начинающиеся с
 @b(define) плюс @b(return).
@@ -445,11 +450,11 @@
 @end(list)
 "
   (let ((params (mnas-string:split " " (elt lines n))))
-    (setf (<point>-x point) (read-x-by-key (<object>-tag point) params))
-    (setf (<point>-y point) (read-y-by-key (<object>-tag point) params))
-    (setf (<point>-z point) (read-z-by-key (<object>-tag point) params))
-    (setf (<ent>-family point) (read-by-key "family" params))
-    (setf (<obj>-name  point) (read-by-key "name" params))
+    (setf (<point>-x point) (x-by-key (<object>-tag point) params))
+    (setf (<point>-y point) (y-by-key (<object>-tag point) params))
+    (setf (<point>-z point) (z-by-key (<object>-tag point) params))
+    (setf (<ent>-family point) (by-key "family" params))
+    (setf (<obj>-name  point) (by-key "name" params))
     (values point 1)))
 
 (defmethod read-object (lines n (family <family>))
@@ -460,19 +465,19 @@
 @end(list)
 "
   (let ((params (mnas-string:split " " (elt lines n))))
-    (setf (<obj>-name             family) (read-by-key     "define_family" params))
-    (setf (<family>-color         family) (read-int-by-key "color"         params))
-    (setf (<family>-prism         family) (read-int-by-key "prism"         params))
-    (setf (<family>-internal-wall family) (read-int-by-key "internal_wall" params))
-    (setf (<family>-split-wall    family) (read-int-by-key "split_wall"    params))
-    (setf (<family>-tetra-size    family) (read-x-by-key   "tetra_size"    params))
-    (setf (<family>-height        family) (read-x-by-key   "height"        params))
-    (setf (<family>-hratio        family) (read-x-by-key   "hratio"        params))
-    (setf (<family>-nlay          family) (read-int-by-key "nlay"          params))
-    (setf (<family>-ratio         family) (read-x-by-key   "ratio"         params))
-    (setf (<family>-width         family) (read-x-by-key   "width"         params))
-    (setf (<family>-min           family) (read-x-by-key   "min"           params))
-    (setf (<family>-dev           family) (read-x-by-key   "dev"           params))
+    (setf (<obj>-name             family) (by-key     "define_family" params))
+    (setf (<family>-color         family) (int-by-key "color"         params))
+    (setf (<family>-prism         family) (int-by-key "prism"         params))
+    (setf (<family>-internal-wall family) (int-by-key "internal_wall" params))
+    (setf (<family>-split-wall    family) (int-by-key "split_wall"    params))
+    (setf (<family>-tetra-size    family) (x-by-key   "tetra_size"    params))
+    (setf (<family>-height        family) (x-by-key   "height"        params))
+    (setf (<family>-hratio        family) (x-by-key   "hratio"        params))
+    (setf (<family>-nlay          family) (int-by-key "nlay"          params))
+    (setf (<family>-ratio         family) (x-by-key   "ratio"         params))
+    (setf (<family>-width         family) (x-by-key   "width"         params))
+    (setf (<family>-min           family) (x-by-key   "min"           params))
+    (setf (<family>-dev           family) (x-by-key   "dev"           params))
     (values family 1)))
 
 (defmethod print-object ((family <family>) s)
@@ -518,11 +523,11 @@
 @end(list)
 "
   (let ((params (mnas-string:split " " (elt lines n))))
-    (setf (<ent>-family curve) (read-by-key "family" params))
-    (setf (<tetra>-size curve) (read-by-key "tetra_size" params))
-    (setf (<obj>-name  curve) (read-by-key "name" params))
-    (setf (<curve>-vertex1 curve) (read-by-key "vertex1" params))
-    (setf (<curve>-vertex2 curve) (read-by-key "vertex2" params))
+    (setf (<ent>-family curve) (by-key "family" params))
+    (setf (<tetra>-size curve) (by-key "tetra_size" params))
+    (setf (<obj>-name  curve) (by-key "name" params))
+    (setf (<curve>-vertex1 curve) (by-key "vertex1" params))
+    (setf (<curve>-vertex2 curve) (by-key "vertex2" params))
     (values curve (- (position-if #'(lambda (el) (find el *defines* :test #'string=))
 				  lines
 				  :start (1+ n)
@@ -549,11 +554,11 @@
 @end(list)
 "
   (let ((params (mnas-string:split " " (elt lines n))))
-    (setf (<point>-x material-point) (read-x-by-key (<object>-tag material-point) params))
-    (setf (<point>-y material-point) (read-y-by-key (<object>-tag material-point) params))
-    (setf (<point>-z material-point) (read-z-by-key (<object>-tag material-point) params))
-    (setf (<ent>-family material-point) (read-by-key "family" params))
-    (setf (<obj>-name  material-point) (read-by-key "name" params))
+    (setf (<point>-x material-point) (x-by-key (<object>-tag material-point) params))
+    (setf (<point>-y material-point) (y-by-key (<object>-tag material-point) params))
+    (setf (<point>-z material-point) (z-by-key (<object>-tag material-point) params))
+    (setf (<ent>-family material-point) (by-key "family" params))
+    (setf (<obj>-name  material-point) (by-key "name" params))
     (values material-point 1)))
 
 (defmethod <object>-tag ((coedge <coedge>)) "coedge")
@@ -610,9 +615,9 @@
 		       lines
 		       :start (1+ n)
 		       :key (lambda (el) (first (mnas-string:split " " el))))))
-    (setf (<obj>-name   surface) (read-by-key "name" params))
-    (setf (<ent>-family surface) (read-by-key "family" params))
-    (setf (<tetra>-size surface) (read-by-key "tetra_size" params))
+    (setf (<obj>-name   surface) (by-key "name" params))
+    (setf (<ent>-family surface) (by-key "family" params))
+    (setf (<tetra>-size surface) (by-key "tetra_size" params))
     (let ((rez nil))
       (loop :for i :from (1+ n) :below (position-tin-in-objects lines :objects *defines* :start (1+ n))
             :do (when (string= "coedge" (key-tin-in-objects lines i))
@@ -640,11 +645,11 @@
 @end(list)
 "
   (let ((params (mnas-string:split " " (elt lines n))))
-    (setf (<obj>-name        solid) (read-by-key "name"   params))
-    (setf (<ent>-family      solid) (read-by-key "family" params))
-    (setf (<solid>-n-lumps   solid) (read-int-by-key "n_lumps" params))
-    (setf (<solid>-n-sheets  solid) (read-int-by-key "n_sheets" params))
-    (setf (<solid>-matlpoint solid) (read-by-key "matlpoint" params))
+    (setf (<obj>-name        solid) (by-key "name"   params))
+    (setf (<ent>-family      solid) (by-key "family" params))
+    (setf (<solid>-n-lumps   solid) (int-by-key "n_lumps" params))
+    (setf (<solid>-n-sheets  solid) (int-by-key "n_sheets" params))
+    (setf (<solid>-matlpoint solid) (by-key "matlpoint" params))
     (values solid 1)))
 
 (defmethod tin-points ((tin <tin>))
@@ -727,10 +732,7 @@
 	(<family>  (push object families))
         (<curve>   (add-obj-to-ht-by-name object (<tin>-curves   tin)))
        	(<surface> (add-obj-to-ht-by-name object (<tin>-surfaces tin)))
-        (<point>
-         nil
-         ;; (add-obj-to-ht-by-name object (<tin>-points   tin))
-         )))))
+        (<point>   (add-obj-to-ht-by-name object (<tin>-points   tin)))))))
 
 (defmethod coedged ((curve <curve>) (surface <surface>))
   "@b(Описание:) метод @b(coedged) возвращает объект типа @b(surface),
@@ -790,7 +792,7 @@
 
 
 
-(defmethod families (entytes)
+(defmethod families ((entytes cons))
   "@b(Описание:) метод @b(families) возвращает список семейств,
   содержащий уникальные имена.
 
@@ -800,9 +802,29 @@
  (families (<tin>-curves  *tin*))
  (families (<tin>-points  *tin*))
 @end(code)"
-  (remove-duplicates 
-   (mapcar #'(lambda(el) (<ent>-family el)) entytes)
-   :test #'equal))
+  (let ((rez (sort 
+              (remove-duplicates 
+               (mapcar #'(lambda(el) (<ent>-family el)) entytes)
+               :test #'equal)
+              #'string<)))
+    (format t "~{~A~%~}~2%" rez)
+    rez))
+
+(defmethod families ((entytes hash-table))
+  "@b(Описание:) метод @b(families) возвращает список семейств,
+  содержащий уникальные имена.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (dia:open-tin-file)
+ (families (<tin>-surfaces dia:*tin*))
+ (families (<tin>-curves   dia:*tin*))
+ (families (<tin>-points   dia:*tin*))
+@end(code)"
+  (families (loop :for k :being :the :hash-key
+        :using (hash-value v)
+          :of entytes
+      :collect v)))
 
 (defun names (entities &optional (stream t))
   "@b(Описание:) функция @b(entities) 
@@ -810,7 +832,7 @@
   (let ((names (sort (loop :for i :in entities
                            :collect (<obj>-name i))
                      #'string<)))
-    (format stream "~{~A~^ ~}~2%" names)
+    (format stream "~{~S~^ ~}~2%" names)
     names))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

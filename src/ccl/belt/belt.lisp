@@ -1,6 +1,6 @@
 ;;;; ./src/ccl/belt/belt.lisp
 
-(defpackage #:mnas-ansys/belt
+(defpackage :mnas-ansys/belt
   (:use #:cl)
   (:intern mm->m
            line-name
@@ -9,7 +9,6 @@
            make-line-belt
            make-surface-belt
            char+number)
-  (:export number-to-string)
   (:export obj-number
            obj-number-incf
            obj-number-reset
@@ -39,7 +38,7 @@
  CFX на языке CCL.
 "))
 
-(in-package #:mnas-ansys/belt)
+(in-package :mnas-ansys/belt)
 
 (defvar *obj-number* 1)
 
@@ -236,21 +235,6 @@
 (defun make-table-end ()
   (format t "  END~%END~%~%"))
 
-(defun number-to-string (val &key (fmt "~,2@F"))
-  "@b(Описание:) функция @b(number-to-string) возвращает строку,
-  которая представляет вещественое число в формате пригодном для
-  вставки в CCL файл системы ANSYS CFX в качестве имени.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (number-to-string  90.5645) => \"p90i56\"
- (number-to-string -90.5645) => \"m90i56\"
-@end(code)
-"
-  (mnas-string/translit:translit
-   (string-trim " " (format nil fmt val))
-   :ht mnas-string/translit:*cfx->en*))
-
 (defun mm->m (value)
   "@b(Описание:) функция @b(mm->m) переводит милиметры в метры."
   (/ value 1000.0))
@@ -277,13 +261,13 @@
 
 (defun belt-surface-name (x y r-min r-max theta-min theta-max alpha)
   (format nil "SURFACE ~A ~A ~A ~A ~A ~A ~A"
-          (number-to-string alpha)
-          (number-to-string x)
-          (number-to-string y)
-          (number-to-string r-min)
-          (number-to-string r-max)
-          (number-to-string theta-min)
-          (number-to-string theta-max)))
+          (mnas-string/print:number-to-string alpha)
+          (mnas-string/print:number-to-string x)
+          (mnas-string/print:number-to-string y)
+          (mnas-string/print:number-to-string r-min)
+          (mnas-string/print:number-to-string r-max)
+          (mnas-string/print:number-to-string theta-min)
+          (mnas-string/print:number-to-string theta-max)))
 
 
 (defun make-surface-of-revolution (location-list
@@ -432,6 +416,24 @@
  ((166.66667 200.0 \"Surface 000000000419\")
   (133.33334 166.66667 \"Surface 000000000417\")
   (100.0 133.33334 \"Surface 000000000415\"))
+@end(code)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-tangent-belts 50 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+@end(code)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
+@end(code)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+(make-table-tangent-belts
+ 50 1200.0 0.0 0.0 200.0 -180 +180 0.0
+ :equations '(\"=massFlowAve(Velocity u)@\" \"=massFlowAve(Velocity v)@\" \"=massFlowAve(Velocity w)@\"
+ \"=areaAve(Velocity u)@\" \"=areaAve(Velocity v)@\" \"=areaAve(Velocity w)@\"))
 @end(code)
 
  @image[src=make-tangent-belts.png]()
@@ -853,6 +855,13 @@ END
                      (Variable "Pressure")
                      (Variable-Boundary-Values "Hybrid")
                      (Visibility "On"))
+  "
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-point \"name\")
+@end(code)
+"
   (for-list t  "POINT: " name)
   (for-list t  "  Apply Instancing Transform = " Apply-Instancing-Transform )
   (for-list t  "  Colour = " Colour )
@@ -900,21 +909,6 @@ END
   (for-list t  "    Z = " "0.0 [mm]")
   (for-list t  "  END" "")
   (for-list t  "END" ""))
-
-(make-point "name")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; Примеры использования функций
-
-(make-tangent-belts 50 1200.0 0.0 0.0 200.0 -180 +180 0.0)
-
-(make-table-tangent-belts
- 50 1200.0 0.0 0.0 200.0 -180 +180 0.0
- :equations '("=massFlowAve(Velocity u)@" "=massFlowAve(Velocity v)@" "=massFlowAve(Velocity w)@"
- "=areaAve(Velocity u)@" "=areaAve(Velocity v)@" "=areaAve(Velocity w)@"))
-
-(make-tangent-belts 1 1200.0 0.0 0.0 200.0 -180 +180 0.0)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun make-legend (&key
 		      (name "Legend 1")
@@ -1051,5 +1045,3 @@ END
   (for-list t "  END" "")
   (for-list t "END" "")
   )
-
-
