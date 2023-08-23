@@ -16,6 +16,9 @@
   (:export surface-families
            curves-families
            points-families)
+  (:export tangent-curve-names
+           tangent-point-names
+           )
   (:documentation
    " Пакет @b(mnas-ansys/tin/utils) определяет функции, предназаченные для
    манипулирования графическими объектами при взаимодействии
@@ -212,3 +215,53 @@
    содержащих точки."
   (tin:families (tin:<tin>-points tin)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod coeged-have-same-path ((curve <curve>) (tin <tin>))
+  (let ((ht (make-hash-table :test #'equal)))
+    (mapcar
+     #'(lambda (el)
+         (let ((key (family-path (<ent>-family el))))
+           (setf (gethash key ht) key)))
+     (coedged curve tin))
+    (when (= (hash-table-count ht) 1) (<obj>-name curve))))
+
+(defmethod coeged-have-same-path ((point <point>) (tin <tin>))
+  (when (<= (length (loop :for i :in (coincident point tin)
+                          :when (string/= "TAN" (<ent>-family i))
+                            :collect i))
+            2)
+    (<obj>-name point)))
+
+(defun family-path (name)
+  (format nil "~{~A~^/~}"
+          (reverse (cdr (reverse (mnas-string:split "/" name))))))
+
+(defun exclude-nil (lst)
+  (loop :for i :in lst
+        :when i :collect i))
+
+(defun tangent-curve-names (tin)
+  "@b(Описание:) функция @b(tangent-curve-names) в качестве побочного
+эффекта печатает на стандартный вывод имена кривых, для которых
+сопряженные с ними поверхности имеют один и тотже самый путь."
+  (format t "~{~A~^ ~}~3%"
+          (exclude-nil
+           (mapcar
+            #'(lambda (el)
+                (coeged-have-same-path el tin))
+            (tin-curves tin)))))
+
+(defun tangent-point-names (tin)
+  "@b(Описание:) функция @b(tangent-point-names) в качестве побочного
+эффекта печатает на стандартный вывод имена точек, сопряженных не
+более чем с двумя кривыми."
+  (format t "~{~A~^ ~}~3%"
+          (exclude-nil
+           (mapcar
+            #'(lambda (el)
+                (coeged-have-same-path el tin))
+            (tin-points tin)))))
+
+;; (dia:open-tin-file)
+;; (tangent-curve-names dia:*tin*)

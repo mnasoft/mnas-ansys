@@ -92,12 +92,12 @@ default /tmp/ERROR_LOG0.tmp
 (defun confirm (mess)
   "Presents a dialog with a message and one button that says OK that
 just dismisses the dialog."
-(format t "ic_confirm ~A;~%" mess))
+  (format t "ic_confirm ~A;~%" mess))
 
 (defun yes-or-no (mess)
   "Presents a dialog with a message and 2 buttons, which say Yes or
 No. Returns 1 or 0 depending on which is pressed."
-(format t "ic_yes_or_no ~A;~%" mess))
+  (format t "ic_yes_or_no ~A;~%" mess))
 
 
 (defun multiple-choice (mess args)

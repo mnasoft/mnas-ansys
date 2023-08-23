@@ -67,6 +67,7 @@
            <tin>-curves
            <tin>-surfaces
            <tin>-triangulation-tolerance
+           tin-points
            tin-curves
            tin-surfaces           
            )

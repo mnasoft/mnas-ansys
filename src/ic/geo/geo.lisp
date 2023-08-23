@@ -3,384 +3,429 @@
 (defpackage :mnas-ansys/ic/geo
   (:use #:cl)
   (:nicknames "IC/GEO" "GEO")
-  (:export  load-tetin
-            empty-tetin
-            save-tetin
-            unload-tetin
-            import-mesh
-            update-surface-display
-            export-to-mesh
-            ddn-app
-            summary
-            lookup-family-pid
-            is-loaded
-            is-modified
-            valid-name
-            set-modified
-            check-family
-            check-part
-            new-family
-            new-name
-            get-unused-part
-            delete-family
-            params-blank-done
-            match-name
-            update-visibility
-            get-visibility
-            set-visible-override
-            temporary-visible
-            get-temporary-invisible
-            set-visible-override-families-and-types
-            redraw-geometry
-            incident
-            surface-get-objects
-            loop-get-objects
-            surface-edges-incident-to-curve
-            surface-normals-orient
-            get-side-surfaces
-            boundary
-            object-visible
-            configure-objects
-            configure-one-attribute
-            configure-one-object
-            list-families
-            list-parts
-            check-part
-            list-families-in-part
-            list-families-with-group
-            list-parts-with-group
-            family-is-empty
-            family-is-empty-except-dormant
-            non-empty-families
-            non-empty-families-except-dormant
-            num-objects
-            list-visible-objects
-            num-visible-objects
-            num-segments
-            set-family
-            set-part
-            set-part-curve
-            set-name
-            rename-family
-            replace-entity
-            get-ref-size
-            set-meshing-params
-            get-mesh-growth-ratio
-            get-meshing-params
-            scale-meshing-params
-            set-curve-bunching
-            get-curve-bunching
-            create-surface-segment
-            create-curve-segment
-            split-curve
-            split-curve-at-point
-            create-loop
-            modify-loop
-            pick-location
-            get-object-type
-            trim-surface
-            intersect-surfaces
-            intersect-surfs-by-groups
-            create-unstruct-curve-from-points
-            create-unstruct-surface-from-points
-            create-empty-unstruct-surface
-            create-empty-unstruct-curve
-            create-curve-ends
-            mod-crv-set-end
-            crv-get-end
-            create-points-curveinter
-            create-point-location
-            create-material-location
-            create-density
-            extract-points
-            extract-curves
-            create-surface-edges
-            get-srf-edges
-            stats
-            get-point-location
-            get-material-location
-            set-point-location
-            set-material-location
-            delete-material
-            check-objects-exist
-            get-objects
-            count-in-family
-            objects-in-family
-            objects-in-parts
-            get-internal-object
-            get-name-of-internal-object
-            get-text-point
-            get-centroid
-            num-segments
-            num-nodes
-            get-node
-            drag-nodes
-            drag-point
-            drag-material
-            drag-body
-            project-point
-            project-and-move-point
-            project-coords
-            nearest-object
-            project-curve-to-surface
-            create-surface-curves
-            create-surface-curtain
-            set-node
-            get-family
-            get-part
-            build-topo
-            default-topo-tolerance-old
-            delete-geometry
-            pnt-mrg-inc-crv
-            facetize-geometry
-            move-geometry
-            duplicate
-            fixup
-            min-edge-length
-            coarsen
-            gap-repair
-            midsurface
-            lookup
-            get-entity-types
-            memory-used
-            project-mode
-            csystem-get-current
-            csystem-set-current
-            csystem-list
-            csystem-get
-            csystem-delete
-            csystem-create
-            coords-into-global
-            coords-dir-into-global
-            coords-into-local
-            csystem-display
-            untrim-surface
-            get-thincuts
-            set-thincuts
-            get-periodic-data
-            set-periodic-data
-            get-family-param
-            set-family-params
-            reset-family-params
-            delete-unattached
-            remove-feature
-            merge-curves
-            modify-curve-reappr
-            modify-surface-reappr
-            reset-data-structures
-            params-update-show-size
-            stlrepair-holes
-            stlrepair-edges
-            show-geo-selected
-            reset-geo-selected
-            get-geo-selected
-            set-geo-selected
-            select-geometry-option
-            add-segment
-            delete-segments
-            restrict-segments
-            split-segments
-            split-edges
-            split-one-edge
-            swap-edges
-            move-segments
-            move-node
-            merge-nodes
-            merge-nodes-tol
-            merge-surfaces
-            merge-objects
-            merge-points-tol
-            finish-edit
-            delete-if-empty
-            smallest-segment
-            get-config-param
-            set-config-param
-            set-tag
-            highlight-segments
-            bounding-box
-            bounding-box2
-            model-bounding-box
-            feature-size
-            replace-surface-mesh
-            replace-curve-mesh
-            vec-diff
-            vec-dot
-            vec-mult
-            vec-nrm
-            vec-len
-            pnt-dist
-            vec-smult
-            vec-sum
-            crv-length
-            cre-srf-rev
-            cre-crv-iso-crv
-            cre-srf-pln-3pnts
-            cre-srf-pln-nrm-pnt
-            cre-srf-pln-nrm-dist
-            cre-arc-from-pnts
-            cre-bsp-crv-n-pnts
-            cre-bsp-crv-n-pnts-cons
-            cre-crv-arc-ctr-rad
-            cre-srf-cyl
-            cre-line
-            cre-pnt
-            cre-mat
-            get-srf-nrm
-            get-srf-pos
-            cre-pnt-on-srf-at-par
-            cre-pnt-on-crv-at-par
-            cre-crv-concat
-            create-curve-concat
-            cre-srf-from-contour
-            create-surface-from-curves
-            create-param-surface
-            list-crv-data
-            list-srf-data
-            make-conn-regions
-            get-attached-entities
-            get-entities-by-attach-num
-            get-internal-surface-boundary
-            find-internal-outer-loops
-            find-internal-surfaces
-            make-conn-buttons
-            split-surfaces-at-thin-regions
-            surface-create-smart-nodes
-            surface-topological-corners
-            flanges-notch-critical-points
-            trm-srf-at-par
-            trm-srfs-by-curvature
-            surface-curvature
-            hull-2d
-            surface-from-points
-            surface-extend
-            cre-srf-crv-drv-srf
-            get-types
-            flood-fill-surface-angle
-            flood-fill
-            get-triangulation-tolerance
-            convex-hull
-            remove-triangles-on-plane
-            bbox-of-entities
-            classify-by-regions
-            split-surfaces
-            elem-assoc
-            cre-bsp-srf-by-pnt-array
-            cre-geom-input
-            import-str-to-cad
-            crv-data
-            srf-data
-            cre-srf-loft-crvs
-            cre-crv-test-project-surface
-            cre-surface-section
-            offset
-            cre-crv-datred
-            cre-srf-datred
-            cre-srf-sweep
-            crv-is-opposite
-            crv-is-edge
-            fix-degen-geom
-            find-nearest-srf-pnt
-            find-nearest-crv-pnt
-            distance-from-surfaces
-            nearest-surface-list
-            get-crv-nrm
-            get-crv-pos
-            get-crv-binrm
-            cvt-uns-to-bsc
-            srf-area
-            sort-by-srf-area
-            reduce-face
-            get-crv-tan
-            mod-crv-tanext
-            mod-srf-tanext
-            mod-srf-ext
-            mod-crv-match-crv
-            mod-crv-match-pnt
-            cre-srf-offset
-            build-bodies
-            create-volume
-            reset-bodies
-            create-body
-            get-body-matlpnt
-            srf-radius
-            cre-srf-offset-edge
-            body-lower-entities
-            cre-geom-plot3d
-            cre-srf-db-pnts
-            cre-crv-db-pnts
-            read-off-file
-            read-xyz-file
-            crv-is-arc
-            get-keypoints
-            reverse-crv
-            cre-edge-concat
-            create-histogram-box
-            build-topo-on-srfs
-            contact-surfaces
-            map-tetin-sizes
-            surface-thickness
-            srf-in-srf-fam-set
-            cre-srf-over-holes
-            subset-exists
-            subset-copy
-            subset-clear
-            subset-unused-name
-            subset-delete
-            subset-visible
-            subset-list-families
-            subset-list
-            subset-add-items
-            subset-remove-items
-            subset-handle-bc-changes
-            subset-get-items
-            subset-bbox
-            subset-add-layer
-            subset-remove-layer
-            subset-names-to-parts
-            get-srf-edges
-            get-vert-edges
-            calc-bisector-pnt
-            cre-srf-simple-trim
-            set-simplification-level
-            surface-thickness-check
-            close-contour
-            find-srf-prc-pnt
-            get-dormant
-            get-dormant-entity
-            get-facets
-            filter-curves
-            cre-bridge-crv
-            cre-pln-crv
-            pln-n-pnts
-            sub-get-numbers-by-names
-            get-pnt-marked
-            set-pnt-marked
-            get-all-marked-pnts
-            add-embedded-crv
-            add-embedded-pnt
-            is-crv-on-srf
-            register-crv
-            cre-midline-crv
-            get-points-from-curves
-            test-cmd
-            cre-crv-ell
-            improve-edge
-            just-do-it
-            get-prism-families
-            set-prism-families
-            get-prism-family-params
-            set-prism-family-params
-            create-tglib-sfbgrid
-            vcalc
-            highlight
-            vset
-            curve
-            get-crv-data-at-par
-            )
+  (:export ddn-app
+           summary
+           is-loaded
+           is-modified
+           check-part
+           params-blank-done
+           update-visibility
+           temporary-visible
+           redraw-geometry
+           incident
+           boundary
+           object-visible
+           configure-objects
+           configure-one-attribute
+           configure-one-object
+           check-part
+           non-empty-families
+           non-empty-families-except-dormant
+           num-objects
+           num-visible-objects
+           num-segments
+           replace-entity
+           create-curve-segment
+           split-curve
+           split-curve-at-point
+           pick-location
+           intersect-surfs-by-groups
+           create-unstruct-curve-from-points
+           create-empty-unstruct-curve
+           create-curve-ends
+           create-points-curveinter
+           create-point-location
+           create-material-location
+           create-density
+           extract-points
+           extract-curves
+           stats
+           delete-material
+           check-objects-exist
+           objects-in-parts
+           num-segments
+           num-nodes
+           drag-nodes
+           drag-point
+           drag-material
+           drag-body
+           project-point
+           project-and-move-point
+           project-coords
+           nearest-object
+           build-topo
+           default-topo-tolerance-old
+           delete-geometry
+           pnt-mrg-inc-crv
+           facetize-geometry
+           move-geometry
+           duplicate
+           fixup
+           min-edge-length
+           coarsen
+           gap-repair
+           lookup
+           memory-used
+           project-mode
+           csystem-delete
+           csystem-create
+           coords-into-global
+           coords-dir-into-global
+           coords-into-local
+           csystem-display
+           delete-unattached
+           remove-feature
+           merge-curves
+           modify-curve-reappr
+           params-update-show-size
+           stlrepair-holes
+           stlrepair-edges
+           show-geo-selected
+           select-geometry-option
+           add-segment
+           delete-segments
+           restrict-segments
+           split-segments
+           split-edges
+           split-one-edge
+           swap-edges
+           move-segments
+           move-node
+           merge-nodes
+           merge-nodes-tol
+           merge-objects
+           merge-points-tol
+           finish-edit
+           delete-if-empty
+           smallest-segment
+           highlight-segments
+           bounding-box
+           bounding-box2
+           model-bounding-box
+           feature-size
+           vec-diff
+           vec-dot
+           vec-mult
+           vec-nrm
+           vec-len
+           pnt-dist
+           vec-smult
+           vec-sum
+           crv-length
+           cre-srf-rev
+           cre-crv-iso-crv
+           cre-srf-pln-3pnts
+           cre-srf-pln-nrm-pnt
+           cre-srf-pln-nrm-dist
+           cre-arc-from-pnts
+           cre-bsp-crv-n-pnts
+           cre-bsp-crv-n-pnts-cons
+           cre-crv-arc-ctr-rad
+           cre-srf-cyl
+           cre-line
+           cre-pnt
+           cre-mat
+           cre-pnt-on-srf-at-par
+           cre-pnt-on-crv-at-par
+           cre-crv-concat
+           create-curve-concat
+           cre-srf-from-contour
+           make-conn-regions
+           make-conn-buttons
+           flanges-notch-critical-points
+           trm-srf-at-par
+           trm-srfs-by-curvature
+           hull-2d
+           cre-srf-crv-drv-srf
+           flood-fill
+           convex-hull
+           remove-triangles-on-plane
+           bbox-of-entities
+           classify-by-regions
+           elem-assoc
+           cre-bsp-srf-by-pnt-array
+           cre-geom-input
+           import-str-to-cad
+           crv-data
+           srf-data
+           cre-srf-loft-crvs
+           cre-crv-datred
+           cre-srf-datred
+           cre-srf-sweep
+           crv-is-opposite
+           crv-is-edge
+           fix-degen-geom
+           find-nearest-srf-pnt
+           find-nearest-crv-pnt
+           cvt-uns-to-bsc
+           srf-area
+           sort-by-srf-area
+           reduce-face
+           mod-crv-tanext
+           mod-srf-tanext
+           mod-srf-ext
+           mod-crv-match-crv
+           mod-crv-match-pnt
+           build-bodies
+           create-volume
+           create-body
+           srf-radius
+           body-lower-entities
+           cre-geom-plot3d
+           cre-srf-db-pnts
+           cre-crv-db-pnts
+           read-off-file
+           read-xyz-file
+           crv-is-arc
+           reverse-crv
+           cre-edge-concat
+           create-histogram-box
+           build-topo-on-srfs
+           cre-srf-over-holes
+           calc-bisector-pnt
+           cre-srf-simple-trim
+           close-contour
+           find-srf-prc-pnt
+           filter-curves
+           cre-bridge-crv
+           cre-pln-crv
+           pln-n-pnts
+           add-embedded-crv
+           add-embedded-pnt
+           is-crv-on-srf
+           register-crv
+           cre-midline-crv
+           test-cmd
+           cre-crv-ell
+           improve-edge
+           just-do-it
+           create-tglib-sfbgrid
+           vcalc
+           highlight
+           curve
+           )
+  (:export get-unused-part
+           get-visibility
+           get-temporary-invisible
+           get-ref-size
+           get-curve-bunching
+           get-object-type
+           crv-get-end
+           get-srf-edges
+           get-point-location
+           get-material-location
+           get-objects
+           get-internal-object
+           get-text-point
+           get-centroid
+           get-node
+           get-part
+           get-entity-types
+           csystem-get-current
+           csystem-get
+           get-thincuts
+           get-periodic-data
+           get-geo-selected
+           get-config-param
+           get-srf-nrm
+           get-srf-pos
+           get-attached-entities
+           get-entities-by-attach-num
+           get-types
+           get-triangulation-tolerance
+           get-crv-nrm
+           get-crv-pos
+           get-crv-binrm
+           get-crv-tan
+           get-body-matlpnt
+           get-keypoints
+           subset-get-items
+           get-srf-edges
+           get-vert-edges
+           get-dormant
+           get-dormant-entity
+           get-facets
+           get-pnt-marked
+           get-all-marked-pnts
+           get-points-from-curves
+           get-prism-families
+           get-crv-data-at-par)
+  (:export empty-tetin
+           save-tetin
+           unload-tetin
+           map-tetin-sizes
+           load-tetin
+           )
+  (:export list-crv-data
+           list-srf-data
+           subset-list-families
+           subset-list
+           list-families
+           list-parts
+           list-families-in-part
+           list-families-with-group
+           list-parts-with-group
+           list-visible-objects
+           csystem-list
+           )
+  (:export set-modified
+           set-visible-override
+           set-visible-override-families-and-types
+           set-part
+           set-part-curve
+           set-curve-bunching
+           mod-crv-set-end
+           set-point-location
+           set-material-location
+           set-node
+           csystem-set-current
+           set-thincuts
+           set-periodic-data
+           reset-data-structures
+           reset-geo-selected
+           set-geo-selected
+           set-config-param
+           set-tag
+           offset
+           cre-srf-offset
+           reset-bodies
+           cre-srf-offset-edge
+           srf-in-srf-fam-set
+           set-simplification-level
+           set-pnt-marked
+           set-prism-families
+           vset)
+  (:export subset-exists
+           subset-copy
+           subset-clear
+           subset-delete
+           subset-visible
+           subset-add-items
+           subset-remove-items
+           subset-handle-bc-changes
+           subset-bbox
+           subset-add-layer
+           subset-remove-layer
+           )
+  (:export get-prism-family-params
+           set-family
+           set-family-params
+           reset-family-params
+           set-prism-family-params
+           lookup-family-pid
+           check-family
+           new-family
+           delete-family
+           family-is-empty
+           family-is-empty-except-dormant
+           count-in-family
+           objects-in-family
+           get-family
+           get-family-param
+           )
+  (:export loop-get-objects
+           create-loop
+           modify-loop
+           find-internal-outer-loops
+           )
+  (:export replace-curve-mesh
+           get-mesh-growth-ratio
+           get-meshing-params
+           set-meshing-params
+           import-mesh
+           export-to-mesh
+           scale-meshing-params)
+  (:export match-name
+           get-name-of-internal-object
+           sub-get-numbers-by-names
+           set-name
+           subset-unused-name
+           subset-names-to-parts
+           rename-family
+           valid-name
+           new-name
+           )
+  (:export update-surface-display
+           surface-edges-incident-to-curve
+           surface-normals-orient
+           create-surface-segment
+           trim-surface
+           intersect-surfaces
+           create-unstruct-surface-from-points
+           create-empty-unstruct-surface
+           create-surface-edges
+           project-curve-to-surface
+           create-surface-curves
+           create-surface-curtain
+           midsurface
+           untrim-surface
+           modify-surface-reappr
+           merge-surfaces
+           create-surface-from-curves
+           create-param-surface
+           find-internal-surfaces
+           split-surfaces-at-thin-regions
+           surface-create-smart-nodes
+           surface-topological-corners
+           surface-curvature
+           surface-from-points
+           surface-extend
+           flood-fill-surface-angle
+           split-surfaces
+           cre-crv-test-project-surface
+           cre-surface-section
+           distance-from-surfaces
+           contact-surfaces
+           surface-thickness
+           surface-thickness-check
+           surface-get-objects
+           get-side-surfaces
+           get-internal-surface-boundary
+           nearest-surface-list
+           )
   (:export set-meshing-params-global)
   (:documentation
    " Пакет предназначен для создания геометрии через API системы ANSYS ICEM CFD."
    ))
+
+(defparameter k-words 
+  '("2d" "3pnts" "add" "all" "and" "angle" "app" "arc" "area" "array" "assoc" "at"
+    "attach" "attached" "attribute" "bbox" "bc" "binrm" "bisector" "blank"
+    "bodies" "body" "boundary" "bounding" "box" "box2" "bridge" "bsc" "bsp"
+    "build" "bunching" "buttons" "by" "cad" "calc" "centroid" "changes" "check"
+    "classify" "clear" "close" "cmd" "coarsen" "concat" "config" "configure"
+    "conn" "cons" "contact" "contour" "convex" "coords" "copy" "corners" "count"
+    "cre" "create" "critical" "crv" "crvs" "csystem" "ctr" "current" "curtain"
+    "curvature" "curve" "curveinter" "curves" "cvt" "cyl" "data" "datred" "db"
+    "ddn" "default" "degen" "delete" "density" "diff" "dir" "display" "dist"
+    "distance" "do" "done" "dormant" "dot" "drag" "drv" "duplicate" "edge" "edges"
+    "edit" "elem" "ell" "embedded" "empty" "end" "ends" "entities" "entity"
+    "except" "exist" "exists" "export" "ext" "extend" "extract" "face" "facetize"
+    "facets" "fam" "families" "family" "feature" "file" "fill" "filter" "find"
+    "finish" "fix" "fixup" "flanges" "flood" "from" "gap" "geo" "geom" "geometry"
+    "get" "global" "group" "groups" "growth" "handle" "highlight" "histogram"
+    "holes" "hull" "if" "import" "improve" "in" "inc" "incident" "input"
+    "internal" "intersect" "into" "invisible" "is" "iso" "it" "items" "just"
+    "keypoints" "layer" "len" "length" "level" "line" "list" "load" "loaded"
+    "local" "location" "loft" "lookup" "loop" "loops" "lower" "make" "map"
+    "marked" "mat" "match" "material" "matlpnt" "memory" "merge" "mesh" "meshing"
+    "midline" "midsurface" "min" "mod" "mode" "model" "modified" "modify" "move"
+    "mrg" "mult" "n" "name" "names" "nearest" "new" "node" "nodes" "non" "normals"
+    "notch" "nrm" "num" "numbers" "object" "objects" "of" "off" "offset" "old"
+    "on" "one" "opposite" "option" "orient" "outer" "over" "override" "par"
+    "param" "params" "part" "parts" "periodic" "pick" "pid" "plane" "pln" "plot3d"
+    "pnt" "pnts" "point" "points" "pos" "prc" "prism" "project" "rad" "radius"
+    "ratio" "read" "reappr" "redraw" "reduce" "ref" "regions" "register" "remove"
+    "rename" "repair" "replace" "reset" "restrict" "rev" "reverse" "save" "scale"
+    "section" "segment" "segments" "select" "selected" "set" "sfbgrid" "show"
+    "side" "simple" "simplification" "size" "sizes" "smallest" "smart" "smult"
+    "sort" "split" "srf" "srfs" "stats" "stlrepair" "str" "structures" "sub"
+    "subset" "sum" "summary" "surface" "surfaces" "surfs" "swap" "sweep" "tag"
+    "tan" "tanext" "temporary" "test" "tetin" "text" "tglib" "thickness" "thin"
+    "thincuts" "to" "tol" "tolerance" "topo" "topological" "triangles"
+    "triangulation" "trim" "trm" "type" "types" "unattached" "unload" "uns"
+    "unstruct" "untrim" "unused" "update" "used" "valid" "vcalc" "vec" "vert"
+    "visibility" "visible" "volume" "vset" "with" "xyz"))
 
 (in-package :mnas-ansys/ic/geo)
 
@@ -593,8 +638,8 @@ Returns the internal numeric id (pid) of the family. This is not a safe function
    ))
 
 (defun is-modified ()
-"
-Reports if the current geometry has been modified since the last save.
+" Reports if the current geometry has been modified since the last
+save.
 "  
   (format
    t
@@ -611,8 +656,8 @@ Changes a name into a valid family/entity name.
    name no_colon))
 
 (defun set-modified (on)
-"
-Sets the modified flag for the current geometry. This should not be used for most operations since they set this flag themselves.
+" Sets the modified flag for the current geometry. This should not be
+used for most operations since they set this flag themselves.
 "  
   (format
    t
@@ -638,10 +683,12 @@ Checks if a part exists.
    name))
 
 (defun new-family (name &optional (do_update 1))
-"
-Creates a new family if it is not already there. Returns 1 if a new family was created, or 0 if it already existed.
+" Creates a new family if it is not already there. Returns 1 if a new
+family was created, or 0 if it already existed.
 
-Note:   The newly created family will not appear in the interactive family list unless you issue the update_family_display command interactively.
+Note: The newly created family will not appear in the interactive
+family list unless you issue the update_family_display command
+interactively.
 "  
 
   (format
@@ -678,8 +725,9 @@ Deletes a family, or a list of families.
    names))
 
 (defun params-blank-done (type &optional (reset 0))
-"
-Blanks those entities that have some meshing parameters already defined. If reset == 1, then the entities blanked entities are unblanked.
+" Blanks those entities that have some meshing parameters already
+defined. If reset == 1, then the entities blanked entities are
+unblanked.
 "  
   (format
    t
@@ -696,8 +744,10 @@ Returns the names of the objects that match a given pattern.
    type pat))
 
 (defun update-visibility (type vis_fams visible)
-"
-Changes the visibility so that only objects with the given families and type are visible or not, depending on the visible option. If vis_fams is *skip* then they are retained and the type is checked. If a family is not listed in the family list then it is ignored.
+" Changes the visibility so that only objects with the given families
+and type are visible or not, depending on the visible option. If
+vis_fams is *skip* then they are retained and the type is checked. If
+a family is not listed in the family list then it is ignored.
 "  
   (format
    t
@@ -714,8 +764,9 @@ Returns whether an object is visible or not.
    type name))
 
 (defun set-visible-override (type name val)
-"
-Sets or unsets the visible_override flag. If this flag is set for an object then it is always visible no matter what types and families are enabled. This is needed for geometry subsets.
+" Sets or unsets the visible_override flag. If this flag is set for an
+object then it is always visible no matter what types and families are
+enabled. This is needed for geometry subsets.
 "  
   (format
    t
@@ -723,8 +774,9 @@ Sets or unsets the visible_override flag. If this flag is set for an object then
    type name val))
 
 (defun temporary-visible (type objects vis &optional (force 0))
-"
-Temporarily blanks or unblanks an object. This will not go away when you change anything larger scale. If objects is set to all then all will be blanked or unblanked.
+" Temporarily blanks or unblanks an object. This will not go away when
+you change anything larger scale. If objects is set to all then all
+will be blanked or unblanked.
 "  
   (format
    t
@@ -732,8 +784,9 @@ Temporarily blanks or unblanks an object. This will not go away when you change 
    type objects vis force))
 
 (defun get-temporary-invisible (type &optional (entity ""))
-"
-Gets the temporarily blanked entities. Returns a list of “type name”, or an empty list if no entity was blanked. Type can be entity (for all types), point, curve, or surface.
+" Gets the temporarily blanked entities. Returns a list of “type
+name”, or an empty list if no entity was blanked. Type can be
+entity (for all types), point, curve, or surface.
 
 Example usage: ic_geo_get_temporary_invisible [type]
 "  
@@ -743,8 +796,10 @@ Example usage: ic_geo_get_temporary_invisible [type]
    type entity))
 
 (defun set-visible-override-families-and-types (fams types)
-"
-This is a helper function that sets the visible_override flag for all objects in some families and types, and clears it for all others. Note that after calling this function all the visible flags on the non-override families will be off.
+" This is a helper function that sets the visible_override flag for
+all objects in some families and types, and clears it for all
+others. Note that after calling this function all the visible flags on
+the non-override families will be off.
 "  
   (format
    t
@@ -752,8 +807,7 @@ This is a helper function that sets the visible_override flag for all objects in
    fams types))
 
 (defun redraw-geometry (type name)
-"
-This redraws the geometry in case something changes.
+" This redraws the geometry in case something changes.
 "  
   (format
    t
@@ -761,8 +815,9 @@ This redraws the geometry in case something changes.
    type name))
 
 (defun incident (type names &optional (even_if_dormant 0))
-"
-Returns what objects of higher dimensionality are incident to this one. Surfaces are incident to curves and curves are incident to points.
+" Returns what objects of higher dimensionality are incident to this
+one. Surfaces are incident to curves and curves are incident to
+points.
 "  
 
   (format
@@ -771,8 +826,7 @@ Returns what objects of higher dimensionality are incident to this one. Surfaces
    type names even_if_dormant))
 
 (defun surface-get-objects (surface type &optional (embedded_points ""))
-"
-Returns a list of objects associated to a surface.
+" Returns a list of objects associated to a surface.
 "  
 
   (format
@@ -781,8 +835,7 @@ Returns a list of objects associated to a surface.
    surface type embedded_points))
 
 (defun loop-get-objects (loop type &optional (surface ""))
-"
-Returns a list of objects associated to a loop.
+" Returns a list of objects associated to a loop.
 "  
   (format
    t
@@ -790,8 +843,8 @@ Returns a list of objects associated to a loop.
    loop type surface))
 
 (defun surface-edges-incident-to-curve (surfname curvename)
-"
-Returns the edges in a triangulated surface which are incident to a given curve.
+" Returns the edges in a triangulated surface which are incident to a
+given curve.
 "  
   (format
    t
@@ -799,8 +852,10 @@ Returns the edges in a triangulated surface which are incident to a given curve.
    surfname curvename))
 
 (defun surface-normals-orient (&optional (refsurfname "") (outward 1))
-"
-Reorients the normals of surfaces in a model with respect to the given reference surface refsurfname in direction given outward [0|1]. If there is no material point, outward means reverse reference surface before reorienting with respect to it.
+" Reorients the normals of surfaces in a model with respect to the
+given reference surface refsurfname in direction given outward
+[0|1]. If there is no material point, outward means reverse reference
+surface before reorienting with respect to it.
 "  
 
   (format
@@ -809,8 +864,8 @@ Reorients the normals of surfaces in a model with respect to the given reference
    refsurfname outward))
 
 (defun get-side-surfaces (tol how &optional (list ""))
-"
-Returns a list of surfaces whose normal of magnitude tol does not intersect another surface.
+" Returns a list of surfaces whose normal of magnitude tol does not
+intersect another surface.
 "  
   (format
    t
@@ -834,8 +889,8 @@ indicating which additional boundaries.
    type names outer even_if_dormant embedded))
 
 (defun object-visible (type names visible)
-"
-Changes the visibility of a specific object or objects. The visible argument is 0 or 1.
+" Changes the visibility of a specific object or objects. The visible
+argument is 0 or 1.
 "  
   (format
    t
@@ -853,12 +908,16 @@ Changes the visibility of a specific object or objects. The visible argument is 
                                    (dormant 0)
                                    (protect 0)
                                    (hardsize 0))
-"
-Configures the attributes of all the visible objects of a given type. The arguments are:
+" Configures the attributes of all the visible objects of a given
+type. The arguments are:
 
-    simp : the level of simplification. 0 shows the full detail of the object, and higher values simplify them more: 5 is very simple. In the case of faceted geometry, this value is 1/20 of the angle that is used to extract internal curves
+    simp : the level of simplification. 0 shows the full detail of the
+    object, and higher values simplify them more: 5 is very simple. In
+    the case of faceted geometry, this value is 1/20 of the angle that
+    is used to extract internal curves
 
-    shade : how to draw the objects: one of wire, solid, solid/wire, or hidden.
+    shade : how to draw the objects: one of wire, solid, solid/wire,
+    or hidden.
 
     st : if 1 show sizes appropriate for Tetra.
 
@@ -916,8 +975,7 @@ Configures the attributes of all the visible objects of a given type. The argume
    protect hardsize))
 
 (defun configure-one-attribute (type what val)
-"
-Configure one attribute of a whole type.
+" Configure one attribute of a whole type.
 "  
   (format
    t
@@ -925,8 +983,7 @@ Configure one attribute of a whole type.
    type what val))
 
 (defun configure-one-object (type name what &optional (val "-"))
-"
-Configure the attributes of one object.
+" Configure the attributes of one object.
 "  
   (format
    t
@@ -945,8 +1002,7 @@ empty.
    only_material non_empty))
 
 (defun list-parts (&optional (prefix "") (non_empty 0))
-"
-Lists the current parts.
+" Lists the current parts.
 "  
   (format
    t
@@ -954,8 +1010,7 @@ Lists the current parts.
    prefix non_empty))
 
 (defun check-part (name)
-"
-Checks whether a part exists.
+" Checks whether a part exists.
 "  
   (format
    t
@@ -963,8 +1018,7 @@ Checks whether a part exists.
    name))
 
 (defun list-families-in-part (part)
-"
-Lists the current families in a part.
+" Lists the current families in a part.
 "  
 
   (format
@@ -973,8 +1027,7 @@ Lists the current families in a part.
    part))
 
 (defun list-families-with-group (gname)
-"
-Lists the families in a group.
+" Lists the families in a group.
 "  
   (format
    t
@@ -982,8 +1035,7 @@ Lists the families in a group.
    gname))
 
 (defun list-parts-with-group (gname)
-"
-Lists the parts that have some family in a group.
+" Lists the parts that have some family in a group.
 "  
   (format
    t
@@ -991,8 +1043,7 @@ Lists the parts that have some family in a group.
    gname))
 
 (defun family-is-empty (fam)
-"
-Returns whether or not the family is empty of entities.
+" Returns whether or not the family is empty of entities.
 "  
   (format
    t
@@ -1000,8 +1051,7 @@ Returns whether or not the family is empty of entities.
    fam))
 
 (defun family-is-empty-except-dormant (fam)
-"
-Returns whether or not the family contains only dormant entities.
+" Returns whether or not the family contains only dormant entities.
 "  
 
   (format
@@ -1010,8 +1060,7 @@ Returns whether or not the family contains only dormant entities.
    fam))
 
 (defun non-empty-families ()
-"
-Lists all the non-empty families.
+" Lists all the non-empty families.
 
 Note:  This does not check whether there are directives.
 "  
@@ -1021,8 +1070,7 @@ Note:  This does not check whether there are directives.
   ))
 
 (defun non-empty-families-except-dormant ()
-"
-Lists all the families containing only dormant entities.
+" Lists all the families containing only dormant entities.
 
 Note:  This does not check whether there are directives.
 "  
@@ -1032,8 +1080,7 @@ Note:  This does not check whether there are directives.
   ))
 
 (defun num-objects (type)
-"
-Returns the number of objects of the given type.
+" Returns the number of objects of the given type.
 "  
   (format
    t
@@ -1041,8 +1088,7 @@ Returns the number of objects of the given type.
    type))
 
 (defun list-visible-objects (type &optional (even_if_dormant 1))
-"
-Returns the number of visible objects of the given type.
+" Returns the number of visible objects of the given type.
 "  
   (format
    t
@@ -1050,8 +1096,8 @@ Returns the number of visible objects of the given type.
    type even_if_dormant))
 
 (defun num-visible-objects (type &optional (any 0))
-"
-Returns the number of visible objects of the given type. If any is 1, specify whether that number is more than 0.
+" Returns the number of visible objects of the given type. If any is
+1, specify whether that number is more than 0.
 "  
   (format
    t
@@ -1059,8 +1105,8 @@ Returns the number of visible objects of the given type. If any is 1, specify wh
    type any))
 
 (defun num-segments (type name)
-"
-Returns the number of segments or triangles in the object. This returns 2 numbers - the number of segments and the number of nodes.
+" Returns the number of segments or triangles in the object. This
+returns 2 numbers - the number of segments and the number of nodes.
 "  
   (format
    t
@@ -1068,8 +1114,12 @@ Returns the number of segments or triangles in the object. This returns 2 number
    type name))
 
 (defun set-family (type newfam how objs &optional (rename 1))
-"
-Changes the geometry with the given type and name to family newfam. The first argument tells the type of geometry objects: surface, curve, material, point, density, or loop. The second argument is the new family name to be set. The third argument tells how to select the objects and the fourth is the list of object specifiers. how can be one of the following:
+" Changes the geometry with the given type and name to family
+newfam. The first argument tells the type of geometry objects:
+surface, curve, material, point, density, or loop. The second argument
+is the new family name to be set. The third argument tells how to
+select the objects and the fourth is the list of object
+specifiers. how can be one of the following:
 
     names: a list of the names of the objects
 
@@ -1113,8 +1163,11 @@ the other groups in the family are not disturbed.
   #+nil (ic/util:undo-group-end))
 
 (defun set-name (type name newname &optional (make_new 0) (warn 1))
-"
-Change the geometry with the given type and name to name newname. If make_new is 1 then an unused name that starts with newname is used and this value is returned from the function. If possible newname is used without modification. If make_new is 0 then any objects of that same type and name that already exist will be deleted first.
+" Change the geometry with the given type and name to name newname. If
+make_new is 1 then an unused name that starts with newname is used and
+this value is returned from the function. If possible newname is used
+without modification. If make_new is 0 then any objects of that same
+type and name that already exist will be deleted first.
 "  
   (format
    t
@@ -1131,8 +1184,11 @@ rename_ents is set, family entities will be renamed.
    fam newfam rename_ents))
 
 (defun replace-entity (type e1name e2name)
-"
-For two geometry entities of type, the first, of name e1name, will be replaced by the second, of name e2name, as well as being put into the family of the first entity and having the meshing parameters copied from the first to the second. The name of the first entity is appended with _OLD and put into the family ORFN.
+" For two geometry entities of type, the first, of name e1name, will
+be replaced by the second, of name e2name, as well as being put into
+the family of the first entity and having the meshing parameters
+copied from the first to the second. The name of the first entity is
+appended with _OLD and put into the family ORFN.
 "  
   (format
    t
@@ -1140,8 +1196,8 @@ For two geometry entities of type, the first, of name e1name, will be replaced b
    type e1name e2name))
 
 (defun get-ref-size ()
-"
-Returns the reference mesh size. This is used to scale all meshing parameter values for display to the user.
+" Returns the reference mesh size. This is used to scale all meshing
+parameter values for display to the user.
 "  
   (format
    t
@@ -1273,10 +1329,8 @@ parameters only for one of the objects in that family.
                                     (grat 1.5)
                                     (stream t)
                                     )
-"
-    global: set or get the global parameters like natural size,
-    etc. The num argument is ignored. The parameters that are accepted
-    are:
+" global: set or get the global parameters like natural size, etc. The
+    num argument is ignored. The parameters that are accepted are:
 
  @b(Переменые:)
 @begin(list)
@@ -1313,8 +1367,8 @@ parameters only for one of the objects in that family.
   (format stream ";~%"))
 
 (defun set-meshing-params-curve (type num args)
-"
-    curve: set or get the parameters on curve num The parameters that are accepted are:
+" curve: set or get the parameters on curve num The parameters that
+    are accepted are:
 
         emax: the maximum element size
 
@@ -1337,8 +1391,7 @@ parameters only for one of the objects in that family.
    type num args))
 
 (defun set-meshing-params-surface (type num args)
-"
-    surface: set or get the parameters on surface num The parameters
+" surface: set or get the parameters on surface num The parameters
     that are accepted are:
 
         emax: the maximum element size
@@ -1363,8 +1416,7 @@ parameters only for one of the objects in that family.
    type num args))
 
 (defun set-meshing-params-point (type num args)
-"
-    point: set or get the parameters on prescribed point num The
+" point: set or get the parameters on prescribed point num The
     parameters that are accepted are:
 
         ehgt: the maximum height
@@ -1381,8 +1433,7 @@ parameters only for one of the objects in that family.
    type num args))
 
 (defun set-meshing-params-density (type num args)
-"
-    density: set or get the parameters on density volume num The
+" density: set or get the parameters on density volume num The
     parameters that are accepted are:
 
         emax: the maximum element size
@@ -1421,8 +1472,7 @@ GUI. The type can be one of the following:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun get-mesh-growth-ratio ()
-"
-Returns mesh growth ratio.
+" Returns mesh growth ratio.
 "  
   (format
    t
@@ -1449,8 +1499,7 @@ curve point material density loop\".
    types factor))
 
 (defun set-curve-bunching (curves args)
-"
-Sets curve bunching.
+" Sets curve bunching.
 "  
   (format
    t
@@ -1458,8 +1507,7 @@ Sets curve bunching.
    curves args))
 
 (defun get-curve-bunching (name)
-"
-Gets curve bunching.
+" Gets curve bunching.
 "  
   (format
    t
@@ -1467,8 +1515,9 @@ Gets curve bunching.
    name))
 
 (defun create-surface-segment (name how args)
-"
-Creates new surfaces by segmenting an existing one. The name argument is the name of the existing surface. The how argument describes how to do the segmentation:
+" Creates new surfaces by segmenting an existing one. The name
+argument is the name of the existing surface. The how argument
+describes how to do the segmentation:
 
     angle: split the surface where the angle exceeds the given value (see below)
 
@@ -1500,8 +1549,9 @@ The return value is a list of numbers which are the newly created surfaces.
    name how args))
 
 (defun create-curve-segment (name how args)
-"
-Creates new curves by segmenting an existing one. The name argument is the name of the existing curve. The how argument describes how to do the segmentation:
+" Creates new curves by segmenting an existing one. The name argument
+is the name of the existing curve. The how argument describes how to
+do the segmentation:
 
     angle: split the curve where the angle exceeds the given value (see below)
 
@@ -1531,9 +1581,8 @@ The return value is a list of numbers which are the newly created curves.
    name how args))
 
 (defun split-curve (curve points)
-"curve 	name of the curve
-points 	list of points
-return	names of curve segments
+"curve name of the curve points list of points return names of curve
+segments
 
 Note:   This splits the curve in the specified order of the points
 "  
@@ -1543,20 +1592,21 @@ Note:   This splits the curve in the specified order of the points
    curve points))
 
 (defun split-curve-at-point (curve point &optional (tol 0))
-"
-Splits a curve at a point.
-curve	name of the curve
-point	may be a prescribed point name or {xyz} coordinates
-tol	(optional) on curve tolerance
-return	names of curve segments (usually 2)
+" Splits a curve at a point.  curve name of the curve point may be a
+prescribed point name or {xyz} coordinates tol (optional) on curve
+tolerance return names of curve segments (usually 2)
 
 Notes:
 
-    If the trim operation does not segment the curve (e.g. trim at curve endpoint), the result string will be empty.
+    If the trim operation does not segment the curve (e.g. trim at
+    curve endpoint), the result string will be empty.
 
-    If the function returns with the error status set, the result string will contain an error message.
+    If the function returns with the error status set, the result
+    string will contain an error message.
 
-    For example usage, refer to ic_geo_split_curve_at_point.tcl in the Ansys installation directory under v221/icemcfd/Samples/ProgrammersGuide/med_test.
+    For example usage, refer to ic_geo_split_curve_at_point.tcl in the
+    Ansys installation directory under
+    v221/icemcfd/Samples/ProgrammersGuide/med_test.
 "  
   (format
    t
@@ -1565,8 +1615,15 @@ Notes:
 
 (defun create-loop (name fam how curves all_separate surfs
                            &optional (fams "") (pts "") (crs ""))
-"
-Creates a loop with the given name and family using the specified curves. If how is names then curves is a list of the names of the curves to use, and if it is families then it is a list of family names. If all_separate is 1 then all the curves are considered individually and if it is 0 then they are all taken together to create the loop. Surfaces are associated to the loop if a list surfs of names of surfaces is given. Optionally the loops can be set to the families in the list fams in order, in the case of all_separate is 1. Points can be added to a loop if a list points of names of points is given.
+" Creates a loop with the given name and family using the specified
+curves. If how is names then curves is a list of the names of the
+curves to use, and if it is families then it is a list of family
+names. If all_separate is 1 then all the curves are considered
+individually and if it is 0 then they are all taken together to create
+the loop. Surfaces are associated to the loop if a list surfs of names
+of surfaces is given. Optionally the loops can be set to the families
+in the list fams in order, in the case of all_separate is 1. Points
+can be added to a loop if a list points of names of points is given.
 "  
   (format
    t
@@ -1579,8 +1636,11 @@ Creates a loop with the given name and family using the specified curves. If how
                              (surfs "")
                              (pts "")
                              (crs ""))
-"
-Modify 1 loop with the given name using the specified curves, points and surfaces. A list of names of curves must be given. Surfaces are associated to the loop if a list surfs of names of surfaces is given. Points/corners can be added to a loop if a list points of names of points/corners is given.
+" Modify 1 loop with the given name using the specified curves, points
+and surfaces. A list of names of curves must be given. Surfaces are
+associated to the loop if a list surfs of names of surfaces is
+given. Points/corners can be added to a loop if a list points of names
+of points/corners is given.
 "  
   (format
    t
@@ -1588,14 +1648,15 @@ Modify 1 loop with the given name using the specified curves, points and surface
    name curves surfs pts crs))
 
 (defun pick-location (args)
-"
-Selects a geometric entity on the screen. Arguments are:
+" Selects a geometric entity on the screen. Arguments are:
 
     line{{x y z} {x y z}}: the line in model space
 
-    typetype: one of: entity, surface, curve, point, material, loop, or density
+    typetype: one of: entity, surface, curve, point, material, loop,
+    or density
 
-The return value is a list that contains the type, name, and location on the object.
+The return value is a list that contains the type, name, and location
+on the object.
 "  
 
   (format
@@ -1604,8 +1665,9 @@ The return value is a list that contains the type, name, and location on the obj
    args))
 
 (defun get-object-type (type names)
-"
-Determines whether an object is type param (a trimmed NURBS curve or surface) or mesh (a faceted surface or piecewise linear curve). If both types are present in the list of names mixed is returned.
+" Determines whether an object is type param (a trimmed NURBS curve or
+surface) or mesh (a faceted surface or piecewise linear curve). If
+both types are present in the list of names mixed is returned.
 "  
 
   (format
@@ -1614,8 +1676,8 @@ Determines whether an object is type param (a trimmed NURBS curve or surface) or
    type names))
 
 (defun trim-surface (surf curves &optional (build_topo 1))
-"
-Trims the surface by the curves. This creates a new surface with the name of the old surface followed by .cut.$n.
+" Trims the surface by the curves. This creates a new surface with the
+name of the old surface followed by .cut.$n.
 "  
   (format
    t
@@ -1626,21 +1688,23 @@ Trims the surface by the curves. This creates a new surface with the name of the
                                   &optional
                                     (bsp_flag "")
                                     (multi_flag ""))
-"
-Intersects the surfaces and creates new intersection curves in the given family.
-family	family containing surface
-surfs	list of surfaces
-bsp_flag 	== \"use_bsp\" - create curves as b-spline
-multi_flag	== \"multi_crv\" - create multiple curves
-return	names of created curves
+" Intersects the surfaces and creates new intersection curves in the
+given family.  family family containing surface surfs list of surfaces
+bsp_flag == \"use_bsp\" - create curves as b-spline multi_flag ==
+\"multi_crv\" - create multiple curves return names of created curves
 
 Notes:
 
-    When multi_flag is set to \"multi_crv\", the function will produce 1 curve for each connected component of the intersection. When multi_flag is set to \"\", the function will produce 1 unstructured curve.
+    When multi_flag is set to \"multi_crv\", the function will produce
+    1 curve for each connected component of the intersection. When
+    multi_flag is set to \"\", the function will produce 1
+    unstructured curve.
 
     Setting the bsp_flag to \"use_bsp\" implies setting the multi_flag
 
-    For example usage, refer to ic_geo_intersect_surfaces.tcl in the Ansys installation directory under v221/icemcfd/Samples/ProgrammersGuide/med_test.
+    For example usage, refer to ic_geo_intersect_surfaces.tcl in the
+    Ansys installation directory under
+    v221/icemcfd/Samples/ProgrammersGuide/med_test.
 "  
   (format
    t
@@ -1651,8 +1715,7 @@ Notes:
                                                   (fam "")
                                                   (bsp_flag "")
                                                   (multi_flag ""))
-"
-Intersects surface groups.
+" Intersects surface groups.
 
 groups can be a list of two forms:
 
@@ -1660,7 +1723,12 @@ groups can be a list of two forms:
 
     {{srf1 srf2 srf3 ...} {srf4 srf5 srf6 ...} {srf7 srf8 srf9 ...} ...}
 
-In the first form, every surface is intersected with each other, but curves created from each surface pair intersection will be separate. In the second form, each set is intersected with every other set. Surfaces within each set will not be intersected with each other. Separate curves are still generated from each surface pair intersection.
+In the first form, every surface is intersected with each other, but
+curves created from each surface pair intersection will be
+separate. In the second form, each set is intersected with every other
+set. Surfaces within each set will not be intersected with each
+other. Separate curves are still generated from each surface pair
+intersection.
 "  
   (format
    t
@@ -1668,26 +1736,20 @@ In the first form, every surface is intersected with each other, but curves crea
    groups fam bsp_flag multi_flag))
 
 (defun create-unstruct-curve-from-points (name fam pts)
- "
-Creates a piecewise linear curve from the points. This curve is
+ " Creates a piecewise linear curve from the points. This curve is
 given the specified name and family. pts is a list of triples of
 floating point numbers or list of prescribed point names and they are
 connected in order. The points are in the current local coordinate
 system.
 "  
-"
-Creates a piecewise linear curve from the points. This curve is given the specified name and family. pts is a list of triples of floating point numbers or list of prescribed point names and they are connected in order. The points are in the current local coordinate system.
-"  
   (format t "ic_geo_create_unstruct_curve_from_points ~A ~A {~{ {~{~A~^ ~}} ~}};~%"
-          name fam pts)
-  (format
-   t
-   "ic_geo_create_unstruct_curve_from_points "
-   name fam pts))
+          name fam pts))
 
 (defun create-unstruct-surface-from-points (name fam pts)
-"
-Creates a surface from 4 points, with the given name and family. pts is a list of 4 triples of floating point numbers or list prescribed point names and 2 triangles are created to make a rectangular surface. The points are in the current local coordinate system.
+" Creates a surface from 4 points, with the given name and family. pts
+is a list of 4 triples of floating point numbers or list prescribed
+point names and 2 triangles are created to make a rectangular
+surface. The points are in the current local coordinate system.
 "  
   (format
    t
@@ -1695,8 +1757,7 @@ Creates a surface from 4 points, with the given name and family. pts is a list o
    name fam pts))
 
 (defun create-empty-unstruct-surface (name fam)
-"
-Creates an empty surface, with the given name and family.
+" Creates an empty surface, with the given name and family.
 "  
   (format
    t
@@ -1704,8 +1765,7 @@ Creates an empty surface, with the given name and family.
    name fam))
 
 (defun create-empty-unstruct-curve (name fam)
-"
-Creates an empty curve, with the given name and family.
+" Creates an empty curve, with the given name and family.
 "  
   (format
    t
@@ -1713,12 +1773,11 @@ Creates an empty curve, with the given name and family.
    name fam))
 
 (defun create-curve-ends (names)
-"
-Creates points at the ends of the named curve.
-names	names of curve
-return	names of created points
+" Creates points at the ends of the named curve.  names names of curve
+return names of created points
 
-Note:   This function creates new points at curve endpoints as needed. See also ic_geo_mod_crv_set_end.
+Note: This function creates new points at curve endpoints as
+needed. See also ic_geo_mod_crv_set_end.
 "  
   (format
    t
@@ -1726,8 +1785,8 @@ Note:   This function creates new points at curve endpoints as needed. See also 
    names))
 
 (defun mod-crv-set-end (crv pnt crvend &optional (tol -1)])
-"
-Sets the curve end.
+" Sets the curve end.
+
 crv	name of curve
 pnt	name of prescribed point
 crvend	curve end indicator
@@ -1741,13 +1800,18 @@ Notes:
     start point 0 
     end point 1
 
-    If the curve end is already associated, the function will take no action. The name of the curve end will be returned in any case.
+    If the curve end is already associated, the function will take no
+    action. The name of the curve end will be returned in any case.
 
-    If the merge tolerance is set negative, the tolerance will default to the triangulation tolerance.
+    If the merge tolerance is set negative, the tolerance will default
+    to the triangulation tolerance.
 
-    If the function returns with the error status set, the result string will contain an error message.
+    If the function returns with the error status set, the result
+    string will contain an error message.
 
-    For example usage, refer to ic_geo_mod_crv_set_end.tcl in the Ansys installation directory under v221/icemcfd/Samples/ProgrammersGuide/med_test.
+    For example usage, refer to ic_geo_mod_crv_set_end.tcl in the
+    Ansys installation directory under
+    v221/icemcfd/Samples/ProgrammersGuide/med_test.
 "  
   (format
    t
@@ -1768,7 +1832,8 @@ Notes:
     start point 0
     end point 1
 
-    If the curve end is not already associated, the function will return an error which must be caught.
+    If the curve end is not already associated, the function will
+    return an error which must be caught.
 "  
 
   (format
@@ -1777,8 +1842,8 @@ Notes:
    crv crvend))
 
 (defun create-points-curveinter (curves tol fam &optional (name))
-"
-Creates points at the intersection of curves. curves is a list of curves to intersect.
+" Creates points at the intersection of curves. curves is a list of
+curves to intersect.
 "  
   (format
    t
@@ -1786,8 +1851,7 @@ Creates points at the intersection of curves. curves is a list of curves to inte
    curves tol fam name))
 
 (defun create-point-location (fam pt &optional (in_lcs 1))
-"
-This function has been replaced by ic_geo_cre_pnt
+" This function has been replaced by ic_geo_cre_pnt
 "  
   (format
    t
@@ -1795,8 +1859,7 @@ This function has been replaced by ic_geo_cre_pnt
    fam pt in_lcs))
 
 (defun create-material-location (fam pt)
-"
-This function has been replaced by ic_geo_cre_mat
+" This function has been replaced by ic_geo_cre_mat
 "  
   (format
    t
@@ -1809,8 +1872,10 @@ This function has been replaced by ic_geo_cre_mat
                                 (ratio 0.0)
                                 (strfac 1.0)
                                 (strvec ""))
-"
-Creates a density polygon from a set of points. It is given the specified name and tetra size. Stretch factor with direction may be specified optionally.
+" Creates a density polygon from a set of points. It is given the
+specified name and tetra size. Stretch factor with direction may be
+specified optionally.
+
 name	name of polygon
 size	tetra size (must be > 0)
 pts	list of points (must have 4 or more)
@@ -1828,8 +1893,8 @@ Note:   Points may be passed either as 3-tuples or as names of prescribed points
    name size pts width ratio strfac strvec ))
 
 (defun extract-points (names angle)
-"
-Extracts points from curves based on the angle between adjacent segments in degrees.
+" Extracts points from curves based on the angle between adjacent
+segments in degrees.
 "  
 
   (format
@@ -1838,8 +1903,10 @@ Extracts points from curves based on the angle between adjacent segments in degr
    names angle))
 
 (defun extract-curves (names bound angle minedge)
-"
-Extracts curves from mesh surfaces. If bound is 1 then only the boundary of the surface is extracted. If it is 0 then the angle is used to determine feature lines. The minedge argument determines what the smallest curve that will be extracted is.
+" Extracts curves from mesh surfaces. If bound is 1 then only the
+boundary of the surface is extracted. If it is 0 then the angle is
+used to determine feature lines. The minedge argument determines what
+the smallest curve that will be extracted is.
 "  
   (format
    t
@@ -1847,8 +1914,7 @@ Extracts curves from mesh surfaces. If bound is 1 then only the boundary of the 
    names bound angle minedge))
 
 (defun create-surface-edges (names)
-"
-Creates curves based on the edges of a surface.
+" Creates curves based on the edges of a surface.
 "  
   (format
    t
@@ -1856,8 +1922,7 @@ Creates curves based on the edges of a surface.
    names))
 
 (defun get-srf-edges (srf)
-"
-Get any curves associated as edges to a surface.
+" Get any curves associated as edges to a surface.
 "  
   (format
    t
@@ -1865,8 +1930,8 @@ Get any curves associated as edges to a surface.
    srf))
 
 (defun stats (type name)
-"
-Returns some statistics about the object. This is a readable string that says what the type is, how many triangles, nodes, etc.
+" Returns some statistics about the object. This is a readable string
+that says what the type is, how many triangles, nodes, etc.
 "  
   (format
    t
@@ -1874,8 +1939,7 @@ Returns some statistics about the object. This is a readable string that says wh
    type name))
 
 (defun get-point-location (name)
-"
-Given the name of a point, returns its location.
+" Given the name of a point, returns its location.
 "  
   (format
    t
@@ -1883,8 +1947,7 @@ Given the name of a point, returns its location.
    name))
 
 (defun get-material-location (name)
-"
-Given the name of a material point, returns its location.
+" Given the name of a material point, returns its location.
 "  
   (format
    t
@@ -1892,8 +1955,8 @@ Given the name of a material point, returns its location.
    name))
 
 (defun set-point-location (args)
-"
-Sets the location of a point or points. The names and locations must come in pairs.
+" Sets the location of a point or points. The names and locations must
+come in pairs.
 "  
   (format
    t
@@ -1901,8 +1964,8 @@ Sets the location of a point or points. The names and locations must come in pai
    args))
 
 (defun set-material-location (args)
-"
-Sets the location of one or more material points. The names and locations must come in pairs.
+" Sets the location of one or more material points. The names and
+locations must come in pairs.
 "  
   (format
    t
@@ -1910,8 +1973,7 @@ Sets the location of one or more material points. The names and locations must c
    args))
 
 (defun delete-material (names)
-"
-Deletes a material.
+" Deletes a material.
 "  
   (format
    t
@@ -1919,8 +1981,9 @@ Deletes a material.
    names))
 
 (defun check-objects-exist (type args)
-"
-This function checks to make sure the objects exist - it returns the list of names that were found. If no objects with the given type and names were found it returns an empty list.
+" This function checks to make sure the objects exist - it returns the
+list of names that were found. If no objects with the given type and
+names were found it returns an empty list.
 "  
   (format
    t
@@ -1941,8 +2004,7 @@ it is \"\" then it returns all objects of all families.
    types fams even_if_dormant))
 
 (defun count-in-family (types fams)
-"
-Returns the number of objects of the given type in the given family.
+" Returns the number of objects of the given type in the given family.
 "  
   (format
    t
@@ -1950,8 +2012,7 @@ Returns the number of objects of the given type in the given family.
    types fams))
 
 (defun objects-in-family (types fams)
-"
-Returns a list of objects in the given family name.
+" Returns a list of objects in the given family name.
 "  
   (format
    t
@@ -1959,8 +2020,7 @@ Returns a list of objects in the given family name.
    types fams))
 
 (defun objects-in-parts (types parts)
-"
-Returns a list of objects (type/name pairs) in the given parts.
+" Returns a list of objects (type/name pairs) in the given parts.
 "  
   (format
    t
@@ -1968,8 +2028,8 @@ Returns a list of objects (type/name pairs) in the given parts.
    types parts))
 
 (defun get-internal-object (type name)
-"
-Returns the internal object associated with a name. This is a bit of a back door.
+" Returns the internal object associated with a name. This is a bit of
+a back door.
 "  
   (format
    t
@@ -1977,8 +2037,8 @@ Returns the internal object associated with a name. This is a bit of a back door
    type name))
 
 (defun get-name-of-internal-object (obj)
-"
-Returns the name of an internal object. This is a bit of a back door.
+" Returns the name of an internal object. This is a bit of a back
+door.
 "  
   (format
    t
@@ -1986,8 +2046,8 @@ Returns the name of an internal object. This is a bit of a back door.
    obj))
 
 (defun get-text-point (type name)
-"
-Returns the text point list for an object, specified by type and name. The list is: \"{xloc yloc zloc} {xdir ydir zdir}\"
+" Returns the text point list for an object, specified by type and
+name. The list is: \"{xloc yloc zloc} {xdir ydir zdir}\"
 "  
   (format
    t
@@ -1995,8 +2055,9 @@ Returns the text point list for an object, specified by type and name. The list 
    type name))
 
 (defun get-centroid (type name)
-"
-Returns the centroid for an object, specified by type and name. The return is: \"{xloc yloc zloc}\". This function only works for curves at this time.
+" Returns the centroid for an object, specified by type and name. The
+return is: \"{xloc yloc zloc}\". This function only works for curves
+at this time.
 "  
 
   (format
@@ -2005,8 +2066,7 @@ Returns the centroid for an object, specified by type and name. The return is: \
    type name))
 
 (defun num-segments (type name)
-"
-Returns the number of triangles or bars, and nodes in this object.
+" Returns the number of triangles or bars, and nodes in this object.
 "  
 
   (format
@@ -2015,8 +2075,7 @@ Returns the number of triangles or bars, and nodes in this object.
    type name))
 
 (defun num-nodes (type name)
-"
-Returns number of nodes in the object.
+" Returns number of nodes in the object.
 "  
   (format
    t
@@ -2024,8 +2083,7 @@ Returns number of nodes in the object.
    type name))
 
 (defun get-node (type name num)
-"
-Returns a node in a mesh curve, surface or density polygon.
+" Returns a node in a mesh curve, surface or density polygon.
 "  
   (format
    t
@@ -2033,8 +2091,7 @@ Returns a node in a mesh curve, surface or density polygon.
    type name num))
 
 (defun drag-nodes (type name ptnums startpts startmouse spos svec how)
-"
-Allows you to interactively drag nodes in surfaces and curves.
+" Allows you to interactively drag nodes in surfaces and curves.
 "  
   (format
    t
@@ -2042,8 +2099,7 @@ Allows you to interactively drag nodes in surfaces and curves.
    type name ptnums startpts startmouse spos svec how))
 
 (defun drag-point (name startpt startmouse spos svec)
-"
-Allows you to interactively drag prescribed points.
+" Allows you to interactively drag prescribed points.
 "  
 
   (format
@@ -2052,8 +2108,7 @@ Allows you to interactively drag prescribed points.
    name startpt startmouse spos svec))
 
 (defun drag-material (name startpt startmouse spos svec)
-"
-Allows you to interactively drag material points.
+" Allows you to interactively drag material points.
 "  
   (format
    t
@@ -2061,8 +2116,7 @@ Allows you to interactively drag material points.
    name startpt startmouse spos svec))
 
 (defun drag-body (name startpt startmouse spos svec)
-"
-Allows you to interactively drag body points.
+" Allows you to interactively drag body points.
 "  
   (format
    t
@@ -2072,8 +2126,10 @@ Allows you to interactively drag body points.
 (defun project-point (type names pt &optional
                                              (dir '(0 0 0))
                                              (tan_ext 0))
-"
-Project a point to a set of objects. dir is the vector along which to project, or 0 0 0 if the nearest point is desired. dir is used only in the case of surfaces.
+" Project a point to a set of objects. dir is the vector along which
+to project, or 0 0 0 if the nearest point is desired. dir is used only
+in the case of surfaces.
+
 type	point, curve, surface
 names	list of entity names
 pt	point -- either entity name or 3-tuple
@@ -2090,14 +2146,13 @@ tan_ext 	project to tangential extension (curves only)
                                         (dir '(0 0 0))
                                         (tan_ext 0)
                                         (fam ""))
-"
-Project and move a point to a set of objects. dir is the vector along which to project, or 0 0 0 if the nearest point is desired. dir is used only in the case of surfaces.
-type 	point, curve, surface
-names 	list of entity names
-pt 	point -- either entity name or 3-tuple
-dir 	projection vector, {0, 0, 0} for nearest point
-tan_ext 	project to tangential extension (curves only)
-fam 	part name (if blank, use the part name of the point)
+" Project and move a point to a set of objects. dir is the vector
+along which to project, or 0 0 0 if the nearest point is desired. dir
+is used only in the case of surfaces.  type point, curve, surface
+names list of entity names pt point -- either entity name or 3-tuple
+dir projection vector, {0, 0, 0} for nearest point tan_ext project to
+tangential extension (curves only) fam part name (if blank, use the
+part name of the point)
 "  
   (format
    t
@@ -2108,8 +2163,9 @@ fam 	part name (if blank, use the part name of the point)
                               &optional
                                 (dir '(0 0 0))
                                 (tan_ext 0))
-"
-Project coordinates to a set of objects. dir is the vector along which to project, or 0 0 0 if the nearest point is desired. dir is used only in the case of surfaces.
+" Project coordinates to a set of objects. dir is the vector along
+which to project, or 0 0 0 if the nearest point is desired. dir is
+used only in the case of surfaces.
 "  
   (format
    t
@@ -2120,8 +2176,11 @@ Project coordinates to a set of objects. dir is the vector along which to projec
                               &optional
                                 (dir '(0 0 0))
                                 (tol 0))
-"
-Projects a point to a set of objects, and return the name of the best one and the location. dir is the vector along which to project, or 0 0 0 if the nearest point is desired. pt may either be an XYZ location or the name of a prescribed point. The tol argument is used for intersecting a line with curves.
+" Projects a point to a set of objects, and return the name of the
+best one and the location. dir is the vector along which to project,
+or 0 0 0 if the nearest point is desired. pt may either be an XYZ
+location or the name of a prescribed point. The tol argument is used
+for intersecting a line with curves.
 
 Note:  Curve projection is not yet implemented.
 "  
@@ -2137,6 +2196,7 @@ Note:  Curve projection is not yet implemented.
                                           (bld_topo 0))
 "
 Projects one or more curves to one or more surfaces.
+
 crvs	list of curve names
 surfs	list of surface names
 name	base name of created curve
@@ -2151,8 +2211,8 @@ return	name(s) of created curve(s)
    crvs surfs name fam new_name bld_topo))
 
 (defun create-surface-curves (crv1 crv2 name)
-"
-Creates a faceted surface from crv1 and crv2. If the curves are not connected, the new surface will connect straight across the gaps.
+" Creates a faceted surface from crv1 and crv2. If the curves are not
+connected, the new surface will connect straight across the gaps.
 
 name is the name of the new surface.
 "  
@@ -2168,6 +2228,7 @@ name is the name of the new surface.
                                         (quiet 0))
 "
 Creates a curtain surface between one or more curves and a surface.
+
 crvs	list of defining curves
 surfs	surface(s) to project to
 name	base name of created surfaces
@@ -2191,8 +2252,7 @@ Moves a node on an object.
    type name num pt))
 
 (defun get-family (type name)
-"
-Returns the family for an object.
+" Returns the family for an object.
 "  
   (format
    t
@@ -2200,8 +2260,8 @@ Returns the family for an object.
    type name))
 
 (defun get-part (type name)
-"
-Returns the part for an object (just the family with stuff after the first : removed)
+" Returns the part for an object (just the family with stuff after the
+first : removed)
 "  
   (format
    t
@@ -2209,8 +2269,8 @@ Returns the part for an object (just the family with stuff after the first : rem
    type name))
 
 (defun build-topo (args)
-"
-Builds the topology information from the geometry data. Arguments are:
+" Builds the topology information from the geometry data. Arguments
+are:
 
     tolerance: the gap tolerance
 
@@ -2240,8 +2300,7 @@ Builds the topology information from the geometry data. Arguments are:
    args))
 
 (defun default-topo-tolerance-old ()
-"
-Get a good tolerance for the current geometry.
+" Get a good tolerance for the current geometry.
 "  
   (format
    t
@@ -2252,8 +2311,11 @@ Get a good tolerance for the current geometry.
                                       (objects "")
                                       (report_err 1)
                                       (even_if_dormant 0))
-"
-Deletes geometry objects. The first argument tells what kind of objects to delete: surface, curve, material, point, density, or loop. The second argument tells how to select the objects and the third is the list of object specifiers. how can be one of the following:
+" Deletes geometry objects. The first argument tells what kind of
+objects to delete: surface, curve, material, point, density, or
+loop. The second argument tells how to select the objects and the
+third is the list of object specifiers. how can be one of the
+following:
 
     names: a list of the names of the objects
 
@@ -2279,8 +2341,7 @@ Deletes geometry objects. The first argument tells what kind of objects to delet
    type how objects report_err even_if_dormant))
 
 (defun pnt-mrg-inc-crv (how objects)
-"
-Deletes a point and joins incident curves.
+" Deletes a point and joins incident curves.
 
     how - defines how points are selected. See ic_delete_geometry.
 
@@ -2293,8 +2354,8 @@ Deletes a point and joins incident curves.
    how objects))
 
 (defun facetize-geometry (type name args)
-"
-Makes a new geometric entity that is the faceted or piecewise linear equivalent of the old one. Optional arguments are:
+" Makes a new geometric entity that is the faceted or piecewise linear
+equivalent of the old one. Optional arguments are:
 
     noisyon : if 1 print status information
 
@@ -2307,8 +2368,9 @@ Makes a new geometric entity that is the faceted or piecewise linear equivalent 
    type name args))
 
 (defun move-geometry (type args)
-"
-Moves an existing geometry entity. The type argument gives the type: point, curve, surface, material, density, loop, or all. The other arguments are:
+" Moves an existing geometry entity. The type argument gives the type:
+point, curve, surface, material, density, loop, or all. The other
+arguments are:
 
     names: a list of the names of the objects
 
@@ -2345,8 +2407,9 @@ The translation vector, center of rotation, and rotate axis should be specified 
 (defun duplicate (type name &optional
                                      (newname "")
                                      (facetize 0))
-"
-Duplicates an existing geometrical entity. If the newname is given then that is used, otherwise a name is generated automatically. If facetize is specified then bspline surfaces are turned into facets.
+" Duplicates an existing geometrical entity. If the newname is given
+then that is used, otherwise a name is generated automatically. If
+facetize is specified then bspline surfaces are turned into facets.
 "  
   (format
    t
@@ -2357,8 +2420,8 @@ Duplicates an existing geometrical entity. If the newname is given then that is 
 
 (defun fixup (&optional
                        (mesh))
-"
-Fix problems in surfaces and curves like duplicate triangles, unused nodes, etc.
+" Fix problems in surfaces and curves like duplicate triangles, unused
+nodes, etc.
 "  
   (format
    t
@@ -2366,8 +2429,8 @@ Fix problems in surfaces and curves like duplicate triangles, unused nodes, etc.
    mesh))
 
 (defun min-edge-length (args)
-"
-Returns the minimum edge length on a list of surfaces or curves. Arguments are:
+" Returns the minimum edge length on a list of surfaces or
+curves. Arguments are:
 
     surfaceval: list of surface names
 
@@ -2381,10 +2444,10 @@ Example usage: set surfaces \"surf1 surf2 surf3\" set curves \"curv1\" ic_geo_mi
    args))
 
 (defun coarsen (args)
-"
-Simplify surfaces or curves by coarsening them. The arguments are:
+" Simplify surfaces or curves by coarsening them. The arguments are:
 
-    tolval: the tolerance to use for coarsening, which determines how far from the original surface the new nodes can move (default 0)
+    tolval: the tolerance to use for coarsening, which determines how
+    far from the original surface the new nodes can move (default 0)
 
     surfacesnamelist: the surfaces to coarsen.
 
@@ -2406,8 +2469,7 @@ Simplify surfaces or curves by coarsening them. The arguments are:
    args))
 
 (defun gap-repair (args)
-"
-Perform geometry repair. Arguments are:
+" Perform geometry repair. Arguments are:
 
     tolerval: the geometry tolerance
 
@@ -2439,8 +2501,7 @@ Return value is 0 if there was an error and 1 if it was OK.
    args))
 
 (defun midsurface (args)
-"
-Creates midsurfaces. Arguments are:
+" Creates midsurfaces. Arguments are:
 
     max_distval: the maximum distance between surface pairs
 
@@ -2476,8 +2537,9 @@ Return value is 0 if there was an error and 1 if it was OK.
    args))
 
 (defun lookup (types how spec)
-"
-Looks up geometry objects based on certain criteria. type may be one of the geometry type names or all. This always returns a list of type/name pairs. Useful values for how and args are:
+" Looks up geometry objects based on certain criteria. type may be one
+of the geometry type names or all. This always returns a list of
+type/name pairs. Useful values for how and args are:
 
     namesnames: return objects with the given names
 
@@ -2497,8 +2559,8 @@ Looks up geometry objects based on certain criteria. type may be one of the geom
    types how spec))
 
 (defun get-entity-types (entnames)
-"
-For the given list of entities, return a *flat* list of \"type entname\" pairs, i.e. {type_1 ent_1 type_2 ent_2 ... type_n ent_n}
+" For the given list of entities, return a *flat* list of \"type
+entname\" pairs, i.e. {type_1 ent_1 type_2 ent_2 ... type_n ent_n}
 "  
   (format
    t
@@ -2506,8 +2568,7 @@ For the given list of entities, return a *flat* list of \"type entname\" pairs, 
    entnames))
 
 (defun memory-used ()
-"
-Specifies how much memory is used for the geometry data.
+" Specifies how much memory is used for the geometry data.
 "  
   (format
    t
@@ -2515,8 +2576,7 @@ Specifies how much memory is used for the geometry data.
   ))
 
 (defun project-mode (which)
-"
-Sets the projection mode.
+" Sets the projection mode.
 "  
   (format
    t
@@ -2524,8 +2584,7 @@ Sets the projection mode.
    which))
 
 (defun csystem-get-current ()
-"
-Specifies the current coordinate system.
+" Specifies the current coordinate system.
 "  
   (format
    t
@@ -2533,8 +2592,7 @@ Specifies the current coordinate system.
   ))
 
 (defun csystem-set-current (what)
-"
-Sets the current coordinate system.
+" Sets the current coordinate system.
 "  
   (format
    t
@@ -2542,8 +2600,7 @@ Sets the current coordinate system.
    what))
 
 (defun csystem-list ()
-"
-Lists the existing coordinate systems.
+" Lists the existing coordinate systems.
 "  
   (format
    t
@@ -2551,8 +2608,9 @@ Lists the existing coordinate systems.
   ))
 
 (defun csystem-get (name)
-"
-Returns information on the named coordinate system. This returns a list of 4 items: the type of the coordinate system, the origin, and the 3 vectors that define coordinate system. The type can be one of:
+" Returns information on the named coordinate system. This returns a
+list of 4 items: the type of the coordinate system, the origin, and
+the 3 vectors that define coordinate system. The type can be one of:
 
     cartesian
 
@@ -2568,8 +2626,7 @@ Returns information on the named coordinate system. This returns a list of 4 ite
    name))
 
 (defun csystem-delete (name)
-"
-Deletes the named coordinate system.
+" Deletes the named coordinate system.
 "  
   (format
    t
@@ -2577,12 +2634,12 @@ Deletes the named coordinate system.
    name))
 
 (defun csystem-create (name type center axis0 axis1 axis2)
-"
-Creates a new coordinate system with the given parameters.
+" Creates a new coordinate system with the given parameters.
 
     name: the name of the system to create.
 
-    type: the type which can be one of cartesian, cylindrical, spherical, or toroidal (as yet unsupported).
+    type: the type which can be one of cartesian, cylindrical,
+    spherical, or toroidal (as yet unsupported).
 
     center: the center point in 3-D coordinates.
 
@@ -2598,8 +2655,8 @@ Creates a new coordinate system with the given parameters.
    name type center axis0 axis1 axis2))
 
 (defun coords-into-global (pt &optional (system ""))
-"
-Translates coordinates from the current or given system into the global system.
+" Translates coordinates from the current or given system into the
+global system.
 "  
   (format
    t
@@ -2620,8 +2677,8 @@ system.
    vector system))
 
 (defun coords-into-local (pt &optional (system ""))
-"
-Translates coordinates from the global system into the current or given local system.
+" Translates coordinates from the global system into the current or
+given local system.
 "  
   (format
    t
@@ -2629,8 +2686,8 @@ Translates coordinates from the global system into the current or given local sy
    pt system))
 
 (defun csystem-display (name on)
-"
-Displays the specified coordinate system. If name is all and on is 0 then erase all coordinate systems.
+" Displays the specified coordinate system. If name is all and on is 0
+then erase all coordinate systems.
 "  
 
   (format
@@ -2639,8 +2696,7 @@ Displays the specified coordinate system. If name is all and on is 0 then erase 
    name on))
 
 (defun untrim-surface (surf)
-"
-Untrims a surface.
+" Untrims a surface.
 "  
   (format
    t
@@ -2648,16 +2704,14 @@ Untrims a surface.
    surf))
 
 (defun get-thincuts ()
-"
-Returns the thincut data.
+" Returns the thincut data.
 "  
   (format
    t
    "ic_geo_get_thincuts;;~%"))
 
 (defun set-thincuts (data)
-"
-Sets the thincut data.
+" Sets the thincut data.
 "  
   (format
    t
@@ -2665,8 +2719,7 @@ Sets the thincut data.
    data))
 
 (defun get-periodic-data ()
-"
-Returns the periodic data.
+" Returns the periodic data.
 "  
   (format
    t
@@ -2674,8 +2727,7 @@ Returns the periodic data.
   ))
 
 (defun set-periodic-data (data)
-"
-Sets the periodic data.
+" Sets the periodic data.
 "  
   (format
    t
@@ -2683,8 +2735,7 @@ Sets the periodic data.
    data))
 
 (defun get-family-param (fam name )
-"
-Returns the family parameters.
+" Returns the family parameters.
 "  
   (format
    t
@@ -2705,9 +2756,7 @@ Returns the family parameters.
                             (edev 0.0)
                             (split_wall 0)
                             (internal_wall 0))
-  "ic_geo_set_family_params
-
- Sets the family parameters. If there is no such family, nothing will be done.
+  " Sets the family parameters. If there is no such family, nothing will be done.
 
 ic_undo_group_begin 
 ic_geo_set_family_params B/AIR_RL_OUT/N2/D_10.000 no_crv_inf prism 0 emax 2.0 ehgt 0.0 hrat 0 nlay 0 erat 1.5 ewid 0 emin 0.0 edev 0.0 split_wall 0 internal_wall 0
@@ -2749,8 +2798,7 @@ Deletes unattached geometry.
    fams quiet only_if_dormant))
 
 (defun remove-feature (curves)
-"
-Removes features.
+" Removes features.
 "  
   (format
    t
@@ -2758,8 +2806,7 @@ Removes features.
    curves))
 
 (defun merge-curves (curves)
-"
-Merges curves.
+" Merges curves.
 "  
   (format
    t
@@ -2770,15 +2817,13 @@ Merges curves.
                                    &optional
                                      (ask 1)
                                      (quiet 0))
-"
-Reapproximates curves.
-curves	list of curve names
-tol	re-approximation tolerance
-ask	prompt to accept result
-quiet	suppresses messages
-return	list of new curve names
+" Reapproximates curves.  curves list of curve names tol
+re-approximation tolerance ask prompt to accept result quiet
+suppresses messages return list of new curve names
 
-Note:   In interactive mode, if the ask parameter is 1 (default), the application prompts you to confirm whether the result is okay for each curve. Parameter is ignored in batch mode.
+Note: In interactive mode, if the ask parameter is 1 (default), the
+application prompts you to confirm whether the result is okay for each
+curve. Parameter is ignored in batch mode.
 "  
   (format
    t
@@ -2787,16 +2832,14 @@ Note:   In interactive mode, if the ask parameter is 1 (default), the applicatio
 
 (defun modify-surface-reappr (surfaces tol
                                      &optional (ask 1) (each 0) (curves ""))
-"
-Reapproximates surfaces.
-surfaces	list of surface names
-tol	re-approximation tolerance
-ask	prompt to accept result if set
-each	re-approximate each surface separately if set
-curves	list of curve names
-return	list of new surface names
+" Reapproximates surfaces.  surfaces list of surface names tol
+re-approximation tolerance ask prompt to accept result if set each
+re-approximate each surface separately if set curves list of curve
+names return list of new surface names
 
-Note:   In interactive mode, if the ask parameter is 1 (default), the application prompts you to confirm whether the result is okay for each surface. Parameter is ignored in batch mode.
+Note: In interactive mode, if the ask parameter is 1 (default), the
+application prompts you to confirm whether the result is okay for each
+surface. Parameter is ignored in batch mode.
 "  
   (format
    t
@@ -2813,8 +2856,8 @@ Resets the Tcl data structures after making big changes to the proj database.
   ))
 
 (defun params-update-show-size (type size)
-"
-Modifies the display of the size icons for ref, natural, and max size. Can also be used for per-object parameters like tetra_size.
+" Modifies the display of the size icons for ref, natural, and max
+size. Can also be used for per-object parameters like tetra_size.
 "  
 
   (format
@@ -2828,8 +2871,8 @@ Modifies the display of the size icons for ref, natural, and max size. Can also 
                                  (dcurves "")
                                  (toler "")
                                  (part ""))
-"
-Repairs holes using the stlrepair functionality. type indicates the entity type by which segments are specified, e.g. surface.
+" Repairs holes using the stlrepair functionality. type indicates the
+entity type by which segments are specified, e.g. surface.
 "  
   (format
    t
@@ -2837,8 +2880,8 @@ Repairs holes using the stlrepair functionality. type indicates the entity type 
    type segs add_nodes int_surf complete_edges dcurves toler part))
 
 (defun stlrepair-edges (type segs merge_tol &optional (merge_ends -1))
-"
-Repairs edges using the stlrepair functionality. type indicates the entity type by which segments are specified, e.g. surface.
+" Repairs edges using the stlrepair functionality. type indicates the
+entity type by which segments are specified, e.g. surface.
 "  
   (format
    t
@@ -2849,8 +2892,7 @@ Repairs edges using the stlrepair functionality. type indicates the entity type 
                              &optional
                                (color "")
                                (force_visible 0))
-"
-Displays some geometry selected or not.
+" Displays some geometry selected or not.
 "  
   (format
    t
@@ -2858,8 +2900,7 @@ Displays some geometry selected or not.
    type names on color force_visible))
 
 (defun reset-geo-selected ()
-"
-Resets all selection display.
+" Resets all selection display.
 "  
   (format
    t
@@ -2867,8 +2908,7 @@ Resets all selection display.
   ))
 
 (defun get-geo-selected ()
-"
-Returns all current geometry selections.
+" Returns all current geometry selections.
 "  
 
   (format
@@ -2877,8 +2917,7 @@ Returns all current geometry selections.
   ))
 
 (defun set-geo-selected (selected on)
-"
-Sets all previous geometry selections.
+" Sets all previous geometry selections.
 "  
   (format
    t
@@ -2886,8 +2925,7 @@ Sets all previous geometry selections.
    selected on))
 
 (defun select-geometry-option ()
-"
-Returns the previously used selection option.
+" Returns the previously used selection option.
 "  
   (format
    t
@@ -2895,8 +2933,7 @@ Returns the previously used selection option.
   ))
 
 (defun add-segment (type name item pts)
-"
-Adds segments or triangles to a surface or curve.
+" Adds segments or triangles to a surface or curve.
 "  
   (format
    t
@@ -2904,8 +2941,7 @@ Adds segments or triangles to a surface or curve.
    type name item pts))
 
 (defun delete-segments (type name item pts)
-"
-Deletes segments or triangles from a curve or surface.
+" Deletes segments or triangles from a curve or surface.
 "  
   (format
    t
@@ -2913,8 +2949,7 @@ Deletes segments or triangles from a curve or surface.
    type name item pts))
 
 (defun restrict-segments (type name item pts)
-"
-Restrict to segments or triangles from a surface or curve.
+" Restrict to segments or triangles from a surface or curve.
 "  
   (format
    t
@@ -2922,8 +2957,7 @@ Restrict to segments or triangles from a surface or curve.
    type name item pts))
 
 (defun split-segments (type name item how pts)
-"
-Splits some segments in a surface or curve.
+" Splits some segments in a surface or curve.
 "  
   (format
    t
@@ -2931,8 +2965,7 @@ Splits some segments in a surface or curve.
    type name item how pts))
 
 (defun split-edges (type name pts)
-"
-Splits some edges in a surface.
+" Splits some edges in a surface.
 "  
   (format
    t
@@ -2940,8 +2973,7 @@ Splits some edges in a surface.
    type name pts))
 
 (defun split-one-edge (type name ed)
-"
-Splits one edge in a surface.
+" Splits one edge in a surface.
 "  
   (format
    t
@@ -2949,8 +2981,7 @@ Splits one edge in a surface.
    type name ed))
 
 (defun swap-edges (type name pts)
-"
-Swaps some edges in a surface.
+" Swaps some edges in a surface.
 "  
 
   (format
@@ -2959,8 +2990,7 @@ Swaps some edges in a surface.
    type name pts))
 
 (defun move-segments (type name1 name2 item pts)
-"
-Moves some segments from one surface to another.
+" Moves some segments from one surface to another.
 "  
 
   (format
@@ -2969,8 +2999,10 @@ Moves some segments from one surface to another.
    type name1 name2 item pts))
 
 (defun move-node (type name nodes args)
-"
-Moves a node in a surface or curve. nodes is a list of the node numbers. After this, specify either one or more positions. If one, then all nodes are moved to that position. If more, then the nodes are moved to their corresponding positions.
+" Moves a node in a surface or curve. nodes is a list of the node
+numbers. After this, specify either one or more positions. If one,
+then all nodes are moved to that position. If more, then the nodes are
+moved to their corresponding positions.
 "  
   (format
    t
@@ -2978,8 +3010,7 @@ Moves a node in a surface or curve. nodes is a list of the node numbers. After t
    type name nodes args))
 
 (defun merge-nodes (type name nodes)
-"
-Merges nodes in a surface or curve.
+" Merges nodes in a surface or curve.
 "  
   (format
    t
@@ -2987,8 +3018,7 @@ Merges nodes in a surface or curve.
    type name nodes))
 
 (defun merge-nodes-tol (type name tol)
-"
-Merges nodes in a surface or curve by tolerance.
+" Merges nodes in a surface or curve by tolerance.
 "  
   (format
    t
@@ -2996,8 +3026,7 @@ Merges nodes in a surface or curve by tolerance.
    type name tol))
 
 (defun merge-surfaces (to from)
-"
-Merges multiple surfaces.
+" Merges multiple surfaces.
 "  
   (format
    t
@@ -3005,8 +3034,7 @@ Merges multiple surfaces.
    to from))
 
 (defun merge-objects (type dest objs)
-"
-Merges multiple curves, or surfaces.
+" Merges multiple curves, or surfaces.
 "  
   (format
    t
@@ -3014,8 +3042,7 @@ Merges multiple curves, or surfaces.
    type dest objs))
 
 (defun merge-points-tol (pts tol)
-"
-Merges multiple points using a tolerance.
+" Merges multiple points using a tolerance.
 "  
   (format
    t
@@ -3023,8 +3050,7 @@ Merges multiple points using a tolerance.
    pts tol))
 
 (defun finish-edit (type name)
-"
-Cleans up a surface or curve after editing operations.
+" Cleans up a surface or curve after editing operations.
 "  
   (format
    t
@@ -3032,8 +3058,7 @@ Cleans up a surface or curve after editing operations.
    type name))
 
 (defun delete-if-empty (type name)
-"
-Deletes a surface or curve if it is empty.
+" Deletes a surface or curve if it is empty.
 "  
   (format
    t
@@ -3041,8 +3066,7 @@ Deletes a surface or curve if it is empty.
    type name))
 
 (defun smallest-segment (type name)
-"
-Returns the smallest triangle in a surface.
+" Returns the smallest triangle in a surface.
 "  
   (format
    t
@@ -3050,8 +3074,7 @@ Returns the smallest triangle in a surface.
    type name))
 
 (defun get-config-param (type name param)
-"
-This is kind of an escape.
+" This is kind of an escape.
 "  
   (format
    t
@@ -3059,8 +3082,7 @@ This is kind of an escape.
    type name param))
 
 (defun set-config-param (type name param val)
-"
-This is kind of an escape.
+" This is kind of an escape.
 "  
 
   (format
@@ -3069,8 +3091,11 @@ This is kind of an escape.
    type name param val))
 
 (defun set-tag (type names tagname on)
-"
-Sets the given tag on the objects, or removes it. If the tagname is pickable this affects the geometry selection code. If the type is clear then the tag is removed from all objects and the name and on parameters are ignored. If name is an empty string then all the objects of that type will be modified.
+" Sets the given tag on the objects, or removes it. If the tagname is
+pickable this affects the geometry selection code. If the type is
+clear then the tag is removed from all objects and the name and on
+parameters are ignored. If name is an empty string then all the
+objects of that type will be modified.
 "  
 
   (format
@@ -3079,8 +3104,7 @@ Sets the given tag on the objects, or removes it. If the tagname is pickable thi
    type names tagname on))
 
 (defun highlight-segments (type name add hsmode segs)
-"
-Highlights some segments of an image.
+" Highlights some segments of an image.
 "  
   (format
    t
@@ -3088,8 +3112,9 @@ Highlights some segments of an image.
    type name add hsmode segs))
 
 (defun bounding-box (objlist)
-"
-Returns the bounding box of a set of objects. objlist is a list of type names pairs, e.g. { { curve {C1 C2 C2} point {C2 C3}} } It can also be all which will give the bounding box of all the geometry.
+" Returns the bounding box of a set of objects. objlist is a list of
+type names pairs, e.g. { { curve {C1 C2 C2} point {C2 C3}} } It can
+also be all which will give the bounding box of all the geometry.
 "  
   (format
    t
@@ -3097,8 +3122,7 @@ Returns the bounding box of a set of objects. objlist is a list of type names pa
    objlist))
 
 (defun bounding-box2 (objlist)
-"
-This is the more rigorous version of the boundary box calculation.
+" This is the more rigorous version of the boundary box calculation.
 "  
   (format
    t
@@ -3106,8 +3130,7 @@ This is the more rigorous version of the boundary box calculation.
    objlist))
 
 (defun model-bounding-box ()
-"
-This gives the bounding box of all objects in projlib.
+" This gives the bounding box of all objects in projlib.
 "  
   (format
    t
@@ -3115,8 +3138,7 @@ This gives the bounding box of all objects in projlib.
   ))
 
 (defun feature-size (type name)
-"
-Returns the feature size of an object.
+" Returns the feature size of an object.
 "  
   (format
    t
@@ -3124,8 +3146,9 @@ Returns the feature size of an object.
    type name))
 
 (defun replace-surface-mesh (name pts tris)
-"
-Replaces a surface mesh. pts is a list of x y z triples. tris is a list of 3 point numbers. e.g., ic_geo_replace_surface_mesh SURF.1 {{0 0 0} {1 1 1} ...} {{0 1 2} ...}
+" Replaces a surface mesh. pts is a list of x y z triples. tris is a
+list of 3 point numbers. e.g., ic_geo_replace_surface_mesh SURF.1 {{0
+0 0} {1 1 1} ...} {{0 1 2} ...}
 "  
   (format
    t
@@ -3133,8 +3156,9 @@ Replaces a surface mesh. pts is a list of x y z triples. tris is a list of 3 poi
    name pts tris))
 
 (defun replace-curve-mesh (name pts bars)
-"
-Replaces a curve mesh. pts is a list of x y z triples. bars is a list of 2 point numbers. e.g., ic_geo_replace_curve_mesh CRV.1 {{0 0 0} {1 1 1} ...} {{0 1} {2 3} ...}
+" Replaces a curve mesh. pts is a list of x y z triples. bars is a
+list of 2 point numbers. e.g., ic_geo_replace_curve_mesh CRV.1 {{0 0
+0} {1 1 1} ...} {{0 1} {2 3} ...}
 "  
   (format
    t
@@ -3142,11 +3166,9 @@ Replaces a curve mesh. pts is a list of x y z triples. bars is a list of 2 point
    name pts bars))
 
 (defun vec-diff (p1 p2)
-"
-Computes the displacement vector between two points.
-p1	point -- e.g. {1 2 3}
-p2	point -- e.g. {3 4 3}
-return	3-tuple containing difference
+" Computes the displacement vector between two points.  p1 point --
+e.g. {1 2 3} p2 point -- e.g. {3 4 3} return 3-tuple containing
+difference
 
 Example
 
@@ -3166,11 +3188,8 @@ Example
    p1 p2))
 
 (defun vec-dot (v1 v2)
-"
-Computes the dot product between two vectors.
-v1	vector -- e.g. {1 2 3}
-v2	vector -- e.g. {3 4 3}
-return	dot product
+" Computes the dot product between two vectors.  v1 vector -- e.g. {1
+2 3} v2 vector -- e.g. {3 4 3} return dot product
 
 Example
 
@@ -3190,11 +3209,8 @@ Example
    v1 v2))
 
 (defun vec-mult (v1 v2)
-"
-Computes the cross product between two vectors.
-v1	vector -- e.g. {1 2 3}
-v2	vector -- e.g. {3 4 3}
-return	cross product
+" Computes the cross product between two vectors.  v1 vector --
+e.g. {1 2 3} v2 vector -- e.g. {3 4 3} return cross product
 
 Example
 
@@ -3215,10 +3231,8 @@ Example
    v1 v2))
 
 (defun vec-nrm (vec)
-"
-Normalizes a vector.
-vec	vector -- e.g. {1 2 3}
-return	normalized vector
+" Normalizes a vector.  vec vector -- e.g. {1 2 3} return normalized
+vector
 
 Example
 
@@ -3239,10 +3253,8 @@ Example
    vec))
 
 (defun vec-len (vec)
-"
-Computes the length of a vector.
-vec	vector -- e.g. {1 2 3}
-return	length
+" Computes the length of a vector.  vec vector -- e.g. {1 2 3} return
+length
 
 Example
 
@@ -3261,11 +3273,9 @@ Example
    vec))
 
 (defun pnt-dist (pnt1 pnt2)
-"
-Computes the distance between two points.
-pnt1	point -- e.g. {1 2 3} or point name
-pnt2	point -- e.g. {1 2 3} or point name
-return	distance between points
+" Computes the distance between two points.  pnt1 point -- e.g. {1 2
+3} or point name pnt2 point -- e.g. {1 2 3} or point name return
+distance between points
 
 Example
 
@@ -3284,11 +3294,8 @@ Example
    pnt1 pnt2))
 
 (defun vec-smult (vec scal)
-"
-Multiplies a vector by a scalar.
-vec	vector -- e.g. {1 2 3}
-scal	scalar -- e.g. 42
-return	scalar product vector
+" Multiplies a vector by a scalar.  vec vector -- e.g. {1 2 3} scal
+scalar -- e.g. 42 return scalar product vector
 
 Example
 
@@ -3308,11 +3315,8 @@ Example
    vec scal))
 
 (defun vec-sum (v1 v2)
-"
-Computes the sum of two vectors.
-v1	vector -- e.g. {1 2 3}
-v2	vector -- e.g. {3 4 3}
-return	cross product
+" Computes the sum of two vectors.  v1 vector -- e.g. {1 2 3} v2
+vector -- e.g. {3 4 3} return cross product
 
 Example
 
@@ -3333,12 +3337,9 @@ Example
    v1 v2))
 
 (defun crv-length (crvs &optional (t_min 0) (t_max 1))
-"
-Computes the arc length of a curve segment.
-crvs	list of one or more curves
-t_min	lower limit of segment (unitized
-t_max 	upper limit of segment (unitized
-return	list of computed arc lengths
+" Computes the arc length of a curve segment.  crvs list of one or
+more curves t_min lower limit of segment (unitized t_max upper limit
+of segment (unitized return list of computed arc lengths
 
 Notes:
 
@@ -3354,18 +3355,12 @@ Notes:
 
 (defun cre-srf-rev (family name gen base zaxis srtang endang
                            &optional (dxn "a") (bld_topo 0))
-"
-Creates a revolution surface from a generator curve and axis.
-family	family containing surface
-name	name of created surface
-gen	generator curve(s)
-base	axis base point
-zaxis	axis direction vector
-srtang	start angle (degrees)
-endang	end angle (degrees)
-dxn	c-clockwise, a-anticlockwise
-bld_topo	associate edge curves
-return	name of created surface
+" Creates a revolution surface from a generator curve and axis.
+family family containing surface name name of created surface gen
+generator curve(s) base axis base point zaxis axis direction vector
+srtang start angle (degrees) endang end angle (degrees) dxn
+c-clockwise, a-anticlockwise bld_topo associate edge curves return
+name of created surface
 
 Notes:
 
@@ -3386,16 +3381,12 @@ Notes:
 
 (defun cre-crv-iso-crv (family name srfs par sel
                                &optional (do_split 0) (coord 0))
-"
-Creates isoparametric curve segments on a surface.
-family	family containing curves
-name	name of created curves
-srfs	list of surface names list of surface names
-par	surface parameter 0 <= par <= 1
-sel	== 0 u cons; == 1 v cons
-do_split	== 1 split the surface
-coord	== 0 use restricted coordinates; == 1 use natural coordinates
-return	list of created curves/surfaces
+" Creates isoparametric curve segments on a surface.  family family
+containing curves name name of created curves srfs list of surface
+names list of surface names par surface parameter 0 <= par <= 1 sel ==
+0 u cons; == 1 v cons do_split == 1 split the surface coord == 0 use
+restricted coordinates; == 1 use natural coordinates return list of
+created curves/surfaces
 
 Notes:
 
@@ -3425,14 +3416,10 @@ Notes:
    family name srfs par sel do_split coord))
 
 (defun cre-srf-pln-3pnts (family name p1 p2 p3 rad)
-"
-Creates a bspline plane from 3 points.
-family	family containing plane
-name	name of created plane
-p1	point data, e.g. {1 2 3}
-p2	point data, e.g. {1 2 3}
-p3	point data, e.g. {1 2 3}
-scale	scales surface extents
+" Creates a bspline plane from 3 points.  family family containing
+plane name name of created plane p1 point data, e.g. {1 2 3} p2 point
+data, e.g. {1 2 3} p3 point data, e.g. {1 2 3} scale scales surface
+extents
 
 Notes:
 
@@ -3448,13 +3435,10 @@ Notes:
    family name p1 p2 p3 rad))
 
 (defun cre-srf-pln-nrm-pnt (family name pnt nrm rad)
-"
-Creates a bspline plane from a point and normal vector.
-family	family containing plane
-name	name of created plane
-pnt	point data, e.g. {1 2 3}
-nrm	plane normal, e.g. {1 1 1}
-rad	radius of created surface
+" Creates a bspline plane from a point and normal vector.  family
+family containing plane name name of created plane pnt point data,
+e.g. {1 2 3} nrm plane normal, e.g. {1 1 1} rad radius of created
+surface
 
 Notes:
 
@@ -3470,13 +3454,10 @@ Notes:
    family name pnt nrm rad))
 
 (defun cre-srf-pln-nrm-dist (family name nrm dist rad)
-"
-Creates a bspline plane from normal vector at a distance from origin.
-family	family containing plane
-name	name of created plane
-nrm	plane normal, e.g. {1 1 1}
-dist	signed distance between origin and plane
-rad	radius of created surface
+" Creates a bspline plane from normal vector at a distance from
+origin.  family family containing plane name name of created plane nrm
+plane normal, e.g. {1 1 1} dist signed distance between origin and
+plane rad radius of created surface
 
 Notes:
 
@@ -3506,8 +3487,7 @@ Example
    family name nrm dist rad))
 
 (defun cre-arc-from-pnts (family name p1 p2 p3)
- "
-ic_geo_cre_arc_from_pnts family name p1 p2 p3
+ " ic_geo_cre_arc_from_pnts family name p1 p2 p3
 
 Create a bspline arc from 3 points.
 
@@ -3599,8 +3579,8 @@ Notes:
    family name pnts tol deg))
 
 (defun cre-bsp-crv-n-pnts-cons (family name pnts fixPnts tanCons tanIndx &optional (tol 0.001))
- "  
-ic_geo_cre_bsp_crv_n_pnts_cons family name pnts fixPnts tanCons tanIndx tol [0.001]
+ "ic_geo_cre_bsp_crv_n_pnts_cons family name pnts fixPnts tanCons
+tanIndx tol [0.001]
 
 Creates a bspline curve from n points with constraints.
 
@@ -3689,17 +3669,11 @@ Notes:
    family name pnts fixPnts tanCons tanIndx tol))
 
 (defun cre-crv-arc-ctr-rad (family name center x_ax normal radius srtang endang)
-"
-Creates a bspline arc from center, radius information.
-family	family containing curve
-name	name of created curve
-center	arc center
-x_ax	vector aligned along angle == 0
-normal	arc normal
-radius	arc radius
-srtang	start angle (degrees)
-endang	end angle (degrees)
-return	name of created curve
+" Creates a bspline arc from center, radius information.  family
+family containing curve name name of created curve center arc center
+x_ax vector aligned along angle == 0 normal arc normal radius arc
+radius srtang start angle (degrees) endang end angle (degrees) return
+name of created curve
 
 Notes:
 
@@ -3719,8 +3693,8 @@ Notes:
    family name center x_ax normal radius srtang endang))
 
 (defun cre-srf-cyl (family name center x_ax z_ax radius srtang endang length)
- "  
-ic_geo_cre_srf_cyl family name center x_ax z_ax radius srtang endang length
+ "ic_geo_cre_srf_cyl family name center x_ax z_ax radius srtang endang
+length
 
 Create a bspline cylinder from center, radius information.
 
@@ -3783,8 +3757,7 @@ Notes:
    family name center x_ax z_ax radius srtang endang length))
 
 (defun cre-line (family name p1 p2)
- "
-ic_geo_cre_line family name p1 p2
+ " ic_geo_cre_line family name p1 p2
 
 Create a bspline line from 2 points.
 
@@ -3830,8 +3803,7 @@ Notes:
           family name p1 p2))
 
 (defun cre-pnt (family name pnt &optional (in_lcs 1))
- "
-ic_geo_cre_pnt family name pnt in_lcs [1]
+ " ic_geo_cre_pnt family name pnt in_lcs [1]
 
 Creates a prescribed point from coordinates.
 
@@ -3950,12 +3922,9 @@ Example
   name)
 
 (defun get-srf-nrm (upar vpar srf)
-"
-Get the normal vector of a surface at a parameter.
-upar	surface u parameter
-vpar	surface v parameter
-srf	list of surfaces to evaluate
-return	list of 3-tuple of doubles
+" Get the normal vector of a surface at a parameter.  upar surface u
+parameter vpar surface v parameter srf list of surfaces to evaluate
+return list of 3-tuple of doubles
 
 Notes:
 
@@ -3974,12 +3943,9 @@ Notes:
    upar vpar srf))
 
 (defun get-srf-pos (upar vpar srf)
-"
-Get a surface position at a parameter.
-upar	surface u parameter
-vpar	surface v parameter
-srf	list of surfaces to evaluate
-return	list of 3-tuple of doubles
+" Get a surface position at a parameter.  upar surface u parameter
+vpar surface v parameter srf list of surfaces to evaluate return list
+of 3-tuple of doubles
 
 Notes:
 
@@ -3997,14 +3963,10 @@ Notes:
    upar vpar srf))
 
 (defun cre-pnt-on-srf-at-par (family name upar vpar srf)
-"
-Creates a prescribed point on a surface at a parameter.
-family	family containing point
-name	name of created point
-upar	surface u parameter
-vpar	surface v parameter
-srf	list of surfaces to evaluate
-return	names of created points
+" Creates a prescribed point on a surface at a parameter.  family
+family containing point name name of created point upar surface u
+parameter vpar surface v parameter srf list of surfaces to evaluate
+return names of created points
 
 Notes:
 
@@ -4022,13 +3984,9 @@ Notes:
    family name upar vpar srf))
 
 (defun cre-pnt-on-crv-at-par (family name par crv)
-"
-Creates a prescribed point on a curve at a parameter.
-family	family containing point
-name	name of created point
-par	curve parameter
-crv	name of curve to evaluate
-return	name of created point
+" Creates a prescribed point on a curve at a parameter.  family family
+containing point name name of created point par curve parameter crv
+name of curve to evaluate return name of created point
 
 Notes:
 
@@ -4044,13 +4002,9 @@ Notes:
    family name par crv))
 
 (defun cre-crv-concat (family name tol crvs)
-"
-Create a new curve by concatenating existing curves.
-family	family containing curve
-name	name of created curve
-tol	merge tolerance
-crvs	list of curves to be joined
-return	name of created curve
+" Create a new curve by concatenating existing curves.  family family
+containing curve name name of created curve tol merge tolerance crvs
+list of curves to be joined return name of created curve
 
 Notes:
 
@@ -4068,8 +4022,8 @@ Notes:
    family name tol crvs))
 
 (defun create-curve-concat (family name tol crvs)
-"
-Deprecated version of ic_geo_cre_crv_concat. This function has been replaced by ic_geo_cre_crv_concat.
+" Deprecated version of ic_geo_cre_crv_concat. This function has been
+replaced by ic_geo_cre_crv_concat.
 "  
   (format
    t
@@ -4077,12 +4031,9 @@ Deprecated version of ic_geo_cre_crv_concat. This function has been replaced by 
    family name tol crvs))
 
 (defun cre-srf-from-contour (family name tol crvs)
-"
-Create a new surface spanning a planar contour.
-family	family containing new surface
-name	base name of created surface
-tol	merge tolerance
-crvs	list of curves to span
+" Create a new surface spanning a planar contour.  family family
+containing new surface name base name of created surface tol merge
+tolerance crvs list of curves to span
 
 Notes:
 
@@ -4100,13 +4051,9 @@ Notes:
    family name tol crvs))
 
 (defun create-surface-from-curves (family name tol crvs &optional (bld_topo 0))
-"
-Create a new surface spanning two to four curves.
-family	family containing new surface
-name	name of created surface
-tol	merge tolerance
-crvs	list of curves to span
-bld_topo	associate edge curves
+" Create a new surface spanning two to four curves.  family family
+containing new surface name name of created surface tol merge
+tolerance crvs list of curves to span bld_topo associate edge curves
 
 Notes:
 
@@ -4124,19 +4071,12 @@ Notes:
    family name tol crvs bld_topo))
 
 (defun create-param-surface (family name nu nv ord_u ord_v rational u_knots v_knots control_pts loops)
-"
-Create a new surface from a u,v set of coordinates.
-family	family containing new surface
-name	name of created surface
-nu	number of u coordinates
-nv	number of v coordinates
-ord_u	order of u
-ord_v	order of v
-rational	dimension of polynomial fit above 3
-u_knots	for rational=0, list of u coordinates
-v_knots	for rational=0, list of v coordinates
-control_pts	points the surface should go through
-loops	loops to trim
+" Create a new surface from a u,v set of coordinates.  family family
+containing new surface name name of created surface nu number of u
+coordinates nv number of v coordinates ord_u order of u ord_v order of
+v rational dimension of polynomial fit above 3 u_knots for rational=0,
+list of u coordinates v_knots for rational=0, list of v coordinates
+control_pts points the surface should go through loops loops to trim
 
     If the function returns with the error status set, the result string will contain an error message.
 "  
@@ -4146,11 +4086,8 @@ loops	loops to trim
    family name nu nv ord_u ord_v rational u_knots v_knots control_pts loops))
 
 (defun list-crv-data (file format crvs)
-"
-Lists the IGES data defining a list of curves.
-out_file 	output file
-format	output format
-crvs	list of curves
+" Lists the IGES data defining a list of curves.  out_file output file
+format output format crvs list of curves
 
 Notes:
 
@@ -4190,11 +4127,8 @@ Example
    file format crvs))
 
 (defun list-srf-data (file format srfs)
-"
-Lists the IGES data defining a list of surfaces
-out_file	output file
-format	output format
-crvs	list of surfaces
+" Lists the IGES data defining a list of surfaces out_file output file
+format output format crvs list of surfaces
 
 Notes:
 
@@ -4213,8 +4147,13 @@ Notes:
 
 (defun make-conn-regions (type entities
                                  &optional (surf_angle 180) (surf_curvature 360))
-"
-Makes connected regions of type: surface or curve entities are a list of the type, surfaces or curves. If type is surface, surf_angle limits connectivity based on curves over the feature angle; default is 180, 0 would make each surface separate. If type is surface, surf_curvature limits connectivity to surfaces with curvature over value; default is 360, 0 would make each surface separate. The return is a separated list based on connectivity.
+" Makes connected regions of type: surface or curve entities are a
+list of the type, surfaces or curves. If type is surface, surf_angle
+limits connectivity based on curves over the feature angle; default is
+180, 0 would make each surface separate. If type is surface,
+surf_curvature limits connectivity to surfaces with curvature over
+value; default is 360, 0 would make each surface separate. The return
+is a separated list based on connectivity.
 "  
   (format
    t
@@ -4222,8 +4161,11 @@ Makes connected regions of type: surface or curve entities are a list of the typ
    type entities surf_angle surf_curvature))
 
 (defun get-attached-entities (attach_type orig_type entities)
-"
-Gets all attached entities based on attach_type and orig_type to a list of entities. attach_type could be boundary or incident. orig_type could be surface curve or point. Example: if you want all curves attached to a list of surfaces attach_type is boundary, orig_type is surface, entities is the list of surfaces.
+" Gets all attached entities based on attach_type and orig_type to a
+list of entities. attach_type could be boundary or incident. orig_type
+could be surface curve or point. Example: if you want all curves
+attached to a list of surfaces attach_type is boundary, orig_type is
+surface, entities is the list of surfaces.
 "  
   (format
    t
@@ -4231,8 +4173,13 @@ Gets all attached entities based on attach_type and orig_type to a list of entit
    attach_type orig_type entities))
 
 (defun get-entities-by-attach-num (type num &optional (entities ""))
-"
-Gets all entities of a type: point or curve; that have defined number of entities attached to it. For example a single curve has 1 entity attached. entities is list of type to look for. Default is all entities of this type. If num is multiple, it will find attachments of 3 or more. If num is double, it will find attachments of 2. If num is single, it will find attachments of 1. If num is unattached, it will find attachments of 0.
+" Gets all entities of a type: point or curve; that have defined
+number of entities attached to it. For example a single curve has 1
+entity attached. entities is list of type to look for. Default is all
+entities of this type. If num is multiple, it will find attachments of
+3 or more. If num is double, it will find attachments of 2. If num is
+single, it will find attachments of 1. If num is unattached, it will
+find attachments of 0.
 "  
   (format
    t
@@ -4252,8 +4199,9 @@ limit the returned curves to only those that are attached to more than
    surf not_single))
 
 (defun find-internal-outer-loops (surfs &optional (not_single 0) (all_boundary 0))
-"
-This procedure returns a list of outer curves and inner curves attached to a set of surfaces, optional argument not_single will limit the list to just curves attached to more than 1 surface.
+" This procedure returns a list of outer curves and inner curves
+attached to a set of surfaces, optional argument not_single will limit
+the list to just curves attached to more than 1 surface.
 "  
   (format
    t
@@ -4263,8 +4211,8 @@ This procedure returns a list of outer curves and inner curves attached to a set
 (defun find-internal-surfaces (loop surrounding_surfs
                                            &optional (outer_curves "")
                                                      (exclusion_surfs ""))
-"
-This function will find a set of surfaces enclosed by a loop of curves.
+" This function will find a set of surfaces enclosed by a loop of
+curves.
 "  
   (format
    t
@@ -4272,8 +4220,8 @@ This function will find a set of surfaces enclosed by a loop of curves.
    loop surrounding_surfs outer_curves exclusion_surfs))
 
 (defun make-conn-buttons (loop &optional (exclusion_surfs ""))
-"
-This function will take a curve list (loop), and find all surfaces attached to it excluding any given exclusion_surfs.
+" This function will take a curve list (loop), and find all surfaces
+attached to it excluding any given exclusion_surfs.
 "  
   (format
    t
@@ -4281,8 +4229,11 @@ This function will take a curve list (loop), and find all surfaces attached to i
    loop exclusion_surfs))
 
 (defun split-surfaces-at-thin-regions (srfs tolerance min_res_curve_len)
-"
-Splits boundaries of the given surfaces at thin regions, that is, where a surface boundary points is less than tolerance from an other boundary curve. It will not, however, split curves which would result in segments of length less than min_res_curve_len. Returns a list of all new points, if any.
+" Splits boundaries of the given surfaces at thin regions, that is,
+where a surface boundary points is less than tolerance from an other
+boundary curve. It will not, however, split curves which would result
+in segments of length less than min_res_curve_len. Returns a list of
+all new points, if any.
 "  
   (format
    t
@@ -4290,8 +4241,11 @@ Splits boundaries of the given surfaces at thin regions, that is, where a surfac
    srfs tolerance min_res_curve_len))
 
 (defun surface-create-smart-nodes (srfs tolerance min_res_curve_len)
-"
-Split boundaries of the given surfaces at thin regions, that is, where a surface boundary points is less than tolerance from an other boundary curve. It will not, however, split curves which would result in segments of length less than min_res_curve_len. Returns tcl-error-stat.
+" Split boundaries of the given surfaces at thin regions, that is,
+where a surface boundary points is less than tolerance from an other
+boundary curve. It will not, however, split curves which would result
+in segments of length less than min_res_curve_len. Returns
+tcl-error-stat.
 "  
   (format
    t
@@ -4312,8 +4266,7 @@ counter-clockwise. The form of the list returned is: \"{surf_name_1
    surfs))
 
 (defun flanges-notch-critical-points (surfs)
-"
-Returns the critical point of the notch in a given flange surface.
+" Returns the critical point of the notch in a given flange surface.
 "  
   (format
    t
@@ -4321,11 +4274,8 @@ Returns the critical point of the notch in a given flange surface.
    surfs))
 
 (defun trm-srf-at-par (srf par sel)
-"
-Splits a surface at a parameter.
-srf	surface name
-par	surface parameter 0 <= par <= 1
-sel	== 0 u cons; == 1 v cons
+" Splits a surface at a parameter.  srf surface name par surface
+parameter 0 <= par <= 1 sel == 0 u cons; == 1 v cons
 
 Example
 
@@ -4341,10 +4291,8 @@ Example
    srf par sel))
 
 (defun trm-srfs-by-curvature (srfs ang)
-"
-Splits folded surfaces by maximum curvature.
-srfs	surface names
-ang	maximum total curvature
+" Splits folded surfaces by maximum curvature.  srfs surface names ang
+maximum total curvature
 "  
   (format
    t
@@ -4352,10 +4300,8 @@ ang	maximum total curvature
    srfs ang))
 
 (defun surface-curvature (surf &optional (tol 100) (debug 0))
-"
-Calculates curvature of surface.
-surf	surface name
-btol	relative boundary tolerance (100 -> 1/100 -> 1%)
+" Calculates curvature of surface.  surf surface name btol relative
+boundary tolerance (100 -> 1/100 -> 1%)
 "  
   (format
    t
@@ -4364,13 +4310,9 @@ btol	relative boundary tolerance (100 -> 1/100 -> 1%)
 
 (defun hull-2d (entities
                    &optional (tol 0) (four 1) (type "srface") (shrink 0) (debug 0))
-"
-Creates 2D hull of surfaces or curves.
-entities	entity names
-tol	approximation tolerance
-four	split hull at best four corners if set
-type	surface or curve
-shrink	relative shrink tolerance (0 ... 1)
+" Creates 2D hull of surfaces or curves.  entities entity names tol
+approximation tolerance four split hull at best four corners if set
+type surface or curve shrink relative shrink tolerance (0 ... 1)
 "  
   (format
    t
@@ -4380,9 +4322,8 @@ shrink	relative shrink tolerance (0 ... 1)
 (defun surface-from-points (points &optional
                                         (part "")
                                         (name ""))
-"
-Creates a faceted surface from points using a 2D Delaunay triangulation.
-points	point names
+" Creates a faceted surface from points using a 2D Delaunay
+triangulation.  points point names
 "  
   (format
    t
@@ -4393,15 +4334,12 @@ points	point names
                               &optional
                                 (toler 0) (bld_topo 1) (perpendicular 1)
                                 (connect 0) (concat_crvs 1) (db 0))
-"
-Extends surface edge to surface(s).
-curve	\"yellow\" edge to extend
-surfaces	surfaces to extend surface edge to
-toler	geometry tolerance
-bld_topo	associate edge curves
-perpendicular	extend normal to curve if 1, create a curtain surface if 0, or do a parametric extension if 2
-connect	connect extension to target surface(s) if set
-concat_crvs	clean points on surface edges if set
+" Extends surface edge to surface(s).  curve \"yellow\" edge to extend
+surfaces surfaces to extend surface edge to toler geometry tolerance
+bld_topo associate edge curves perpendicular extend normal to curve if
+1, create a curtain surface if 0, or do a parametric extension if 2
+connect connect extension to target surface(s) if set concat_crvs
+clean points on surface edges if set
 "  
   (format
    t
@@ -4410,13 +4348,9 @@ concat_crvs	clean points on surface edges if set
 
 (defun cre-srf-crv-drv-srf (family name gencrv ctrcrv
                                    &optional (bld_topo 0))
-"
-Create a curve driven surface.
-family	family containing new surface
-name	name of created surface
-gencrv	name of generator or driven curve
-ctrcrv	name of center or driver curve
-bld_topo	associate edge curves
+" Create a curve driven surface.  family family containing new surface
+name name of created surface gencrv name of generator or driven curve
+ctrcrv name of center or driver curve bld_topo associate edge curves
 
 Notes:
 
@@ -4430,8 +4364,9 @@ Notes:
    family name gencrv ctrcrv bld_topo ))
 
 (defun get-types (&optional (which "all"))
-"
-This function returns a list of all geometric entity types available in the loaded geometry. If no geometry is loaded, it returns all possible types: \"surface curve point material density loop\"
+" This function returns a list of all geometric entity types available
+in the loaded geometry. If no geometry is loaded, it returns all
+possible types: \"surface curve point material density loop\"
 "  
   (format
    t
@@ -4439,8 +4374,8 @@ This function returns a list of all geometric entity types available in the load
    which ))
 
 (defun flood-fill-surface-angle (surf curve angle)
-"
-Returns the list of incident surfaces at curve whose dihedral angle with surf is less than the feat_angle.
+" Returns the list of incident surfaces at curve whose dihedral angle
+with surf is less than the feat_angle.
 "  
   (format
    t
@@ -4453,8 +4388,8 @@ Returns the list of incident surfaces at curve whose dihedral angle with surf is
                             (feat_angle 0)
                             (bound_mode "all")
                             (nedges 0))
-"
-Returns the list of entities connected by the lower dimension entities. For example surfaces connected by the curves.
+" Returns the list of entities connected by the lower dimension
+entities. For example surfaces connected by the curves.
 
     what - 'curve' or 'surface'
 
@@ -4474,8 +4409,10 @@ Returns the list of entities connected by the lower dimension entities. For exam
    what ents all feat_angle bound_mode nedges))
 
 (defun get-triangulation-tolerance ()
-"
-Returns a two-element list containing the triangulation tolerance of the model, such that the first element is the tolerance (real number) and the second element is an integer (0 or 1) indicating whether or not the value is relative to a global setting.
+" Returns a two-element list containing the triangulation tolerance of
+the model, such that the first element is the tolerance (real number)
+and the second element is an integer (0 or 1) indicating whether or
+not the value is relative to a global setting.
 "  
   (format
    t
@@ -4483,8 +4420,8 @@ Returns a two-element list containing the triangulation tolerance of the model, 
   ))
 
 (defun convex-hull (entities name fam)
-"
-Creates the convex hull of the objects. entities is a list of pairs, where the first element is the type and the second is the name.
+" Creates the convex hull of the objects. entities is a list of pairs,
+where the first element is the type and the second is the name.
 "  
   (format
    t
@@ -4492,8 +4429,7 @@ Creates the convex hull of the objects. entities is a list of pairs, where the f
    entities name fam))
 
 (defun remove-triangles-on-plane (surf plane tol)
-"
-Remove triangles on a plane in the named surface.
+" Remove triangles on a plane in the named surface.
 "  
   (format
    t
@@ -4501,8 +4437,8 @@ Remove triangles on a plane in the named surface.
    surf plane tol))
 
 (defun bbox-of-entities (ents)
-"
-Return the bounding box of some objects. The ents argument is a list of the form {{type name} {type name} ...}
+" Return the bounding box of some objects. The ents argument is a list
+of the form {{type name} {type name} ...}
 "  
   (format
    t
@@ -4510,8 +4446,7 @@ Return the bounding box of some objects. The ents argument is a list of the form
    ents))
 
 (defun classify-by-regions (planes entities how)
-"
-Used by convex hull.
+" Used by convex hull.
 "  
   (format
    t
@@ -4519,8 +4454,7 @@ Used by convex hull.
    planes entities how))
 
 (defun split-surfaces (surfs planes)
-"
-Used by convex hull.
+" Used by convex hull.
 "  
   (format
    t
@@ -4528,10 +4462,8 @@ Used by convex hull.
    surfs planes))
 
 (defun elem-assoc (domain assoc)
-"
-Generate mesh geometry associativity for CATIA interface.
-domain	domain file
-assoc	output associativity file
+" Generate mesh geometry associativity for CATIA interface.  domain
+domain file assoc output associativity file
 "  
   (format
    t
@@ -4541,13 +4473,9 @@ assoc	output associativity file
 (defun cre-bsp-srf-by-pnt-array (family name n_ptu n_ptv pnts
                                         &optional
                                           (tol 0.0001))
-"
-Creates a bspline surface from a point array.
-family	family containing surface
-name	name of created surface
-n_ptu 	number of points in u direction
-n_ptv 	number of points in v direction
-pnts	point data
+" Creates a bspline surface from a point array.  family family
+containing surface name name of created surface n_ptu number of points
+in u direction n_ptv number of points in v direction pnts point data
 
 Notes:
 
@@ -4574,16 +4502,12 @@ Notes:
                                 (crv_prefix "crv")
                                 (srf_fam "SRF")
                                 (srf_prefix "srf"))
-"
-Create point and b-spline geometry from an Ansys ICEM CFD Input file.
-fit_tol	approximation tolerance
-mode	type of ICEM CFD input file
-pnt_fam	family for point entities
-pnt_prefix 	prefix for point names
-crv_fam	family for curve entities
-crv_prefix	prefix for curve names
-srf_fam	family for surface entities
-srf_prefix	prefix for surface names
+" Create point and b-spline geometry from an Ansys ICEM CFD Input
+file.  fit_tol approximation tolerance mode type of ICEM CFD input
+file pnt_fam family for point entities pnt_prefix prefix for point
+names crv_fam family for curve entities crv_prefix prefix for curve
+names srf_fam family for surface entities srf_prefix prefix for
+surface names
 
 Notes:
 
@@ -4606,8 +4530,11 @@ Notes:
                                         (srf_fam "SRFS")
                                         (crv_fam "")
                                         (pnt_fam ""))
-"
-Converts structured surface domains to b-spline geometry. If successful, the current mesh and geometry are unloaded, and the new geometry is loaded. Surfaces, curves, and points are created only if families are provided for each argument type. By default, only surfaces will be created.
+" Converts structured surface domains to b-spline geometry. If
+successful, the current mesh and geometry are unloaded, and the new
+geometry is loaded. Surfaces, curves, and points are created only if
+families are provided for each argument type. By default, only
+surfaces will be created.
 "  
   (format
    t
@@ -4615,10 +4542,8 @@ Converts structured surface domains to b-spline geometry. If successful, the cur
    doms srf_fam crv_fam pnt_fam ))
 
 (defun crv-data (crvs datums)
-"
-Return the b-spline data associated to a curve.
-crvs	list of curve to examine
-datums	list of curve properties to return
+" Return the b-spline data associated to a curve.  crvs list of curve
+to examine datums list of curve properties to return
 
 Notes:
 
@@ -4648,10 +4573,8 @@ Notes:
    crvs datums))
 
 (defun srf-data (srfs datums)
-"
-Return the b-spline data associated to a surface
-srfs	list of surface to examine
-datums	list of surface properties to return
+" Return the b-spline data associated to a surface srfs list of
+surface to examine datums list of surface properties to return
 
 Notes:
 
@@ -4685,15 +4608,11 @@ Notes:
 (defun cre-srf-loft-crvs (family name tol crvs
                                  &optional
                                    (sec_ord 4) (form 0) (bld_topo 0))
-"
-Create a new surface by lofting two or more curves
-family	family containing new surface
-name	name of created surface
-tol	approximation tolerance
-crvs	list of curves to loft
-sec_ord	order in cross direction
-form	0 (C1 cubic blend) or 1 (C2 cubic blend)
-bld_topo	associate edge curves
+" Create a new surface by lofting two or more curves family family
+containing new surface name name of created surface tol approximation
+tolerance crvs list of curves to loft sec_ord order in cross direction
+form 0 (C1 cubic blend) or 1 (C2 cubic blend) bld_topo associate edge
+curves
 
 Notes:
 
@@ -4713,13 +4632,9 @@ Notes:
    family name tol crvs sec_ord form bld_topo))
 
 (defun cre-crv-test-project-surface (family name surface curve dir)
-"
-Project a curve to a surface.
-family	family for new curve
-name	name for new curve (can be \"\")
-surface	name of input surface
-curve	name of input curve
-dir	direction vector
+" Project a curve to a surface.  family family for new curve name name
+for new curve (can be \"\") surface name of input surface curve name
+of input curve dir direction vector
 
 Return value is the name of the new curve.
 "  
@@ -4732,18 +4647,13 @@ Return value is the name of the new curve.
                                    &optional
                                      (P2 "")
                                      (trim 0))
-"
-Create curve as section of a surface with plane, cylinder or segment.
-family	family for new curve
-name	name for new curve (can be \"\")
-surface	name of input surface
-mode	0 - section with plane
-1 - section with cylinder
-2 - section with segment
-P0, P1, P2	define plane, cylinder or segment:
-Surface through three given points
-Cylinder with axis on P0-P1 line and P2 on the radius
-Segment from P0 to P1 projected in direction P0-P2
+" Create curve as section of a surface with plane, cylinder or
+segment.  family family for new curve name name for new curve (can be
+\"\") surface name of input surface mode 0 - section with plane 1 -
+section with cylinder 2 - section with segment P0, P1, P2 define
+plane, cylinder or segment: Surface through three given points
+Cylinder with axis on P0-P1 line and P2 on the radius Segment from P0
+to P1 projected in direction P0-P2
 
 Return value is the name of the new curve.
 "  
@@ -4755,8 +4665,7 @@ Return value is the name of the new curve.
 (defun offset (family name surface_to_offset offset
                       &optional
                         (max_factor 3))
-"
-Offset surface using mesh representation.
+" Offset surface using mesh representation.
 "  
   (format
    t
@@ -4765,13 +4674,9 @@ Offset surface using mesh representation.
 
 (defun cre-crv-datred (family name crvs
                               &optional (tol 0.001))
-"
-Creates a reduced b-spline curve
-family	family containing curve
-name	name of created curve
-crvs	list of curves to be joined
-tol	approximation tolerance
-return	names of created curves
+" Creates a reduced b-spline curve family family containing curve name
+name of created curve crvs list of curves to be joined tol
+approximation tolerance return names of created curves
 
 Notes:
 
@@ -4789,13 +4694,9 @@ Notes:
    family name crvs tol))
 
 (defun cre-srf-datred (family name srfs &optional (tol 0.001))
-"
-Create a reduced b-spline surface.
-family	family containing surface
-name	name of created surface
-srfs	list of surfaces to be joined
-tol	approximation tolerance
-return	names of created surfaces
+" Create a reduced b-spline surface.  family family containing surface
+name name of created surface srfs list of surfaces to be joined tol
+approximation tolerance return names of created surfaces
 
 Notes:
 
@@ -4813,14 +4714,10 @@ Notes:
    family name srfs tol))
 
 (defun cre-srf-sweep (family name gen drv &optional (bld_topo 0))
-"
-Creates a swept surface from a generator curve and axis.
-family	family containing surface
-name	name of created surface
-gen	generator curve(s)
-drv	drive curve or vector
-bld_topo	associate edge curves
-return	name of created surface
+" Creates a swept surface from a generator curve and axis.  family
+family containing surface name name of created surface gen generator
+curve(s) drv drive curve or vector bld_topo associate edge curves
+return name of created surface
 
 Notes:
 
@@ -4838,11 +4735,9 @@ Notes:
    family name gen drv bld_topo ))
 
 (defun crv-is-opposite (crv1 crv2)
-"
-Determines whether two curves are oriented in parallel or opposite directions.
-crv1	curve 1 name
-crv2	curve 2 name
-return	1 if opposite, 0 otherwise
+" Determines whether two curves are oriented in parallel or opposite
+directions.  crv1 curve 1 name crv2 curve 2 name return 1 if opposite,
+0 otherwise
 
 Notes:
 
@@ -4856,10 +4751,8 @@ Notes:
    crv1 crv2))
 
 (defun crv-is-edge (crv)
-"
-Determines whether a curve bounds a surface.
-crv	curve name
-return	number of surfaces bounded
+" Determines whether a curve bounds a surface.  crv curve name return
+number of surfaces bounded
 "  
   (format
    t
@@ -4867,9 +4760,9 @@ return	number of surfaces bounded
    crv))
 
 (defun fix-degen-geom (&optional (switch 0))
-"
-Activates repair function for degenerate bsplines in the tetin reader. For now these functions are disabled by default.
-switch	0 for off; 1 for on
+" Activates repair function for degenerate bsplines in the tetin
+reader. For now these functions are disabled by default.  switch 0 for
+off; 1 for on
 "  
   (format
    t
@@ -4877,12 +4770,8 @@ switch	0 for off; 1 for on
    switch))
 
 (defun find-nearest-srf-pnt (srf pnt &optional (want_ext 0))
-"
-Finds parameters of closest point on surface.
-srf 	name of surface
-pnt	test point
-want_ext	want extended output
-return	uv pair
+" Finds parameters of closest point on surface.  srf name of surface
+pnt test point want_ext want extended output return uv pair
 
 Notes:
 
@@ -4898,11 +4787,8 @@ Notes:
    srf pnt want_ext))
 
 (defun find-nearest-crv-pnt (crv pnt)
-"
-Finds parameters of closest point on curve.
-crv	name of curve
-pnt	test point
-return	t parameter
+" Finds parameters of closest point on curve.  crv name of curve pnt
+test point return t parameter
 
 Notes:
 
@@ -4918,8 +4804,8 @@ Notes:
    crv pnt))
 
 (defun distance-from-surfaces (surfs coords)
-"
-Gets the distance of coords from the nearest surface in surface_family
+" Gets the distance of coords from the nearest surface in
+surface_family
 "  
   (format
    t
@@ -4927,8 +4813,7 @@ Gets the distance of coords from the nearest surface in surface_family
    surfs coords))
 
 (defun nearest-surface-list (coords surfaces)
-"
-Gets nearest surface to coords from a list of surfaces.
+" Gets nearest surface to coords from a list of surfaces.
 "  
   (format
    t
@@ -4936,11 +4821,9 @@ Gets nearest surface to coords from a list of surfaces.
    coords surfaces))
 
 (defun get-crv-nrm (par crv)
-"
-Gets the normal vector of a curve at a parameter.
-par	curve t parameter
-crv	list of curves to evaluate
-return	list of 3-tuple of doubles
+" Gets the normal vector of a curve at a parameter.  par curve t
+parameter crv list of curves to evaluate return list of 3-tuple of
+doubles
 
 Notes:
 
@@ -4956,11 +4839,8 @@ Notes:
    par crv))
 
 (defun get-crv-pos (par crv)
-"
-Gets a position on a curve at a parameter.
-par	curve t parameter
-crv	list of curves to evaluate
-return	list of 3-tuple of doubles
+" Gets a position on a curve at a parameter.  par curve t parameter
+crv list of curves to evaluate return list of 3-tuple of doubles
 
 Notes:
 
@@ -4978,11 +4858,9 @@ Notes:
    par crv))
 
 (defun get-crv-binrm (par crv)
-"
-Gets the binormal vector of a curve at a parameter.
-par	curve t parameter
-crv	list of curves to evaluate
-return	list of 3-tuple of doubles
+" Gets the binormal vector of a curve at a parameter.  par curve t
+parameter crv list of curves to evaluate return list of 3-tuple of
+doubles
 
 Notes:
 
@@ -4996,12 +4874,9 @@ Notes:
    par crv))
 
 (defun cvt-uns-to-bsc (family base uns)
-"
-Creates one or more bspline curves from an unstructured curve.
-family	family for new curves
-base	base name of created curves
-uns	name(s) of unstructured curve(s)
-return	name of created curves
+" Creates one or more bspline curves from an unstructured curve.
+family family for new curves base base name of created curves uns
+name(s) of unstructured curve(s) return name of created curves
 
 Notes:
 
@@ -5017,10 +4892,8 @@ Notes:
    family base uns))
 
 (defun srf-area (srfs)
-"
-Computes the area of one or more surfaces.
-srfs	list of one or more surfaces
-return	area of surfaces
+" Computes the area of one or more surfaces.  srfs list of one or more
+surfaces return area of surfaces
 
 Notes:
 
@@ -5034,8 +4907,8 @@ Notes:
    srfs))
 
 (defun sort-by-srf-area (surf_list &optional (args ""))
-"
-Sorts surfaces by their surface area. args is arguments for the sort.
+" Sorts surfaces by their surface area. args is arguments for the
+sort.
 "  
   (format
    t
@@ -5043,9 +4916,8 @@ Sorts surfaces by their surface area. args is arguments for the sort.
    surf_list args))
 
 (defun reduce-face (srfs)
-"
-Trims a surface back to its active area.
-srfs	list of one or more surfaces
+" Trims a surface back to its active area.  srfs list of one or more
+surfaces
 
 Notes:
 
@@ -5061,11 +4933,9 @@ Notes:
    srfs))
 
 (defun get-crv-tan (par crv)
-"
-Gets the tangent vector of a curve at a parameter.
-par	curve t parameter
-crv	list of curves to evaluate
-return	list of 3-tuple of doubles
+" Gets the tangent vector of a curve at a parameter.  par curve t
+parameter crv list of curves to evaluate return list of 3-tuple of
+doubles
 
 Notes:
 
@@ -5081,12 +4951,9 @@ Notes:
    par crv))
 
 (defun mod-crv-tanext (crvs dist srtend)
-"
-Tangentially extend a curve.
-crvs	list of curves to extend
-dist	distance (relative) of ext.
-srtend	extend start (0), end(1)
-return	names of extended curves
+" Tangentially extend a curve.  crvs list of curves to extend dist
+distance (relative) of ext.  srtend extend start (0), end(1) return
+names of extended curves
 
 Notes:
 
@@ -5108,12 +4975,9 @@ Notes:
    crvs dist srtend))
 
 (defun mod-srf-tanext (srfs dist srtend &optional (bld_topo 0))
-"
-Tangentially extend a surface.
-srfs	list of surfaces to extend
-dist	distance (relative) of ext.
-edge	index of edge to extend
-return	names of modified surfaces
+" Tangentially extend a surface.  srfs list of surfaces to extend dist
+distance (relative) of ext.  edge index of edge to extend return names
+of modified surfaces
 
 Notes:
 
@@ -5142,12 +5006,9 @@ Notes:
    srfs dist srtend bld_topo))
 
 (defun mod-srf-ext (srfs dist edge &optional (bld_topo 0))
-"
-Extend a surface.
-srfs	list of surfaces to extend
-dist	distance of extension
-edge	curve at edge to extend
-return	names of modified surfaces
+" Extend a surface.  srfs list of surfaces to extend dist distance of
+extension edge curve at edge to extend return names of modified
+surfaces
 "  
   (format
    t
@@ -5155,14 +5016,9 @@ return	names of modified surfaces
    srfs dist edge bld_topo))
 
 (defun mod-crv-match-crv (crv1 crv2 &optional (crv1end 0) (crv2end 0) (modes ""))
-"
-Matches two curves.
-crv1	name of first curve
-crv2	name of second curve
-crv1end	curve1 end indicator
-crv2end	curve2 end indicator
-modes	5 element list of flags
-return	names of modified curves
+" Matches two curves.  crv1 name of first curve crv2 name of second
+curve crv1end curve1 end indicator crv2end curve2 end indicator modes
+5 element list of flags return names of modified curves
 
 Notes:
 
@@ -5196,12 +5052,8 @@ Notes:
    crv1 crv2 crv1end crv2end modes))
 
 (defun mod-crv-match-pnt (crv pnt &optional (crvend 0) (modes ""))
-"
-Match curve and a point.
-crv	name of curve
-pnt	name of point
-crvend	curve end indicator
-return	name of modified curve
+" Match curve and a point.  crv name of curve pnt name of point crvend
+curve end indicator return name of modified curve
 
 Notes:
 
@@ -5220,15 +5072,11 @@ Notes:
 (defun cre-srf-offset (family name base offset
                               &optional
                                 (all_conn 0) (stitch 0))
-"
-Creates one or more offset surfaces.
-family	family containing surface
-name	base name of created surface
-base	surface(s) to offset
-offset	distance to offset
-all_conn	offset connected surfs if set
-stitch	preserve connected edges if set
-return	name(s) of created surface(s)
+" Creates one or more offset surfaces.  family family containing
+surface name base name of created surface base surface(s) to offset
+offset distance to offset all_conn offset connected surfs if set
+stitch preserve connected edges if set return name(s) of created
+surface(s)
 
 Notes:
 
@@ -5255,14 +5103,12 @@ Notes:
                               (fam "LIVE") (buildtopo 0) (tol 0.01)
                               (multi 0) (newm 0) (surf "")
                               (assem 0) (from_solids 0))
-"
-Automatically creates a body for each closed volume of surfaces as determined by the connectivity produced from build topology.
-fam	Family for bodies
-buildtopo	Build topology if non-zero
-tol	Tolerance for the optional build topology function
-multi	Old style assembly naming if non-zero
-newm	Use the new schema if non-zero
-surf	Initial surface
+" Automatically creates a body for each closed volume of surfaces as
+determined by the connectivity produced from build topology.  fam
+Family for bodies buildtopo Build topology if non-zero tol Tolerance
+for the optional build topology function multi Old style assembly
+naming if non-zero newm Use the new schema if non-zero surf Initial
+surface
 "  
   (format
    t
@@ -5272,8 +5118,7 @@ surf	Initial surface
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun create-volume (matlpt &optional (name "") (fam "LIVE"))
-"
-Creates volume from material point name, matlpt.
+" Creates volume from material point name, matlpt.
 "  
 
   (format
@@ -5282,8 +5127,8 @@ Creates volume from material point name, matlpt.
    matlpt name fam))
 
 (defun reset-bodies ()
-"
-Updates the current defined bodies in the model, by removing nonexistent ones and adding any new ones to the display.
+" Updates the current defined bodies in the model, by removing
+nonexistent ones and adding any new ones to the display.
 "  
 
   (format
@@ -5292,8 +5137,8 @@ Updates the current defined bodies in the model, by removing nonexistent ones an
   ))
 
 (defun create-body (surfs &optional (name "") (fam "") (quiet 0))
-"
-Creates a body from the collection of surfaces, surfs. The new body will be given the name, name, in the family, fam.
+" Creates a body from the collection of surfaces, surfs. The new body
+will be given the name, name, in the family, fam.
 "  
   (format
    t
@@ -5301,8 +5146,7 @@ Creates a body from the collection of surfaces, surfs. The new body will be give
    surfs name fam quiet))
 
 (defun get-body-matlpnt (bdy)
-"
-Returns the material point name associated with the body, bdy.
+" Returns the material point name associated with the body, bdy.
 "  
   (format
    t
@@ -5310,10 +5154,8 @@ Returns the material point name associated with the body, bdy.
    bdy))
 
 (defun srf-radius (srfs)
-"
-Computes the radius of a b-spline surface.
-srfs	list of one or more surfaces
-return	list of computed surface radii
+" Computes the radius of a b-spline surface.  srfs list of one or more
+surfaces return list of computed surface radii
 
 Notes:
 
@@ -5327,16 +5169,11 @@ Notes:
    srfs))
 
 (defun cre-srf-offset-edge (family name crv offset)
-"
-Creates an offset surface from a generator curve and axis.
-family	family containing surface
-name	name of created surface
-gen	generator curve(s)
-base	axis base point
-zaxis	axis direction vector
-srtang	start angle (degrees)
-endang	end angle (degrees)
-return	name of created surface
+" Creates an offset surface from a generator curve and axis.  family
+family containing surface name name of created surface gen generator
+curve(s) base axis base point zaxis axis direction vector srtang start
+angle (degrees) endang end angle (degrees) return name of created
+surface
 
 Notes:
 
@@ -5354,8 +5191,10 @@ Notes:
    family name crv offset))
 
 (defun body-lower-entities (bdy)
-"
-Given a body name, bdy, it returns the names of the surfaces, curves, and points belonging to the body. These are returned in the form of argument pairs where the first name is the entity type and the second name is the entity name.
+" Given a body name, bdy, it returns the names of the surfaces,
+curves, and points belonging to the body. These are returned in the
+form of argument pairs where the first name is the entity type and the
+second name is the entity name.
 "  
   (format
    t
@@ -5368,15 +5207,11 @@ Given a body name, bdy, it returns the names of the surfaces, curves, and points
                                  (pnt_fam "PNT") (pnt_prefix "pnt")
                                          (crv_fam "CRV") (crv_prefix "crv")
                                  (srf_fam "SRF") (srf_prefix "srf"))
-"
-Creates point and b-spline geometry from a Plot3d file.
-fit_tol	approximation tolerance
-pnt_fam	family for point entities
-pnt_prefix	prefix for point names
-crv_fam	family for curve entities
-crv_prefix 	prefix for curve names
-srf_fam 	family for surface entities
-srf_prefix	prefix for surface names
+" Creates point and b-spline geometry from a Plot3d file.  fit_tol
+approximation tolerance pnt_fam family for point entities pnt_prefix
+prefix for point names crv_fam family for curve entities crv_prefix
+prefix for curve names srf_fam family for surface entities srf_prefix
+prefix for surface names
 
 Notes:
 
@@ -5395,10 +5230,8 @@ Notes:
    in_file fit_tol pnt_fam pnt_prefix crv_fam crv_prefix srf_fam srf_prefix))
 
 (defun cre-srf-db-pnts (srfs)
-"
-Create the deboor points of a bspline surface.
-srfs	list of surfaces
-return	names of created points
+" Create the deboor points of a bspline surface.  srfs list of
+surfaces return names of created points
 "  
   (format
    t
@@ -5406,10 +5239,8 @@ return	names of created points
    srfs))
 
 (defun cre-crv-db-pnts (crvs)
-"
-Creates the deboor points of a bspline curve.
-crvs	list of curves
-return	names of created points
+" Creates the deboor points of a bspline curve.  crvs list of curves
+return names of created points
 "  
   (format
    t
@@ -5417,11 +5248,8 @@ return	names of created points
    crvs))
 
 (defun read-off-file (fam name in_file)
-"
-Read an OFF file (native format for Geomview).
-fam	family for new geometry
-name	root name for new surfaces
-in_file 	input file
+" Read an OFF file (native format for Geomview).  fam family for new
+geometry name root name for new surfaces in_file input file
 
 Notes:
 
@@ -5437,13 +5265,9 @@ Notes:
    fam name in_file))
 
 (defun read-xyz-file (fam name in_file off_file &optional (mode ""))
-"
-Reads and triangulate a list of XYZ points.
-fam	family for new geometry
-name	root name for new surfaces
-in_file	input file
-off_file 	intermediate OFF file
-mode	fast, tight
+" Reads and triangulate a list of XYZ points.  fam family for new
+geometry name root name for new surfaces in_file input file off_file
+intermediate OFF file mode fast, tight
 
 Notes:
 
@@ -5461,11 +5285,9 @@ Notes:
    fam name in_file off_file mode))
 
 (defun crv-is-arc (crvs &optional (tol -1))
-"
-Determine whether one or more curves are circular.
-crvs	list of one or more curves
-tol	approximation tolerance
-return	list of true/false flags
+" Determine whether one or more curves are circular.  crvs list of one
+or more curves tol approximation tolerance return list of true/false
+flags
 
 Notes:
 
@@ -5479,8 +5301,8 @@ Notes:
    crvs tol))
 
 (defun get-keypoints (dir border &optional (bb ""))
-"
-Gets keypoints for the current geometry. dir is 0, 1, or 2. If border is non zero, then add some slack.
+" Gets keypoints for the current geometry. dir is 0, 1, or 2. If
+border is non zero, then add some slack.
 "  
   (format
    t
@@ -5488,10 +5310,8 @@ Gets keypoints for the current geometry. dir is 0, 1, or 2. If border is non zer
    dir border bb))
 
 (defun reverse-crv (crvs)
-"
-Reverses the orientation of one or more curves.
-crvs	list of one or more curves
-return	error message on failure
+" Reverses the orientation of one or more curves.  crvs list of one or
+more curves return error message on failure
 
 For example usage, refer to ic_geo_reverse_crv.tcl in the Ansys installation directory under v221/icemcfd/Samples/ProgrammersGuide/med_test.
 "  
@@ -5501,11 +5321,9 @@ For example usage, refer to ic_geo_reverse_crv.tcl in the Ansys installation dir
    crvs))
 
 (defun cre-edge-concat (crvs &optional (require_topo 0))
-"
-Merges one or more curves and associated topology.
-crvs	list of curves to be joined
-require_topo	fail if topology will not merge
-return	name of created curve
+" Merges one or more curves and associated topology.  crvs list of
+curves to be joined require_topo fail if topology will not merge
+return name of created curve
 
 Notes:
 
@@ -5525,11 +5343,8 @@ Notes:
    crvs require_topo))
 
 (defun create-histogram-box (min max lblList)
-"
-Make a histogram box.
-min	min pt of the box
-max	max pt of the box
-lblList	list of labels
+" Make a histogram box.  min min pt of the box max max pt of the box
+lblList list of labels
 
 Notes:
 
@@ -5546,14 +5361,10 @@ Notes:
                                   &optional
                                     (crvs "") (tol -1) (trim_srfs 0)
                                     (concat_crvs 0) (quiet 0))
-"
-Builds topology on a list of surfaces.
-srfs	surface(s)
-crvs	optional curve(s)
-tol	merge tolerance
-trim_srfs	1 -- trim surfaces; 0 otherwise
-concat_crvs	1 -- concatenate edges that join tangentially; 0 otherwise
-quiet	1 -- suppress chatter; 0 otherwise
+" Builds topology on a list of surfaces.  srfs surface(s) crvs
+optional curve(s) tol merge tolerance trim_srfs 1 -- trim surfaces; 0
+otherwise concat_crvs 1 -- concatenate edges that join tangentially; 0
+otherwise quiet 1 -- suppress chatter; 0 otherwise
 
 Notes:
 
@@ -5567,12 +5378,9 @@ Notes:
    srfs crvs tol trim_srfs concat_crvs quiet))
 
 (defun contact-surfaces (surfaces &optional (distance 0) (family "") (debug 0))
-"
-Search for contact surfaces.
-surfaces	list of surface names
-distance	maximum distance
-family	family name for contact surfaces
-return	list of surface pairs
+" Search for contact surfaces.  surfaces list of surface names
+distance maximum distance family family name for contact surfaces
+return list of surface pairs
 "  
   (format
    t
@@ -5580,15 +5388,10 @@ return	list of surface pairs
    surfaces distance family debug))
 
 (defun map-tetin-sizes (tetin &optional (what 0))
-"
-Map parameter data from a tetin file to the current model.
-tetin	input tetin file
-what	== 0 - map all possible data
-bit0 - map global parameters
-bit1 - map family parameters
-bit2 - map prescribed points data
-bit3 - map curve data
-bit4 - map surface data
+" Map parameter data from a tetin file to the current model.  tetin
+input tetin file what == 0 - map all possible data bit0 - map global
+parameters bit1 - map family parameters bit2 - map prescribed points
+data bit3 - map curve data bit4 - map surface data
 
 For example usage, refer to ic_geo_map_tetin_sizes.tcl in the Ansys installation directory under v221/icemcfd/Samples/ProgrammersGuide/med_test.
 "  
@@ -5598,11 +5401,9 @@ For example usage, refer to ic_geo_map_tetin_sizes.tcl in the Ansys installation
    tetin what))
 
 (defun surface-thickness (surfaces order &optional (thickness ""))
-"
-Set (or get) the thickness of surfaces.
-surfaces	list of surface names
-order	order of thickness approximation
-thickness	order * order thickness values
+" Set (or get) the thickness of surfaces.  surfaces list of surface
+names order order of thickness approximation thickness order * order
+thickness values
 "  
   (format
    t
@@ -5610,10 +5411,8 @@ thickness	order * order thickness values
    surfaces order thickness))
 
 (defun srf-in-srf-fam-set (srf fams)
-"
-Determines whether a surface is within a volume bounded by one or more surface families.
-srf	test surface
-fams	list of families
+" Determines whether a surface is within a volume bounded by one or
+more surface families.  srf test surface fams list of families
 "  
   (format
    t
@@ -5621,10 +5420,8 @@ fams	list of families
    srf fams))
 
 (defun cre-srf-over-holes (fam srfs)
-"
-Closes planar holes in a collection of surfaces.
-srf	test surface
-fams	list of families
+" Closes planar holes in a collection of surfaces.  srf test surface
+fams list of families
 "  
   (format
    t
@@ -5632,8 +5429,7 @@ fams	list of families
    fam srfs))
 
 (defun subset-exists (name)
-"
-Checks if a geometry subset exists.
+" Checks if a geometry subset exists.
 "  
   (format
    t
@@ -5641,8 +5437,7 @@ Checks if a geometry subset exists.
    name))
 
 (defun subset-copy (oldname newname)
-"
-Copies the geometry from one subset to another.
+" Copies the geometry from one subset to another.
 "  
   (format
    t
@@ -5650,8 +5445,7 @@ Copies the geometry from one subset to another.
    oldname newname))
 
 (defun subset-clear (name)
-"
-Clears out everything from a subset.
+" Clears out everything from a subset.
 "  
 
   (format
@@ -5660,8 +5454,8 @@ Clears out everything from a subset.
    name))
 
 (defun subset-unused-name (&optional (pref "subset"))
-"
-Returns an unused geometry subset name with the given prefix Note that this gives names unique for both geometry and mesh.
+" Returns an unused geometry subset name with the given prefix Note
+that this gives names unique for both geometry and mesh.
 "  
   (format
    t
@@ -5669,8 +5463,7 @@ Returns an unused geometry subset name with the given prefix Note that this give
    pref))
 
 (defun subset-delete (name)
-"
-Deletes a geometry subset.
+" Deletes a geometry subset.
 "  
   (format
    t
@@ -5678,8 +5471,7 @@ Deletes a geometry subset.
    name))
 
 (defun subset-visible (name vis)
-"
-Makes a geometry subset visible (or not).
+" Makes a geometry subset visible (or not).
 "  
   (format
    t
@@ -5687,8 +5479,7 @@ Makes a geometry subset visible (or not).
    name vis))
 
 (defun subset-list-families (name)
-"
-Lists all the families that are represented in the named subset.
+" Lists all the families that are represented in the named subset.
 "  
   (format
    t
@@ -5696,8 +5487,7 @@ Lists all the families that are represented in the named subset.
    name))
 
 (defun subset-list (&optional (pat "*"))
-"
-Lists all existing geometry subset names.
+" Lists all existing geometry subset names.
 "  
   (format
    t
@@ -5705,8 +5495,11 @@ Lists all existing geometry subset names.
    pat))
 
 (defun subset-add-items (name items)
-"
-Adds items to a geometry subset. If the subset does not exist, it will be created. The items argument is a list of type/name pairs. The types can be one of point, curve, surface, material, density, loop, body, shell, lump, solid, and the names specify the desired object of that type.
+" Adds items to a geometry subset. If the subset does not exist, it
+will be created. The items argument is a list of type/name pairs. The
+types can be one of point, curve, surface, material, density, loop,
+body, shell, lump, solid, and the names specify the desired object of
+that type.
 "  
   (format
    t
@@ -5714,8 +5507,8 @@ Adds items to a geometry subset. If the subset does not exist, it will be create
    name items))
 
 (defun subset-remove-items (name items)
-"
-Removes items from a geometry subset. The items list is the same as for ic_geo_subset_add_items.
+" Removes items from a geometry subset. The items list is the same as
+for ic_geo_subset_add_items.
 "  
   (format
    t
@@ -5723,8 +5516,8 @@ Removes items from a geometry subset. The items list is the same as for ic_geo_s
    name items))
 
 (defun subset-handle-bc-changes (items subset add)
-"
-Adds or removes bc icons and groups based on addition or removal of objects in subsets.
+" Adds or removes bc icons and groups based on addition or removal of
+objects in subsets.
 "  
   (format
    t
@@ -5732,8 +5525,8 @@ Adds or removes bc icons and groups based on addition or removal of objects in s
    items subset add))
 
 (defun subset-get-items (name)
-"
-Gets items in a geometry subset. This returns a list of type/name pairs.
+" Gets items in a geometry subset. This returns a list of type/name
+pairs.
 "  
   (format
    t
@@ -5741,8 +5534,7 @@ Gets items in a geometry subset. This returns a list of type/name pairs.
    name))
 
 (defun subset-bbox (name)
-"
-Returns the bounding box of all geometry in a named subset.
+" Returns the bounding box of all geometry in a named subset.
 "  
   (format
    t
@@ -5750,8 +5542,8 @@ Returns the bounding box of all geometry in a named subset.
    name))
 
 (defun subset-add-layer (name all feat_angle bound_mode)
-"
-Adds one or more layers to a geom subset. Arguments are the same as ic_geo_flood_fill.
+" Adds one or more layers to a geom subset. Arguments are the same as
+ic_geo_flood_fill.
 "  
   (format
    t
@@ -5759,8 +5551,7 @@ Adds one or more layers to a geom subset. Arguments are the same as ic_geo_flood
    name all feat_angle bound_mode))
 
 (defun subset-remove-layer (name)
-"
-Removes one or more layers from a geometry subset.
+" Removes one or more layers from a geometry subset.
 "  
   (format
    t
@@ -5768,8 +5559,7 @@ Removes one or more layers from a geometry subset.
    name))
 
 (defun subset-names-to-parts (name)
-"
-Move the contents of all subsets to a part (name of subset)
+" Move the contents of all subsets to a part (name of subset)
 "  
   (format
    t
@@ -5777,8 +5567,7 @@ Move the contents of all subsets to a part (name of subset)
    name))
 
 (defun get-srf-edges (srf)
-"
-Returns any curves associated as edges to a surface.
+" Returns any curves associated as edges to a surface.
 "  
   (format
    t
@@ -5786,8 +5575,7 @@ Returns any curves associated as edges to a surface.
    srf))
 
 (defun get-vert-edges (pnt)
-"
-Get any curves associated as edges to a vertex.
+" Get any curves associated as edges to a vertex.
 "  
   (format
    t
@@ -5795,8 +5583,9 @@ Get any curves associated as edges to a vertex.
    pnt))
 
 (defun calc-bisector-pnt (pnt1 pnt2 pnt3 len inverse)
-"
-Calculates node lying on the bisector of the angle formed by nodes pnt1, pnt2, pnt3 in distance delta. If inverse: calculate the reverse bisector.
+" Calculates node lying on the bisector of the angle formed by nodes
+pnt1, pnt2, pnt3 in distance delta. If inverse: calculate the reverse
+bisector.
 "  
   (format
    t
@@ -5804,12 +5593,9 @@ Calculates node lying on the bisector of the angle formed by nodes pnt1, pnt2, p
    pnt1 pnt2 pnt3 len inverse))
 
 (defun cre-srf-simple-trim (families names srf crvs)
-"
-Trims a surface using a simple contour.
-families	list of 2 family names
-names	list of 2 surface names
-srf	surface to trim
-crvs	list of trim curves
+" Trims a surface using a simple contour.  families list of 2 family
+names names list of 2 surface names srf surface to trim crvs list of
+trim curves
 
 Notes:
 
@@ -5823,8 +5609,9 @@ Notes:
    families names srf crvs))
 
 (defun set-simplification-level (pixels)
-"
-Sets the simplification level in pixels (surfaces smaller than this size will be drawn as a box. 0 disables simplification. A value of -1 just returns the level.
+" Sets the simplification level in pixels (surfaces smaller than this
+size will be drawn as a box. 0 disables simplification. A value of -1
+just returns the level.
 "  
   (format
    t
@@ -5832,8 +5619,10 @@ Sets the simplification level in pixels (surfaces smaller than this size will be
    pixels))
 
 (defun surface-thickness-check (names &optional (newfam "") (return_unassigned 0))
-"
-Checks for zero thickness surfaces and assigns to new family. newfam is family name for surfaces with no thickness. return_unassigned is option to return unassigned surfaces without changing family. Default (0) is disabled.
+" Checks for zero thickness surfaces and assigns to new family. newfam
+is family name for surfaces with no thickness. return_unassigned is
+option to return unassigned surfaces without changing
+family. Default (0) is disabled.
 "  
   (format
    t
@@ -5841,10 +5630,8 @@ Checks for zero thickness surfaces and assigns to new family. newfam is family n
    names newfam return_unassigned))
 
 (defun close-contour (crvs srf)
-"
-Closes up a contour prior to trimming.
-crvs	list of curves
-srf	surface to trim
+" Closes up a contour prior to trimming.  crvs list of curves srf
+surface to trim
 
 Notes:
 
@@ -5858,12 +5645,8 @@ Notes:
    crvs srf))
 
 (defun find-srf-prc-pnt (srf pnt vec)
-"
-Finds parameter of pierce point on surface.
-srf	name of surface
-pnt	test point
-vec	pierce direction
-return	uv pair
+" Finds parameter of pierce point on surface.  srf name of surface pnt
+test point vec pierce direction return uv pair
 
 Notes:
 
@@ -5879,8 +5662,7 @@ Notes:
    srf pnt vec))
 
 (defun get-dormant (type &optional (only_if_visible ""))
-"
-Returns list of dormant points or curves.
+" Returns list of dormant points or curves.
 "  
   (format
    t
@@ -5888,8 +5670,8 @@ Returns list of dormant points or curves.
    type only_if_visible))
 
 (defun get-dormant-entity (type name)
-"
-Determines whether an entity is dormant Only points and curves can be dormant synchronized pickable and visible. Used in bounding box.
+" Determines whether an entity is dormant Only points and curves can
+be dormant synchronized pickable and visible. Used in bounding box.
 "  
   (format
    t
@@ -5897,8 +5679,7 @@ Determines whether an entity is dormant Only points and curves can be dormant sy
    type name))
 
 (defun get-facets (type list)
-"
-Returns list of faceted surfaces.
+" Returns list of faceted surfaces.
 "  
   (format
    t
@@ -5906,10 +5687,11 @@ Returns list of faceted surfaces.
    type list))
 
 (defun filter-curves (angle fams)
-"
-Returns a list of essential curves. A curve is \"essential\" when it bounds two surfaces which meet at an angle (measured by surface normals) exceeding a threshold angle. The function identifies the essential curves in the specified families.
-angle	threshold angle in degrees
-fams	names of families to search
+" Returns a list of essential curves. A curve is \"essential\" when it
+bounds two surfaces which meet at an angle (measured by surface
+normals) exceeding a threshold angle. The function identifies the
+essential curves in the specified families.  angle threshold angle in
+degrees fams names of families to search
 "  
   (format
    t
@@ -5919,17 +5701,11 @@ fams	names of families to search
 (defun cre-bridge-crv (fam name crv1 crv2
                               &optional (end1 0) (end2 0)
                                 (mag1 0.3) (mag2 0.3))
-"
-Creates a bridge curve between two curves.
-fam	family of created curve
-name	name of created curve
-crv1	curve 1 name
-crv2	curve 2 name
-end1	curve 1 end indicator
-end2	curve 2 end indicator
-mag1	magnitude of start vector
-mag2	magnitude of end vector
-return	name of curve vertex
+" Creates a bridge curve between two curves.  fam family of created
+curve name name of created curve crv1 curve 1 name crv2 curve 2 name
+end1 curve 1 end indicator end2 curve 2 end indicator mag1 magnitude
+of start vector mag2 magnitude of end vector return name of curve
+vertex
 
 Notes:
 
@@ -5946,12 +5722,9 @@ Notes:
    fam name crv1 crv2 end1 end2 mag1 mag2))
 
 (defun cre-pln-crv (fam name crv base nrm)
-"
-Creates the projection of a curve onto a plane.
-fam	family of created curve
-name	name of created curve
-crv1	curve name
-return	name of created curve
+" Creates the projection of a curve onto a plane.  fam family of
+created curve name name of created curve crv1 curve name return name
+of created curve
 "  
   (format
    t
@@ -5959,10 +5732,8 @@ return	name of created curve
    fam name crv base nrm))
 
 (defun pln-n-pnts (pnts)
-"
-Finds the least square plane through three or more points.
-pnts	list of 3 or more points
-return	{base} {normal} of plane
+" Finds the least square plane through three or more points.  pnts
+list of 3 or more points return {base} {normal} of plane
 "  
   (format
    t
@@ -5970,8 +5741,11 @@ return	{base} {normal} of plane
    pnts))
 
 (defun sub-get-numbers-by-names (type ent_names)
-"
-Returns each entity number (recognized in the batch interpreter) associated with each entity name in ent_names. ent_names can be a list but they must all be the same type defined by type. In this case, the return is a list of numbers in the same order as the entity names were given.
+" Returns each entity number (recognized in the batch interpreter)
+associated with each entity name in ent_names. ent_names can be a list
+but they must all be the same type defined by type. In this case, the
+return is a list of numbers in the same order as the entity names were
+given.
 "  
   (format
    t
@@ -5979,8 +5753,7 @@ Returns each entity number (recognized in the batch interpreter) associated with
    type ent_names))
 
 (defun get-pnt-marked (name)
-"
-Determines whether a point is marked.
+" Determines whether a point is marked.
 "  
   (format
    t
@@ -5988,8 +5761,7 @@ Determines whether a point is marked.
    name))
 
 (defun set-pnt-marked (name set_to)
-"
-Sets the marked flag on a point.
+" Sets the marked flag on a point.
 "  
   (format
    t
@@ -5997,8 +5769,7 @@ Sets the marked flag on a point.
    name set_to))
 
 (defun get-all-marked-pnts ()
-"
-Returns a list of all marked points.
+" Returns a list of all marked points.
 "  
   (format
    t
@@ -6006,10 +5777,7 @@ Returns a list of all marked points.
   ))
 
 (defun add-embedded-crv (srf crvs)
-"
-Embeds a curve into a surface.
-srf	surface
-crvs	list of curves
+" Embeds a curve into a surface.  srf surface crvs list of curves
 
 Note:   No checks are performed to determine whether the curves are on the surface.
 "  
@@ -6019,10 +5787,7 @@ Note:   No checks are performed to determine whether the curves are on the surfa
    srf crvs))
 
 (defun add-embedded-pnt (srf pnts)
-"
-Embeds a point into a surface.
-srf	surface
-pnts	list of points
+" Embeds a point into a surface.  srf surface pnts list of points
 
 Note:   No checks are performed to determine whether the points are on the surface.
 "  
@@ -6032,11 +5797,8 @@ Note:   No checks are performed to determine whether the points are on the surfa
    srf pnts))
 
 (defun is-crv-on-srf (crv srf &optional (tol -1))
-"
-Checks if a curve is on a surface.
-crv	curve
-srf	surface
-tol	tolerance
+" Checks if a curve is on a surface.  crv curve srf surface tol
+tolerance
 
 Note:   If a negative value is passed for the tolerance, the utility will use an internally computed tolerance.
 "  
@@ -6046,9 +5808,8 @@ Note:   If a negative value is passed for the tolerance, the utility will use an
    crv srf tol))
 
 (defun register-crv (crv_name new_fam)
-"
-Register a curve (this is used by Ansys TurboGrid)
-crv_name	name of created curve
+" Register a curve (this is used by Ansys TurboGrid) crv_name name of
+created curve
 "  
   (format
    t
@@ -6056,12 +5817,9 @@ crv_name	name of created curve
    crv_name new_fam))
 
 (defun cre-midline-crv (&optional (crvs "") (toldebug 0) (crvs2 "") (fam ""))
-"
-Creates a new curve by midlining two existing curves.
-crvs	list of 2 curves
-tol	tolerance
-family	family containing curve
-return	name of created midline curve
+" Creates a new curve by midlining two existing curves.  crvs list of
+2 curves tol tolerance family family containing curve return name of
+created midline curve
 
 Notes:
 
@@ -6079,8 +5837,7 @@ Notes:
    crvs toldebug crvs2 fam))
 
 (defun get-points-from-curves (curves)
-"
-This finds all the points attached to a list of curves.
+" This finds all the points attached to a list of curves.
 "  
   (format
    t
@@ -6088,8 +5845,7 @@ This finds all the points attached to a list of curves.
    curves))
 
 (defun test-cmd (vec pnt crvs srfs)
-"
-Test routine.
+" Test routine.
 "  
   (format
    t
@@ -6098,16 +5854,11 @@ Test routine.
 
 (defun cre-crv-ell (family name center srt_pnt next_pnt
                            &optional (srtang 0) (endang 360))
-"
-Creates a bspline ellipse from center, start point, second point.
-family	family containing curve
-name	name of created curve
-center	ellipse center
-srt_pnt	crv point on ellipse major axis
-next_pnt	crv point not on major axis
-srtang	start angle (degrees)
-endang	end angle (degrees)
-return	name of created curve
+" Creates a bspline ellipse from center, start point, second point.
+family family containing curve name name of created curve center
+ellipse center srt_pnt crv point on ellipse major axis next_pnt crv
+point not on major axis srtang start angle (degrees) endang end
+angle (degrees) return name of created curve
 
 Notes:
 
@@ -6128,9 +5879,7 @@ Notes:
    family name center srt_pnt next_pnt srtang endang))
 
 (defun improve-edge (crvs)
-"
-Improves one or more edges.
-crvs	list of one or more curves
+" Improves one or more edges.  crvs list of one or more curves
 "  
   (format
    t
@@ -6138,9 +5887,7 @@ crvs	list of one or more curves
    crvs))
 
 (defun just-do-it (srfs)
-"
-Surface test routine.
-srfs	list of one or more surfaces
+" Surface test routine.  srfs list of one or more surfaces
 "  
   (format
    t
@@ -6148,8 +5895,7 @@ srfs	list of one or more surfaces
    srfs))
 
 (defun get-prism-families ()
-"
-Returns the list of families for prism meshing.
+" Returns the list of families for prism meshing.
 "  
   (format
    t
@@ -6157,8 +5903,8 @@ Returns the list of families for prism meshing.
   ))
 
 (defun set-prism-families (prism_fams &optional (excl 1))
-"
-Sets the list of families for prism meshing. If excl==1, then any previous prism families are reset.
+" Sets the list of families for prism meshing. If excl==1, then any
+previous prism families are reset.
 "  
   (format
    t
@@ -6166,8 +5912,7 @@ Sets the list of families for prism meshing. If excl==1, then any previous prism
    prism_fams excl))
 
 (defun get-prism-family-params (fam)
-"
-Returns the prism meshing parameters for a family.
+" Returns the prism meshing parameters for a family.
 "  
   (format
    t
@@ -6175,8 +5920,7 @@ Returns the prism meshing parameters for a family.
    fam))
 
 (defun set-prism-family-params (fam args)
-"
-Sets the prism meshing parameters for a family.
+" Sets the prism meshing parameters for a family.
 "  
   (format
    t
@@ -6184,8 +5928,7 @@ Sets the prism meshing parameters for a family.
    fam args))
 
 (defun create-tglib-sfbgrid (args)
-"
-Reads a TGLib size function background grid.
+" Reads a TGLib size function background grid.
 
 Usage: ic_hex_create_tglib_size_functions-tglib_sfbgrid_filefname-remove_existing-create_callbacks
 
@@ -6231,8 +5974,7 @@ vec_norm p1 	some vector normal to p1
    op args))
 
 (defun highlight (args)
-"
-Temporary change color and/or \"width\" of points, curves, surfaces
+" Temporary change color and/or \"width\" of points, curves, surfaces
 
     color white or red or green. Default color: family color.
 
@@ -6247,11 +5989,68 @@ Temporary change color and/or \"width\" of points, curves, surfaces
 
 (defun vset (args)
  "
-ic_vset options/parameters : return ic_vset -names : all names* ic_vset -names type : names of that type ic_vset -method : all methods ic_vset -method type : methods for that type ic_vset -method type method : format of the method of the type ic_vset -method name : method for that name (if not default) ic_vset -database : all names of databases with items number ic_vset -database dname : make selected database current ic_vset name : empty line if not defined**, or value (if any) ic_vset name def : for variable set new definition ic_vset -type name : type of entity ic_vset -def name : definition of entity ic_vset -info name : detailed info on entity ic_vset -settings debug : return current debug level ic_vset -settings debug value : set current debug level ic_vset -settings med_pts : current med points usage option ic_vset -settings med_pts value : set current med points usage option ic_vset -settings interrupt value : set 0/1 interrupt design creation (ic_vcreate) ic_vset -vec - vec.expr. : calculate ï¿½anonymousï¿½ vector expression ic_vset -con - con.expr. : calculate ï¿½anonymousï¿½ constraint expression ic_vset - expression : calculate expression without database modification ic_vset -delete name : delete entity ic_vset -delete all : delete all entities in active database ic_vset : (without parameters) return last result or last reason for error** * options may be abbreviated to 3 or more characters: -nam, -met, -dat, -setï¿½ ** most commands return empty line on invalid input
+ic_vset options/parameters : return
+
+ic_vset -names : all names*
+
+ic_vset -names type : names of that type
+
+ic_vset -method : all methods
+
+ic_vset -method type : methods for that type
+
+ic_vset -method type method : format of the method of the type
+
+ic_vset -method name : method for that name (if not default)
+
+ic_vset -database : all names of databases with items number
+
+ic_vset -database dname : make selected database current
+
+ic_vset name : empty line if not defined**, or value (if any)
+
+ic_vset name def : for variable set new definition
+
+ic_vset -type name : type of entity
+
+ic_vset -def name : definition of entity
+
+ic_vset -info name : detailed info on entity
+
+ic_vset -settings debug : return current debug level
+
+ic_vset -settings debug value : set current debug level
+
+ic_vset -settings med_pts : current med points usage option
+
+ic_vset -settings med_pts value : set current med points usage option
+
+ic_vset -settings interrupt value : set 0/1 interrupt design creation (ic_vcreate)
+
+ic_vset -vec - vec.expr. : calculate anonymous vector expression
+
+ic_vset -con - con.expr. : calculate anonymous constraint expression
+
+ic_vset - expression : calculate expression without database modification
+
+ic_vset -delete name : delete entity
+
+ic_vset -delete all : delete all entities in active database
+
+ic_vset : (without parameters) return last result or last reason for
+error * options may be abbreviated to 3 or more characters:
+-nam,
+-met,
+-dat,
+-set ** most commands return empty line on invalid
+
+input
 
 ic_vdefine name type method_name* definition
 
-ic_vfile read filename : read Vid file into current database ic_vfile write filename : write current database into Vid file
+ic_vfile read filename : read Vid file into current database
+
+ic_vfile write filename : write current database into Vid file
 
 ## if {$npts == 2} {set pts [list $pts]}
 "  
@@ -6264,13 +6063,18 @@ ic_vfile read filename : read Vid file into current database ic_vfile write file
  "
 Create a bspline arc.
 
-Usage: From a center point and two points: ic_curv earc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 0.0 \"\" \"\" 0}
+Usage: From a center point and two points:
+ic_curv earc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 0.0 \"\" \"\" 0}
 
-From a center point and two points and radius: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 RADIUS \"\" \"\" 0} Note: in case of a radius of 0.0, the arc radius will be calculated from the distance between CENTER_POINT and POINT_1
+From a center point and two points and radius:
 
-From start/end points: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 0.0 \"\" \"\" 1}
+ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {CENTER_POINT POINT_1 POINT_2 RADIUS \"\" \"\" 0} Note: in case of a radius of 0.0, the arc radius will be calculated from the distance between CENTER_POINT and POINT_1
 
-From start/end points and radius: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 RADIUS \"\" \"\" 1}
+From start/end points:
+ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 0.0 \"\" \"\" 1}
+
+From start/end points and radius:
+ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME {POINT_1 POINT_2 POINT_3 RADIUS \"\" \"\" 1}
 "  
   (format
    t
@@ -6280,9 +6084,14 @@ From start/end points and radius: ic_curve arc_ctr_rad PART_NAME NEW_CURVE_NAME 
 (defun get-crv-data-at-par (par crv)
 "
 Returns the curve data at a parameter.
+
 par	curve parameter
+
 crv	curve name
-return	list of 4 triplets: location, and 3 normalized vectors — tangent, direction to curve center, direction normal to curve plane
+
+return list of 4 triplets: location, and 3 normalized vectors —
+tangent, direction to curve center, direction normal to curve plane
+
 return	empty line if curve does not exist
 
 Notes:
@@ -6290,8 +6099,6 @@ Notes:
     For faceted curves result is parametric approximation of the curve.
 
     Direction to center and normal plane may be {0 0 0} if not defined, e.g. for line.
-
-
 "  
   (format
    t
