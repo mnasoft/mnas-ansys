@@ -34,6 +34,7 @@ proc ch_vis {} {
 ####################################################################################################
 
 proc remove_last {mylist} {
+    # Удаляет последний элемент из списка.
     set newlist {}
     for {set i 0} {$i < [llength $mylist] - 1 } {incr i} {
         lappend newlist [lindex $mylist $i] }
@@ -41,10 +42,12 @@ proc remove_last {mylist} {
 }
 
 proc part_path {part} {
+    # Возвращает для семейтва part путь к его родителю.
     return [join [remove_last [split $part {/}]] {/}]
 }
 
 proc ch_tan_curve {curve} {
+    # Вспомогательная функция для ch_tan перемещает кривые в семейтсво TAN.
     set x {}
     foreach surface [ic_geo_incident curve $curve 0] {
         lappend x [part_path [ic_geo_get_family surface $surface]]
@@ -55,6 +58,7 @@ proc ch_tan_curve {curve} {
 }
 
 proc ch_tan_point {point} {
+    # Вспомогательная функция для ch_tan перемещает точки в семейтсво TAN.
     set x {}
     foreach curve [ic_geo_incident point $point] {
         set family [ic_geo_get_family curve $curve]
@@ -68,6 +72,8 @@ proc ch_tan_point {point} {
 }
 
 proc ch_tan {} {
+    # Перемещает кривые, разграничивающие касательные поверхности, и
+    # точки инциндентные с этими кривыми в семейтво TAN.
     foreach curve [ic_geo_get_objects curve] {
         ch_tan_curve $curve 
     }

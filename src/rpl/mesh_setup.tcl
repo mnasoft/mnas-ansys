@@ -57,6 +57,12 @@ proc msh_fam {part {d_scale 0.25} {erat 0.0}} {
 }
 
 proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
+    # Устанавливает для всех семейств размер в соответствии с именем
+    # семейства, в котором зашифрован гидравлический диаметр.
+    # Размер для семейства определяется по формуле S=d_scale * D,
+    # где:
+    #      D - гидравлический диаметр;
+    #      d_scale - коэффициент маштабирования гидравлического диаметра.
     set x {}
     foreach surface [ic_geo_get_objects surface] {
         lappend x [ic_geo_get_family surface $surface]
