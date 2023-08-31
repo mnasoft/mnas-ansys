@@ -11,6 +11,8 @@ proc del_part {part} {
 }
 
 proc parts {types} {
+    # Возвращает список семейств, в которых
+    # присутствуют бъекты типов types.
     set x {}
     foreach type $types {
         foreach object [ic_geo_get_objects $type] {
@@ -32,3 +34,61 @@ proc del_asm {assembles} {
     }
 }
 
+# ic_geo_list_families
+# ic_geo_family_is_empty
+
+# ic_geo_family_is_empty DG1/B1/AIR_RL_OUT/N2/D_05.000
+
+
+# clear_all
+
+proc all_parents {part} {
+    set x {}
+    set p $part
+    while { $p != {} } {
+        lappend x $p    
+        set p [path_name $p]
+    }
+    return $x
+}
+
+proc not_empty_parts {} {
+    # Возвращает непустые семейства.
+    set not_empty {}
+    foreach  family [ic_geo_list_families] {
+        if {[ic_geo_family_is_empty $family] == 0} then {
+            lappend not_empty $family
+        }
+    }
+    return $not_empty
+}
+
+proc not_empty_parents {} {
+    # Возвращает непустые семейства и их родителей.
+    set x {}
+    foreach fam [not_empty_parts]  {
+        foreach fam [all_parents $fam] {
+            lappend x $fam
+        }
+    }
+    return [lsort -unique $x]
+}
+
+proc empty_parents {} {
+    # Возвращает пустые семейства и их родителей.
+    set x {}
+    set not_empty_parents [not_empty_parents]
+    foreach  family [ic_geo_list_families] {
+        if {[lsearch -exact $not_empty_parents $family] == -1} then {
+            lappend x $family
+        }
+    }
+    return [lsort -unique $x]
+}
+
+proc clear_all {} {
+    # Удаляет все неиспользуемае семейства и их предков. 
+    foreach family [empty_parents] {
+        ic_geo_delete_family $family
+    }
+}

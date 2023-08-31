@@ -41,7 +41,14 @@ proc remove_last {mylist} {
     return $newlist
 }
 
-proc part_path {part} {
+proc base_name {part} {
+    # Возвращает его базовое имя, то что находится права
+    # от превого слева разделителя "/".
+    set x [split $part {/}]
+    return [lindex  $x [expr [llength $x] - 1 ] ]
+}
+
+proc path_name {part} {
     # Возвращает для семейтва part путь к его родителю.
     return [join [remove_last [split $part {/}]] {/}]
 }
@@ -50,7 +57,7 @@ proc ch_tan_curve {curve} {
     # Вспомогательная функция для ch_tan перемещает кривые в семейтсво TAN.
     set x {}
     foreach surface [ic_geo_incident curve $curve 0] {
-        lappend x [part_path [ic_geo_get_family surface $surface]]
+        lappend x [path_name [ic_geo_get_family surface $surface]]
     }
     if { [expr [llength [lsort -unique $x]] == 1] } {
     ic_geo_set_part curve $curve TAN 0 
@@ -84,3 +91,20 @@ proc ch_tan {} {
 
 ####################################################################################################
 
+proc part_key_value {part {key D}} {
+    set x [base_name $part]
+    set d [value_key $key [lreverse [split $x {_}]]]
+    return $d
+}
+
+proc sort_by_size {} {
+    set x {}
+    foreach part [parts surface] {
+        lappend x [list [part_key_value $part] $part]
+    }
+    return [lsort -increasing -real -index 0 $x]
+}
+
+# value_key
+# base_name DG4/M0/GU/G2/07/05_D_08.000
+# foo DG4/M0/GU/G2/07/05_D_08.000

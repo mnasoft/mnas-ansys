@@ -1,6 +1,7 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/src/rpl/mesh_setup.tcl
 
 proc msh_per {{angle 0} {axis {1 0 0}} {base {0 0 0}}} {
+    # Задает периодисность
     if {$angle == 0} {
         ic_undo_group_begin
         ic_coords_dir_into_global {1 0 0} global
@@ -18,6 +19,7 @@ proc msh_per {{angle 0} {axis {1 0 0}} {base {0 0 0}}} {
 }
 
 proc msh_par {{gmax 6}} {
+    # Задает глоальные параметры сетки
     set gref 1
 #    set gmax 2
     set gnat 0
