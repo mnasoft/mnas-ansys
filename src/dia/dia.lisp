@@ -114,6 +114,7 @@
         (format stream "ic_undo_group_end~2%"))
       (progn
         (format stream "~A~%" "ic_undo_group_begin;")
+        #+nil
         (geo:set-meshing-params-global :gref gref :gmax gmax :gnatref gnatref :gnat gnat :igwall igwall :stream stream)
         (format stream "~A~2%" "ic_undo_group_end;"))
       (progn

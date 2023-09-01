@@ -1,5 +1,4 @@
-# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/src/rpl/geom.tcl
-
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/geom.tcl
 
 # ic_point {} GEOM pnt.02 {-0.407799278471 0.112614026691 0}
 

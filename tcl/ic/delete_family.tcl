@@ -1,4 +1,5 @@
-# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/src/rpl/delete_family.tcl
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/delete_family.tcl
+
 
 proc del_part {part} {
     ic_undo_group_begin

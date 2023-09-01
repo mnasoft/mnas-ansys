@@ -1,4 +1,4 @@
-# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/src/rpl/change.tcl
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/change.tcl
 
 proc ch_part {part} {
     # Перемещает точки и кривые сопряженные со всеми поверхностями,

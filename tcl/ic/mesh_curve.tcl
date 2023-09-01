@@ -1,4 +1,4 @@
-# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/src/rpl/mesh_curve.tcl
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/mesh_curve.tcl
 
 proc key_value {key list {default 0.0}} {
     # Возвращает из списка list значение,
@@ -46,6 +46,3 @@ proc curves_mesh_params {{emax_scale 1.0}} {
         curve_mesh_params $curve $emax_scale
     }
 } 
-
-
-

@@ -1,4 +1,4 @@
-# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/src/rpl/mesh_setup.tcl
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/mesh_setup.tcl
 
 proc msh_per {{angle 0} {axis {1 0 0}} {base {0 0 0}}} {
     # Задает периодисность
@@ -65,12 +65,7 @@ proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
     # где:
     #      D - гидравлический диаметр;
     #      d_scale - коэффициент маштабирования гидравлического диаметра.
-    set x {}
-    foreach surface [ic_geo_get_objects surface] {
-        lappend x [ic_geo_get_family surface $surface]
-    }
-    foreach part [lsort -unique $x] {
+    foreach part [parts surface] {
         msh_fam $part $d_scale $tetra_size_ratio
     }
 }
-
