@@ -11,7 +11,20 @@
            digits-dimension)
   (:export make-domain-interface-rotational-periodicity
            make-domain-interface-general-connection
+           mk-split
+           mk-path           
+           mk-general
            )
+  (:export good-name
+           )
+  (:export is-interface
+           is-interface-fluid
+           is-interface-fluid-general
+           is-interface-fluid-rotational
+           is-interface-fluid-rotational-l
+           is-interface-fluid-rotational-r
+           interface-fluid-rotational-pair
+   )
   (:export make-material-CH4
            make-material-CO
            make-material-CO2
@@ -142,10 +155,15 @@
   (format stream "}~%"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun good-name (name)
+  (mnas-string/translit:translit
+              name
+              :ht (mnas-string/translit:make-transliter
+                   ".-+/()"
+                   "i     ")))
 
 (defun make-domain-interface-rotational-periodicity (domain-interface i-reg-lst-1 i-reg-lst-2)
-  (let ((d-i domain-interface
-             #+nil(mnas-string/translit:translit domain-interface :ht mnas-string/translit:*cfx->en*)))
+  (let ((d-i (good-name domain-interface)))
     (format t
             "
 FLOW: Flow Analysis 1
@@ -174,8 +192,7 @@ END
             d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
 
 (defun make-domain-interface-general-connection (domain-interface i-reg-lst-1 i-reg-lst-2)
-  (let ((d-i domain-interface
-             #+nil(mnas-string/translit:translit domain-interface :ht mnas-string/translit:*cfx->en*)))
+  (let ((d-i (good-name domain-interface)))
     (format t
             "
 FLOW: Flow Analysis 1
@@ -210,6 +227,114 @@ END
 ~2%
 "
             d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
+
+(defun mk-split (name)
+  (mnas-string:split "/-" name))
+
+(defun mk-path (name)
+  (mnas-string:split "/" name))
+
+(defun mk-general (name)
+    "@b(Описание:) функция @b(mk-general) выводит на стандартный вывод
+данные на языке ccl, представляющие соединительный (генеральный)
+интерфейс. Вывод происходит, если имя @b(name) соответствует
+интерфейсу генерального типа.
+"
+  (labels (
+           (int-name (lst)
+             (format nil "~{~A~^ ~}"
+                     (subseq lst 1 (1- (length lst)))))
+           (int-1 (name)
+             (format nil "~{~A~^ ~}" (mk-split name)))
+           (int-2 (name)
+             (format nil "~{~A~^ ~} 2" (mk-split name)))
+           (is-gen (lst)
+             (when (string= "C" (first lst))
+               (notany
+                #'(lambda (el)
+                    (or (string= el "L") (string= el "R")))
+                lst))))
+    (when (is-gen (mk-path name))
+      (mnas-ansys/ccl:make-domain-interface-general-connection
+       (int-name (mk-split name))
+       (int-1 name)
+       (int-2 name)))))
+
+(defun mk-rotational (name)
+  "@b(Описание:) функция @b(mk-rotational) выводит на стандартный вывод
+данные на языке ccl, представляющие периодический интерфейс. Вывод
+происходит, если имя интерфейса соответствует левому перидическому
+типу.
+"
+  (labels ((mk-rotational-name (name)
+             (let* ((lst (mk-split name))
+                    (len (length lst)))
+               (format nil "~{~A~^ ~} LR"
+                       (loop :for i :in lst
+                             :for j :from 1
+                             :unless (or (= j 1) (= j len) (string= i "L"))
+                               :collect i))))
+           (int-1 (name)
+             (format nil "~{~A~^ ~}"
+                     (mk-split name)))
+           (int-2 (name)
+             (format nil "~{~A~^ ~}"
+                     (mk-split
+                      (interface-fluid-rotational-pair name)))))
+    (when (is-interface-fluid-rotational-l name)
+      (mnas-ansys/ccl:make-domain-interface-general-connection
+       (mk-rotational-name name)
+       (int-1 name)
+       (int-2 name)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun is-interface (name)
+  (string= "C" (first (mnas-ansys/ccl:mk-path name))))
+
+(defun is-interface-fluid (name)
+  (let ((from-to (second (mnas-ansys/ccl:mk-path name))))
+    (and (is-interface name)
+         (eq #\G (char from-to 0)))))
+
+(defun is-interface-fluid-general (name)
+  (and (is-interface-fluid name)
+       (notany
+        #'(lambda (el)
+            (or (string= el "L") (string= el "R")))
+        (mnas-ansys/ccl:mk-path name))))
+
+(defun is-interface-fluid-rotational (name)
+  (and (is-interface-fluid name)
+       (some
+        #'(lambda (el)
+            (or (string= el "L") (string= el "R")))
+        (mnas-ansys/ccl:mk-path name))))
+
+(defun is-interface-fluid-rotational-l (name)
+  (and (is-interface-fluid name)
+       (some
+        #'(lambda (el)
+            (or (string= el "L")))
+        (mnas-ansys/ccl:mk-path name))))
+
+(defun is-interface-fluid-rotational-r (name)
+  (and (is-interface-fluid name)
+       (some
+        #'(lambda (el)
+            (or (string= el "R")))
+        (mnas-ansys/ccl:mk-path name))))
+
+(defun interface-fluid-rotational-pair (name)
+  (let ((rez (cond
+               ((is-interface-fluid-rotational-l name)
+                (subst "R" "L" (mnas-ansys/ccl:mk-path name)
+                       :test #'equal))
+               ((is-interface-fluid-rotational-l name)
+                (subst "L" "R" (mnas-ansys/ccl:mk-path name)
+                       :test #'equal))
+               (t nil))))
+    (when rez (format nil "~{~A~^/~}" rez))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun make-material-CH4 ()

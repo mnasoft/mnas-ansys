@@ -696,7 +696,8 @@ Creates a new unused part or family name.
    prefix no_first_num))
 
 (defun ic-geo-delete-family (names)
-"
+  "ic_geo_delete_family names
+
 Deletes a family, or a list of families.
 "  
   (format
