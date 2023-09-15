@@ -39,13 +39,12 @@ proc fam_scale {part} {
     set len [llength $x]
     if {[string compare D [lindex $x [expr $len - 2 ]]] == 0} then {
         return [lindex $x [expr $len - 1 ]] } else {
-            return 0
-        }
-}
+            return 0 } }
 
 proc msh_fam {part {d_scale 0.25} {erat 0.0}} {
     ic_geo_set_family_params $part \
-        no_crv_inf prism 0 \
+        no_crv_inf \
+        prism 0 \
         emax [expr $d_scale * [fam_scale $part]] \
         ehgt 0.0 \
         hrat 0 \
@@ -55,8 +54,7 @@ proc msh_fam {part {d_scale 0.25} {erat 0.0}} {
         emin 0.0 \
         edev 0.0 \
         split_wall 0 \
-        internal_wall 0
-}
+        internal_wall 0 }
 
 proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
     # Устанавливает для всех семейств размер в соответствии с именем
@@ -66,6 +64,4 @@ proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
     #      D - гидравлический диаметр;
     #      d_scale - коэффициент маштабирования гидравлического диаметра.
     foreach part [parts surface] {
-        msh_fam $part $d_scale $tetra_size_ratio
-    }
-}
+        msh_fam $part $d_scale $tetra_size_ratio } }

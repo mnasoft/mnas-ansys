@@ -23,6 +23,14 @@ proc parts {types} {
     return [lsort -unique $x]
 }
 
+proc parts_print {types} {
+    # Печатает в консоль tcl имена частей в которых есть объекты типа
+    # types.
+    mess "\n\n\n(defparameter *$types*\n'("
+    foreach i [parts $types] {
+        mess "\"$i\"\n" }
+    mess "))\n\n\n"}
+
 # append [parts surface] [parts curve] [parts point]
 
 proc del_asm {assembles} {

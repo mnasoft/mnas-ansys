@@ -12,8 +12,11 @@
   (:export make-domain-interface-rotational-periodicity
            make-domain-interface-general-connection
            mk-split
-           mk-path           
+           mk-path
            mk-general
+           )
+  (:export mk-general-interfaces
+           mk-rotational-interfaces
            )
   (:export good-name
            )
@@ -24,7 +27,14 @@
            is-interface-fluid-rotational-l
            is-interface-fluid-rotational-r
            interface-fluid-rotational-pair
-   )
+           )
+  (:export boundares
+           boundary-name
+           name-location
+           mk-boundary-inlet
+           mk-boundary-outlet-mfr
+           mk-boundary-outlet-ast
+           )
   (:export make-material-CH4
            make-material-CO
            make-material-CO2
@@ -165,8 +175,7 @@
 (defun make-domain-interface-rotational-periodicity (domain-interface i-reg-lst-1 i-reg-lst-2)
   (let ((d-i (good-name domain-interface)))
     (format t
-            "
-FLOW: Flow Analysis 1
+            "FLOW: Flow Analysis 1
   &replace DOMAIN INTERFACE: ~A
     Boundary List1 = ~A Side 1
     Boundary List2 = ~A Side 2
@@ -186,16 +195,13 @@ FLOW: Flow Analysis 1
       Option = Automatic
     END
   END
-END
-~2%
-"
+END~%"
             d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
 
 (defun make-domain-interface-general-connection (domain-interface i-reg-lst-1 i-reg-lst-2)
   (let ((d-i (good-name domain-interface)))
     (format t
-            "
-FLOW: Flow Analysis 1
+            "FLOW: Flow Analysis 1
   &replace DOMAIN INTERFACE: ~A
     Boundary List1 = ~A Side 1
     Boundary List2 = ~A Side 2
@@ -223,9 +229,7 @@ FLOW: Flow Analysis 1
       Option = Automatic
     END
   END
-END
-~2%
-"
+END~%"
             d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
 
 (defun mk-split (name)
@@ -233,59 +237,6 @@ END
 
 (defun mk-path (name)
   (mnas-string:split "/" name))
-
-(defun mk-general (name)
-    "@b(Описание:) функция @b(mk-general) выводит на стандартный вывод
-данные на языке ccl, представляющие соединительный (генеральный)
-интерфейс. Вывод происходит, если имя @b(name) соответствует
-интерфейсу генерального типа.
-"
-  (labels (
-           (int-name (lst)
-             (format nil "~{~A~^ ~}"
-                     (subseq lst 1 (1- (length lst)))))
-           (int-1 (name)
-             (format nil "~{~A~^ ~}" (mk-split name)))
-           (int-2 (name)
-             (format nil "~{~A~^ ~} 2" (mk-split name)))
-           (is-gen (lst)
-             (when (string= "C" (first lst))
-               (notany
-                #'(lambda (el)
-                    (or (string= el "L") (string= el "R")))
-                lst))))
-    (when (is-gen (mk-path name))
-      (mnas-ansys/ccl:make-domain-interface-general-connection
-       (int-name (mk-split name))
-       (int-1 name)
-       (int-2 name)))))
-
-(defun mk-rotational (name)
-  "@b(Описание:) функция @b(mk-rotational) выводит на стандартный вывод
-данные на языке ccl, представляющие периодический интерфейс. Вывод
-происходит, если имя интерфейса соответствует левому перидическому
-типу.
-"
-  (labels ((mk-rotational-name (name)
-             (let* ((lst (mk-split name))
-                    (len (length lst)))
-               (format nil "~{~A~^ ~} LR"
-                       (loop :for i :in lst
-                             :for j :from 1
-                             :unless (or (= j 1) (= j len) (string= i "L"))
-                               :collect i))))
-           (int-1 (name)
-             (format nil "~{~A~^ ~}"
-                     (mk-split name)))
-           (int-2 (name)
-             (format nil "~{~A~^ ~}"
-                     (mk-split
-                      (interface-fluid-rotational-pair name)))))
-    (when (is-interface-fluid-rotational-l name)
-      (mnas-ansys/ccl:make-domain-interface-general-connection
-       (mk-rotational-name name)
-       (int-1 name)
-       (int-2 name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -337,6 +288,235 @@ END
     (when rez (format nil "~{~A~^/~}" rez))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun is-boundary (name)
+  (let ((path (mnas-ansys/ccl:mk-path name)))
+    (if (and (stringp (first path))
+             (stringp (second path))
+             (cl-ppcre:scan "DG[1-9]" (first path))
+             (cl-ppcre:scan "B[1-9]" (second path)))
+        t)))
+
+(defun select-if (predicat sequience)
+    (loop :for name :in sequience
+        :when (funcall predicat name)
+          :collect name))
+
+(defun boundares (surface)
+  (select-if #'is-boundary surface))
+
+
+(defun boundary-name (name)
+  (format nil "B ~A" (third (mk-path name))))
+
+(defun name-location (name)
+  (format nil "~{~A~^ ~}" (mk-path name)))
+
+(defun mk-boundary-inlet (name
+                          mfr
+                          T-Tem
+                          &key
+                            (mfr-dim "kg s^-1")
+                            (T-Tem-dim "C")
+                            (CH4-fr 0.0)
+                            (CO-fr 0.0)
+                            (CO2-fr 0.0)
+                            (H2O-fr 0.0)
+                            (NO-fr 0.0)
+                            (O2-fr 0.0)
+                            (T-type "Total"))
+  "@b(Описание:) функция @b(mk-boundary-inlet)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mk-boundary-input \"DG1 B1 AIR_IN D_00.000\" 2.855695 406)
+@end(code)
+"
+  (labels ((component (name fraction)
+             (format t "~%~7T COMPONENT: ~A~%~9T Mass Fraction = ~A~%~9T Option = Mass Fraction~%~7T END" name fraction))
+           )
+
+    (format t "FLOW: Flow Analysis 1
+~1T DOMAIN: D1
+~3T &replace BOUNDARY: ~A
+~5T Boundary Type = INLET
+~5T Interface Boundary = Off
+~5T Location = ~A
+~5T BOUNDARY CONDITIONS:"
+            (boundary-name name)
+            (name-location name))
+    (component "CH4" CH4-fr)
+    (component "CO"  CO-fr)
+    (component "CO2" CO2-fr)
+    (component "H2O" H2O-fr)
+    (component "NO"  NO-fr)
+    (component "O2"  O2-fr)
+    (format t "
+        FLOW DIRECTION: 
+          Option = Normal to Boundary Condition
+        END
+        FLOW REGIME: 
+          Option = Subsonic
+        END")
+    (format t "
+        HEAT TRANSFER: 
+          Option = ~A Temperature
+          ~A Temperature = ~A [~A]
+        END" T-type T-type T-Tem T-Tem-dim)
+    (format t     "
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = ~A [~A]
+          Option = Mass Flow Rate
+        END" mfr mfr-dim)
+    (format t     "
+        TURBULENCE: 
+          Option = Medium Intensity and Eddy Viscosity Ratio
+        END
+      END
+    END
+  END
+END~%")))
+
+(defun mk-boundary-outlet-mfr (name mft
+                           &key
+                             (mfr-dim "kg s^-1"))
+  "@b(Описание:) функция @b(mk-boundary-outlet)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mk-boundary-outlet \"DG1/B1/AIR_RL_OUT/D_05.000\" 0.185745 )
+@end(code)
+
+"
+  (format t "FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: ~A
+      Boundary Type = OUTLET
+      Interface Boundary = Off
+      Location = ~A
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = ~A [~A]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END~%"
+          (boundary-name name)
+          (name-location name)
+          mft
+          mfr-dim))
+
+(defun mk-boundary-outlet-ast (name pr-r
+                               &key
+                                 (pr-dim "kPa")
+                                 (ppb 0.05))
+  (format t "FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: ~A
+      Boundary Type = OUTLET
+      Interface Boundary = Off
+      Location = ~A
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Option = Average Static Pressure
+          Pressure Profile Blend = ~A
+          Relative Pressure = ~A [~A]
+        END
+        PRESSURE AVERAGING: 
+          Option = Average Over Whole Outlet
+        END
+      END
+    END
+  END
+END~%" 
+          (boundary-name name)
+          (name-location name)
+          ppb
+          pr-r pr-dim))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun mk-general (name)
+    "@b(Описание:) функция @b(mk-general) выводит на стандартный вывод
+данные на языке ccl, представляющие соединительный (генеральный)
+интерфейс. Вывод происходит, если имя @b(name) соответствует
+интерфейсу генерального типа.
+"
+  (labels (
+           (int-name (lst)
+             (format nil "~{~A~^ ~}"
+                     (subseq lst 1 (1- (length lst)))))
+           (int-1 (name)
+             (format nil "~{~A~^ ~}" (mk-split name)))
+           (int-2 (name)
+             (format nil "~{~A~^ ~} 2" (mk-split name)))
+           (is-gen (lst)
+             (when (string= "C" (first lst))
+               (notany
+                #'(lambda (el)
+                    (or (string= el "L") (string= el "R")))
+                lst))))
+    (when (is-gen (mk-path name))
+      (mnas-ansys/ccl:make-domain-interface-general-connection
+       (int-name (mk-split name))
+       (int-1 name)
+       (int-2 name)))))
+
+(defun mk-general-interfaces (surface)
+  "@b(Описание:) функция @b(mk-general-interfaces) выводит на
+стандартный вывод определения на языке ccl для генеральных
+интерфейсов.
+"
+  (loop :for name :in surface :do
+    (if (is-interface-fluid-general name)
+        (mk-general name))))
+
+(defun mk-rotational (name)
+  "@b(Описание:) функция @b(mk-rotational) выводит на стандартный вывод
+данные на языке ccl, представляющие периодический интерфейс. Вывод
+происходит, если имя интерфейса соответствует левому перидическому
+типу.
+"
+  (labels ((mk-rotational-name (name)
+             (let* ((lst (mk-split name))
+                    (len (length lst)))
+               (format nil "~{~A~^ ~} LR"
+                       (loop :for i :in lst
+                             :for j :from 1
+                             :unless (or (= j 1) (= j len) (string= i "L"))
+                               :collect i))))
+           (int-1 (name)
+             (format nil "~{~A~^ ~}"
+                     (mk-split name)))
+           (int-2 (name)
+             (format nil "~{~A~^ ~}"
+                     (mk-split
+                      (interface-fluid-rotational-pair name)))))
+    (when (is-interface-fluid-rotational-l name)
+      (mnas-ansys/ccl:make-domain-interface-rotational-periodicity
+       (mk-rotational-name name)
+       (int-1 name)
+       (int-2 name)))))
+
+(defun mk-rotational-interfaces (surface)
+  "@b(Описание:) функция @b(mk-rotational-interfaces) выводит на
+стандартный вывод определения на языке ccl для генеральных
+интерфейсов.
+"
+  (loop :for name :in surface :do
+    (if (is-interface-fluid-rotational-l name)
+        (mk-rotational name))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun make-material-CH4 ()
   (format t "
 LIBRARY: 

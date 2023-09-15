@@ -364,6 +364,28 @@
            <table>-table-export-trailing-separators
            <table>-object-report-options
            <table>-table-cells)
+  (:export <monitor-location-control>
+           <monitor-location-control>-domain-name
+           <monitor-location-control>-interpolation-type
+           )
+  (:export <position-update-frequency>
+           <position-update-frequency>-option
+           )
+  (:export <monitor-point>
+           <monitor-point>-cartesian-coordinates
+           <monitor-point>-coord-frame
+           <monitor-point>-option
+           <monitor-point>-output-variables-list
+           <monitor-point>-monitor-location-control
+           <monitor-point>-position-update-frequency
+           )
+  (:export <monitor-objects>
+           <monitor-objects>-objects)
+  (:export <output-control>
+           <output-control>-monitor-objects)
+  (:export <flow>
+           <flow>-output-control)
+  
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -2264,3 +2286,87 @@
       (<table-cells>-cells (<table>-table-cells *table*)))
 @end(code)
 "))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <monitor-location-control> (<obj>)
+  ((domain-name
+    :accessor <monitor-location-control>-domain-name
+    :initform "D1"
+    :initarg :domain-name
+    :documentation "domain-name")
+   (interpolation-type
+    :accessor <monitor-location-control>-interpolation-type
+    :initform "Nearest Vertex"
+    :initarg :interpolation-type
+    :documentation "interpolation-type")))
+
+(defclass <position-update-frequency> (<obj>)
+  ((option
+    :accessor <position-update-frequency>-option
+    :initform "Initial Mesh Only"
+    :initarg :option
+    :documentation "option")))
+
+(defclass <monitor-point> (<obj>)
+  ((cartesian-coordinates
+    :accessor <monitor-point>-cartesian-coordinates
+    :initform '("0.0 [mm]" "0.0 [mm]"  "0.0 [mm]")
+    :initarg :cartesian-coordinates
+    :documentation "cartesian-coordinates")
+   (coord-frame
+    :accessor <monitor-point>-coord-frame
+    :initform "Coord 0"
+    :initarg :coord-frame
+    :documentation "coord-frame")
+   (option
+    :accessor <monitor-point>-option
+    :initform "Cartesian Coordinates"
+    :initarg :option
+    :documentation "option")
+   (output-variables-list
+    :accessor <monitor-point>-output-variables-list
+    :initform "Total Pressure"
+    :initarg :output-variables-list
+    :documentation "output-variables-list")
+   (monitor-location-control
+    :accessor <monitor-point>-monitor-location-control
+    :initform (make-instance '<monitor-location-control> :name "")
+    :initarg :monitor-location-control
+    :documentation "monitor-location-control")
+   (position-update-frequency
+    :accessor <monitor-point>-position-update-frequency
+    :initform (make-instance '<position-update-frequency> :name "")
+    :initarg :position-update-frequency
+    :documentation "position-update-frequency")))
+
+(defclass <monitor-objects> (<obj>)
+  ((objects
+    :accessor <monitor-objects>-objects
+    :initform nil
+    :initarg :objects
+    :documentation "objects")))
+
+(defmethod print-object :around ((x <monitor-objects>) s)
+  (format s (format nil "~~~At~~A: ~%" (tabs)) "MONITOR OBJECTS")
+  (tabs-incf)
+  (loop :for i :in (<monitor-objects>-objects x) :do
+    (format s (format nil "~~~At~~A~%" (tabs)) i))
+  (tabs-decf)
+  (format s (format nil "~~~At~~A~%" (tabs)) "END"))
+
+(defclass <output-control> (<obj>)
+  ((monitor-objects
+    :accessor <output-control>-monitor-objects
+    :initform (make-instance '<monitor-objects>)
+    :initarg :objects
+    :documentation "monitor-objects")))
+
+(defclass <flow> (<obj>)
+  ((output-control
+    :accessor <flow>-output-control
+    :initform (make-instance '<output-control> :name "")
+    :initarg :output-control
+    :documentation "output-control")))
+
+

@@ -48,3 +48,25 @@ proc curves_mesh_params {{emax_scale 1.0}} {
     # тетраэдрической ячееки для кривой.
     foreach curve [ic_geo_get_objects curve] {
         curve_mesh_params $curve $emax_scale }} 
+
+proc topo {} {
+    ic_undo_group_begin
+    ic_geo_delete_unattached [ic_geo_non_empty_families] 0 1
+    ic_build_topo 0.05 -angle 30 [ic_geo_non_empty_families]
+    ic_geo_delete_unattached [ic_geo_non_empty_families]
+    ic_undo_group_end }
+
+proc msh {size {angle 0} {d_scale 0.25} {tetra_size_ratio 0.0}} {
+    ch_all;   # Перенос кривых в семейства ицидентных с ними поверхностей
+    clear_all;                     # Очистка неиспользуемые семейств    
+    ch_tan;                
+    
+    # Настройка параметров сетки. Начало    
+    msh_per $angle;                # С периодичностью
+    msh_par $size;                 # Максимальный размер  
+    msh_prt $d_scale $tetra_size_ratio; # Настройка размеров для семейств    
+    # Настройка параметров сетки. Конец
+    curves_mesh_params;            # Устанавливаем параметры для кривых
+    # Настройка размеров для семейств. Повтор, но он нужен
+    msh_prt $d_scale $tetra_size_ratio; 
+}
