@@ -68,86 +68,24 @@ proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
 
 ####################################################################################################
 
-proc get_array_value_if_index_exist {arrName index} {
-    # Возвращает значение, связанное с индексом массава, если индекс
-    # есть в перечне индексов. Если индекс отвутствует возвращается
-    # пустой список.
-    upvar $arrName arr
-    if { [lsearch -exact [array names arr] $index] != -1 } {
-        return $arr($index) 
-    } else {
-        return {}
-    }
+foreach {key des value type lbl entry} $dlg_msh_param_data {
+    set ob_name($key) $des
 }
 
-proc split_basename {name} {
-    return [lreverse [split $name _]]}
+part_name_prop  01_D_0.0_S_1.23
+part_name_prefix 01_D_0.0_S_1.23
+make_name 01_D_0.0_S_1.23
 
-proc part_name_prop {name} {
-    set rez {}
-    foreach {val name} [split_basename $name] {
-        if { $name != {} } {
-            lappend rez $name
-            lappend rez $val } }
-    return $rez }
-
-proc make_name {name} {
-    global ob_name ob_value ob_list
-    set props $name
-    array set arr $props
-    set x {}
-    foreach index $ob_list {
-        set name $ob_name($index)
-        if { [get_array_value_if_index_exist arr $name] != {} } {
-            lappend x $name
-            lappend x $arr($name) } }
-    return $x }
-
-proc msh_prt_new {{params {dhir 00.000 scale 1.0}}} {
-    global ob_name ob_value arr
-     foreach {name val} $params {
-         set arr($ob_name($name)) $val
-     }
-}
-
-proc remove_last {mylist} {
-    # Удаляет последний элемент из списка.
-    set newlist {}
-    for {set i 0} {$i < [llength $mylist] - 1 } {incr i} {
-        lappend newlist [lindex $mylist $i] }
-    return $newlist
-}
-
-####################################################################################################
-
-proc base_name {part} {
-    # Возвращает его базовое имя, то что находится права
-    # от превого слева разделителя "/".
-    set x [split $part {/}]
-    return [lindex  $x [expr [llength $x] - 1 ] ]
-}
-
-proc path_name {part} {
-    # Возвращает для семейтва part путь к его родителю.
-    return [join [remove_last [split $part {/}]] {/}]
-}
-
-proc ch_tan_curve {curve} {
-    # Вспомогательная функция для ch_tan перемещает кривые в семейтсво TAN.
-    set x {}
-    foreach surface [ic_geo_incident curve $curve 0] {
-        lappend x [path_name [ic_geo_get_family surface $surface]]
-    }
-    if { [expr [llength [lsort -unique $x]] == 1] } {
-    ic_geo_set_part curve $curve TAN 0 
-    }
-}
-
-#set surfaces [ic_geo_list_visible_objects surface]
-
-#foreach surface $surfaces {
-#    set part [ic_geo_get_family surface $surface]
-#    set newpart [join [lreplace [split $part {/}] 0 0 DG$dom_suffix] {/}]
-#    lappend x $newpart
-#    ic_geo_set_part surface $surface $newpart 0
-#}
+mess [array get ob_name] \n
+scale S
+edev MD
+hrat HR
+d_hid D
+ehgt H
+ewid TW
+emin MSL
+emax MS
+split_wall SW
+nlay NL
+erat TSR
+internal_wall IW
