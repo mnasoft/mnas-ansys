@@ -1,10 +1,11 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/load_all.tcl
 
 # Глобальная переменная dlg_msh_param_data содержит записи,
 # характеризующие параметры сетки и данные для настройки
 # диалога. Каждая запись состоит из:
 # 1. ключа, используемого в качестве метки;
-# 2. обозначения параметра в имени;
+# 2. обозначения параметра в имени части;
 # 3. значения по умолчанию;
 # 4. типа содержимого окна редактирования (entry);
 # 5. координаты расположения метки (label);
@@ -25,12 +26,13 @@ set dlg_msh_param_data {
 }
 
 # Глобальная переменная ob_name содержит массив, у которого:
-
 # - ключами являются ключи из записей, находящихся в
-# dlg_msh_param_data;
-# - значениями являются 
+# глобальной переменной dlg_msh_param_data;
+# - значениями являются обозначения параметра в имени части;
+# Например scale - ключ S - значение.
 
-scale S
+# Глобальная переменная ob_list содержит упорядоченный список ключей
+# из переменной dlg_msh_param_data
 proc dlg_msh_init {} {
     global dlg_msh_param_data var_prefix
     global ob_name ob_value ob_list
@@ -62,7 +64,7 @@ proc dlg_msh {} {
         set s $d.fr_0
         form_label $s.l_select "Select" {0 0}
         form_button_bitmap $s.b_select @$guibase_dir/goup.xbm \
-            { dlg_msh_select } {0 1}
+            { dlg_msh_setup [select_by_type] } {0 1}
         form_entry $s.e_select var_surfaces string {0 2}
         
         form_label $s.l_path "Path" {1 0}
@@ -108,9 +110,14 @@ proc get_array_value_if_index_exist {arrName index} {
     } else {
         return {} } }
 
+# Функция split_basename разделяет базовое имя на составляющие.
+# Пример использования:
+# split_basename OUTLET_D_0.33 -> 0.33 D OUTLET
 proc split_basename {name} {
     return [lreverse [split $name _]]}
 
+# Пример использования:
+# part_name_prop OUTLET_D_0.33 -> D 0.33
 proc part_name_prop {name} {
     set rez {}
     foreach {val name} [split_basename $name] {
@@ -119,6 +126,10 @@ proc part_name_prop {name} {
             lappend rez $val } }
     return $rez }
 
+# Функция part_name_prefix возвращает список состоящий из пар -
+# обозначение и значение.
+# Пример использования:
+# part_name_prop OUTLET_D_0.33 -> Result: D 0.33
 proc part_name_prefix {name} {
     set rez {}
     foreach {val name} [split_basename $name] {
@@ -126,6 +137,7 @@ proc part_name_prefix {name} {
             lappend rez $val } }
     return $rez }
 
+# Функция make_name пока не используется и не готова.
 proc make_name {name} {
     global ob_name ob_value ob_list
     set props $name
@@ -145,27 +157,34 @@ proc msh_prt_new {{params {dhir 00.000 scale 1.0}}} {
 
 ####################################################################################################
 
+# Функция подсвечивает (при on=1) или снимает подсвечивание (при on=0)
+# с объектов с именами names, имеющих тип type.
+# Пример использования:
+# highlight surface $surfaces 0
 proc highlight {type names on} {
-    # Подсвечивает (при on=1) или снимает подсвечивание (при on=0) с
-    # объектов с именами names, имеющих тип type.
     ic_highlight 
     ic_image delete preview
     ic_show_geo_selected $type $names $on }
 
-proc dlg_msh_select {} {
-    global var_surfaces var_path var_name_prefix var_name
-    set surfaces [geo_select surface]
-    highlight surface $surfaces 0
-    set x {}
-    mess $surfaces
-    set var_surfaces $surfaces
-    set var_path [path_name [ic_geo_get_family surface $surfaces] ]
-    set var_name_prefix \
-        [part_name_prefix \
-             [base_name \
-                  [ic_geo_get_family surface $surfaces] ] ]
+# Функция select_by_type позволяет сделать интерактивно выбрать оъекты
+# определенного типа (по умолчанию - поверхности). Возвращает имена
+# выбранных объектов.
+# Пример использования:
+# select_by_type -> Result: srf.04.cut.0.0 srf.02.cut.0.0
+proc select_by_type {{type surface}} {
+    set obj [geo_select $type]
+    highlight $type $obj 0
+    return $obj}
 
-    return  $surfaces }
+proc dlg_msh_setup {surfaces} {
+    global var_surfaces var_path var_name_prefix var_name
+    set surface [lindex $surfaces 0]
+    set family  [ic_geo_get_family surface $surface]
+    set base_name [base_name $family ]
+    set var_surfaces    $surfaces
+    set var_path        [path_name [ic_geo_get_family surface $surface] ]
+    set var_name_prefix [part_name_prefix $base_name ]
+    set var_name        $base_name }
 
 proc dlg_msh_prepare {surface} {
     global dlg_msh_param_data
@@ -188,5 +207,3 @@ proc dlg_msh_ok_action {} {
 # foreach surface $surfaces {lappend x [ic_geo_get_family surface $surface]}
 dlg_msh_init
 dlg_msh
-
-
