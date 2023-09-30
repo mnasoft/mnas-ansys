@@ -39,13 +39,12 @@ proc fam_scale {part} {
     set len [llength $x]
     if {[string compare D [lindex $x [expr $len - 2 ]]] == 0} then {
         return [lindex $x [expr $len - 1 ]] } else {
-            return 0
-        }
-}
+            return 0 } }
 
 proc msh_fam {part {d_scale 0.25} {erat 0.0}} {
     ic_geo_set_family_params $part \
-        no_crv_inf prism 0 \
+        no_crv_inf \
+        prism 0 \
         emax [expr $d_scale * [fam_scale $part]] \
         ehgt 0.0 \
         hrat 0 \
@@ -55,8 +54,7 @@ proc msh_fam {part {d_scale 0.25} {erat 0.0}} {
         emin 0.0 \
         edev 0.0 \
         split_wall 0 \
-        internal_wall 0
-}
+        internal_wall 0 }
 
 proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
     # Устанавливает для всех семейств размер в соответствии с именем
@@ -66,6 +64,28 @@ proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
     #      D - гидравлический диаметр;
     #      d_scale - коэффициент маштабирования гидравлического диаметра.
     foreach part [parts surface] {
-        msh_fam $part $d_scale $tetra_size_ratio
-    }
+        msh_fam $part $d_scale $tetra_size_ratio } }
+
+####################################################################################################
+
+foreach {key des value type lbl entry} $dlg_msh_param_data {
+    set ob_name($key) $des
 }
+
+part_name_prop  01_D_0.0_S_1.23
+part_name_prefix 01_D_0.0_S_1.23
+make_name 01_D_0.0_S_1.23
+
+mess [array get ob_name] \n
+scale S
+edev MD
+hrat HR
+d_hid D
+ehgt H
+ewid TW
+emin MSL
+emax MS
+split_wall SW
+nlay NL
+erat TSR
+internal_wall IW

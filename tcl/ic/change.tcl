@@ -35,11 +35,14 @@ proc ch_vis {} {
 
 proc remove_last {mylist} {
     # Удаляет последний элемент из списка.
-    set newlist {}
-    for {set i 0} {$i < [llength $mylist] - 1 } {incr i} {
-        lappend newlist [lindex $mylist $i] }
-    return $newlist
+    set len [llength $mylist]
+    incr len -1
+    return [lreplace $mylist $len $len]
 }
+
+proc remove_first {mylist} {
+    # Удаляет последний элемент из списка.
+    return [lreplace $mylist 0 0] }
 
 proc base_name {part} {
     # Возвращает его базовое имя, то что находится права
@@ -50,19 +53,17 @@ proc base_name {part} {
 
 proc path_name {part} {
     # Возвращает для семейтва part путь к его родителю.
-    return [join [remove_last [split $part {/}]] {/}]
-}
+    return [join [remove_last [split $part {/}]] {/}] }
 
 proc ch_tan_curve {curve} {
-    # Вспомогательная функция для ch_tan перемещает кривые в семейтсво TAN.
+    # Вспомогательная функция для ch_tan перемещает кривые в семейтсво
+    # TAN.
     set x {}
     foreach surface [ic_geo_incident curve $curve 0] {
         lappend x [path_name [ic_geo_get_family surface $surface]]
     }
     if { [expr [llength [lsort -unique $x]] == 1] } {
-    ic_geo_set_part curve $curve TAN 0 
-    }
-}
+        ic_geo_set_part curve $curve TAN 0 } }
 
 proc ch_tan_point {point} {
     # Вспомогательная функция для ch_tan перемещает точки в семейтсво TAN.
@@ -70,13 +71,9 @@ proc ch_tan_point {point} {
     foreach curve [ic_geo_incident point $point] {
         set family [ic_geo_get_family curve $curve]
         if {[string compare $family TAN] != 0} {
-            lappend x $family
-        }
-    }
+            lappend x $family } }
     if { [expr [llength $x] <= 2]} {
-        return [ic_geo_set_part point $point TAN 0]
-    }
-}
+        return [ic_geo_set_part point $point TAN 0] } }
 
 proc ch_tan {} {
     # Перемещает кривые, разграничивающие касательные поверхности, и
@@ -85,9 +82,7 @@ proc ch_tan {} {
         ch_tan_curve $curve 
     }
     foreach point [ic_geo_get_objects point] {
-        ch_tan_point $point
-    }
-}
+        ch_tan_point $point } }
 
 ####################################################################################################
 
