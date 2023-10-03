@@ -67,25 +67,3 @@ proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
         msh_fam $part $d_scale $tetra_size_ratio } }
 
 ####################################################################################################
-
-foreach {key des value type lbl entry} $dlg_msh_param_data {
-    set ob_name($key) $des
-}
-
-part_name_prop  01_D_0.0_S_1.23
-part_name_prefix 01_D_0.0_S_1.23
-make_name 01_D_0.0_S_1.23
-
-mess [array get ob_name] \n
-scale S
-edev MD
-hrat HR
-d_hid D
-ehgt H
-ewid TW
-emin MSL
-emax MS
-split_wall SW
-nlay NL
-erat TSR
-internal_wall IW

@@ -1,17 +1,17 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/change.tcl
 
+# Перемещает точки и кривые сопряженные со всеми поверхностями,
+# находящимися в семействе part в это семейство.
 proc ch_part {part} {
-    # Перемещает точки и кривые сопряженные со всеми поверхностями,
-    # находящимися в семействе part в это семейство.
   set surfaces [ic_geo_get_objects surface $part]
   foreach curve [ic_geo_boundary surface $surfaces 0 0 1] {
     ic_geo_set_part curve $curve $part 0
     foreach point [ic_geo_boundary curve $curve 0 0 1] {
       ic_geo_set_part point $point $part 0 } } }
 
+# Перемещает точки и кривые сопряженные со всеми поверхностями,
+#  в соответствующие им семейства.
 proc ch_all {} {
-    # Перемещает точки и кривые сопряженные со всеми поверхностями,
-    #  в соответствующие им семейства.
     set surfaces [ic_geo_get_objects surface]
     foreach surface $surfaces {
         set part [ic_geo_get_family surface $surface]
@@ -20,9 +20,9 @@ proc ch_all {} {
             foreach point [ic_geo_boundary curve $curve 0 0 1] {
                 ic_geo_set_part point $point $part 0 } } } }
 
+# Перемещает точки и кривые сопряженные с видимыми поверхностями,
+# в соответствующие им семейства.
 proc ch_vis {} {
-    # Перемещает точки и кривые сопряженные с видимыми поверхностями,
-    # в соответствующие им семейства.
     set surfaces [ic_geo_list_visible_objects surface]
     foreach surface $surfaces {
         set part [ic_geo_get_family surface $surface]
@@ -33,31 +33,31 @@ proc ch_vis {} {
 
 ####################################################################################################
 
+# Удаляет последний элемент из списка.
 proc remove_last {mylist} {
-    # Удаляет последний элемент из списка.
     set len [llength $mylist]
     incr len -1
     return [lreplace $mylist $len $len]
 }
 
+# Удаляет последний элемент из списка.
 proc remove_first {mylist} {
-    # Удаляет последний элемент из списка.
     return [lreplace $mylist 0 0] }
 
+# Возвращает его базовое имя, то что находится права
+# от превого слева разделителя "/".
 proc base_name {part} {
-    # Возвращает его базовое имя, то что находится права
-    # от превого слева разделителя "/".
     set x [split $part {/}]
     return [lindex  $x [expr [llength $x] - 1 ] ]
 }
 
+# Возвращает для семейтва part путь к его родителю.
 proc path_name {part} {
-    # Возвращает для семейтва part путь к его родителю.
     return [join [remove_last [split $part {/}]] {/}] }
 
+# Вспомогательная функция для ch_tan перемещает кривые в семейтсво
+# TAN.
 proc ch_tan_curve {curve} {
-    # Вспомогательная функция для ch_tan перемещает кривые в семейтсво
-    # TAN.
     set x {}
     foreach surface [ic_geo_incident curve $curve 0] {
         lappend x [path_name [ic_geo_get_family surface $surface]]
@@ -65,8 +65,8 @@ proc ch_tan_curve {curve} {
     if { [expr [llength [lsort -unique $x]] == 1] } {
         ic_geo_set_part curve $curve TAN 0 } }
 
+# Вспомогательная функция для ch_tan перемещает точки в семейтсво TAN.
 proc ch_tan_point {point} {
-    # Вспомогательная функция для ch_tan перемещает точки в семейтсво TAN.
     set x {}
     foreach curve [ic_geo_incident point $point] {
         set family [ic_geo_get_family curve $curve]
@@ -89,8 +89,7 @@ proc ch_tan {} {
 proc part_key_value {part {key D}} {
     set x [base_name $part]
     set d [value_key $key [lreverse [split $x {_}]]]
-    return $d
-}
+    return $d }
 
 proc sort_by_size {} {
     set x {}

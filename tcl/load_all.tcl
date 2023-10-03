@@ -9,4 +9,4 @@ proc load_all {} {
     }
 }
 
-# load_all
+load_all
