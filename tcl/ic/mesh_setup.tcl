@@ -2,7 +2,7 @@
 mess "source mesh_setup.tcl START... \n"
 
 proc msh_per {{angle 0} {axis {1 0 0}} {base {0 0 0}}} {
-    # Задает периодисность
+    # Задает периодичность
     if {$angle == 0} {
         ic_undo_group_begin
         ic_coords_dir_into_global {1 0 0} global

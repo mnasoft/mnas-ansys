@@ -1,6 +1,31 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
 mess "source dlg_msh.tcl START... \n"
 
+set file_proc "
+ l_dlg_msh
+ dlg_msh
+ dlg_msh_init
+ dlg_msh_move_action
+ dlg_msh_setup
+ dlg_msh_prepare
+ highlight
+ select_by_type
+ dlg_msh_print_action
+ dlg_msh_fam_params_action
+ make_basename
+ dlg_msh_rename_action
+ split_basename
+ part_name_prop
+
+ make_keys
+ part_name_prefix
+
+
+ get_array_value_if_index_exist
+ make_name
+ msh_prt_new
+"
+
 # Функция осуществляет загрузку настоящего файла.
 proc l_dlg_msh {} {
     source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
@@ -28,18 +53,18 @@ set dlg_msh_prefix dlg_msh; lappend global_vars dlg_msh_prefix
 # 6. расположения entry.
 global dlg_msh_param_data
 set dlg_msh_param_data {
-    d_hid          D   0.0 float     {0 0}  {0 1}
-    scale          S   0.0 float     {1 0}  {1 1}
-    emax           MS  0.0 float     {2 0}  {2 1}
-    ehgt           H   0.0 float     {3 0}  {3 1}
-    hrat           HR  0.0 float     {4 0}  {4 1}
-    nlay           NL  0   int_blank {5 0}  {5 1}
-    erat           TSR 0.0 float     {6 0}  {6 1}
-    ewid           TW  0.0 float     {7 0}  {7 1}
-    emin           MSL 0.0 float     {8 0}  {8 1}
-    edev           MD  0.0 float     {9 0}  {9 1}
-    split_wall     SW  0   int_blank {10 0} {10 1}
-    internal_wall  IW  0   int_blank {11 0} {11 1} }
+    d_hid          D   0.0  float     {0 0}  { 0 1}
+    scale          S   0.25 float     {1 0}  { 1 1}
+    ehgt           H   0.0  float     {3 0}  { 3 1}
+    hrat           HR  0.0  float     {4 0}  { 4 1}
+    nlay           NL  0    int_blank {5 0}  { 5 1}
+    erat           TSR 0.0  float     {6 0}  { 6 1}
+    ewid           TW  0.0  float     {7 0}  { 7 1}
+    emin           MSL 0.0  float     {8 0}  { 8 1}
+    edev           MD  0.0  float     {9 0}  { 9 1}
+    split_wall     SW  0    int_blank {10 0} {10 1}
+    internal_wall  IW  0    int_blank {11 0} {11 1}
+    prism          PR  0    int_blank {12 0} {12 1} }
 lappend global_vars dlg_msh_param_data
 
 # key_des содержит массив, у которого:
@@ -116,9 +141,49 @@ proc dlg_msh_print_action {} {
     global global_vars; foreach {gvar} $global_vars { global $gvar }
     mess "$var_path/$var_name\n" }
 
-# Акция на нажатие клавиши Ok
-proc dlg_msh_ok_action {} {
-    form_done .dlg_msh }
+# Устанавливает значения по умолчанию для части
+proc fam_params_clear {part} {
+    ic_geo_set_family_params $part \
+        no_crv_inf \
+        prism 0 \
+        emax 0.0 \
+        ehgt 0.0 \
+        hrat 0 \
+        nlay 0 \
+        erat 0.0 \
+        ewid 0 \
+        emin 0.0 \
+        edev 0.0 \
+        split_wall 0 \
+        internal_wall 0 }
+
+# Устанавливает парамерты настройки сетки для части на основе ее
+# имени.
+proc fam_params_set {part} {
+    global global_vars; foreach {gvar} $global_vars { global $gvar }
+    fam_params_clear $part
+    set pnp [part_name_prop $part]
+    set d_hid 0.0
+    set scale 0.25
+    set d_hid_scale {d_hid scale}
+    set x {}
+    foreach {des val} $pnp {
+        if { [info exists des_key($des)] == 1 } then {
+            set d_hid_scale_index [lsearch $d_hid_scale $des_key($des)]
+            if { $d_hid_scale_index != -1 } then {
+                set [lindex $d_hid_scale $d_hid_scale_index] $val
+            } else {
+                lappend x $des_key($des) $val } } }
+    lappend x emax [expr { $d_hid * $scale } ]
+    set cmd "ic_geo_set_family_params $part no_crv_inf $x"
+    eval $cmd
+    return $x }
+
+# Акция на нажатие клавиши Fam params
+proc dlg_msh_fam_params_action {} {
+    global global_vars; foreach {gvar} $global_vars { global $gvar }
+    foreach part [parts surface] {
+        fam_params_set $part } }
 
 # Формирует базовое имя для части.
 proc make_basename {} {
@@ -161,10 +226,10 @@ proc split_basename {name} {
     return [lreverse [split $name _]]}
 
 # Функция part_name_prop возвращает список, состоящий из пар:
-# (обозначение значение параметра). Параметр name доолжен содержать
-# базовое имя (последнюю часть пути).
+# (обозначение значение параметра). Параметр name должен содержать
+# имя семейства.
 # Пример использования:
-# part_name_prop OUTLET_D_0.33 -> D 0.33
+# part_name_prop DG1/B/INLET_D_0.25_S_0.33 -> S 0.33 D 0.25
 proc part_name_prop {name} {
     set rez {}
     foreach {val name} [split_basename $name] {
@@ -223,10 +288,10 @@ proc dlg_msh {} {
         global ${dlg_msh_prefix}_$key
         set ${dlg_msh_prefix}_$key $value }
     set buts {
-        { {Rename}        { dlg_msh_rename_action } }
-        { {Move}          { dlg_msh_move_action   } }
-        { {Print}         { dlg_msh_print_action  } }
-        { {OK}            { dlg_msh_ok_action     } } }
+        { {Rename}     { dlg_msh_rename_action     } }
+        { {Move}       { dlg_msh_move_action       } }
+        { {Print}      { dlg_msh_print_action      } }
+        { {Fam params} { dlg_msh_fam_params_action } } }
     set d [form_init .dlg_msh "Dlg msh param" "" $buts]
     if {$d != ""} {
         form_frame $d.fr_0 sunken 1 {0 0}
