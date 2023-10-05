@@ -1,6 +1,5 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
-
-source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/load_all.tcl
+mess "source dlg_msh.tcl START... \n"
 
 # Функция осуществляет загрузку настоящего файла.
 proc l_dlg_msh {} {
@@ -10,11 +9,13 @@ proc l_dlg_msh {} {
 ##################################################
 # Глобальные переменные начало
 ##################################################
+global global_vars
 set global_vars {}
 
 # dlg_msh_prefix содержит строку dlg_msh, используемую для
 # формирования имен переменных, которые используются для значений
 # связанных с окнами ввода entry.
+global dlg_msh_prefix
 set dlg_msh_prefix dlg_msh; lappend global_vars dlg_msh_prefix
 
 # dlg_msh_param_data содержит записи, характеризующие параметры сетки
@@ -25,6 +26,7 @@ set dlg_msh_prefix dlg_msh; lappend global_vars dlg_msh_prefix
 # 4. типа содержимого окна редактирования (entry);
 # 5. координаты расположения метки (label);
 # 6. расположения entry.
+global dlg_msh_param_data
 set dlg_msh_param_data {
     d_hid          D   0.0 float     {0 0}  {0 1}
     scale          S   0.0 float     {1 0}  {1 1}
@@ -59,8 +61,9 @@ lappend global_vars des_key
 lappend  global_vars key_list
 
 # mnas_base_dir содержит путь картинкам для кнопок.
+global mnas_base_dir
 set mnas_base_dir D:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/image
-lappend  global_vars mnas_base_dir
+lappend global_vars mnas_base_dir
 
 # var_surfaces содержит имена поверхностей.
 # var_path содержит путь к части.
@@ -229,7 +232,7 @@ proc dlg_msh {} {
         form_frame $d.fr_0 sunken 1 {0 0}
         set s $d.fr_0
         form_label $s.l_select "Select" {0 0}
-        form_button_bitmap $s.b_select @$mnas_base_dir/goup.xbm \
+        form_button_bitmap $s.b_select @$mnas_base_dir/diag.xbm \
             { dlg_msh_setup [select_by_type] } {0 1}
         form_entry $s.e_select var_surfaces string {0 2}
 ####
@@ -295,4 +298,5 @@ proc dlg_msh_prepare {surface} {
     set prefix [part_name_prefix $family] }
 
 # l_dlg_msh
-dlg_msh
+
+mess "source dlg_msh.tcl FINISH. \n"

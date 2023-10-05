@@ -1,4 +1,5 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/fv.tcl
+mess "source fv.tcl START... \n"
 
 proc vis {{min 0.0} {max 2.0}} {
     # Включает видимость для поверхностей с
@@ -26,3 +27,4 @@ proc hide {types} {
         foreach part [parts $type] {
             ic_geo_update_visibility $type $part 0 }}}
 
+mess "source fv.tcl FINISH. \n"

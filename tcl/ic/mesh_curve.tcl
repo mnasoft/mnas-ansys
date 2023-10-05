@@ -1,4 +1,5 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/mesh_curve.tcl
+mess "source mesh_curve.tcl START... \n"
 
 proc key_value {key list {default 0.0}} {
     # Возвращает из списка list значение,
@@ -70,3 +71,5 @@ proc msh {size {angle 0} {d_scale 0.25} {tetra_size_ratio 0.0}} {
     # Настройка размеров для семейств. Повтор, но он нужен
     msh_prt $d_scale $tetra_size_ratio; 
 }
+
+mess "source mesh_curve.tcl FINISH. \n"

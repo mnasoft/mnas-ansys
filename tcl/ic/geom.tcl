@@ -1,4 +1,5 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/geom.tcl
+mess "source geom.tcl START... \n"
 
 # ic_point {} GEOM pnt.02 {-0.407799278471 0.112614026691 0}
 
@@ -22,3 +23,5 @@ proc mk_pline {name points {part GEOM}} {
 
 # mk_pline pl {{0 0 0} {10 0 0} {10 10 0} {0 10 0} {0 0 0}} 
 
+
+mess "source geom.tcl FINISH. \n"

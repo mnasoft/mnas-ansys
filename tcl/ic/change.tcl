@@ -1,4 +1,5 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/change.tcl
+mess "source change.tcl START... \n"
 
 # Перемещает точки и кривые сопряженные со всеми поверхностями,
 # находящимися в семействе part в это семейство.
@@ -102,3 +103,5 @@ proc sort_by_size {} {
 # value_key
 # base_name DG4/M0/GU/G2/07/05_D_08.000
 # foo DG4/M0/GU/G2/07/05_D_08.000
+
+mess "source change.tcl FINISH. \n"

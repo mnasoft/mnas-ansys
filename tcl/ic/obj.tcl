@@ -1,4 +1,5 @@
 #source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/obj.tcl
+mess "source obj.tcl START... \n"
 
 proc obj_num {{types {point curve surface}}} {
     # Возвращает количество общее объектов определенного типа.
@@ -18,3 +19,5 @@ proc obj_num_part {{types {point curve surface}} {part TAN}} {
     }
     return $x
 }
+
+mess "source obj.tcl FINISH. \n"

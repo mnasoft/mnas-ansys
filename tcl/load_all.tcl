@@ -1,12 +1,24 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/load_all.tcl
 # source d:/PRG/msys64/home/mnaso/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/load_all.tcl
+mess "source load_all.tcl START... \n"
 
+global mnas_ansys_tcl_dir
+set mnas_ansys_tcl_dir "d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl"
+
+proc load_dir_tcl {directiry {extension *.tcl}} {
+    global mnas_ansys_tcl_dir
+    foreach file [glob  -nocomplain -type f ${mnas_ansys_tcl_dir}/${directiry}/$extension] {
+        source $file } }
+
+global load_all
 proc load_all {} {
-    set directiry d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/
-    set extension *.tcl
-    foreach file [glob  -nocomplain -type f $directiry$extension] {
-        source $file
-    }
-}
+    set dirs {ic ic/dia ic/help}
+    mess "MESSAGEEEEE \n"
+    foreach dir $dirs {
+        mess "$dir \n"
+        load_dir_tcl $dir } }
 
 load_all
+
+mess "source load_all.tcl FINISH. \n"
+

@@ -1,5 +1,5 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/delete_family.tcl
-
+mess "source delete_family.tcl START... \n"
 
 proc del_part {part} {
     ic_undo_group_begin
@@ -101,3 +101,5 @@ proc clear_all {} {
         ic_geo_delete_family $family
     }
 }
+
+mess "source delete_family.tcl FINISH. \n"
