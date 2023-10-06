@@ -3,7 +3,10 @@
 mess "source load_all.tcl START... \n"
 
 global mnas_ansys_tcl_dir
-set mnas_ansys_tcl_dir "d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl"
+if { [string compare [info hostname] N142013] == 0 } then {
+    set mnas_ansys_tcl_dir "d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl" }
+if {[string compare [info hostname] uakazi-note] == 0 } then {
+    set mnas_ansys_tcl_dir "d:/PRG/msys64/home/mnaso/quicklisp/local-projects/ANSYS/mnas-ansys/tcl" }
 
 proc load_dir_tcl {directiry {extension *.tcl}} {
     global mnas_ansys_tcl_dir

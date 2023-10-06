@@ -2,10 +2,10 @@
 mess "source dlg_msh.tcl START... \n"
 
 set file_proc "
- l_dlg_msh
  dlg_msh
  dlg_msh_init
  dlg_msh_move_action
+ dlg_msh_separate_action
  dlg_msh_setup
  dlg_msh_prepare
  highlight
@@ -16,20 +16,12 @@ set file_proc "
  dlg_msh_rename_action
  split_basename
  part_name_prop
-
  make_keys
  part_name_prefix
-
-
  get_array_value_if_index_exist
  make_name
  msh_prt_new
 "
-
-# Функция осуществляет загрузку настоящего файла.
-proc l_dlg_msh {} {
-    source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
-}
 
 ##################################################
 # Глобальные переменные начало
@@ -238,6 +230,21 @@ proc part_name_prop {name} {
             lappend rez $val } }
     return $rez }
 
+# Разделяет поверхности по подчастям 
+proc dlg_msh_separate_action {} {
+    global global_vars; foreach {gvar} $global_vars { global $gvar }
+    set l_surfaces [llength $var_surfaces]
+    if { $var_path != {} } then {
+        set f_prefix $var_path
+    } else {
+        set f_prefix {} }
+    set i 0
+    foreach surface $var_surfaces {
+        incr i
+        ic_undo_group_begin
+        ic_geo_set_part surface $surface ${f_prefix}/[format "%#03d" $i]/$var_name 0
+        ic_undo_group_end } }
+
 # Акция по нажалию кнопки Move. Перемещает все выбранные поверхности в
 # новую или существующую часть.
 proc dlg_msh_move_action {} {
@@ -251,6 +258,9 @@ proc dlg_msh_move_action {} {
         ic_undo_group_begin
         ic_geo_set_part surface $surface $family_new 0
         ic_undo_group_end } }
+
+
+
 
 proc make_keys {} {
     global global_vars; foreach {gvar} $global_vars { global $gvar }
@@ -288,9 +298,12 @@ proc dlg_msh {} {
         global ${dlg_msh_prefix}_$key
         set ${dlg_msh_prefix}_$key $value }
     set buts {
-        { {Rename}     { dlg_msh_rename_action     } }
-        { {Move}       { dlg_msh_move_action       } }
         { {Print}      { dlg_msh_print_action      } }
+        { {Move}       { dlg_msh_move_action       } }
+        { {Separate}   { dlg_msh_separate_action   } }
+        { {Rename}     { dlg_msh_rename_action     } }
+
+
         { {Fam params} { dlg_msh_fam_params_action } } }
     set d [form_init .dlg_msh "Dlg msh param" "" $buts]
     if {$d != ""} {
