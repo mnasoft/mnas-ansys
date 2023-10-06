@@ -6,12 +6,13 @@ set file_proc "
  dlg_msh_init
  dlg_msh_move_action
  dlg_msh_separate_action
+ dlg_msh_print_action
+ dlg_msh_fam_params_action
  dlg_msh_setup
  dlg_msh_prepare
  highlight
  select_by_type
- dlg_msh_print_action
- dlg_msh_fam_params_action
+
  make_basename
  dlg_msh_rename_action
  split_basename
@@ -45,18 +46,18 @@ set dlg_msh_prefix dlg_msh; lappend global_vars dlg_msh_prefix
 # 6. расположения entry.
 global dlg_msh_param_data
 set dlg_msh_param_data {
-    d_hid          D   0.0  float     {0 0}  { 0 1}
-    scale          S   0.25 float     {1 0}  { 1 1}
-    ehgt           H   0.0  float     {3 0}  { 3 1}
-    hrat           HR  0.0  float     {4 0}  { 4 1}
-    nlay           NL  0    int_blank {5 0}  { 5 1}
-    erat           TSR 0.0  float     {6 0}  { 6 1}
-    ewid           TW  0.0  float     {7 0}  { 7 1}
-    emin           MSL 0.0  float     {8 0}  { 8 1}
-    edev           MD  0.0  float     {9 0}  { 9 1}
-    split_wall     SW  0    int_blank {10 0} {10 1}
-    internal_wall  IW  0    int_blank {11 0} {11 1}
-    prism          PR  0    int_blank {12 0} {12 1} }
+    d_hid          D   0.0  float     {0 0} {0 1}
+    scale          S   0.25 float     {0 2} {0 3}
+    prism          PR  0    int_blank {1 0} {1 1} 
+    ehgt           H   0.0  float     {1 2} {1 3}
+    hrat           HR  0.0  float     {2 0} {2 1}
+    nlay           NL  0    int_blank {2 2} {2 3}
+    erat           TSR 0.0  float     {3 0} {3 1}
+    ewid           TW  0.0  float     {3 2} {3 3}
+    emin           MSL 0.0  float     {4 0} {4 1}
+    edev           MD  0.0  float     {4 2} {4 3}
+    split_wall     SW  0    int_blank {5 0} {5 1}
+    internal_wall  IW  0    int_blank {5 2} {5 3} }
 lappend global_vars dlg_msh_param_data
 
 # key_des содержит массив, у которого:
@@ -131,7 +132,22 @@ proc select_by_type {{type surface}} {
 # Акция на нажатие клавиши print
 proc dlg_msh_print_action {} {
     global global_vars; foreach {gvar} $global_vars { global $gvar }
-    mess "$var_path/$var_name\n" }
+    mess "\n"
+    mess "==========================\n"
+    mess "Names of selected surfaces:\n"
+    mess "==========================\n"
+    foreach object $var_surfaces { mess "$object\n" }
+    mess "\n"
+    mess "==========================\n"
+    mess "Parts of selected surfaces:\n"
+    mess "==========================\n"
+    foreach object $var_surfaces {
+        mess "[ic_geo_get_family surface $object]\n" }
+    mess "\n"
+    mess "==========================\n"    
+    mess "Part name to move to:\n"
+    mess "==========================\n"
+    mess "$var_path/$var_name\n\n" }
 
 # Устанавливает значения по умолчанию для части
 proc fam_params_clear {part} {
@@ -189,10 +205,14 @@ proc make_basename {} {
             lappend x $key_des($key)
             lappend x $val } }
     set rez [join $x _]
-    if { [string equal $rez {} ] } then {
-        set var_name ${var_prefix}_D_00.000
+    if { [string equal $var_prefix {} ] } then {
+        set v_pref {}
     } else {
-        set var_name ${var_prefix}_$rez } }
+        set v_pref ${var_prefix}_ }
+    if { [string equal $rez {} ] } then {
+        set var_name ${v_pref}D_0.0
+    } else {
+        set var_name ${v_pref}$rez } }
 
 # Акция по нажалию кнопки Rename. Переименовывает часть, которая
 # содержит относится к первой выбранной поверхности.
@@ -224,7 +244,7 @@ proc split_basename {name} {
 # part_name_prop DG1/B/INLET_D_0.25_S_0.33 -> S 0.33 D 0.25
 proc part_name_prop {name} {
     set rez {}
-    foreach {val name} [split_basename $name] {
+    foreach {val name} [split_basename [base_name $name]] {
         if { $name != {} } {
             lappend rez $name
             lappend rez $val } }
@@ -258,9 +278,6 @@ proc dlg_msh_move_action {} {
         ic_undo_group_begin
         ic_geo_set_part surface $surface $family_new 0
         ic_undo_group_end } }
-
-
-
 
 proc make_keys {} {
     global global_vars; foreach {gvar} $global_vars { global $gvar }
@@ -299,11 +316,7 @@ proc dlg_msh {} {
         set ${dlg_msh_prefix}_$key $value }
     set buts {
         { {Print}      { dlg_msh_print_action      } }
-        { {Move}       { dlg_msh_move_action       } }
-        { {Separate}   { dlg_msh_separate_action   } }
         { {Rename}     { dlg_msh_rename_action     } }
-
-
         { {Fam params} { dlg_msh_fam_params_action } } }
     set d [form_init .dlg_msh "Dlg msh param" "" $buts]
     if {$d != ""} {
@@ -325,8 +338,14 @@ proc dlg_msh {} {
 ##########
         form_frame $d.fr_1 sunken 1 {1 0}
         set s $d.fr_1
-        form_button_bitmap $s.b_make_basename @$mnas_base_dir/goup.xbm { make_basename } {0 1}
-        form_button_bitmap $s.b_make_keys @$mnas_base_dir/godown.xbm   { make_keys }     {0 2}
+        
+        form_button $s.b_move "Move" {dlg_msh_move_action}  {0 1} 
+        form_button_bitmap $s.b_make_basename @$mnas_base_dir/goup.xbm { make_basename } {0 2}
+        form_button_bitmap $s.b_make_keys @$mnas_base_dir/godown.xbm   { make_keys }     {0 3}
+        form_button $s.b_separate "Separate" {dlg_msh_separate_action}  {0 4}
+        form_button $s.b_ch_vis "Ch Vis" {ch_vis}  {0 5}
+        form_button $s.b_ch_all "Ch All" {ch_all}  {0 6}
+
 ##########        
         form_frame $d.fr sunken 1 {2 0}
         set d $d.fr
