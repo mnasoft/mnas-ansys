@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/delete_family.tcl
 mess "source delete_family.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 proc del_part {part} {
     ic_undo_group_begin
     ic_start_bigunsop

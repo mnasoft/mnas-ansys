@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/suface.tcl
 mess "source suface.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 # Переносит видимые поверхности в газовый домен, имеющий суффикс
 # dom_suffix.
 proc ch_dg {dom_suffix} {

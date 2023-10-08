@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/change.tcl
 mess "source change.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 # Перемещает точки и кривые сопряженные со всеми поверхностями,
 # находящимися в семействе part в это семейство.
 proc ch_part {part} {

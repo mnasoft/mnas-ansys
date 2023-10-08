@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/mesh_setup.tcl
 mess "source mesh_setup.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 proc msh_per {{angle 0} {axis {1 0 0}} {base {0 0 0}}} {
     # Задает периодичность
     if {$angle == 0} {

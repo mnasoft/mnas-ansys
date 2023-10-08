@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/mesh_curve.tcl
 mess "source mesh_curve.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 proc key_value {key list {default 0.0}} {
     # Возвращает из списка list значение,
     # следующее за ключом key.

@@ -1,13 +1,19 @@
 mess "source mnas_help.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
+# Функция mnas_help дает краткую помощь по командам пакета
+# mnas_icem_utils.
 proc mnas_help {} {
-    mess "Command - Description; \n"
-    mess "dlg_msh - Part renaming moving (properties) command; \n"
-    mess "ch_all  - оЕПЕЛЕЫЮЕР РНВЙХ Х ЙПХБШЕ ЯНОПЪФЕММШЕ ЯН БЯЕЛХ ОНБЕПУМНЯРЪЛХ, \n"
-    mess "          Б ЯННРБЕРЯРБСЧЫХЕ ХЛ ЯЕЛЕИЯРБЮ. \n"
-    mess "ch_vis  - оЕПЕЛЕЫЮЕР РНВЙХ Х ЙПХБШЕ ЯНОПЪФЕММШЕ Я БХДХЛШЛХ ОНБЕПУМНЯРЪЛХ,\n"
-    mess "          Б ЯННРБЕРЯРБСЧЫХЕ ХЛ ЯЕЛЕИЯРБЮ. \n"
-}
+    set lines {}
+    lappend lines "Команда - Описание \n"
+    lappend lines "dlg_msh - Part renaming moving (properties) command; \n"
+    lappend lines "ch_all  - Перемещает точки и кривые сопряженные со всеми поверхностями, \n"
+    lappend lines "          в соответствующие им семейства. \n"
+    lappend lines "ch_vis  - Перемещает точки и кривые сопряженные с видимыми поверхностями,\n"
+    lappend lines "          в соответствующие им семейства. \n"
+    foreach line $lines {
+        mess [encoding convertto [encoding system] $line] } }
 
 set procs {
     ch_part \

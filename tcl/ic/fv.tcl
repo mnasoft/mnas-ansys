@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/fv.tcl
 mess "source fv.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 proc vis {{min 0.0} {max 2.0}} {
     # Включает видимость для поверхностей с
     # гидравлическим диаметром в диапазоне (min max].

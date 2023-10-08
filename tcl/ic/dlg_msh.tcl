@@ -1,6 +1,8 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
 mess "source dlg_msh.tcl START... \n"
 
+package provide mnas_icem_utils 1.0
+
 set file_proc "
  dlg_msh
  dlg_msh_init
