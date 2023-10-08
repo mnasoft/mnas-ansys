@@ -82,7 +82,8 @@ lappend  global_vars key_list
 
 # mnas_base_dir содержит путь картинкам для кнопок.
 global mnas_base_dir
-set mnas_base_dir D:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/image
+set mnas_base_dir ${mnas_ansys_tcl_dir}/image
+
 lappend global_vars mnas_base_dir
 
 # var_surfaces содержит имена поверхностей.

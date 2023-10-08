@@ -13,7 +13,7 @@ proc mnas_help {} {
     lappend lines "ch_vis  - Перемещает точки и кривые сопряженные с видимыми поверхностями,\n"
     lappend lines "          в соответствующие им семейства. \n"
     foreach line $lines {
-        mess [encoding convertto [encoding system] $line] } }
+        mess [encoding convertto cp1251 $line] } }
 
 set procs {
     ch_part \
