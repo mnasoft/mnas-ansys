@@ -800,7 +800,6 @@ the non-override families will be off.
 one. Surfaces are incident to curves and curves are incident to
 points.
 "  
-
   (format
    t
    "ic_geo_incident ~A ~A ~S ;~%"

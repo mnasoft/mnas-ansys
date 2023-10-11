@@ -1,5 +1,4 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/fv.tcl
-mess "source fv.tcl START... \n"
 
 package provide mnas_icem_utils 1.0
 
@@ -28,5 +27,3 @@ proc hide {types} {
     foreach type $types {
         foreach part [parts $type] {
             ic_geo_update_visibility $type $part 0 }}}
-
-mess "source fv.tcl FINISH. \n"

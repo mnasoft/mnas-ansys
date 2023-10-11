@@ -1,5 +1,4 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/suface.tcl
-mess "source suface.tcl START... \n"
 
 package provide mnas_icem_utils 1.0
 
@@ -14,5 +13,3 @@ proc ch_dg {dom_suffix} {
         lappend x $newpart
         ic_geo_set_part surface $surface $newpart 0 }
     return $x }
-
-mess "source suface.tcl FINISH. \n"

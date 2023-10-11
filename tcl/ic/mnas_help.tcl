@@ -1,19 +1,6 @@
-mess "source mnas_help.tcl START... \n"
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/mnas_help.tcl
 
 package provide mnas_icem_utils 1.0
-
-# Функция mnas_help дает краткую помощь по командам пакета
-# mnas_icem_utils.
-proc mnas_help {} {
-    set lines {}
-    lappend lines "Команда - Описание \n"
-    lappend lines "dlg_msh - Part renaming moving (properties) command; \n"
-    lappend lines "ch_all  - Перемещает точки и кривые сопряженные со всеми поверхностями, \n"
-    lappend lines "          в соответствующие им семейства. \n"
-    lappend lines "ch_vis  - Перемещает точки и кривые сопряженные с видимыми поверхностями,\n"
-    lappend lines "          в соответствующие им семейства. \n"
-    foreach line $lines {
-        mess [encoding convertto cp1251 $line] } }
 
 set procs {
     ch_part \
@@ -88,6 +75,20 @@ set procs {
         close_compute \
         dialog }
 
-mnas_help
+# п╓я┐п╫п╨я├п╦я▐ mnas_help п╢п╟п╣я┌ п╨я─п╟я┌п╨я┐я▌ п©п╬п╪п╬я┴я▄ п©п╬ п╨п╬п╪п╟п╫п╢п╟п╪ п©п╟п╨п╣я┌п╟
+# mnas_icem_utils.
+proc mnas_help {} {
+    set lines {}
+    lappend lines "=========================\n"    
+    lappend lines "Command   - Description \n"
+    lappend lines "=========================\n"
+    lappend lines "mnas_help - give short help for mnas_icem_utils commands;\n"     
+    lappend lines "ch_all    - Move  all points and curves which are coedged with surfaces to parts in which surfaces belong to;\n" 
+    lappend lines "ch_vis    - Move visible points and curves which are coedged with lappend lines surfaces to parts in which surfaces belong to; \n"
+    lappend lines "require_pkg - load package mnas_icem_utils 1.0; \n"
+    lappend lines "make_auto   - make tclIndex for loading commands not included package mnas_icem_utils 1.0; \n"
+    lappend lines "check_auto_path - print line by line auto_path variable; \n"
+    lappend lines "dlg_msh   - part renaming, moving, change properties dialog; \n"
+    foreach line $lines {
+        mess $line} }
 
-mess "source mnas_help.tcl FINISH. \n"

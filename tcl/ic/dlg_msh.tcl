@@ -1,7 +1,8 @@
-# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dia/dlg_msh.tcl
-mess "source dlg_msh.tcl START... \n"
+# source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/dlg_msh.tcl
 
 package provide mnas_icem_utils 1.0
+
+# surface curve point material density loop body
 
 set file_proc "
  dlg_msh
@@ -152,7 +153,7 @@ proc dlg_msh_print_action {} {
     mess "==========================\n"
     mess "$var_path/$var_name\n\n" }
 
-# Устанавливает значения по умолчанию для части
+# Устанавливает значения по умолчанию для части part.
 proc fam_params_clear {part} {
     ic_geo_set_family_params $part \
         no_crv_inf \
@@ -167,6 +168,13 @@ proc fam_params_clear {part} {
         edev 0.0 \
         split_wall 0 \
         internal_wall 0 }
+
+
+# Устанавливает значения по умолчанию для всех частей, в которыъ
+# содержатся поверхности.
+proc fams_params_clear {} {
+    foreach part [parts surface] {
+        fam_params_clear $part } }
 
 # Устанавливает парамерты настройки сетки для части на основе ее
 # имени.
@@ -193,6 +201,7 @@ proc fam_params_set {part} {
 # Акция на нажатие клавиши Fam params
 proc dlg_msh_fam_params_action {} {
     global global_vars; foreach {gvar} $global_vars { global $gvar }
+    ch_curves
     foreach part [parts surface] {
         fam_params_set $part } }
 
@@ -320,7 +329,7 @@ proc dlg_msh {} {
     set buts {
         { {Print}      { dlg_msh_print_action      } }
         { {Rename}     { dlg_msh_rename_action     } }
-        { {Fam params} { dlg_msh_fam_params_action } } }
+        { {Fam PRM}    { dlg_msh_fam_params_action } } }
     set d [form_init .dlg_msh "Dlg msh param" "" $buts]
     if {$d != ""} {
         form_frame $d.fr_0 sunken 1 {0 0}
@@ -342,12 +351,15 @@ proc dlg_msh {} {
         form_frame $d.fr_1 sunken 1 {1 0}
         set s $d.fr_1
         
-        form_button $s.b_move "Move" {dlg_msh_move_action}  {0 1} 
-        form_button_bitmap $s.b_make_basename @$mnas_base_dir/goup.xbm { make_basename } {0 2}
-        form_button_bitmap $s.b_make_keys @$mnas_base_dir/godown.xbm   { make_keys }     {0 3}
-        form_button $s.b_separate "Separate" {dlg_msh_separate_action}  {0 4}
-        form_button $s.b_ch_vis "Ch Vis" {ch_vis}  {0 5}
-        form_button $s.b_ch_all "Ch All" {ch_all}  {0 6}
+        form_button $s.b_move "Move" {dlg_msh_move_action}  {0 0} 
+        form_button_bitmap $s.b_make_basename @$mnas_base_dir/goup.xbm { make_basename } {0 1}
+        form_button_bitmap $s.b_make_keys @$mnas_base_dir/godown.xbm   { make_keys }     {0 2}
+        form_button $s.b_separate "Separate" {dlg_msh_separate_action}  {0 3}
+        form_button $s.b_ch_vis "Ch Vis" {ch_vis}  {0 4}
+        form_button $s.b_ch_all "Ch All" {ch_all}  {0 5}
+        form_button $s.b_ch_cur "Ch Curves" {ch_curves}     {1 0}
+        form_button $s.b_dlg_msh_init "Dlg Init" {dlg_msh_init}  {1 3}
+        form_button $s.b_fams_params_clear "Fam CLR" {fams_params_clear}  {1 4}
 
 ##########        
         form_frame $d.fr sunken 1 {2 0}
@@ -396,7 +408,3 @@ proc dlg_msh_prepare {surface} {
     set prop   [part_name_prop $family]
     set arr array set prop
     set prefix [part_name_prefix $family] }
-
-# l_dlg_msh
-
-mess "source dlg_msh.tcl FINISH. \n"

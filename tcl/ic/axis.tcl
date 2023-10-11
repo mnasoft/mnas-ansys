@@ -1,5 +1,4 @@
 # source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ANSYS/mnas-ansys/tcl/ic/axis.tcl
-mess "source axis.tcl START... \n"
 
 package provide mnas_icem_utils 1.0
 
@@ -16,4 +15,8 @@ proc axis_gt {} {
 proc axis_en {} {
     axis 0 0 0 1000 0 0 }
 
-mess "source axis.tcl FINISH. \n"
+# Создает материальную точку.
+proc mk_body {pnt part} {
+    ic_undo_group_begin 
+    ic_geo_create_volume $pnt {} $part
+    ic_undo_group_end }
