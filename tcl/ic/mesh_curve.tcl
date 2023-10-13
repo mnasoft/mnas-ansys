@@ -71,3 +71,33 @@ proc msh {gmax {angle 0}} {
     dlg_msh_fam_params_action; # Настройка размеров для семейств
     ch_tan;                    # Перенос касательных кривых в семейство TAN.
     mess "Done.\n"}
+
+# Настройка глобальных паметров тетраэдрической сетки для солида.
+# Параметры gmax:
+# gmax   - ммаксимальный размер ячейки;
+# gnat   - минимальный размер ячейки
+# gcgap  - количество ячеек в зазоре;
+# gref   - масштабный фактор;
+# gedgec - минимальное качество ячейки;
+# gfast  - gfast
+proc msh_solid {gmax {angle 0} {gnat 0.40} {gcgap 3} {gnatref 10}} {
+    mess "msh_solid {$gmax $angle} starting ... "
+    ch_all;   # Перенос кривых в семейства ицидентных с ними поверхностей
+    clear_all;                 # Очистка неиспользуемых семейств    
+    msh_per $angle;            # С периодичностью
+    ic_undo_group_begin
+    ic_set_meshing_params \
+        global 0 \
+        gref 1.0 \
+        gmax $gmax \
+        gfast 0 \
+        gedgec 0.2 \
+        gnat $gnat \
+        gcgap $gcgap \
+        gnatref $gnatref \
+        igwall 0
+    ic_undo_group_end
+    fams_params_clear
+    ch_curves; # Перенос кривых в наиболее подходящие по размеру части
+    ch_tan; # Перенос касательных кривых в семейство TAN.
+    mess "Done.\n"}

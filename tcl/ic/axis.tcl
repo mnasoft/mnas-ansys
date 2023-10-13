@@ -20,4 +20,3 @@ proc mk_body {pnt part} {
     ic_undo_group_begin 
     ic_geo_create_volume $pnt {} $part
     ic_undo_group_end }
-

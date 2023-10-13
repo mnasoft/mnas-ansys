@@ -21,19 +21,29 @@ proc msh_per {{angle 0} {axis {1 0 0}} {base {0 0 0}}} {
 
 # Задает глоальные параметры сетки
 proc msh_par {{gmax 6}} {
-    set gref 1
-#    set gmax 2
+    set gref 1 ; scale factor
+    # set gmax 2 ;
     set gnat 0
-    set gnatref 10
-    set gedgec 0.2
-    set gcgap 1
-    set gttol 0.001
-    set gfast 0
-    set igwall 0
-    set gtrel 1
-    set grat 1.5
-    ic_set_meshing_params global 0 gref $gref gmax $gmax gnat $gnat gnatref $gnatref gedgec $gedgec gcgap $gcgap gttol $gttol gfast $gfast igwall $igwall gtrel $gtrel grat $grat
-}
+    set gnatref 10 ; 
+    set gedgec 0.2 ;
+    set gcgap 1 ;
+    set gttol 0.001 ;
+    set gfast 0 ;
+    set igwall 0 ;
+    set gtrel 1 ;
+    set grat 1.5 ;
+    ic_set_meshing_params global 0 \
+        gref $gref \
+        gmax $gmax \
+        gnat $gnat \
+        gnatref $gnatref \
+        gedgec $gedgec \
+        gcgap $gcgap \
+        gttol $gttol \
+        gfast $gfast \
+        igwall $igwall \
+        gtrel $gtrel \
+        grat $grat}
 
 proc fam_scale {part} {
     set x [split $part {/_}]
