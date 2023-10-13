@@ -61,4 +61,5 @@ make_auto
 mess "\n\n\n====================================================================================================\n"
 mess "To load mnas_icem_utils 1.0 invoke command: \n"
 mess "source $mnas_ansys_tcl_dir/load_all.tcl; make_auto; require_pkg \n"
+mess "source d:/home/_namatv/PRG/msys64/home/namatv/quicklisp/local-projects/ZM/cfx/n70-base/tcl/prj_06.tcl\n"
 mess "====================================================================================================\n"

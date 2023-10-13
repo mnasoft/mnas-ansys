@@ -169,7 +169,6 @@ proc fam_params_clear {part} {
         split_wall 0 \
         internal_wall 0 }
 
-
 # Устанавливает значения по умолчанию для всех частей, в которыъ
 # содержатся поверхности.
 proc fams_params_clear {} {

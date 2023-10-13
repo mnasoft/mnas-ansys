@@ -51,20 +51,23 @@ proc curves_mesh_params {{emax_scale 1.0}} {
 
 # Функция topo выполняет проверку топологии геометрических объектов.
 proc topo {} {
+    mess "topo starting ... "
     ic_undo_group_begin
     ic_geo_delete_unattached [ic_geo_non_empty_families] 0 1
     ic_build_topo 0.05 -angle 30 [ic_geo_non_empty_families]
     ic_geo_delete_unattached [ic_geo_non_empty_families]
-    ic_undo_group_end }
+    ic_undo_group_end
+    mess "Done.\n" }
 
 # Настройка глобальных паметров тетраэдрической сетки. Параметры gmax:
 # - максимальный глобальный размер ячейки; angle - угол, определяющий
 # периодичность.
 proc msh {gmax {angle 0}} {
+    mess "msh {$gmax $angle} starting ... "
     ch_all;   # Перенос кривых в семейства ицидентных с ними поверхностей
     clear_all;                 # Очистка неиспользуемых семейств    
     msh_per $angle;            # С периодичностью
     msh_par $gmax;             # Максимальный размер 
     dlg_msh_fam_params_action; # Настройка размеров для семейств
     ch_tan;                    # Перенос касательных кривых в семейство TAN.
-}
+    mess "Done.\n"}

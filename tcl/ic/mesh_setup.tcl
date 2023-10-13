@@ -64,6 +64,5 @@ proc msh_fam {part {d_scale 0.25} {erat 0.0}} {
 #      D - гидравлический диаметр;
 #      d_scale - коэффициент маштабирования гидравлического диаметра.
 proc msh_prt {{d_scale 0.25} {tetra_size_ratio 0.0}} {
-
     foreach part [parts surface] {
         msh_fam $part $d_scale $tetra_size_ratio } }
