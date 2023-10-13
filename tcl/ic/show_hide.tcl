@@ -31,7 +31,7 @@ proc hide {types} {
         foreach part [parts $type] {
             ic_geo_update_visibility $type $part 0 } } }
 
-# Выключает видимость геометрических объектов
+# Выключает видимость геометрических объектов.
 proc hide_objects {part} {
     foreach type {surface curve point material density loop body} {
         if { [ic_geo_is_loaded] } then {
