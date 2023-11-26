@@ -1,5 +1,0 @@
-* Перечень файлов
-  - [[./aienv_options.tcl]] - хранит настройки ICEM CFD <2021-12-29 Ср> из
-    файла [[c:/Users/namatv/.aienv_options][.aienv_options]]. Файл [[c:/Users/namatv/.aienv_options][.aienv_options]] содержит стартовый
-    сценарий для пакета ICEM CFD.
-    
