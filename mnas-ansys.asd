@@ -292,4 +292,15 @@ CFX-PRE.
                 :components
                 ((:file "exchange")))))
 
-
+(defsystem "mnas-ansys/cfx/solver"
+  :description
+  "Подсистема @(mnas-ansys/cfx-solver) определяет функции, позволяющие
+ определять время, затрачиваемое CFX-SOLVER на одну итерацию."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+;;;; :depends-on () 
+  :components ((:module "src/cfx/solver"
+                :serial nil
+                :components
+                ((:file "solver")))))
