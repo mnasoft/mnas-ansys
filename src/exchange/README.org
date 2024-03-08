@@ -1,29 +1,154 @@
-
-Расположение 
-#+begin_src shell
-  cfx5dfile <file> -read-monitor
-#+end_src
-
-D:\ANSYS\v145\CFX\bin\cfx5.exe
-
-//n133905/home/_namatv/CFX/n70/cfx/N70_prj_01/hot/prj_01_Tair_0_G1_17/rez-bak/N70_prj_01_Ne_10_Tair_0_D_FaS_Mesh_good_GTD_bad_CMB_FRCaED_002.res
-
+* cfx5dfile
 
 #+begin_src sh
- "D:\ANSYS\v145\CFX\bin\cfx5mondata" -help
+  "C:/ANSYS/v145/CFX/bin/cfx5dfile" -help
+#+end_src
+
+#+begin_example
+Name:
+cfx5dfile
+
+Purpose:
+Access CFX-5 Data Files (Definition, Results and Commands)
+
+Synopsis:
+cfx5dfile <file> [-read-monitor] [-read-cmds]
+                 [-compare-cmds <file2>] [-diff-cmds <file2>]
+                 [-list-profile-files] [-read-profile-file <filename>]
+                 [-output <file>]
+                 [-help] [-verbose]
+
+[]  denotes an optional argument.
+|   separates mutually exclusive arguments.
+... following an argument indicates that it may be repeated.
+<>  denotes that substitution of a suitable value is required. All other
+    arguments are keywords, some of which have a short form.
+
+Arguments:
+
+<file>
+   Names a CFX-5 data file to work with.  This may be a Definition
+   (".def") or Results (".res") file, or a text file containing a
+   Command Language listing (".ccl").
+
+-compare-cmds <file2>
+   Compares the Command Language in <file> and <file2> and sends a
+   list of differences to the standard output, in a Command
+   Language-like format.  Parameters which have changed are
+   listed, with the old value, an arrow "->", and the new value.
+
+-diff-cmds <file2>
+   This option works exactly as -compare-cmds, except that if
+   differences are found it sets the return value to 1; if no
+   differences are found, the return value is 0.  This makes it
+   useful for scripting purposes.
+
+-extract-all-profile-files
+   Reads all profile data, and saves it to a set of files in the
+   current directory.  If any of the files exist locally they will
+   not be overwritten.
+
+
+-extract-profile-file <filename>
+   Reads the profile data contained in the named file, and saves it
+   to a file of the same name in the current directory.  This is
+   equivalent to using -read-profile-file, and using -output to set
+   the destination file name.
+
+
+-list-profile-files
+   Gives a list of the profile files stored in a results file,
+   which can be extracted with the -read-profile-file switch.
+
+-output <file>
+   Rather than sending output to the standard output, save it to
+   the given file.
+
+-read-cmds
+   Reads the CFX Command Language from the file, and sends it to
+   the standard output (but see -output).
+
+-read-pre-state
+   Reads the CFX Command Language representation of the saved
+   CFX-Pre state from the file, which should normally be a .cfx
+   file from CFX-Pre, and sends it to the standard output.
+
+
+-read-profile-file <filename>
+   Reads the profile data contained in the named file, and sends it
+   to the standard output, or to the file specified with the
+   -output switch.
+
+-read-monitor
+   Reads the most recent set of monitor point and residual data
+   from the results file (which will include the combined results
+   from all previous runs), and sends it to the standard output.
+   If the file contains no monitor point data, nothing will be
+   displayed.
+
+-read-pre-state
+   Reads the stored CFX-Pre state from the file, and prints it to
+   the standard output.
+
+-read-resinfo
+   Reads the results information (history) dataset from the file, and
+   prints it to the standard output.
+
+-read-trninfo
+   Reads the transient results information (history) dataset from
+   the file and prints it to the standard output.
+
+-remove-exec-control
+  Removes the SIMULATION CONTROL/EXECUTION CONTROL CCL
+
+-write-monitor <file>
+   Inserts the monitor point data from the specified file into the
+   results file.  To concatenate multiple files, repeat the
+   -write-monitor switch.
+
+   Note that the data is written to the correct dataset for the
+   final timestep in the supplied data.  If the results file
+   already contains monitor data for a different time step, that
+   data will not be overwritten, but may become inaccessible.  If
+   the existing data is from a later timestep than the new file
+   supplied, the new file will be hidden by the existing data.
+#+end_example
+
+#+begin_src shell
+  C:/ANSYS/v145/CFX/bin/cfx5dfile <file> -read-monitor
+#+end_src
+
+* cfx5.exe
+
+CFX Lancher
+
+#+begin_src sh
+  C:/ANSYS/v145/CFX/bin/cfx5.exe
+#+end_src
+
+  //n133905/home/_namatv/CFX/n70/cfx/N70_prj_01/hot/prj_01_Tair_0_G1_17/rez-bak/N70_prj_01_Ne_10_Tair_0_D_FaS_Mesh_good_GTD_bad_CMB_FRCaED_002.res
+
+* cfx5mondata
+- Расположение в файловой системе - [[C:/ANSYS/v145/CFX/bin/cfx5mondata.exe]]
+
+#+begin_src sh
+   "D:\ANSYS\v145\CFX\bin\cfx5mondata" -help
+#+end_src
+** Пример извлечения данных из res-файла
+В данном примере из res-файла [[D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_010.res/N70_prj_10mt_010.res][N70_prj_10mt_010.res]] извлекаются все
+данные, относящиеся к определенной категории =CATEGORY = USER
+POINT=. Результат записывается в файл [[D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_010.res.csv][N70_prj_10mt_010.res.csv]].
+#+begin_src lisp
+  (sb-ext:run-program "C:/ANSYS/v145/CFX/bin/cfx5mondata.exe"
+                      (list "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_010.res"
+                            "-out" "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_010.res.csv"
+                            "-varrule" "CATEGORY = USER POINT"))
 #+end_src
 
 
- D:\ANSYS\v145\CFX\etc\workspace-basic.mst
-
-[[file:d:/ANSYS/v145/CFX/etc/workspace-basic.mst]] 
-
-
-* D:\ANSYS\v145\CFX\bin\cfx5mondata
-
+** Документация
 Name:
 cfx5mondata
-
 
 Purpose:
 Run the CFX Monitor Data Exporter.  Monitor data will be output in

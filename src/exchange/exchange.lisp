@@ -23,9 +23,11 @@
   (:export res->ccl)
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
-    информацию из файлов которые экспортирует Ansys"))
+    информацию из файлов, которые экспортирует Ansys"))
 
 (in-package :mnas-ansys/exchange)
+
+(defparameter *cfx5mondata* "C:/ANSYS/v145/CFX/bin/cfx5mondata.exe")
 
 (defun read-dat-file (dat-file)
   "@b(Описание:) функция @b(read-dat-file) возвращает 2 значения:
@@ -102,12 +104,12 @@
        (math/matr:col col data))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (defun read-res-file (res-file
                       &key
                         (rec-number 500)
-                        (program "D:/ANSYS/v145/CFX/bin/cfx5mondata.exe")
+                        (program *cfx5mondata*)
                         (file-name
                          (namestring
                           (fad:with-output-to-temporary-file (stream))
@@ -120,6 +122,18 @@
                         (regex-n-1 (ppcre:create-scanner ",(?=,)|,$"))
                         (regex-n-2 (ppcre:create-scanner ","))
                         )
+  "@b(Описание:) функция @b(read-res-file) возвращает список,
+   состоящий из векторов, основанный на данных, содержащихся в
+   res-файле.  Первый вектор содержит имена параметров, второй и
+   последующие векторы содержат значения для указанных параметров.
+
+   (read-res-file \"D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.res\" :rec-number 1)
+   => 
+   (#(\"ACCUMULATED TIMESTEP\"
+      \"USER POINT,CH1 m16i0 p321i2 m1i2,D1,\"x=-1.60E-02,y= 3.21E-01,z=-1.21E-03\",CH4.Mass Fraction\"
+      ...)
+    #(274 0.04226463 ...))
+"
   (labels
       ((scan-res-file (file-name                                   
                        &aux
@@ -157,7 +171,7 @@
 @begin[lang=lisp](code)
  (setect-matches \"GT1\" *h-d*)
 => ((1124 \"USER POINT,Temperature GT1 F T01 p46i5 p415i5 p0i0,D1,\"x= 4.65E-02,y= 4.16E-01,z= 0.00E+00\",Temperature\")
-    (1125   \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
+    (1125 \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
     ...
    )
 @end(code)
@@ -177,7 +191,7 @@
 @begin[lang=lisp](code)
  (setect-matches \"GT1\" *h-d*)
 => ((1124 \"USER POINT,Temperature GT1 F T01 p46i5 p415i5 p0i0,D1,\"x= 4.65E-02,y= 4.16E-01,z= 0.00E+00\",Temperature\")
-    (1125   \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
+    (1125 \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
     ...
    )
 @end(code)
@@ -279,7 +293,7 @@
 
 (defun res->ccl (res-file
                  &key
-                   (program "D:/ANSYS/v145/CFX/bin/cfx5cmds.exe")
+                   (program "C:/ANSYS/v145/CFX/bin/cfx5cmds.exe")
                    (file-name
                     (namestring
                      (fad:with-output-to-temporary-file (stream))))
