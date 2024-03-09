@@ -29,6 +29,8 @@
 
 (defparameter *cfx5mondata* "C:/ANSYS/v145/CFX/bin/cfx5mondata.exe")
 
+(uiop:getenv "ANSYS231_DIR")  ; => "C:\\Program Files\\ANSYS Inc\\v231\\ANSYS"
+
 (defun read-dat-file (dat-file)
   "@b(Описание:) функция @b(read-dat-file) возвращает 2 значения:
 @begin(list)

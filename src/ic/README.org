@@ -25,3 +25,22 @@
 ** Unstructured Mesh Editing and Modification Functions
 ** Utility Functions
 * Workbench Integration
+
+* ABC
+[[file:ABC.org]]
+#+name: find-tcl-files
+#+begin_src sh :results output :exports both
+  CDIR=`pwd`
+  echo "* ABC" > "${CDIR}/ABC.org"
+  DIR="C:/Program Files/ANSYS Inc/v231/icemcfd/win64_amd/"
+  cd "${DIR}"
+  for i in `find . -name "*.tcl"`
+  do
+      echo "[[${DIR}$i]]" >> "${CDIR}/ABC.org"
+      grep -r '^[[:space:]]*proc' "$i" >> "${CDIR}/ABC.org"
+  done
+#+end_src
+
+#+RESULTS: find-tcl-files
+
+
