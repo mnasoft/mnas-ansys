@@ -21,7 +21,7 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.17"
+  :version "0.0.18"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
@@ -304,3 +304,16 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "solver")))))
+
+(defsystem "mnas-ansys/cfx/bin"
+  :description
+  "Подсистема @(mnas-ansys/cfx/bin) определяет функции, которые позволяют
+определить версию ANSYS CFX и пути к её программам."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("cl-ppcre" "mnas-string") 
+  :components ((:module "src/cfx/bin"
+                :serial nil
+                :components
+                ((:file "bin")))))

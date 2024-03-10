@@ -7,7 +7,7 @@
            ansys-version
            *ansys-version*
            executables
-           setup
+           init
            help
            )
   (:export *cfdpost*
@@ -122,7 +122,9 @@
       ((and (listp versions) (< 1 (length versions)))
        (mnas-string/parse:read-integer-alt versions)))))
 
-(defparameter *ansys-version* (ansys-version))
+(defparameter *ansys-version* (ansys-version)
+  "@b(Описание:) глобальная переменная @b(*ansys-version*) хранит версию,
+выбранной для использования системы ANSYS CFX.")
 
 (defun executables ()
   "@b(Описание:) функция @b(executables) возвращает список
@@ -140,7 +142,10 @@
                 "\\..\\CFX\\bin\\" "*.exe"))
         :collect (namestring pname)))
 
-(defun setup ()
+(defun init ()
+  "@b(Описание:) функция @b(init) выполняет инициализацию глобальных
+переменных с именами начинающимися на *cfd и *cfx.
+"
   (loop :for i :in (executables)
         :do
            (let ((var-name (read-from-string 
@@ -152,9 +157,21 @@
              (set var-name      
                   i))))
 
+(defun run-program (program &rest args)
+  "@b(Описание:) функция @b(run-program) возвращает строку, выводимую на
+стандартный вывод в результате запуска прораммы.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (run-program *cfx5mondata* \"-help\")
+ (run-program *cfx5dfile* \"-help\")
+@end(code) "
+  (ppcre:regex-replace-all
+   "" (uiop:run-program (append (list program) args) :output :string) ""))
+
 (defun help (program)
   "@b(Описание:) функция @b(help) выводит на стандартный вывод
-описание для соответствующей программы.
+описание для программы @b(program).
 
  @b(Пример использования:)
 @begin[lang=lisp](code)
@@ -163,26 +180,9 @@
 @end(code)
 
 "
-  (format
-   t "~A"
-   (ppcre:regex-replace-all
-    "" (uiop:run-program (list program  "-help") :output :string) "")))
+  (format t "~A" (run-program program "-help")))
 
-(defun run-program (program &rest args)
-  "@b(Описание:) функция @b(help) выводит на стандартный вывод
-описание для соответствующей программы.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (help *cfx5mondata*)
- (help *cfx5dfile*)
-@end(code)
-
-"
-  (ppcre:regex-replace-all
-    "" (uiop:run-program (append (list program) args) :output :string) ""))
-
-(setup)
+(init)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
