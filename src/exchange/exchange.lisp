@@ -27,10 +27,6 @@
 
 (in-package :mnas-ansys/exchange)
 
-(defparameter *cfx5mondata* "C:/ANSYS/v145/CFX/bin/cfx5mondata.exe")
-
-(uiop:getenv "ANSYS231_DIR")  ; => "C:\\Program Files\\ANSYS Inc\\v231\\ANSYS"
-
 (defun read-dat-file (dat-file)
   "@b(Описание:) функция @b(read-dat-file) возвращает 2 значения:
 @begin(list)
@@ -111,7 +107,7 @@
 (defun read-res-file (res-file
                       &key
                         (rec-number 500)
-                        (program *cfx5mondata*)
+                        (program mnas-ansys/cfx/bin:*cfx5mondata*)
                         (file-name
                          (namestring
                           (fad:with-output-to-temporary-file (stream))
@@ -295,7 +291,7 @@
 
 (defun res->ccl (res-file
                  &key
-                   (program "C:/ANSYS/v145/CFX/bin/cfx5cmds.exe")
+                   (program mnas-ansys/cfx/bin:*cfx5cmds*)
                    (file-name
                     (namestring
                      (fad:with-output-to-temporary-file (stream))))

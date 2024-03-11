@@ -21,7 +21,7 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.18"
+  :version "0.0.19"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
@@ -31,7 +31,8 @@ CFX-PRE.
                "mnas-ansys/belt"
                "mnas-ansys/exchange"
                "mnas-ansys/dia"
-               "mnas-ansys/ic")
+               "mnas-ansys/ic"
+               )
   :components ((:module "src" 
                 :serial nil
                 :components
@@ -286,7 +287,8 @@ CFX-PRE.
   :depends-on ("cl-fad"
                "mnas-string"
                "math/stat"
-               "math/matr") 
+               "math/matr"
+               "mnas-ansys/cfx/bin")
   :components ((:module "src/exchange"
                 :serial nil
                 :components
@@ -317,3 +319,17 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "bin")))))
+
+(defsystem "mnas-ansys/cfx/file"
+  :description
+  "Подсистема @(mnas-ansys/cfx/file) определяет функции, которые позволяют
+осуществить извлечение информации из cfx, def и res файлов ANSYS CFX."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange") 
+  :components ((:module "src/cfx/file"
+                :serial nil
+                :components
+                ((:file "file")))))
+
