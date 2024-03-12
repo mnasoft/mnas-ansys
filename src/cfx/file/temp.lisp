@@ -32,6 +32,7 @@
 #+nil
 (progn
   (mon-extract *res* *n-iter*) ; Извлекаем данные о мониторах из res-файла
+  (ccl-extract *res*)          ; Извлекаем данные ccl
   (save        *res*)          ; Сохраняем объект в res-файл
   )
 
@@ -75,14 +76,8 @@
   (mon-to-org "USER POINT,GT CONE5.*Velocity w.*"         *res* :suffix "-GT-CONE5-Vw")
   )
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(ccl-extract *res*)
-
-(<res>-ccl *res*)
-
-(save *res*)
 
 (mnas-ansys/ccl:find-in-tree-in-deep
  '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Mass Flow Rate")
@@ -91,3 +86,17 @@
 (mnas-ansys/ccl:find-in-tree-in-deep 
  '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Total Temperature")
  *ccl* t  )
+
+
+
+
+
+(ppcre:scan-to-strings "([a-z]|[A-Z]|[^,])*([a-z]|[A-Z]|[^,])*" (mon-name *mon*))
+
+(length (mnas-string:split "\"" (mon-name *mon*)))
+
+(mon-name-list *mon*)
+(mon-type *mon*)
+(mon-domain *mon*)
+
+

@@ -8,15 +8,19 @@
            )
   (:export <res>
            <res>-res-pname
-           <res>-ccl           
+           <res>-ccl 
            )
   (:export save          ;; Сохранение объекта
            load-instance ;; Загрузка объекта из файла
+           )
+  (:export ccl-extract ;; Извлечение данных связанных их файла.
            )
   (:export mon-extract ;; Извлечение данных о мониторах из res-файла
            mon-select  ;; Выборка из объекта по определенным мониторам
            mon-table   ;; Список номер пп, имя, данные по монитору
            mon-to-org  ;; Вывод в файл с именем как у res-файла и расширением org
+           )
+  (:export find-in-ccl ;; Поиск вглубину по данным ccl.
            )
   (:export convert-coord)
   (:export res->ccl)
@@ -29,7 +33,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defclass
 
-(defclass <htable> (serializable-object:serializable-object)
+(defclass <res> (serializable-object:serializable-object)
   ((head
     :accessor <htable>-head
     :initarg :head
@@ -39,15 +43,8 @@
     :accessor <htable>-data
     :initarg :data
     :initform nil
-    :documentation "Данные."))
-  (:documentation
-   "@b(Описание:) Класс @b(<htable>) определяет интерфейсы для
- извлечения информации, находящейя в res-файлах системы ANSYS CFX."))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defclass <res> (<htable>)
-  ((res-pname
+    :documentation "Данные.")
+   (res-pname
     :accessor <res>-res-pname
     :initarg :res-pname
     :initform nil
@@ -59,25 +56,28 @@
     :documentation "Полный путь к res-файлу ANSYS CFX.")
     )
   (:documentation
-   "@b(Описание:) Класс @b(<htable>) определяет интерфейсы для
+   "@b(Описание:) Класс @b(<res>) определяет интерфейсы для
  извлечения информации, находящейя в res-файлах системы ANSYS CFX."))
-
- (mnas-ansys/exchange:res->ccl *res-file*)
 
 (defmethod print-object ((res <res>) stream)
   (format stream "Res-Pathname   = ~S~%" (<res>-res-pname res))
   (format stream "S-Obj-Pathname = ~S~%" (slot-value res 'pathname))
   (when (<htable>-data res)
     (format stream "Data Length = ~S~%" (length (<htable>-data res))))
+  (when (<res>-ccl res)
+    (format stream "~%========================================~%" )
+    (format stream "CLL~%")
+    (format stream "========================================~%" )
+    (format stream "~S" (<res>-ccl res)))
   (when (<htable>-head res)
     (format stream "Key Length = ~S~%" (length (<htable>-head res)))
-    (format stream "========================================~%" )
+    (format stream "~%========================================~%" )
     (format stream "Keys~%")
     (format stream "========================================~%" )
     (loop :for k :across (<htable>-head res)
           :for i :from 0
           :do
-      (format stream "~5A: ~A~%" i k))))
+             (format stream "~5A: ~A~%" i k))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defmethod
@@ -87,11 +87,12 @@
 "
   (let ((h-d (mnas-ansys/exchange:read-res-file (<res>-res-pname res) :rec-number n-iter)))
     (setf (<htable>-head res) (first h-d))
-    (setf (<htable>-data res) (cdr   h-d))))
+    (setf (<htable>-data res) (cdr   h-d))
+    res))
 
 (defmethod ccl-extract ((res <res>))
-  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
-"
+  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла данные на
+языке ccl."
   (when (<res>-res-pname res)
     (setf (<res>-ccl res)
           (mnas-ansys/exchange:res->ccl (<res>-res-pname res)))))
