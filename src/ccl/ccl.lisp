@@ -6,7 +6,9 @@
   (:export find-in-tree
            find-in-tree-key
            find-in-tree-value
-           find-in-tree-key-value)
+           find-in-tree-key-value
+           find-in-tree-in-deep
+           )
   (:export value
            digits-dimension)
   (:export make-domain-interface-rotational-periodicity
@@ -101,9 +103,43 @@
    :test #'equal
    :key (lambda (i) (when (consp i) (list (first i)(second i))))))
 
-(defun value (x) (cadr x))
+(defun find-in-tree-in-deep (deep-list ccl-tree &optional (value nil))
+  (let ((rez ccl-tree))
+    (loop :for i :in deep-list :do
+      (cond
+        ((and (consp i) (= 1 (length i)))
+         (setf rez (apply #'find-in-tree-key (append i (list rez)))))
+        ((null (consp i))
+         (setf rez (find-in-tree-key i rez)))
+        ((and (consp i) (= 2 (length i)))
+         (setf rez (apply #'find-in-tree-key-value (append i (list rez)))))))
+    (if value (digits-dimension rez) rez)))
+
+
+(defun value (x)
+  "@b(Описание:) функция @b(value) извлекает второй элемент из списка.
+Второй элемент списка представляет значение и разменность для
+переменной.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (value '(\"Mass Flow Rate\" \"3.505782 [kg s^-1]\"))
+@end(code)"
+  (cadr x))
 
 (defun digits-dimension (x)
+  "@b(Описание:) функция @b(digits-dimension) возвращает два значения:
+@begin(list)
+ @item(- вещественное - значение величины;)
+ @item(- строкове - размерность величины.)
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (digits-dimension '(\"Mass Flow Rate\" \"3.505782 [kg s^-1]\"))
+@end(code)
+
+"
   (let ((str-list (mnas-string:split "[]" (value x))))
     (values 
      (read-from-string (first str-list))

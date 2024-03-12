@@ -122,7 +122,8 @@
       ((and (listp versions) (< 1 (length versions)))
        (mnas-string/parse:read-integer-alt versions)))))
 
-(defparameter *ansys-version* (ansys-version)
+;;; defparameter
+(defvar *ansys-version* (ansys-version) 
   "@b(Описание:) глобальная переменная @b(*ansys-version*) хранит версию,
 выбранной для использования системы ANSYS CFX.")
 

@@ -8,13 +8,15 @@
            )
   (:export <res>
            <res>-res-pname
+           <res>-ccl           
            )
-  (:export extract        ;; Извлечение данных о мониторах из res-файла
-           save           ;; Сохранение объекта
-           load-instance  ;; Загрузка объекта из файла
-           select         ;; Выборка из объекта по определенным мониторам
-           monitor-table  ;; Список номер пп, имя, данные по монитору
-           monitor-to-org ;; Вывод в файл с именем как у res-файла и расширением org
+  (:export save          ;; Сохранение объекта
+           load-instance ;; Загрузка объекта из файла
+           )
+  (:export mon-extract ;; Извлечение данных о мониторах из res-файла
+           mon-select  ;; Выборка из объекта по определенным мониторам
+           mon-table   ;; Список номер пп, имя, данные по монитору
+           mon-to-org  ;; Вывод в файл с именем как у res-файла и расширением org
            )
   (:export convert-coord)
   (:export res->ccl)
@@ -49,10 +51,18 @@
     :accessor <res>-res-pname
     :initarg :res-pname
     :initform nil
-    :documentation "Полный путь к res-файлу ANSYS CFX."))
+    :documentation "Полный путь к res-файлу ANSYS CFX.")
+   (ccl
+    :accessor <res>-ccl
+    :initarg :res-ccl
+    :initform nil
+    :documentation "Полный путь к res-файлу ANSYS CFX.")
+    )
   (:documentation
    "@b(Описание:) Класс @b(<htable>) определяет интерфейсы для
  извлечения информации, находящейя в res-файлах системы ANSYS CFX."))
+
+ (mnas-ansys/exchange:res->ccl *res-file*)
 
 (defmethod print-object ((res <res>) stream)
   (format stream "Res-Pathname   = ~S~%" (<res>-res-pname res))
@@ -72,12 +82,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defmethod
 
-(defmethod extract ((res <res>) (n-iter integer))
-  "@b(Описание:) метод @b(extract) извлекает из res-файла 
+(defmethod mon-extract ((res <res>) (n-iter integer))
+  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
 "
   (let ((h-d (mnas-ansys/exchange:read-res-file (<res>-res-pname res) :rec-number n-iter)))
     (setf (<htable>-head res) (first h-d))
     (setf (<htable>-data res) (cdr   h-d))))
+
+(defmethod ccl-extract ((res <res>))
+  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
+"
+  (when (<res>-res-pname res)
+    (setf (<res>-ccl res)
+          (mnas-ansys/exchange:res->ccl (<res>-res-pname res)))))
 
 (defmethod save ((res <res>))
   (serializable-object:save res :compression nil))
@@ -86,8 +103,8 @@
   (setf res
         (serializable-object:load-instance (slot-value res 'pathname))))
 
-(defmethod select (regexp (res <res>))
-  "@b(Описание:) функция @b(select) возвращает, список, каждый элемент которого
+(defmethod mon-select (regexp (res <res>))
+  "@b(Описание:) функция @b(mon-select) возвращает, список, каждый элемент которого
 является 2d-списком, содержащим номер и заголовок колонки, удовлетворяющей @b(regexp)
 для строки заголовков headered-tabel.
 
@@ -109,14 +126,36 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod monitor-table ((res <res>) &key (regexp ".*MFR.*"))
+(defmethod mon-table (regexp (res <res>))
+  "@b(Описание:) метод @b(mon-table) возващает 2d-list, в каждой
+ строке которого содержится информация относящаяся к одному монитору:
+
+@begin(list)
+  @item(номер по порядку;)
+  @item(имя монитора;)
+  @item(данные монитору на соответствующем временном шаге;)
+@end(list)
+
+ В 2d-list попадают мониторы, имена которых удовлетвоняют регулярному
+выражению @b(regexp) согласно правилам пакета cl-ppcre.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (mon-table \".*MFR.*\" *res*)
+@end(code)
+"
   (when (<htable>-head res))
-  (let ((selected (select regexp res)))
+  (let ((selected (mon-select regexp res)))
     (loop :for (i name) :in selected
           :collect
           (append (list i name) (loop :for val :in (<htable>-data res) :collect (svref val i))))))
 
-(defmethod monitor-to-org ((res <res>) &key (regexp ".*MFR.*"))
+(defmethod mon-to-org (regexp (res <res>) &key (suffix ""))
+  "@b(Описание:) метод @b(mon-to-org) возвращает имя org-файла, в
+который выводятся данные, связанные с мониторами объекта @b(res),
+которые удовлетвоняют регулярному выражению @b(regexp) согласно
+правилам пакета cl-ppcre.
+"
   (let* ((rgx (ppcre:create-scanner ".*(?=[.][-|_|a-z|A-Z|0-9]+$)")) ; Извлечение из полного пути файла - полного пути без расширения
          (res-fname
            (ppcre:scan-to-strings rgx (<res>-res-pname res)))
@@ -127,19 +166,18 @@
       (res-fname
        (with-open-file
            (stream
-            (concatenate 'string res-fname ".org")
+            (concatenate 'string res-fname suffix ".org")
             :direction :output
             :if-exists :supersede)
-         (mnas-org-mode:table-to-org (monitor-table res :regexp regexp) stream)
-         (concatenate 'string res-fname ".org")
+         (mnas-org-mode:table-to-org (mon-table regexp res) stream)
+         (concatenate 'string res-fname suffix ".org")
          ))
       (s-obj-fname
        (with-open-file
            (stream
-            (concatenate 'string s-obj-fname ".org")
+            (concatenate 'string s-obj-fname suffix ".org")
             :direction :output
             :if-exists :supersede)
-         (mnas-org-mode:table-to-org (monitor-table res :regexp regexp) stream)
-         (concatenate 'string s-obj-fname ".org")
+         (mnas-org-mode:table-to-org (mon-table regexp res) stream)
+         (concatenate 'string s-obj-fname suffix ".org")
          )))))
-
