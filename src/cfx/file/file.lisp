@@ -2,13 +2,11 @@
 
 (defpackage :mnas-ansys/cfx/file
   (:use #:cl)
-  (:export <htable>       ;; Класс таблицы
-           <htable>-head  ;; Аксессор заголовока таблицы
-           <htable>-data  ;; Аксессор данных таблицы
-           )
   (:export <res>
-           <res>-res-pname
-           <res>-ccl 
+           <res>-head     ;; Аксессор заголовока таблицы
+           <res>-pathname ;; Аксессор к имени res-файла
+           <res>-data     ;; Аксессор данных таблицы
+           <res>-ccl      ;; Аксессор к списку ccl
            )
   (:export save          ;; Сохранение объекта
            load-instance ;; Загрузка объекта из файла
@@ -35,17 +33,23 @@
 
 (defclass <res> (serializable-object:serializable-object)
   ((head
-    :accessor <htable>-head
+    :accessor <res>-head
     :initarg :head
     :initform nil
     :documentation "Строка заголовков.")
    (data
-    :accessor <htable>-data
+    :accessor <res>-data
     :initarg :data
     :initform nil
     :documentation "Данные.")
+   (mon
+    :accessor <res>-mon
+    :initarg :mon
+    :initform (make-hash-table)
+    :documentation "Хешированная таблица мониторов.")
+    )
    (res-pname
-    :accessor <res>-res-pname
+    :accessor <res>-pathname
     :initarg :res-pname
     :initform nil
     :documentation "Полный путь к res-файлу ANSYS CFX.")
@@ -60,21 +64,21 @@
  извлечения информации, находящейя в res-файлах системы ANSYS CFX."))
 
 (defmethod print-object ((res <res>) stream)
-  (format stream "Res-Pathname   = ~S~%" (<res>-res-pname res))
+  (format stream "Res-Pathname   = ~S~%" (<res>-pathname res))
   (format stream "S-Obj-Pathname = ~S~%" (slot-value res 'pathname))
-  (when (<htable>-data res)
-    (format stream "Data Length = ~S~%" (length (<htable>-data res))))
+  (when (<res>-data res)
+    (format stream "Data Length = ~S~%" (length (<res>-data res))))
   (when (<res>-ccl res)
     (format stream "~%========================================~%" )
     (format stream "CLL~%")
     (format stream "========================================~%" )
     (format stream "~S" (<res>-ccl res)))
-  (when (<htable>-head res)
-    (format stream "Key Length = ~S~%" (length (<htable>-head res)))
+  (when (<res>-head res)
+    (format stream "Key Length = ~S~%" (length (<res>-head res)))
     (format stream "~%========================================~%" )
     (format stream "Keys~%")
     (format stream "========================================~%" )
-    (loop :for k :across (<htable>-head res)
+    (loop :for k :across (<res>-head res)
           :for i :from 0
           :do
              (format stream "~5A: ~A~%" i k))))
@@ -85,17 +89,17 @@
 (defmethod mon-extract ((res <res>) (n-iter integer))
   "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
 "
-  (let ((h-d (mnas-ansys/exchange:read-res-file (<res>-res-pname res) :rec-number n-iter)))
-    (setf (<htable>-head res) (first h-d))
-    (setf (<htable>-data res) (cdr   h-d))
+  (let ((h-d (mnas-ansys/exchange:read-res-file (<res>-pathname res) :rec-number n-iter)))
+    (setf (<res>-head res) (first h-d))
+    (setf (<res>-data res) (cdr   h-d))
     res))
 
 (defmethod ccl-extract ((res <res>))
-  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла данные на
+  "@b(Описание:) метод @b(ccl-extract) извлекает из res-файла данные на
 языке ccl."
-  (when (<res>-res-pname res)
+  (when (<res>-pathname res)
     (setf (<res>-ccl res)
-          (mnas-ansys/exchange:res->ccl (<res>-res-pname res)))))
+          (mnas-ansys/exchange:res->ccl (<res>-pathname res)))))
 
 (defmethod save ((res <res>))
   (serializable-object:save res :compression nil))
@@ -118,9 +122,9 @@
    )
 @end(code)
 "
-  (when (<htable>-head res)
+  (when (<res>-head res)
   (let ((rgx (ppcre:create-scanner regexp)))
-    (loop :for i :across (<htable>-head res)
+    (loop :for i :across (<res>-head res)
           :for j :from 0
           :when (ppcre:scan rgx i)
             :collect `(,j ,i)))))
@@ -145,11 +149,11 @@
   (mon-table \".*MFR.*\" *res*)
 @end(code)
 "
-  (when (<htable>-head res))
+  (when (<res>-head res))
   (let ((selected (mon-select regexp res)))
     (loop :for (i name) :in selected
           :collect
-          (append (list i name) (loop :for val :in (<htable>-data res) :collect (svref val i))))))
+          (append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i))))))
 
 (defmethod mon-to-org (regexp (res <res>) &key (suffix ""))
   "@b(Описание:) метод @b(mon-to-org) возвращает имя org-файла, в
@@ -159,7 +163,7 @@
 "
   (let* ((rgx (ppcre:create-scanner ".*(?=[.][-|_|a-z|A-Z|0-9]+$)")) ; Извлечение из полного пути файла - полного пути без расширения
          (res-fname
-           (ppcre:scan-to-strings rgx (<res>-res-pname res)))
+           (ppcre:scan-to-strings rgx (<res>-pathname res)))
          (s-obj-fname
            (ppcre:scan-to-strings rgx  (slot-value res 'pathname)))
          )

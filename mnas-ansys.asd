@@ -334,3 +334,30 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "file")))))
+
+(defsystem "mnas-ansys/cfx/file/mon"
+  :description
+  "Подсистема @(mnas-ansys/cfx/file) определяет функции, которые позволяют
+осуществить извлечение информации из cfx, def и res файлов ANSYS CFX."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+;;;;  :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange")  
+  :components ((:module "src/cfx/file/mon"
+                :serial nil
+                :components
+                ((:file "mon")))))
+
+(defsystem "mnas-ansys/cfx/file/mon/core"
+  :description
+  "Подсистема @(mnas-ansys/cfx/file/mon/core) определяет функции, которые позволяют
+осуществить извлечение информации из cfx, def и res файлов ANSYS CFX."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+;;;;  :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange")  
+  :components ((:module "src/cfx/file/mon/core"
+                :serial nil
+                :components
+                ((:file "core")))))
+
