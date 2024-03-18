@@ -1,6 +1,6 @@
-;;; ./src/cfx/file/mon/temp.lisp
+;;; ./src/cfx/file/mon/core/temp.lisp
 
-(in-package :mnas-ansys/cfx/file/mon)
+(in-package :mnas-ansys/cfx/file/mon/core)
 
 (progn 
   (mk-mon *mon*)
@@ -46,7 +46,7 @@
 
 (defparameter *mon*  (first (mnas-ansys/cfx/file:mon-select ".*MFR.*" *res*)))
 
-(mon-name *mon*)
-(length (mon-name-list *mon*))
-(mon-type *mon*)
-(mon-domen *mon*)
+(mnas-ansys/cfx/file/mon/core:mon-name *mon*)
+(length (mnas-ansys/cfx/file/mon/core:mon-name-list *mon*))
+(mnas-ansys/cfx/file/mon/core:mon-type *mon*)
+(mnas-ansys/cfx/file/mon/core:mon-domen *mon*)

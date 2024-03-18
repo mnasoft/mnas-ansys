@@ -39,6 +39,11 @@
 (progn
   (setf *res* (load-instance *res*)) ; Загружаем объект из s-obj-файла
 
+
+  (<res>-data *res*)
+  (mon-select ".*" *res*)
+
+
 ;;; Выборка всех полей
   (mon-to-org ".*"                 *res* )
 
@@ -77,6 +82,8 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(<res>-mon *res*)
 
 
 (mnas-ansys/ccl:find-in-tree-in-deep

@@ -20,6 +20,7 @@
            )
   (:export find-in-ccl ;; Поиск вглубину по данным ccl.
            )
+  (:export convert-coord)
   (:export res->ccl)
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
@@ -31,8 +32,7 @@
 ;;;; defclass
 
 (defclass <res> (serializable-object:serializable-object)
-  (
-   (head
+  ((head
     :accessor <res>-head
     :initarg :head
     :initform nil
@@ -42,11 +42,6 @@
     :initarg :data
     :initform nil
     :documentation "Данные.")
-   (mon
-    :accessor <res>-mon
-    :initarg :mon
-    :initform (make-hash-table :test #'equal)
-    :documentation "Хешированная таблица мониторов.")
    (res-pname
     :accessor <res>-pathname
     :initarg :res-pname
@@ -85,7 +80,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defmethod
 
-#+nil
 (defmethod mon-extract ((res <res>) (n-iter integer))
   "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
 "
@@ -93,42 +87,6 @@
     (setf (<res>-head res) (first h-d))
     (setf (<res>-data res) (cdr   h-d))
     res))
-
-(defmethod mon-extract ((res <res>) (n-iter integer))
-  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
-"
-  (let* ((h-d (mnas-ansys/exchange:read-res-file (<res>-pathname res) :rec-number n-iter))
-        (h (first h-d))
-;;        (d (cdr   h-d))
-        )
-    (when h
-      (loop :for name :in h 
-      :for j :from 0 :collect
-        (let* ((mon (mnas-ansys/cfx/file/mon:mk-mon (list j h)))
-               (des (mnas-ansys/cfx/file/mon:<mon>-des mon)) )
-          des)))))
-
-
-(append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i)))
-
-(gethash key ht)
-
-(defparameter *ht* (make-hash-table :test #'equal) )
-
-
-(setf (gethash "0" *ht*) 0.013)
-
-#+nil
-(when (<res>-head res))
-#+nil
-(let ((selected (mon-select regexp res)))
-  (loop :for (i name) :in selected
-        :collect
-        (append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i)))))
-
-#+nil
-(loop :for mon :being :the :hash-keys :in (outlet-edges node graph) :do
-      (remove-from edge graph))
 
 (defmethod ccl-extract ((res <res>))
   "@b(Описание:) метод @b(ccl-extract) извлекает из res-файла данные на
@@ -164,7 +122,7 @@
           :for j :from 0
           :when (ppcre:scan rgx i)
             :collect `(,j ,i)))))
-  
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod mon-table (regexp (res <res>))

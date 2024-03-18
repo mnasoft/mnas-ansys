@@ -3,27 +3,47 @@
 (defpackage :mnas-ansys/cfx/file/mon/core
   (:use #:cl)
   (:export mon-number
+           mon-des)
+  (:export mon-fam
            mon-name
-           mon-name-list
-           mon-fam
            mon-domen
            mon-type
            mon-coords
+           mon-location
            )
+  (:export convert-coord)
+  (:intern mon-name-list)
   (:documentation
    "Пакет @(mnas-ansys/cfx/file/mon/core) определяет функции,
 позволяющие сформировать монитор (см. пакет :mnas-ansys/cfx/file/mon)."))
 
 (in-package :mnas-ansys/cfx/file/mon/core)
 
+(defun convert-coord (x)
+  "Преобразует строковое представление значения в число.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (convert-coord \"p179i5\")
+ (convert-coord \"m258i3\") 
+@end(code)
+"
+  (read-from-string
+   (ppcre:regex-replace-all
+    "m"
+    (ppcre:regex-replace-all
+     "p"
+     (ppcre:regex-replace-all "i" x ".") "+")
+    "-")))
+
 (defun mon-number (mon)
   (first mon))
 
-(defun mon-name (mon)
+(defun mon-des (mon)
   (second mon))
 
 (defun mon-name-list (mon)
-  (let* ((name (mon-name mon))
+  (let* ((name (mon-full-name mon))
          (n-lst(mnas-string:split "\"" name)))
     (cond
       ((and (consp n-lst) (= 3 (length n-lst)))
@@ -37,6 +57,9 @@
 (defun mon-fam (mon)
   (nth 0 (mon-name-list mon)))
 
+(defun mon-name (mon)
+  (nth 1 (mon-name-list mon))))
+
 (defun mon-domen (mon)
   (nth 2 (mon-name-list mon)))
 
@@ -49,9 +72,13 @@
       (nreverse
        (loop :for i :in (nreverse (mnas-string:split " " (second n-lst)))
              :for j :from 1 :to 3
-             :collect (mnas-ansys/exchange:convert-coord i))))))
+             :collect (convert-coord i))))))
 
 (defun mon-location (mon)
+  "@b(Описание:) функция @b(mon-location)
+
+"
+
   (loop :for s
           :in 
           (mnas-string:split "\", xyz=" (nth 3 (mon-name-list mon)))

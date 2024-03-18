@@ -19,7 +19,6 @@
            max-average-value-from-headered-tabel-by-col-names
            ave-max-average-value-from-headered-tabel-by-col-names
            )
-  (:export convert-coord)
   (:export res->ccl)
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
@@ -268,24 +267,6 @@
      number
      (math/stat:average-value rez)
      (math/stat:max-value rez)))
-
-(defun convert-coord (x)
-  "Преобразует строковое представление значения в число.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (convert-coord \"p179i5\")
- (convert-coord \"m258i3\") 
-@end(code)
-"
-  (read-from-string
-   (ppcre:regex-replace-all
-    "m"
-    (ppcre:regex-replace-all
-     "p"
-     (ppcre:regex-replace-all "i" x ".") "+")
-    "-")))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
