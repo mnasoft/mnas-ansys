@@ -7,18 +7,18 @@
   (defparameter *res-file*
     #+nil
     "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.res"
-    #+nil
+;;    #+nil
     "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.res"
-;;  #+nil
+  #+nil
     "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_007.res"
     "Полный путь к res-файлу.")
 
   (defparameter *s-obj-file*
     #+nil
     "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.s-obj"
-    #+nil
+;;    #+nil
     "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.s-obj"
-;;  #+nil
+  #+nil
     "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_007.s-obj"
     "Полный путь к файлу с  сериализованными данными для объекта, класса
  foo.")
@@ -92,9 +92,15 @@
   (mon-to-org "USER POINT,GT CONE5.*Velocity u.*"         *res* :suffix "-GT-CONE5-Vu")
   (mon-to-org "USER POINT,GT CONE5.*Velocity v.*"         *res* :suffix "-GT-CONE5-Vv")
   (mon-to-org "USER POINT,GT CONE5.*Velocity w.*"         *res* :suffix "-GT-CONE5-Vw")
+
+  (mon-to-org "USER POINT,GT[14] M.*"                     *res* :suffix "-GT-MET-T")  
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Вспомогательные тесты
+
+(setf *res* (load-instance *res*)) ; Загружаем объект из s-obj-файла
+
 (<res>-data *res*) ;; Проверка данных проекта
 (mon-select ".*" *res*) ;; Проверка выборки пар индекс, значение
+(mon-select "USER POINT,GT[14] M.*" *res*)
