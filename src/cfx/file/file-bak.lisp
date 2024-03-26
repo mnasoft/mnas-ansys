@@ -1,6 +1,6 @@
 ;;;; ./src/cfx/file/file.lisp
 
-(defpackage :mnas-ansys/cfx/file
+(defpackage :mnas-ansys/cfx/file-bak
   (:use #:cl)
   (:export <res>
            <res>-head     ;; Аксессор заголовока таблицы
@@ -26,7 +26,7 @@
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
     информацию из файлов, которые экспортирует Ansys"))
 
-(in-package :mnas-ansys/cfx/file)
+(in-package :mnas-ansys/cfx/file-bak)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defclass
