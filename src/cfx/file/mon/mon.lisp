@@ -10,6 +10,7 @@
            <mon>-location
            <mon>-type
            <mon>-data
+           mk-key       ;; fam+name+type
            )
   (:export mk-mon)
   (:documentation
@@ -68,8 +69,10 @@
 
 (defmethod print-object ((mon <mon>) stream)
   (format stream "number   = ~S~%" (<mon>-number mon))
-  (format stream "name     = ~S~%" (<mon>-name mon))
+  (format stream "des      = ~S~%" (<mon>-des mon))
   (format stream "fam      = ~S~%" (<mon>-fam mon))
+  (format stream "name     = ~S~%" (<mon>-name mon))
+
   (format stream "domen    = ~S~%" (<mon>-domen mon))
   (format stream "location = ~S~%" (<mon>-location mon))
   (format stream "coords   = ~S~%" (<mon>-coords mon))
@@ -78,13 +81,30 @@
 (defun mk-mon (mon-num-name)
   (let ((mon (make-instance '<mon>)))
     (setf
-     (<mon>-number   mon)   (mnas-ansys/cfx/file/mon/core:mon-number  mon-num-name)
-     (<mon>-name     mon)   (mnas-ansys/cfx/file/mon/core:mon-des     mon-num-name)
-     (<mon>-fam      mon)   (mnas-ansys/cfx/file/mon/core:mon-fam     mon-num-name)
-     (<mon>-domen    mon)   (mnas-ansys/cfx/file/mon/core:mon-domen   mon-num-name)
-     (<mon>-coords   mon)   (mnas-ansys/cfx/file/mon/core:mon-coords  mon-num-name)
-;;     (<mon>-location mon)   (mnas-ansys/cfx/file/mon/core:mon-loc coords  mon-num-name)
-     (<mon>-type     mon)   (mnas-ansys/cfx/file/mon/core:mon-type    mon-num-name))
+     (<mon>-number   mon)   (mnas-ansys/cfx/file/mon/core:mon-number   mon-num-name)
+     (<mon>-des      mon)   (mnas-ansys/cfx/file/mon/core:mon-des      mon-num-name)
+     (<mon>-fam      mon)   (mnas-ansys/cfx/file/mon/core:mon-fam      mon-num-name)
+     (<mon>-name     mon)   (mnas-ansys/cfx/file/mon/core:mon-name     mon-num-name)
+     (<mon>-domen    mon)   (mnas-ansys/cfx/file/mon/core:mon-domen    mon-num-name)
+     (<mon>-coords   mon)   (mnas-ansys/cfx/file/mon/core:mon-coords   mon-num-name)
+     (<mon>-location mon)   (mnas-ansys/cfx/file/mon/core:mon-location mon-num-name)
+     (<mon>-type     mon)   (mnas-ansys/cfx/file/mon/core:mon-type     mon-num-name))
     mon))
 
+(defmethod mk-key ((mon <mon>))
+  (cond
+  ((<mon>-name mon)
+   (format nil "~{~A~^,~}" (list (<mon>-name mon) (<mon>-type mon))))
+  ((<mon>-fam mon))))
+
+#+nil
+(let ((rez ""))
+    (when (<mon>-fam mon)
+      (setf rez (concatenate 'string rez (<mon>-fam mon))))
+    (when (<mon>-name mon)
+      (setf rez (concatenate 'string rez "," (<mon>-name mon))))
+    (when (<mon>-type mon)
+      (setf rez (concatenate 'string rez "," (<mon>-type mon))))
+    rez)
+  
 #+nil (vector 1.0  2.0 3.0)

@@ -329,7 +329,12 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange")  
+  :depends-on ("serializable-object"
+               "mnas-ansys/cfx/bin"
+               "mnas-org-mode"
+               "mnas-ansys/exchange"
+               "mnas-ansys/cfx/file/mon"
+               )
   :components ((:module "src/cfx/file"
                 :serial nil
                 :components
@@ -337,8 +342,8 @@ CFX-PRE.
 
 (defsystem "mnas-ansys/cfx/file/mon"
   :description
-  "Подсистема @(mnas-ansys/cfx/file) определяет функции, которые позволяют
-осуществить извлечение информации из cfx, def и res файлов ANSYS CFX."
+  "Подсистема @(mnas-ansys/cfx/file/mon) определяет класс монитора <mon>
+и функции, обеспечивающие манипуляции с его слотами."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
@@ -350,8 +355,9 @@ CFX-PRE.
 
 (defsystem "mnas-ansys/cfx/file/mon/core"
   :description
-  "Подсистема @(mnas-ansys/cfx/file/mon/core) определяет функции, которые позволяют
-осуществить извлечение информации из cfx, def и res файлов ANSYS CFX."
+  "Подсистема @(mnas-ansys/cfx/file/mon/core) определяет вспомогательные
+функции, обеспечивающие работу функций определяемых системой
+:mnas-ansys/cfx/file/mon."
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil

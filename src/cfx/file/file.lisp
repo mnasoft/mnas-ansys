@@ -98,25 +98,76 @@
   "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
 "
   (let* ((h-d (mnas-ansys/exchange:read-res-file (<res>-pathname res) :rec-number n-iter))
-        (h (first h-d))
-;;        (d (cdr   h-d))
+         (h (first h-d))
+         ;; (d (cdr   h-d))
+         )
+    (when h
+      (loop :for name :across h 
+            :for j :from 0
+            :do
+            (let* ((mon nil)
+                   (des nil))
+              (format t "~A : ~A~%" j name )
+              (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
+              (setf des (mnas-ansys/cfx/file/mon:<mon>-des mon))
+              des)))))
+#+nil
+(when h
+  (loop :for name :across h 
+        :for j :from 0 :to 10
+        :do
+           (let* ((mon nil)
+                  (des nil)
+                  #+nil (type nil)
+                  )
+             (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
+             (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
+                   (loop :for val :in d :collect (svref val j)))
+             (setf (gethash
+                    (mnas-ansys/cfx/file/mon:mk-key mon)
+                    (<res>-mon res))
+                   mon)
+             )))
+
+#+nil
+(progn
+  (defparameter *h-d* (mnas-ansys/exchange:read-res-file
+                       (<res>-pathname *res*)
+                       :rec-number *n-iter*)))
+#+nil
+(defparameter *mons*
+  (let ((h (first *h-d*))
+        (d (cdr   *h-d*))        
         )
     (when h
-      (loop :for name :in h 
-      :for j :from 0 :collect
-        (let* ((mon (mnas-ansys/cfx/file/mon:mk-mon (list j h)))
-               (des (mnas-ansys/cfx/file/mon:<mon>-des mon)) )
-          des)))))
+      (loop :for name :across h 
+            :for j :from 0 :to 10
+            :do
+            (let* ((mon nil)
+                   (des nil)
+                   #+nil (type nil)
+                   )
+              #+nil (format t "~A : ~A~%" j name)
+              (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
+              (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
+                    (loop :for val :in d :collect (svref val j)))
+              (setf (gethash
+                     (mnas-ansys/cfx/file/mon:mk-key mon)
+                     (<res>-mon *res*))
+                    mon)
+              )))))
+#+nil
+(progn
+  *res*
+  (setf (gethash  (mnas-ansys/cfx/file/mon:mk-key (first *mons*)) (<res>-mon *res*)) (first *mons*))
+  (setf (gethash  (mnas-ansys/cfx/file/mon:mk-key (second *mons*)) (<res>-mon *res*)) (second *mons*)))
 
-
-(append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i)))
-
-(gethash key ht)
-
-(defparameter *ht* (make-hash-table :test #'equal) )
-
-
-(setf (gethash "0" *ht*) 0.013)
+#+nil
+(progn 
+  (append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i)))
+  (gethash key ht)
+  (defparameter *ht* (make-hash-table :test #'equal) )
+  (setf (gethash "0" *ht*) 0.013))
 
 #+nil
 (when (<res>-head res))
