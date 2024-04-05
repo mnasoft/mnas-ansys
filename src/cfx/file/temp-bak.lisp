@@ -4,27 +4,35 @@
 ;;;; Vars
 
 (progn
-  (defparameter *res-file*
-    #+nil
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.res"
-;;    #+nil
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.res"
-  #+nil
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_007.res"
-    "Полный путь к res-файлу.")
-
-  (defparameter *s-obj-file*
-    #+nil
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.s-obj"
-;;    #+nil
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.s-obj"
-  #+nil
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_007.s-obj"
-    "Полный путь к файлу с  сериализованными данными для объекта, класса
- foo.")
-
   (defparameter *n-iter* 150
     "Количество итераций")
+  
+  (defparameter *res-file*
+;;;; 09    
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_007.res"
+;;;; 10
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.res"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.res"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_015.res"
+;;;; 11
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-85.res"
+    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-249.res"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
+    "Полный путь к res-файлу.")
+
+
+  (defparameter *s-obj-file*
+;;;; 09
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_007.s-obj"
+;;;; 10
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.s-obj"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.s-obj"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_015.s-obj"
+;;;; 11
+    #+nil  "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-85.s-obj"
+    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-249.s-obj"        
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
+    "Полный путь к файлу с  сериализованными данными для объекта.")
 
 ;;; Создаем переменную, которая ссылается на res-файл.
   (defparameter *res*
