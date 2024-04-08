@@ -22,6 +22,9 @@
            )
   (:export convert-coord)
   (:export res->ccl)
+  (:export res-to-s-obj
+           dir-to-s-obj
+           )
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
     информацию из файлов, которые экспортирует Ansys"))
@@ -180,3 +183,62 @@
          (mnas-org-mode:table-to-org (mon-table regexp res) stream)
          (concatenate 'string s-obj-fname suffix ".org")
          )))))
+
+(defun res-to-s-obj (res-file &key (n-iter 150) (force-load nil))
+  "@b(Описание:) функция @b(res-to-s-obj) возвращает объект класса <res>.
+
+ @b(Переменые:)
+@begin(list)
+ @item(res-file - полное имя res-файла;)
+ @item(n-iter - количество итераций по мониторам;)
+ @item(force-load - признак принудительной выгрузки данных из
+       res-файла.)
+@end(list)
+   Если данные объекта извлекаются:
+@begin(list)
+ @item(res-файла - если s-obj-файл не существует или force-load не
+       равно nil;)
+ @item(s-obj-файла - если s-obj-файл существует и force-load равен
+      nil;)
+@end(list)"
+  (let* ((device    (pathname-device res-file))
+         (directory (pathname-directory res-file))
+         (name      (pathname-name res-file))
+         (type      (pathname-type res-file))
+         (res-fn (make-pathname   :device device
+                                  :directory directory
+                                  :name   name 
+                                  :type   type))
+         (s-obj-fn (make-pathname :device device
+                                  :directory directory
+                                  :name   name 
+                                  :type   "s-obj"))
+         (res nil))
+    (cond
+      ((and (probe-file res-fn)
+            (probe-file s-obj-fn)
+            (null force-load))
+       (setf res
+             (make-instance 'mnas-ansys/cfx/file-bak:<res>
+                            :res-pname (namestring res-fn)
+                            :pathname  (namestring s-obj-fn)))
+       (setf res (mnas-ansys/cfx/file-bak:load-instance res))
+       res)
+      ((and (probe-file res-fn)
+            (null (probe-file s-obj-fn)))
+       (setf res
+             (make-instance 'mnas-ansys/cfx/file-bak:<res>
+                            :res-pname (namestring res-fn)
+                            :pathname  (namestring s-obj-fn)))
+       (mnas-ansys/cfx/file-bak:ccl-extract res)
+       (mnas-ansys/cfx/file-bak:mon-extract res n-iter)
+       (mnas-ansys/cfx/file-bak:save        res)
+       res))))
+
+(defun dir-to-s-obj (dir &key (n-iter 150) (force-load nil))
+  (loop :for i :in (directory dir)
+        :do
+           (res-to-s-obj
+             (namestring i)
+             :n-iter n-iter
+             :force-load force-load)))

@@ -16,7 +16,10 @@
     #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_015.res"
 ;;;; 11
     #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-85.res"
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-249.res"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-249.res"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-332.res"
+   "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_001.res"
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
     "Полный путь к res-файлу.")
 
@@ -29,8 +32,10 @@
     #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_014.s-obj"
     #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_015.s-obj"
 ;;;; 11
-    #+nil  "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-85.s-obj"
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-249.s-obj"        
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-85.s-obj"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-249.s-obj"
+    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_000-332.s-obj"
+    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_001.s-obj"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
     "Полный путь к файлу с  сериализованными данными для объекта.")
 
