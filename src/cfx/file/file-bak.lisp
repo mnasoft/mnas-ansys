@@ -25,6 +25,10 @@
   (:export res-to-s-obj
            dir-to-s-obj
            )
+  (:export *mask-suffix*
+           res-to-org
+           dir-to-org
+           )
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
     информацию из файлов, которые экспортирует Ansys"))
@@ -242,3 +246,44 @@
              (namestring i)
              :n-iter n-iter
              :force-load force-load)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter *mask-suffix*
+  '((".*"                                       "-ALL")
+    ("ACCUMULATED TIMESTEP"                     "-A-TIME")))
+
+(defun res-to-org (res &key (mask *mask-suffix*))
+  "@b(Описание:) функция @b(res-to-org) выводит в сооветствующие
+org-файлы данные мониторов для объекта res класса
+'<res>.
+
+  Перед выводом данные о мониторах загружаются из сериализованного
+представления (из s-obj-файла).  Org-файлы сохраняются в каталог, где
+располагаются res-файл и s-obj-файл.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (res-to-org 
+  (res-to-s-obj
+   \"D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_07/N70_prj_07_001.res\"))
+@end(code)
+"
+  (setf res (load-instance res)) ; Загружаем объект из s-obj-файла
+  (loop :for (msk suf) :in mask
+        :do (mon-to-org msk res :suffix suf)))
+
+(defun dir-to-org (dir &key (mask *mask-suffix*))
+  "@b(Описание:) функция @b(dir-to-org) выполняет сканирование каталога
+@b(dir) на наличие res-файлов, удовлетворяющих маске поиска, и создает
+для каждого из них набор org-файлов.
+
+@b(Пример использования:)
+@begin[lang=lisp](code)
+  (dir-to-org \"D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_07/*.res\")
+@end(code)
+"
+  (loop :for i :in (directory dir)
+        :do
+           (res-to-org 
+            (res-to-s-obj (namestring i)) :mask mask)))
