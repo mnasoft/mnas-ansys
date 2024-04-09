@@ -385,3 +385,13 @@ CFX-PRE.
                 :components
                 ((:file "file-bak")))))
 
+(defsystem "mnas-ansys/cfx/post"
+  :description "Подсистема @(mnas-ansys/cfx/post) определяет функции,
+ позволяющие создавать сценарии для генерирования отчетов CFX-POST."  
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  ;; :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange" )
+  :components ((:module "src/cfx/post"
+                :serial nil
+                :components ((:file "post")))))
