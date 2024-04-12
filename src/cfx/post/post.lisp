@@ -59,17 +59,6 @@
   (format t "> report save~2%")
   (format t "> close~2%"))
 
-
-
-#+nil
-(mk-report
-  "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/N70_prj_11mt_001.res"
- '("D1" "M1" "M2" "M3")
- "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11.cst"
- '("> setViewportView cmd=set, view=/VIEW:Figure 1, viewport=1"
-   "> hide /CONTOUR:Contour 1 Figure 1, view=/VIEW:Figure 1"
-   "> show /CONTOUR:Contour 1 Figure 1, view=/VIEW:Figure 1"))
-
 (defun mk-reports (dir domains state-filename cmds)
   "@b(Описание:) функция @b(mk-reports) выводит на стандартный вывод
 сессию для CFX-POST, которая создает отчеты по заданному шаблону.
@@ -85,12 +74,3 @@
 "
   (loop :for res-filename :in (directory dir)
         :do (mk-report (namestring res-filename) domains state-filename cmds)))
-
-#+nil
-(mk-reports
- "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11/*002.res"
- '("D1" "M1" "M2" "M3")
- "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_11.cst"
- '("> setViewportView cmd=set, view=/VIEW:Figure 1, viewport=1"
-   "> hide /CONTOUR:Contour 1 Figure 1, view=/VIEW:Figure 1"
-   "> show /CONTOUR:Contour 1 Figure 1, view=/VIEW:Figure 1"))
