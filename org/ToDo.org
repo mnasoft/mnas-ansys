@@ -1,89 +1,50 @@
-#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
-#+OPTIONS: author:t broken-links:nil c:nil creator:nil
-#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
-#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
-#+TITLE: ToDo
-#+DATE: <2021-01-12 Вт>
-#+AUTHOR:
-#+EMAIL: mnasoft@gmail.com
-#+LANGUAGE: ru
-#+SELECT_TAGS: export
-#+EXCLUDE_TAGS: noexport
-#+CREATOR: Emacs 26.3 (Org mode 9.1.9)
-#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
-#+OPTIONS: html-preamble:t html-scripts:t html-style:t
-#+OPTIONS: html5-fancy:nil tex:t
-#+HTML_DOCTYPE: xhtml-strict
-#+HTML_CONTAINER: div
-#+DESCRIPTION:
-#+KEYWORDS:
-#+HTML_LINK_HOME:
-#+HTML_LINK_UP:
-#+HTML_MATHJAX:
-#+HTML_HEAD:
-#+HTML_HEAD_EXTRA:
-#+SUBTITLE:
-#+INFOJS_OPT:
-#+CREATOR: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 26.3 (<a href="https://orgmode.org">Org</a> mode 9.1.9)
-#+LATEX_HEADER:
-
-* Извлечение типов объектов из tetin-файла
-Извлечение типов объектов их tetin-файла
-#+BEGIN_SRC lisp
-  (in-package :mnas-ansys)
-  (defun tetin-types ()
-    (sort 
-     (remove-duplicates
-      (reduce #'(lambda (lst el)
-		  (if (and (stringp el)
-			   (< 0 (length el))
-			   (alpha-char-p (first (coerce el 'list))))
-		      (cons (first (mnas-string:split " " el)) lst)
-		      lst))
-	      ,*lines* :initial-value nil)
-      :test #'equal)
-     #'string<))
-
-  (mapcar #'list (tetin-types))
-#+END_SRC
-
-
-| affix                           |
-| bspline                         |
-| coedge                          |
-| define_curve                    |
-| define_family                   |
-| define_model                    |
-| define_prism_meshing_parameters |
-| define_solid                    |
-| define_subset                   |
-| define_surface                  |
-| loop                            |
-| material_point                  |
-| polyline                        |
-| prescribed_point                |
-| return                          |
-| set_triangulation_tolerance     |
-| trim_surface                    |
-
-#+BEGIN_SRC lisp
-(defun lam (el lst)
-	    (when (alpha-char-p (first (coerce el 'list)))
-	      (cons (first (mnas-string:split " " el)) lst)))
-#+END_SRC
-
-
-* [0/3] ToDo
-1. [ ] Добавить слот time (содержащий время последней модификации
+* ToDo
+1. Система mnas-ansys/ccl/belt
+   1. [ ] Написать функцию отбора по заголовку секции.
+   2. [ ] Написать функцию вывода списка в формат CCL.
+   3. Для функций:
+      - [X] make-point
+      - [X] make-line
+      - [X] make-surface-of-revolution
+      - [ ] make-table-head
+      - [ ] make-table-end
+      - [X] make-legend
+             создать соответствующие им объекты в сситеме mnas-ansys/ccl/classes.
+   4. [ ] Перенести фунции:
+      - [ ] make-point
+      - [ ] make-line
+      - [ ] make-surface-of-revolution
+      - [ ] make-table-head
+      - [ ] make-table-end
+      - [ ] make-legend
+        из пакета mnas-ansys/belt в пекет mnas-ansys/ccl/classes/core.
+2. Система mnas-ansys/ccl/parse/
+   1. [ ] Улучшить парсинг
+      - длинные строки с переходом на следующую строку считываются не
+        полностью. Символ перехода на следующую строку - =\=.
+      - [ ] Функцию parse переопределить через одноименный метод для:
+        - [ ] вектора строк (соответствует функции parse);
+        - [ ] строки;
+        - [ ] потока.
+   2. [ ] Определить функцию результатом выполнения которой будет код
+      определения класса, представляющий объект языка CCL системы ANSYS.
+3. Система mnas-ansys/tin/read:
+   1. [ ] read-file-as-lines
+      - [ ] заменить вызовы функции read-file-as-lines вызовами методов line-by-line;
+      - [ ] функцию read-file-as-lines удалить;
+   2. [ ]  Определить функцию прохода через vector строк и возвращающую
+      вектор с объединенными строками если они заканчиваются на =\=.
+4. Система mnas-ansys/cfx/file-bak
+   - [ ] Оптимизировать скорость создания s-obj файла.
+5. [ ] Добавить слот time (содержащий время последней модификации
    tin-файла) в объект <tin>, что позволит програмно принять решение о
    целесобразности считывания и разбора tin-файла.  Если время
    модификации файла не изменилось повторное считывание и разбор не
    является необходимым. Написать метод reopen, учитывающий слот time.
-2. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
+6. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
    реализацию с учетом возможности использования слота surfases
    объекта <curve>. Цель ускорение.
-3. [ ] Написать функцию для нахождения дерева кривых. При этом
+7. [ ] Написать функцию для нахождения дерева кривых. При этом
    сопряжение кривых происходит в вершинах - find-coincidense.
    - [ ] Добавить считывание точек.
 
@@ -126,3 +87,25 @@
     в имена методов там, где на в поток выводятся имена графических
     объектов.
 13. [X] Исключить префикс select из имен методов пакета select.
+1. Система mnas-ansys/tin/read:
+   1. [X] переименовать:
+      - [X] read-by-key -> by-key;
+      - [X] read-int-by-key -> int-by-key;
+      - [X] read-x-by-key -> x-by-key;
+      - [X] read-y-by-key -> y-by-key;
+      - [X] read-z-by-key -> z-by-key.
+
+2. [X] Убрать посторонний вывод при загрузке системы.
+3. Системы переименовать:
+   - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
+   - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
+   - [X] mnas-ansys/select -> mnas-ansys/tin/select;
+   - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
+   - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
+
+4. Пакеты переименовать:
+   - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
+   - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
+   - [X] mnas-ansys/select -> mnas-ansys/tin/select;
+   - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
+   - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.

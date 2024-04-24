@@ -1,7 +1,5 @@
 ;;;; ./src/cfx/file/mon/mon.lisp
 
-mon-full-name mon-des
-
 (defpackage :mnas-ansys/cfx/file/mon/core
   (:use #:cl)
   (:export mon-number ;; Номер монитора

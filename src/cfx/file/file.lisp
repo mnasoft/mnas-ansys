@@ -37,11 +37,6 @@
     :initarg :head
     :initform nil
     :documentation "Строка заголовков.")
-   (data
-    :accessor <res>-data
-    :initarg :data
-    :initform nil
-    :documentation "Данные.")
    (mon
     :accessor <res>-mon
     :initarg :mon
@@ -85,21 +80,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defmethod
 
-#+nil
-(defmethod mon-extract ((res <res>) (n-iter integer))
-  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
-"
-  (let ((h-d (mnas-ansys/exchange:read-res-file (<res>-pathname res) :rec-number n-iter)))
-    (setf (<res>-head res) (first h-d))
-    (setf (<res>-data res) (cdr   h-d))
-    res))
-
 (defmethod mon-extract ((res <res>) (n-iter integer))
   "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
 "
   (let* ((h-d (mnas-ansys/exchange:read-res-file (<res>-pathname res) :rec-number n-iter))
          (h (first h-d))
-         ;; (d (cdr   h-d))
+         (d (cdr   h-d))
          )
     (when h
       (loop :for name :across h 
@@ -110,9 +96,13 @@
               (format t "~A : ~A~%" j name )
               (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
               (setf des (mnas-ansys/cfx/file/mon:<mon>-des mon))
-              des)))))
+              (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
+                    (vector 
+                     (loop :for data :in d
+                           :collect (svref i data))))
+              )))))
 #+nil
-(when h
+(when *h*
   (loop :for name :across h 
         :for j :from 0 :to 10
         :do

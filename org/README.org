@@ -1,0 +1,77 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: README
+#+DATE: <2020-12-17 Чт>
+#+AUTHOR:
+#+EMAIL: mnasoft@gmail.com
+#+LANGUAGE: ru
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.3 (Org mode 9.1.9)
+
+# mnas-icem
+* Назначение
+
+Предназначен для выполнения операций с представлением tin-файлов 
+(представления геометрии) системы ANSYS ICEM
+
+* Получение tin-файлов из расчетного кластера
+
+#+BEGIN_SRC bash
+# Запускать из оболочки bash.
+cd /home/namatv/quicklisp/local-projects/ANSYS/mnas-icem/tin;
+rsync.exe -Pavzhe ssh namatv@hp1:/_gas/CFX/otd11/namatv/a32_base/PR-01/GT/*.tin .
+rsync.exe -Pavzhe ssh namatv@hp1:/_gas/CFX/otd11/namatv/a32_base/PR-01/GU/*.tin .
+#+END_SRC
+#+RESULTS:
+
+http://www.pivlab.net/upload_file/ANSYS%20CFX%20Solving%20I.pdf
+
+* Извлечение типов объектов из tetin-файла
+Извлечение типов объектов их tetin-файла
+#+BEGIN_SRC lisp
+  (in-package :mnas-ansys)
+  (defun tetin-types ()
+    (sort 
+     (remove-duplicates
+      (reduce #'(lambda (lst el)
+		  (if (and (stringp el)
+			   (< 0 (length el))
+			   (alpha-char-p (first (coerce el 'list))))
+		      (cons (first (mnas-string:split " " el)) lst)
+		      lst))
+	      ,*lines* :initial-value nil)
+      :test #'equal)
+     #'string<))
+
+  (mapcar #'list (tetin-types))
+#+END_SRC
+
+
+| affix                           |
+| bspline                         |
+| coedge                          |
+| define_curve                    |
+| define_family                   |
+| define_model                    |
+| define_prism_meshing_parameters |
+| define_solid                    |
+| define_subset                   |
+| define_surface                  |
+| loop                            |
+| material_point                  |
+| polyline                        |
+| prescribed_point                |
+| return                          |
+| set_triangulation_tolerance     |
+| trim_surface                    |
+
+#+BEGIN_SRC lisp
+(defun lam (el lst)
+	    (when (alpha-char-p (first (coerce el 'list)))
+	      (cons (first (mnas-string:split " " el)) lst)))
+#+END_SRC
+

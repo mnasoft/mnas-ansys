@@ -29,6 +29,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Tests
 
+(defparameter *h* nil)
+(setf *h* (mon-extract *res* *n-iter*))
+(svref  *h* 3)
+
+(let ((i 3))
+  (mnas-ansys/cfx/file/mon:mk-mon (list i (svref  *h* i))))
+
 #+nil
 (progn
   (mon-extract *res* *n-iter*) ; Извлекаем данные о мониторах из res-файла

@@ -26,6 +26,7 @@
            dir-to-s-obj
            )
   (:export *mask-suffix*
+           *n-iter*
            res-to-org
            dir-to-org
            )
@@ -34,6 +35,10 @@
     информацию из файлов, которые экспортирует Ansys"))
 
 (in-package :mnas-ansys/cfx/file-bak)
+
+(defparameter *n-iter* 500
+  "@b(Описание:) параметр @b(*n-iter*) определяет максимальное количество
+итераций, извлекаемое из res-файла.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defclass
@@ -188,7 +193,7 @@
          (concatenate 'string s-obj-fname suffix ".org")
          )))))
 
-(defun res-to-s-obj (res-file &key (n-iter 150) (force-load nil))
+(defun res-to-s-obj (res-file &key (n-iter *n-iter*) (force-load nil))
   "@b(Описание:) функция @b(res-to-s-obj) возвращает объект класса <res>.
 
  @b(Переменые:)
@@ -237,9 +242,22 @@
        (mnas-ansys/cfx/file-bak:ccl-extract res)
        (mnas-ansys/cfx/file-bak:mon-extract res n-iter)
        (mnas-ansys/cfx/file-bak:save        res)
-       res))))
+       res)
+      ((and (probe-file res-fn)
+            (probe-file s-obj-fn)
+            force-load)
+       (delete-file s-obj-fn)
+       (setf res
+             (make-instance 'mnas-ansys/cfx/file-bak:<res>
+                            :res-pname (namestring res-fn)
+                            :pathname  (namestring s-obj-fn)))
+       (mnas-ansys/cfx/file-bak:ccl-extract res)
+       (mnas-ansys/cfx/file-bak:mon-extract res n-iter)
+       (mnas-ansys/cfx/file-bak:save        res)
+       res)
+      )))
 
-(defun dir-to-s-obj (dir &key (n-iter 150) (force-load nil))
+(defun dir-to-s-obj (dir &key (n-iter *n-iter*) (force-load nil))
   (loop :for i :in (directory dir)
         :do
            (res-to-s-obj
@@ -273,7 +291,7 @@ org-файлы данные мониторов для объекта res кла�
   (loop :for (msk suf) :in mask
         :do (mon-to-org msk res :suffix suf)))
 
-(defun dir-to-org (dir &key (mask *mask-suffix*))
+(defun dir-to-org (dir &key (mask *mask-suffix*) (n-iter *n-iter*) (force-load nil))
   "@b(Описание:) функция @b(dir-to-org) выполняет сканирование каталога
 @b(dir) на наличие res-файлов, удовлетворяющих маске поиска, и создает
 для каждого из них набор org-файлов.
@@ -286,4 +304,5 @@ org-файлы данные мониторов для объекта res кла�
   (loop :for i :in (directory dir)
         :do
            (res-to-org 
-            (res-to-s-obj (namestring i)) :mask mask)))
+            (res-to-s-obj (namestring i) :n-iter n-iter :force-load force-load)
+            :mask mask )))
