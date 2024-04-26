@@ -19,7 +19,7 @@
 
 (in-package :mnas-ansys/cfx/file/mon)
 
-(defclass <mon> ()
+(defclass <mon> (serializable-object:serializable-object)
   ((number
     :accessor <mon>-number
     :initarg :number

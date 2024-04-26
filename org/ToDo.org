@@ -87,25 +87,29 @@
     в имена методов там, где на в поток выводятся имена графических
     объектов.
 13. [X] Исключить префикс select из имен методов пакета select.
-1. Система mnas-ansys/tin/read:
-   1. [X] переименовать:
-      - [X] read-by-key -> by-key;
-      - [X] read-int-by-key -> int-by-key;
-      - [X] read-x-by-key -> x-by-key;
-      - [X] read-y-by-key -> y-by-key;
-      - [X] read-z-by-key -> z-by-key.
+14. Система mnas-ansys/tin/read:
+    1. [X] переименовать:
+       - [X] read-by-key -> by-key;
+       - [X] read-int-by-key -> int-by-key;
+       - [X] read-x-by-key -> x-by-key;
+       - [X] read-y-by-key -> y-by-key;
+       - [X] read-z-by-key -> z-by-key.
 
-2. [X] Убрать посторонний вывод при загрузке системы.
-3. Системы переименовать:
-   - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
-   - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
-   - [X] mnas-ansys/select -> mnas-ansys/tin/select;
-   - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
-   - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
+15. [X] Убрать посторонний вывод при загрузке системы.
+16. Системы переименовать:
+    - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
+    - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
+    - [X] mnas-ansys/select -> mnas-ansys/tin/select;
+    - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
+    - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
 
-4. Пакеты переименовать:
-   - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
-   - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
-   - [X] mnas-ansys/select -> mnas-ansys/tin/select;
-   - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
-   - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
+17. Пакеты переименовать:
+    - [X] mnas-ansys/read   -> mnas-ansys/tin/read;
+    - [X] mnas-ansys/core   -> mnas-ansys/tin/core;
+    - [X] mnas-ansys/select -> mnas-ansys/tin/select;
+    - [X] mnas-ansys/utils  -> mnas-ansys/tin/utils;
+    - [X] mnas-ansys/dia    -> mnas-ansys/tin/dia.
+18. [X] Система mnas-ansys/cfx/file-bak
+    - [X] Оптимизировать скорость создания s-obj файла. Оптимизация
+      нецелесообразна т.к. основные расходы времени приходятся на
+      извлечение данных из res-файла утилитой ANSYS.

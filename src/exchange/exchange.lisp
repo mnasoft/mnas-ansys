@@ -100,9 +100,6 @@
        (math/matr:col col (select-last-n data last))
        (math/matr:col col data))))
 
-
-
-
 (defun read-res-file (res-file
                       &key
                         (rec-number 500)

@@ -3,18 +3,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Vars
 
+(directory "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_16/*.res")
+
 (progn
   (defparameter *res-file*
-    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.res"
-    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_010.res"
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_006.res"
+    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_16/N70_prj_16mt_001_411.res"
     "Полный путь к res-файлу.")
 
   (defparameter *s-obj-file*
-    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/274_full.s-obj"
-    #+nil "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_10/N70_prj_10mt_010.s-obj"
-    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_09/N70_prj_09mt_006.s-obj"
-    "Полный путь к файлу с  сериализованными данными для объекта, класса
+    "D:/home/_namatv/CFX/n70/cfx/Ne_R=1.00/N70_prj_16/N70_prj_16mt_001_411.s-obj"
+
+    "Полный путь к файлу с сериализованными данными для объекта, класса
  foo.")
 
   (defparameter *n-iter* 150
@@ -29,13 +28,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Tests
 
-(defparameter *h* nil)
-(setf *h* (mon-extract *res* *n-iter*))
-(svref  *h* 3)
-
-(let ((i 3))
-  (mnas-ansys/cfx/file/mon:mk-mon (list i (svref  *h* i))))
-
 #+nil
 (progn
   (mon-extract *res* *n-iter*) ; Извлекаем данные о мониторах из res-файла
@@ -43,60 +35,138 @@
   (save        *res*)          ; Сохраняем объект в res-файл
   )
 
+#+nil
+(setf *res* (load-instance *res*)) ; Загружаем данные из файла
+
+(iterations *res*) ; Количество итераций 
+(iteration-start *res*) ; Начальная итерация
+(iteration-end   *res*) ; Конечная  итерация
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; CCL
+
+(ql:quickload :mnas-ansys/ccl)
+(mnas-ansys/ccl:find-in-tree-in-deep
+ '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Mass Flow Rate")
+ (<res>-ccl *res*) t)
+
+(mnas-ansys/ccl:find-in-tree-in-deep 
+ '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Total Temperature")
+ (<res>-ccl *res*) t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;
+
+
+(math/stat:average-value
+ (coerce 
+  (mnas-ansys/cfx/file/mon:<mon>-data
+   (gethash "GT OUT 109 100:Total Temperature" (<res>-mon *res*)))
+  'list))
+
+(defmethod aver-temp ((res <res>)
+                      &key 
+                        (h-i-from 100)
+                        (h-i-to   109)
+                        (w-i-from 100)
+                        (w-i-to   134)
+                        (h-rel
+                            (loop :for h-i :from h-i-from :to h-i-to
+                                  :for h-r :from 0.05 :by 0.1
+                                  :collect h-r)
+                                  )
+                        )
+  (let ((t-mid
+          (loop :for h :from h-i-from :to h-i-to
+                :for h-r :in h-rel
+                :collect
+                (list
+                 h-r
+                 (- 
+                  (math/stat:average-value
+                   (loop :for w :from w-i-from :to w-i-to
+                         :collect
+                         (math/stat:average-value
+                          (coerce 
+                           (mnas-ansys/cfx/file/mon:<mon>-data
+                            (gethash
+                             (format nil "GT OUT ~A ~A:Total Temperature" h w)
+                             (<res>-mon res)))
+                           'list))))
+                  273.15)))))
+    (vgplot:plot (mapcar #'second t-mid) (mapcar #'first t-mid))))
+
+(defmethod max-temp ((res <res>)
+                      &key 
+                        (h-i-from 100)
+                        (h-i-to   109)
+                        (w-i-from 100)
+                        (w-i-to   134)
+                        (h-rel
+                            (loop :for h-i :from h-i-from :to h-i-to
+                                  :for h-r :from 0.05 :by 0.1
+                                  :collect h-r)
+                                  )
+                        )
+  (let ((t-max
+          (loop :for h :from h-i-from :to h-i-to
+                :for h-r :in h-rel
+                :collect
+                (list
+                 h-r
+                 (- 
+                  (math/stat:max-value
+                   (loop :for w :from w-i-from :to w-i-to
+                         :collect
+                         (math/stat:average-value
+                          (coerce 
+                           (mnas-ansys/cfx/file/mon:<mon>-data
+                            (gethash
+                             (format nil "GT OUT ~A ~A:Total Temperature" h w)
+                             (<res>-mon res)))
+                           'list))))
+                  273.15)))))
+    (vgplot:plot (mapcar #'second t-max) (mapcar #'first t-max))))
+
+(defmethod t-03-00 ((res <res>))
+  (- (math/stat:average-value
+      (coerce 
+       (mnas-ansys/cfx/file/mon:<mon>-data
+        (gethash "T03:" (<res>-mon res)))
+       'list))
+     273.15))
+
+(defmethod t-02 ((res <res>))
+  (mnas-ansys/ccl:find-in-tree-in-deep 
+   '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Total Temperature")
+   (<res>-ccl *res*) t))
+
+(defmethod dt ((res <res>))
+  (- (t-03-00 res) (t-02 res)))
+
+(t-03-00 *res*)
+
+(dt *res*)
+
+(aver-temp *res*)
+
+(max-temp *res*)
+
 (progn
   (setf *res* (load-instance *res*)) ; Загружаем объект из s-obj-файла
-
 
   (<res>-data *res*)
   (mon-select ".*" *res*)
 
 
-;;; Выборка всех полей
-  (mon-to-org ".*"                 *res* )
 
-  (mon-to-org "USER POINT,GT OUT.*Total Temperature.*" *res* :suffix "-GT-OUT-TT")
-  (mon-to-org "USER POINT,GT OUT.*Velocity.*"          *res* :suffix "-GT-OUT-V")
-  (mon-to-org "USER POINT,GT OUT.*Density.*"           *res* :suffix "-GT-OUT-D")
-
-  (mon-to-org "USER POINT,GT OUT.*MFR.*"               *res* :suffix "-MFR")
-  (mon-to-org "ACCUMULATED TIMESTEP"                   *res* :suffix "-A-TIME")
-
-  (mon-to-org "USER POINT,CH1.*CH4.Mass Fraction.*"    *res* :suffix "-CH1-CH4")
-  (mon-to-org "USER POINT,CH1.*Density.*"              *res* :suffix "-CH1-D") 
-  (mon-to-org "USER POINT,CH1.*Total Temperature.*"    *res* :suffix "-CH1-TT") 
-  (mon-to-org "USER POINT,CH1.*Velocity u.*"           *res* :suffix "-CH1-Vu")
-  (mon-to-org "USER POINT,CH1.*Velocity v.*"           *res* :suffix "-CH1-Vv")
-  (mon-to-org "USER POINT,CH1.*Velocity w.*"           *res* :suffix "-CH1-Vw")
-
-  (mon-to-org "USER POINT,CH2.*CH4.Mass Fraction.*"    *res* :suffix "-CH2-CH4")
-  (mon-to-org "USER POINT,CH2.*Density.*"              *res* :suffix "-CH2-D") 
-  (mon-to-org "USER POINT,CH2.*Total Temperature.*"    *res* :suffix "-CH2-TT") 
-  (mon-to-org "USER POINT,CH2.*Velocity u.*"           *res* :suffix "-CH2-Vu")
-  (mon-to-org "USER POINT,CH2.*Velocity v.*"           *res* :suffix "-CH2-Vv")
-  (mon-to-org "USER POINT,CH2.*Velocity w.*"           *res* :suffix "-CH2-Vw")
-
-  (mon-to-org "USER POINT,GT CONE11.*Density.*"           *res* :suffix "-GT-CONE11-D") 
-  (mon-to-org "USER POINT,GT CONE11.*Total Temperature.*" *res* :suffix "-GT-CONE11-TT") 
-  (mon-to-org "USER POINT,GT CONE11.*Velocity u.*"        *res* :suffix "-GT-CONE11-Vu")
-  (mon-to-org "USER POINT,GT CONE11.*Velocity v.*"        *res* :suffix "-GT-CONE11-Vv")
-  (mon-to-org "USER POINT,GT CONE11.*Velocity w.*"        *res* :suffix "-GT-CONE11-Vw")
-
-  (mon-to-org "USER POINT,GT CONE5.*Density.*"            *res* :suffix "-GT-CONE5-D") 
-  (mon-to-org "USER POINT,GT CONE5.*Total Temperature.*"  *res* :suffix "-GT-CONE5-TT") 
-  (mon-to-org "USER POINT,GT CONE5.*Velocity u.*"         *res* :suffix "-GT-CONE5-Vu")
-  (mon-to-org "USER POINT,GT CONE5.*Velocity v.*"         *res* :suffix "-GT-CONE5-Vv")
-  (mon-to-org "USER POINT,GT CONE5.*Velocity w.*"         *res* :suffix "-GT-CONE5-Vw")
-  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (<res>-mon *res*)
 
+(<res>-ccl *res*)
 
-(mnas-ansys/ccl:find-in-tree-in-deep
- '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Mass Flow Rate")
- *ccl* t )
 
-(mnas-ansys/ccl:find-in-tree-in-deep 
- '(("FLOW" "Flow Analysis 1") ("BOUNDARY" "INLET") "Total Temperature")
- *ccl* t  )
+
+(t-03-00 *res*)

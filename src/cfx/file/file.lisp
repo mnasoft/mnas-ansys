@@ -3,10 +3,9 @@
 (defpackage :mnas-ansys/cfx/file
   (:use #:cl)
   (:export <res>
-           <res>-head     ;; Аксессор заголовока таблицы
            <res>-pathname ;; Аксессор к имени res-файла
-           <res>-data     ;; Аксессор данных таблицы
            <res>-ccl      ;; Аксессор к списку ccl
+           <res>-mon      ;; Хешированная таблица мониторов
            )
   (:export save          ;; Сохранение объекта
            load-instance ;; Загрузка объекта из файла
@@ -18,6 +17,9 @@
            mon-table   ;; Список номер пп, имя, данные по монитору
            mon-to-org  ;; Вывод в файл с именем как у res-файла и расширением org
            )
+  (:export iterations  ;; Количество итераций, по данным мониторов
+           iteration-start ;; Номер начальной итерации
+           iterations-end) ;; Номер конечной  итерации
   (:export find-in-ccl ;; Поиск вглубину по данным ccl.
            )
   (:export res->ccl)
@@ -28,15 +30,60 @@
 (in-package :mnas-ansys/cfx/file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; defgeneric
+
+(defgeneric iterations (res)
+  (:documentation
+   "@b(Описание:) обобщенная_функция @b(iterations) возвращает количество
+итераций."))
+
+(defgeneric iteration-start (res)
+  (:documentation
+   "@b(Описание:) обобщенная_функция @b(iteration-start) номер первой
+итерации, которая имеется в мониторах."))
+
+(defgeneric iteration-end (res)
+  (:documentation
+   "@b(Описание:) обобщенная_функция @b(iteration-end) номер последней
+итерации, которая имеется в мониторах."))
+
+(defgeneric mon-extract (res n-iter)
+  (:documentation
+   "@b(Описание:) метод @b(mon-extract) извлекает из res-файла"))
+
+(defgeneric mon-select (regexp res)
+  (:documentation
+   "@b(Описание:) функция @b(mon-select) возвращает, список, каждый элемент которого
+является 2d-списком, содержащим номер и заголовок колонки, удовлетворяющей @b(regexp)
+для строки заголовков headered-tabel.
+
+ @b(Переменые:)
+@begin(list)
+ @item(regexp - регулярное выражение;)
+ @item(res - объект, содержащий мониторы.)
+@end(list)
+"))
+
+(defgeneric mon-select (regexp res)
+  (:documentation
+"@b(Описание:) метод @b(mon-table) возващает 2d-list, в каждой
+ строке которого содержится информация относящаяся к одному монитору:
+
+@begin(list)
+  @item(номер по порядку;)
+  @item(имя монитора;)
+  @item(данные монитору на соответствующем временном шаге;)
+@end(list)
+
+ В 2d-list попадают мониторы, имена которых удовлетвоняют регулярному
+выражению @b(regexp) согласно правилам пакета cl-ppcre."))
+  
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defclass
 
 (defclass <res> (serializable-object:serializable-object)
   (
-   (head
-    :accessor <res>-head
-    :initarg :head
-    :initform nil
-    :documentation "Строка заголовков.")
    (mon
     :accessor <res>-mon
     :initarg :mon
@@ -57,119 +104,52 @@
    "@b(Описание:) Класс @b(<res>) определяет интерфейсы для
  извлечения информации, находящейя в res-файлах системы ANSYS CFX."))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; defmethod
+
 (defmethod print-object ((res <res>) stream)
   (format stream "Res-Pathname   = ~S~%" (<res>-pathname res))
   (format stream "S-Obj-Pathname = ~S~%" (slot-value res 'pathname))
-  (when (<res>-data res)
-    (format stream "Data Length = ~S~%" (length (<res>-data res))))
   (when (<res>-ccl res)
     (format stream "~%========================================~%" )
     (format stream "CLL~%")
     (format stream "========================================~%" )
     (format stream "~S" (<res>-ccl res)))
-  (when (<res>-head res)
-    (format stream "Key Length = ~S~%" (length (<res>-head res)))
-    (format stream "~%========================================~%" )
+  (when (/= 0 (hash-table-count (<res>-mon res)))
+    (format stream "~2%========================================~%" )
     (format stream "Keys~%")
     (format stream "========================================~%" )
-    (loop :for k :across (<res>-head res)
+    (loop :for k :in (mnas-hash-table:keys (<res>-mon res))
           :for i :from 0
           :do
-             (format stream "~5A: ~A~%" i k))))
+             (format stream "~5A: ~S~%" i k))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defmethod
 
 (defmethod mon-extract ((res <res>) (n-iter integer))
-  "@b(Описание:) метод @b(mon-extract) извлекает из res-файла 
-"
-  (let* ((h-d (mnas-ansys/exchange:read-res-file (<res>-pathname res) :rec-number n-iter))
-         (h (first h-d))
-         (d (cdr   h-d))
+  (let* ((h-d (mnas-ansys/exchange:read-res-file
+               (<res>-pathname res)
+               :rec-number n-iter)) 
+         (h (first h-d)) ;; Заголовок мониторов
+         (d (cdr   h-d)) ;; Данные  мониторов
          )
     (when h
       (loop :for name :across h 
             :for j :from 0
             :do
-            (let* ((mon nil)
-                   (des nil))
-              (format t "~A : ~A~%" j name )
-              (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
-              (setf des (mnas-ansys/cfx/file/mon:<mon>-des mon))
-              (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
-                    (vector 
-                     (loop :for data :in d
-                           :collect (svref i data))))
-              )))))
-#+nil
-(when *h*
-  (loop :for name :across h 
-        :for j :from 0 :to 10
-        :do
-           (let* ((mon nil)
-                  (des nil)
-                  #+nil (type nil)
-                  )
-             (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
-             (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
-                   (loop :for val :in d :collect (svref val j)))
-             (setf (gethash
-                    (mnas-ansys/cfx/file/mon:mk-key mon)
-                    (<res>-mon res))
-                   mon)
-             )))
-
-#+nil
-(progn
-  (defparameter *h-d* (mnas-ansys/exchange:read-res-file
-                       (<res>-pathname *res*)
-                       :rec-number *n-iter*)))
-#+nil
-(defparameter *mons*
-  (let ((h (first *h-d*))
-        (d (cdr   *h-d*))        
-        )
-    (when h
-      (loop :for name :across h 
-            :for j :from 0 :to 10
-            :do
-            (let* ((mon nil)
-                   (des nil)
-                   #+nil (type nil)
-                   )
-              #+nil (format t "~A : ~A~%" j name)
-              (setf mon (mnas-ansys/cfx/file/mon:mk-mon (list j name)))
-              (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
-                    (loop :for val :in d :collect (svref val j)))
-              (setf (gethash
-                     (mnas-ansys/cfx/file/mon:mk-key mon)
-                     (<res>-mon *res*))
-                    mon)
-              )))))
-#+nil
-(progn
-  *res*
-  (setf (gethash  (mnas-ansys/cfx/file/mon:mk-key (first *mons*)) (<res>-mon *res*)) (first *mons*))
-  (setf (gethash  (mnas-ansys/cfx/file/mon:mk-key (second *mons*)) (<res>-mon *res*)) (second *mons*)))
-
-#+nil
-(progn 
-  (append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i)))
-  (gethash key ht)
-  (defparameter *ht* (make-hash-table :test #'equal) )
-  (setf (gethash "0" *ht*) 0.013))
-
-#+nil
-(when (<res>-head res))
-#+nil
-(let ((selected (mon-select regexp res)))
-  (loop :for (i name) :in selected
-        :collect
-        (append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i)))))
-
-#+nil
-(loop :for mon :being :the :hash-keys :in (outlet-edges node graph) :do
-      (remove-from edge graph))
+               (let* ((mon (mnas-ansys/cfx/file/mon:mk-mon (list j name))))
+                 (setf (mnas-ansys/cfx/file/mon:<mon>-data mon)
+                       (apply #'vector 
+                              (loop :for data :in d
+                                    :collect (svref data j))))
+                 (setf (gethash
+                        (concatenate 'string
+                                     (mnas-ansys/cfx/file/mon:<mon>-name mon)
+                                     ":"
+                                     (mnas-ansys/cfx/file/mon:<mon>-type mon))
+                        (<res>-mon res))
+                       mon))))))
 
 (defmethod ccl-extract ((res <res>))
   "@b(Описание:) метод @b(ccl-extract) извлекает из res-файла данные на
@@ -186,51 +166,68 @@
         (serializable-object:load-instance (slot-value res 'pathname))))
 
 (defmethod mon-select (regexp (res <res>))
-  "@b(Описание:) функция @b(mon-select) возвращает, список, каждый элемент которого
-является 2d-списком, содержащим номер и заголовок колонки, удовлетворяющей @b(regexp)
-для строки заголовков headered-tabel.
-
- @b(Пример использования:)
+  " @b(Пример использования:)
 @begin[lang=lisp](code)
- (setect-matches \"GT1\" *h-d*)
-=> ((1124 \"USER POINT,Temperature GT1 F T01 p46i5 p415i5 p0i0,D1,\"x= 4.65E-02,y= 4.16E-01,z= 0.00E+00\",Temperature\")
-    (1125 \"USER POINT,Temperature GT1 F T02 p46i5 p335i0 p80i5,D1,\"x= 4.65E-02,y= 3.35E-01,z= 8.05E-02\",Temperature\")
-    ...
-   )
+  (mon-select \"GT OUT.*:Total Temperature\" *res*)
+=> (\"GT OUT 100 100:Total Temperature\"
+    \"GT OUT 100 101:Total Temperature\"
+    ... )
 @end(code)
 "
-  (when (<res>-head res)
-  (let ((rgx (ppcre:create-scanner regexp)))
-    (loop :for i :across (<res>-head res)
-          :for j :from 0
-          :when (ppcre:scan rgx i)
-            :collect `(,j ,i)))))
-  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (when (<res>-mon res)
+    (let ((rgx (ppcre:create-scanner regexp)))
+      (loop :for i :in (mnas-hash-table:keys (<res>-mon res))
+            :when (ppcre:scan rgx i)
+              :collect i))))
+
+(defmethod iterations ((res <res>))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+ (iterations *res*) => 150
+@end(code)"
+  (if (and (<res>-mon res) (gethash ":" (<res>-mon res)))
+      (length (mnas-ansys/cfx/file/mon:<mon>-data
+               (gethash ":" (<res>-mon res))))))
+
+(defmethod iteration-start ((res <res>))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (iteration-start *res*)
+@end(code)"
+  (let ((i nil) (v nil))
+    (if (and (<res>-mon res)
+             (setf i (gethash ":" (<res>-mon res)))
+             (setf v (mnas-ansys/cfx/file/mon:<mon>-data i)))
+        (svref v 0))))
+
+(defmethod iteration-end ((res <res>))
+    " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (iteration-end   *res*)
+@end(code)"
+    (let ((i nil) (v nil))
+    (if (and (<res>-mon res)
+             (setf i (gethash ":" (<res>-mon res)))
+             (setf v (mnas-ansys/cfx/file/mon:<mon>-data i)))
+        (svref v (1- (length v))))))
 
 (defmethod mon-table (regexp (res <res>))
-  "@b(Описание:) метод @b(mon-table) возващает 2d-list, в каждой
- строке которого содержится информация относящаяся к одному монитору:
-
-@begin(list)
-  @item(номер по порядку;)
-  @item(имя монитора;)
-  @item(данные монитору на соответствующем временном шаге;)
-@end(list)
-
- В 2d-list попадают мониторы, имена которых удовлетвоняют регулярному
-выражению @b(regexp) согласно правилам пакета cl-ppcre.
-
- @b(Пример использования:)
+  " @b(Пример использования:)
 @begin[lang=lisp](code)
   (mon-table \".*MFR.*\" *res*)
 @end(code)
 "
-  (when (<res>-head res))
-  (let ((selected (mon-select regexp res)))
-    (loop :for (i name) :in selected
-          :collect
-          (append (list i name) (loop :for val :in (<res>-data res) :collect (svref val i))))))
+  (when (<res>-mon res)
+    (let ((selected (mon-select regexp res)))
+      (loop :for name :in selected
+            :for i :from 1
+            :collect
+            (append (list i name)
+                    (coerce
+                     (mnas-ansys/cfx/file/mon:<mon>-data
+                      (gethash name
+                               (<res>-mon res)))
+                     'list))))))
 
 (defmethod mon-to-org (regexp (res <res>) &key (suffix ""))
   "@b(Описание:) метод @b(mon-to-org) возвращает имя org-файла, в
@@ -261,5 +258,4 @@
             :direction :output
             :if-exists :supersede)
          (mnas-org-mode:table-to-org (mon-table regexp res) stream)
-         (concatenate 'string s-obj-fname suffix ".org")
-         )))))
+         (concatenate 'string s-obj-fname suffix ".org"))))))
