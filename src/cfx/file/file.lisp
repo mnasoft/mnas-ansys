@@ -19,7 +19,7 @@
            )
   (:export iterations      ;; Количество итераций, по данным мониторов
            iteration-start ;; Номер начальной итерации
-           iterations-end  ;; Номер конечной  итерации
+           iteration-end   ;; Номер конечной  итерации
            ) 
   (:export find-in-ccl ;; Поиск вглубину по данным ccl.
            )
