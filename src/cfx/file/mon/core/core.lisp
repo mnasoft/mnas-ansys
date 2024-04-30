@@ -43,9 +43,6 @@
 (defun mon-des (mon) 
   (second mon))
 
-(defun mon-des (mon)
-  (second mon))
-
 (defun mon-name-list (mon)
   (let* ((name (mon-des mon))
          (n-lst(mnas-string:split "\"" name)))

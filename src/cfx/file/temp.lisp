@@ -233,3 +233,13 @@
 (aver-temp *res*)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(progn
+  (defvar x)
+  (defvar y)
+  (setf x (vgplot:range 0.0 (* pi 2) 0.1))
+  (setf y (map 'vector #'sin x))
+;;  (vgplot:plot x y "or;H" x y "-k;")
+  (vgplot:plot x y ";Чисто точки;with lp  dt 5 pt 11 ps 1.5 lc 'black'") ; lc 'red'
+  (vgplot:plot x y ";Это точки;with linespoints pointtype 55 pointsize 1.2 linecolor '\#80ff00'") ; 
+  (vgplot:text-show-label) )
