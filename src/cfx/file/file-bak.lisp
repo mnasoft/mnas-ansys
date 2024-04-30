@@ -21,7 +21,6 @@
   (:export find-in-ccl ;; Поиск вглубину по данным ccl.
            )
   (:export convert-coord)
-  (:export res->ccl)
   (:export res-to-s-obj
            dir-to-s-obj
            )
