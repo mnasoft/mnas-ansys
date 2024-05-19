@@ -15,7 +15,7 @@
    (find-point-by-name (<curve>-vertex1 curve) tin)
    (find-point-by-name (<curve>-vertex2 curve) tin)))
 
-(defmethod coincident ((point <point>) (tin <tin>))
+(defmethod coincident ((point <prescribed-point>) (tin <tin>))
   "  @b(Пример использования:)
 @begin[lang=lisp](code)
   (let* ((tin (open-tin-file

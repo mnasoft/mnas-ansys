@@ -19,6 +19,7 @@
            )
   (:export mk-general-interfaces
            mk-rotational-interfaces
+           mk-interfaces
            )
   (:export good-name
            )
@@ -29,6 +30,10 @@
            is-interface-fluid-rotational-l
            is-interface-fluid-rotational-r
            interface-fluid-rotational-pair
+           )
+  (:export int-general-name
+           int-rotational-name
+           int-names
            )
   (:export boundares
            boundary-name
@@ -480,17 +485,19 @@ END~%"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun int-general-name (name)
+    (labels ((int-name (lst)
+               (format nil "~{~A~^ ~}"
+                       (subseq lst 1 (1- (length lst))))))
+      (int-name (mk-split name))))
+
 (defun mk-general (name)
     "@b(Описание:) функция @b(mk-general) выводит на стандартный вывод
 данные на языке ccl, представляющие соединительный (генеральный)
 интерфейс. Вывод происходит, если имя @b(name) соответствует
 интерфейсу генерального типа.
 "
-  (labels (
-           (int-name (lst)
-             (format nil "~{~A~^ ~}"
-                     (subseq lst 1 (1- (length lst)))))
-           (int-1 (name)
+  (labels ((int-1 (name)
              (format nil "~{~A~^ ~}" (mk-split name)))
            (int-2 (name)
              (format nil "~{~A~^ ~} 2" (mk-split name)))
@@ -502,26 +509,20 @@ END~%"
                 lst))))
     (when (is-gen (mk-path name))
       (mnas-ansys/ccl:make-domain-interface-general-connection
-       (int-name (mk-split name))
+       (int-general-name name)
        (int-1 name)
        (int-2 name)))))
 
-(defun mk-general-interfaces (surface)
+(defun mk-general-interfaces (names)
   "@b(Описание:) функция @b(mk-general-interfaces) выводит на
 стандартный вывод определения на языке ccl для генеральных
 интерфейсов.
 "
-  (loop :for name :in surface :do
+  (loop :for name :in names :do
     (if (is-interface-fluid-general name)
         (mk-general name))))
 
-(defun mk-rotational (name)
-  "@b(Описание:) функция @b(mk-rotational) выводит на стандартный вывод
-данные на языке ccl, представляющие периодический интерфейс. Вывод
-происходит, если имя интерфейса соответствует левому перидическому
-типу.
-"
-  (labels ((mk-rotational-name (name)
+(defun int-rotational-name (name)
              (let* ((lst (mk-split name))
                     (len (length lst)))
                (format nil "~{~A~^ ~} LR"
@@ -529,7 +530,14 @@ END~%"
                              :for j :from 1
                              :unless (or (= j 1) (= j len) (string= i "L"))
                                :collect i))))
-           (int-1 (name)
+
+(defun mk-rotational (name)
+  "@b(Описание:) функция @b(mk-rotational) выводит на стандартный вывод
+данные на языке ccl, представляющие периодический интерфейс. Вывод
+происходит, если имя интерфейса соответствует левому перидическому
+типу.
+"
+  (labels ((int-1 (name)
              (format nil "~{~A~^ ~}"
                      (mk-split name)))
            (int-2 (name)
@@ -538,18 +546,44 @@ END~%"
                       (interface-fluid-rotational-pair name)))))
     (when (is-interface-fluid-rotational-l name)
       (mnas-ansys/ccl:make-domain-interface-rotational-periodicity
-       (mk-rotational-name name)
+       (int-rotational-name name)
        (int-1 name)
        (int-2 name)))))
 
-(defun mk-rotational-interfaces (surface)
+(defun mk-rotational-interfaces (names)
   "@b(Описание:) функция @b(mk-rotational-interfaces) выводит на
 стандартный вывод определения на языке ccl для генеральных
 интерфейсов.
 "
-  (loop :for name :in surface :do
+  (loop :for name :in names :do
     (if (is-interface-fluid-rotational-l name)
         (mk-rotational name))))
+
+(defun int-names (names)
+  (loop :for name :in names
+        :when (cond
+                ((is-interface-fluid-rotational-l name)
+                 (int-rotational-name name)
+                 )
+                ((is-interface-fluid-general name)
+                 (int-general-name name)))
+          :collect :it ))
+
+(defun mk-interfaces (names)
+  "@b(Описание:) функция @b(mk-interfaces) выводит на
+стандартный вывод определения на языке ccl для генеральных и
+вращательных интерфейсов.
+"
+  (loop :for name :in names
+        :when (cond
+                ((is-interface-fluid-rotational-l name)
+                 (mk-rotational name)
+                 (int-rotational-name name)
+                 )
+                ((is-interface-fluid-general name)
+                 (mk-general name)
+                 (int-general-name name)))
+          :collect :it ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -1,9 +1,9 @@
 (in-package :mnas-ansys/tin)
 
-(defmethod read-object (lines n (point <point>))
+(defmethod read-object (lines n (point <prescribed-point>))
   "@b(Описание:) метод @b(read-object) возвращает два значения:
 @begin(list)
- @item(объект типа <point>;)
+ @item(объект типа <prescribed-point>;)
  @item(количество считанных строк.)
 @end(list)
 "
@@ -60,7 +60,7 @@
 (defmethod read-object (lines n (material-point <material-point>))
   "@b(Описание:) метод @b(read-object) возвращает два значения:
 @begin(list)
- @item(объект типа <point>;)
+ @item(объект типа <material-point>;)
  @item(количество считанных строк.)
 @end(list)
 "
@@ -151,7 +151,40 @@
       (setf ob-symol (second (find (key-tin-in-objects lines n) *tin-top-objects* :key #'first :test #'string=))
             object (read-object lines n (make-instance ob-symol)))
       (ecase ob-symol
-	(<family>  (push object families))
-        (<curve>   (add-obj-to-ht-by-name object (<tin>-curves   tin)))
-       	(<surface> (add-obj-to-ht-by-name object (<tin>-surfaces tin)))
-        (<point>   (add-obj-to-ht-by-name object (<tin>-points   tin)))))))
+	(<family>           (push object families))
+        (<curve>            (add-obj-to-ht-by-name object (<tin>-curves   tin)))
+       	(<surface>          (add-obj-to-ht-by-name object (<tin>-surfaces tin)))
+        (<prescribed-point> (add-obj-to-ht-by-name object (<tin>-points   tin)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod read-object (lines n (bspline <bspline>))
+  (let ((params (mnas-string:split "," (elt lines (+ 1 n)))))
+    (setf (<bspline>-n bspline) (int-by-pos 0 params))
+    (setf (<bspline>-k bspline) (int-by-pos 1 params))
+    (setf (<bspline>-i bspline) (int-by-pos 2 params))
+;;;;
+    (setf (<bspline>-knots bspline)
+          (let ((s ""))
+            (loop :for i :from (+ 2 n) :below (+ 2 n (<bspline>-knots-lines bspline))
+                  :do
+                     (setf s (concatenate 'string s "," (elt lines i))))
+            (map 'vector #'read-from-string (mnas-string:split "," s))))
+;;;;
+    (loop :for i :from (+ 2 n (<bspline>-knots-lines bspline))
+          :for j :from 0 :below (<bspline>-n bspline)
+          :do
+             (format t "~A~%" (elt lines i)))
+
+;;    bspline
+    ))
+
+(defmethod <bspline>-knots-number ((bspline <bspline>))
+  (+ (<bspline>-n bspline)
+     (<bspline>-n bspline))
+  )
+
+(defmethod <bspline>-knots-lines ((bspline <bspline>))
+  (ceiling  (<bspline>-knots-number bspline) 5))
+
+

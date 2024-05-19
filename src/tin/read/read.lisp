@@ -10,6 +10,8 @@
 	   y-by-key
 	   z-by-key
            )
+  (:export int-by-pos
+           )
   (:documentation
    " Пакет @b(mnas-ansys/tin/read) предназначен для выполнения
  низкоуровевого разбора инструкций tin-файлов
@@ -53,6 +55,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; reader-help-func
+
+(defun int-by-pos (pos place)
+  (parse-integer (nth pos place)))
 
 (defun by-key (key place)
   "@b(Описание:) функция @b(by-key) возвращает строку, следующую

@@ -1,6 +1,6 @@
 (in-package :mnas-ansys/tin)
 
-(defmethod <object>-tag ((point <point>))
+(defmethod <object>-tag ((point <prescribed-point>))
   "prescribed_point")
 
 (defmethod <object>-tag ((curve <curve>))
@@ -17,3 +17,6 @@ define_surface")
 
 (defmethod <object>-tag ((solid <solid>))
   "define_solid")
+
+(defmethod <object>-tag ((bspline <bspline>))
+  "bspline")

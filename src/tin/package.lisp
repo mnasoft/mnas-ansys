@@ -89,7 +89,9 @@
            names
            surface-coeged-with-surfaces
            )
-  (:export count-surface) 
+  (:export count-surface)
+  (:export <bspline>
+           )
   (:documentation
    " Пакет предназначен для выполнения операций с представлением tin-файлов 
  (представления геометрии) системы ANSYS ICEM.

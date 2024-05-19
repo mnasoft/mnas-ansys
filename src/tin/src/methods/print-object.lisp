@@ -1,6 +1,19 @@
 (in-package :mnas-ansys/tin)
 
-(defmethod print-object ((point <point>) s)
+(defun print-vector (v n stream)
+  "@b(Описание:) функция @b(print-vector) выводит в поток @b(stream)
+элементы вектора @b(v) по @b(n) элементов в строке, разделяя их
+запятыми, и без запятой в конце строки."
+  (loop :for i :from 0 :below (length v) :by n :do
+    (let ((end (min (+ i n) (length v))))
+      (loop :for j :from i :below end :do
+        (progn
+          (format stream "~A" (elt v j))
+          (when (< j (1- end))
+            (format stream ","))))
+      (format stream "~%"))))
+
+(defmethod print-object ((point <prescribed-point>) s)
   "prescribed_point 41.599998474121 465.65328979492 -64.346717834473 family ASM.02/P02 name V_1056684"
   (format s "~A ~16,10F ~16,10F ~16,10F family ~A name ~A~%"
           (<object>-tag point)
@@ -92,3 +105,14 @@
   (format s "~{~A~}"  (tin-surfaces    tin))
   ;; (<tin>-surfaces  tin)
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod print-object ((bspline <bspline>) s)
+  (format s "~A~%" (<object>-tag bspline))
+  (format s "~A,~A,~A~%"
+          (<bspline>-n bspline)
+          (<bspline>-k bspline)
+          (<bspline>-i bspline))
+  (print-vector (<bspline>-knots bspline) 5 s))
+

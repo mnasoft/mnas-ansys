@@ -27,7 +27,7 @@
   '(("define_family"    <family>)
     ("define_curve"     <curve>)
     ("define_surface"   <surface>)
-    ("prescribed_point" <point>)
+    ("prescribed_point" <prescribed-point>)
     
     ;;"define_model"
     ;;"define_prism_meshing_parameters"

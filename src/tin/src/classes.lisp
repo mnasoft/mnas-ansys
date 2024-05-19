@@ -19,25 +19,29 @@
   непосредственному использованию.
 
  От него порождены объекты следующи типов: @begin(list)
-@item(<point>;) @item(<curve>;) @item(<surface>.)  @end(list)"))
+@item(<prescribed-point>;) @item(<curve>;) @item(<surface>.)  @end(list)"))
 
-(defclass <tetra> ()
-  ((size :accessor <tetra>-size :initarg :x :initform 1e+10)))
-
-(defclass <point> (<ent>)
+(defclass <point> ()
   ((x :accessor <point>-x :initarg :x :initform 0.0d0 :type double-float
       :documentation "@b(Описание:) слот @b(x) определяет координату х.")
    (y :accessor <point>-y :initarg :y :initform 0.0d0 :type double-float
       :documentation "@b(Описание:) слот @b(x) определяет координату y.")
    (z :accessor <point>-z :initarg :z :initform 0.0d0 :type double-float
       :documentation "@b(Описание:) слот @b(x) определяет координату z."))
-  (:documentation "@b(Описание:) класс @b(<point>) представляет точку.
+    (:documentation "@b(Описание:) класс @b(<point>) представляет точку."))
+
+(defclass <prescribed-point> (<point> <ent>)
+  ()
+  (:documentation "@b(Описание:) класс @b(<prescribed-point>) представляет точку.
 
  @b(Пример записи в tin-файле:)
 @begin[lang=lisp](code)
  prescribed_point 41.599998474121 465.65328979492 -64.346717834473 family ASM.02/P02 name V_1056684
 @end(code)
 "))
+
+(defclass <tetra> ()
+  ((size :accessor <tetra>-size :initarg :x :initform 1e+10)))
 
 (defclass <family> (<obj>)
   ((color :accessor <family>-color :initarg :color :initform 0 :type integer
@@ -231,3 +235,43 @@
   (:documentation "@b(Описание:) класс @b(<tin>) представляет доступ к
   объектам, находящимся в tin-файле, генерируемом программой ICEM
   комплекса ANSYS."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <bspline> ()
+  ((n        :accessor <bspline>-n  :initarg :n :initform 2 :type integer
+             :documentation "@b(Описание:) слот @b(n) количество вершин.")
+   (k        :accessor <bspline>-k  :initarg :k :initform 2 :type integer
+             :documentation "@b(Описание:) слот @b(k) определяет степень сплайна.")
+   (i        :accessor <bspline>-i  :initarg :i :initform 0
+             :documentation "@b(Описание:) слот @b(i). Пока не используется.")
+   (knots    :accessor <bspline>-knots :initform nil
+             :documentation "Вектор координат узлов.")
+   (points   :accessor <bspline>-points :initform nil
+             :documentation "Вектор точек.")
+   )
+  (:documentation "@b(Описание:) класс @b(<curve>) представляет кривую.
+
+ @b(Пример записи в tin-файле:)
+@begin[lang=lisp](code)
+ bspline
+ 2,2,0
+ 0,0,1,1
+ -0.715436241611,-0.234228187919,0
+ -0.620134228188,-0.121476510067,0
+@end(code)
+
+ @b(Пример записи в tin-файле:)
+@begin[lang=lisp](code)
+bspline
+6,4,0
+0,0,0,0,0.30382264221938
+0.5302509147985,0.97259245893749,0.97259245893749,0.97259245893749,0.97259245893749
+-0.715436241611,-0.234228187919,0
+-0.66848624119026,-0.14561823780716,0
+-0.5110031434075,-0.020919024542826,0
+-0.16535550685116,-0.095724667296346,0
+-0.040609472581351,-0.30590809847363,0
+0.123489932886,-0.321476510067,0
+@end(code)
+"))
