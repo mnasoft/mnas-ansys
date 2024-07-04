@@ -1,40 +1,3 @@
-(defpackage :mnas-ansys/cfx-pre
-  (:use #:cl )
-  (:export preambule
-           cmd-invoke
-           gtmImport
-           update
-           ))
-
-(defun preambule (&optional (stream t))
-  "@b(Описание:) функция @b(preambule) выводит в поток преамбулу для
-командного файла CFX PRE.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (preambule)
-->
- COMMAND FILE:
-   CFX Pre Version = 14.5
- END
-NIL
-@end(code)
-"
-  (format stream "~A~%~A~%~A~2%" "COMMAND FILE:" "  CFX Pre Version = 14.5" "END"))
-
-(defun cmd-invoke (cmd &optional (stream t))
-  (format stream "> ~A~%" cmd))
-
-(defun update (&optional (stream t))
-  "@b(Описание:) функция @b(update) выводит в поток команду update
-командного файла CFX PRE.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (update) ->
- > update
-@end(code)"
-  (cmd-invoke "update" stream))
 "
 > gtmImport filename=D:\home\_namatv\CFX\n70\tin\DOMAINS\G1\msh\N70_prj_08_DG1.msh, type=Generic, units=mm, genOpt= -n, nameStrategy= Assembly
 > gtmImport filename=D:\home\_namatv\CFX\n70\tin\DOMAINS\G2\msh\N70_prj_08_DG2.msh, type=Generic, units=mm, genOpt= -n, nameStrategy= Assembly
@@ -49,3 +12,18 @@ NIL
 
 > update
 "
+
+(progn (preambule)
+       (loop :for i
+               :in '("DG1 G1"
+                     "DG2 G2"
+                     "DG3 G3"
+                     "DG4 G4"
+                     "DG8 G8"
+                     "DG9 G9"
+                     "DG10 G10"
+                     "DM1 M1" 
+                     "DM2 M2" 
+                     )
+             :do
+                (mesh-transformation i)))
