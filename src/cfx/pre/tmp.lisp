@@ -19,10 +19,9 @@
                      "DG2 G2"
                      "DG3 G3"
                      "DG4 G4"
-                     "DG8 G8"
+                     "DG5 G5"
                      "DG9 G9"
-                     "DG10 G10"
-                     "DM1 M1" 
+                     "DM1 M1"
                      "DM2 M2" 
                      )
              :do
