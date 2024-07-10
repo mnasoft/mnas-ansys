@@ -32,6 +32,7 @@ CFX-PRE.
                "mnas-ansys/exchange"
                "mnas-ansys/dia"
                "mnas-ansys/ic"
+               "mnas-ansys/cfx/pre"
                )
   :components ((:module "src" 
                 :serial nil
