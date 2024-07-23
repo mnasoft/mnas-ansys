@@ -6,7 +6,9 @@
            update
            mesh-transformation
            make-domain-interface-general-connection
-           ))
+           )
+  (:export rotate-point-around-vector
+           mk-gt-cone-pnts))
 
 (in-package :mnas-ansys/cfx/pre)
 
@@ -131,3 +133,25 @@ NIL
     (format t "END~%")))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun rotate-point-around-vector (point-3d point-1 point-2 teta)
+  (let* ((rotate-teta (math/matr:rotate-around point-1 point-2  (math/coord:dtr teta)))
+         (move-x-y-z (math/matr:move-xyz 0.0d0 0.0d0 0.0d0))
+         (matrix-4x4 (math/matr:multiply move-x-y-z rotate-teta)))
+    (math/matr:transform point-3d matrix-4x4)))
+
+(defun mk-gt-cone-pnts (point-tcs pa-start pa-end)
+  (apply
+   #'append
+   (loop :for (point tc) :in point-tcs
+         :when tc
+           :collect
+           (loop :for (name teta) :in tc
+                 :collect
+                 `(,name
+                   ,(rotate-point-around-vector
+                     point
+                     pa-end
+                     pa-start
+                     teta))))))
