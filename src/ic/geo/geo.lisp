@@ -2105,7 +2105,7 @@ control_pts points the surface should go through loops loops to trim
 "  
   (format
    t
-   "ic_geo_create_point_location ~A ~A ~A ;~%"
+   "ic_geo_create_point_location ~A {~{~A~^ ~}} ~A ;~%"
    fam pt in_lcs))
 
 (defun ic-geo-create-points-curveinter (curves tol fam &optional (name))

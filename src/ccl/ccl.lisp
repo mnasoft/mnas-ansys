@@ -418,7 +418,7 @@ END~%"
   END
 END~%")))
 
-(defun mk-boundary-outlet-mfr (name mft
+(defun mk-boundary-outlet-mfr (name mfr
                            &key
                              (mfr-dim "kg s^-1"))
   "@b(Описание:) функция @b(mk-boundary-outlet)
@@ -449,7 +449,7 @@ END~%")))
 END~%"
           (boundary-name name)
           (name-location name)
-          mft
+          mfr
           mfr-dim))
 
 (defun mk-boundary-outlet-ast (name pr-r
