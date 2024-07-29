@@ -223,7 +223,9 @@ CFX-PRE.
                "mnas-ansys/ic/trans"
                "mnas-ansys/ic/boco"
                "mnas-ansys/ic/dis"
-               "mnas-ansys/ic/util"))
+               "mnas-ansys/ic/util")
+  :components ((:module "src/ic"   :serial nil :components ((:file "ic"))))
+  )
 
 (defsystem "mnas-ansys/ic/geo"
   :description
