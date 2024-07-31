@@ -24,8 +24,9 @@
   (:export find-in-ccl ;; Поиск вглубину по данным ccl.
            )
   (:export *n-iter* ;; Количество итераций для мониторов, выгружаемое по умолчанию
-           res-to-s-obj ;; Сохранение res-файла в формате s-obj
-           dir-to-s-obj ;; Сохранение групы res-файлов в формате s-obj
+           res-to-s-obj  ;; Сохранение res-файла в формате s-obj
+           dir-to-s-obj  ;; Сохранение групы res-файлов в формате s-obj
+           open-cfx-file ;; Открытие/сохранение res-файла в формате s-obj
            )
   (:export *mask-suffix* 
            res-to-org ;; Сохранение данных о мониторах res-файла в формате org
@@ -33,6 +34,9 @@
            )
   (:export slice ;; Укорачивает данные объекта от start до end
            slice-last ;; Укорачивает данные объекта оставляя последние number их число
+           )
+  (:export mk-fname-s-obj ;; Формирует имя s-obj файла на основании res-файла
+           mk-fname-res   ;; Формирует имя res   файла на основании res-файла
            )
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
@@ -292,12 +296,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun res-to-s-obj (res-file &key (n-iter *n-iter*) (force-load nil))
+(defun open-cfx-file (res-file-name &key (n-iter *n-iter*) (force-load nil))
+  (res-to-s-obj res-file-name :n-iter n-iter :force-load force-load))
+  
+(defun res-to-s-obj (res-file-name &key (n-iter *n-iter*) (force-load nil))
   "@b(Описание:) функция @b(res-to-s-obj) возвращает объект класса <res>.
 
  @b(Переменые:)
 @begin(list)
- @item(res-file - полное имя res-файла;)
+ @item(res-file-name - полное имя res-файла;)
  @item(n-iter - количество итераций по мониторам;)
  @item(force-load - признак принудительной выгрузки данных из
        res-файла.)
@@ -309,18 +316,8 @@
  @item(s-obj-файла - если s-obj-файл существует и force-load равен
       nil;)
 @end(list)"
-  (let* ((device    (pathname-device res-file))
-         (directory (pathname-directory res-file))
-         (name      (pathname-name res-file))
-         (type      (pathname-type res-file))
-         (res-fn (make-pathname   :device device
-                                  :directory directory
-                                  :name   name 
-                                  :type   type))
-         (s-obj-fn (make-pathname :device device
-                                  :directory directory
-                                  :name   name 
-                                  :type   "s-obj"))
+  (let* ((res-fn    (mk-fname-res   res-file-name))
+         (s-obj-fn  (mk-fname-s-obj res-file-name))
          (res nil))
     (cond
       ((and (probe-file res-fn)
@@ -454,3 +451,23 @@ org-файлы данные мониторов для объекта res кла�
           (setf (mnas-ansys/cfx/file/mon:<mon>-data (gethash k (<res>-mon res)))
                 (slice-last number v))))
   res)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun mk-fname-s-obj (res-file-name)
+  (let ((device    (pathname-device    res-file-name))
+        (directory (pathname-directory res-file-name))
+        (name      (pathname-name      res-file-name)))
+    (make-pathname :device    device
+                   :directory directory
+                   :name      name
+                   :type      "s-obj")))
+
+(defun mk-fname-res (res-file-name)
+  (let ((device    (pathname-device    res-file-name))
+        (directory (pathname-directory res-file-name))
+        (name      (pathname-name      res-file-name)))
+    (make-pathname :device    device
+                   :directory directory
+                   :name      name
+                   :type      "res")))
