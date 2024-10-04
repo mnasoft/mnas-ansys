@@ -424,3 +424,22 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "file")))))
+
+(defsystem "mnas-ansys/cfx/file/res-to-s-obj"
+  :description
+  "Подсистема @(mnas-ansys/cfx/file/res-to-s-obj) создает бинарный файл,
+который по res-файлу создает s-obj-файл"
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later"
+  
+  :defsystem-depends-on ("deploy")
+  :build-operation "deploy-op"
+  :build-pathname "res-to-s-obj"
+  :entry-point "mnas-ansys/cfx/file/res-to-s-obj:prompt-read-line"
+
+  :serial nil
+  :depends-on ("mnas-ansys/cfx/file" "gsll")
+  :components ((:module "src/cfx/file/res-to-s-obj"
+                :serial nil
+                :components
+                ((:file "res-to-s-obj")))))

@@ -6,7 +6,9 @@
  @item(mnas-ansys/tin - манипулирования с данными в tin - файле;)
  @item(mnas-ansys/iс - построения команд подсистемы ANSYS ICEM CFD;)
  @item(mnas-ansys/ccl - построения команд на языке CCL подсистем ANSYS PRE, ANSYS POST;)
-@end(list)"))
+@end(list)")
+  (:export iterations-per-day
+           second-per-iteration))
 
 (in-package :mnas-ansys)
 
@@ -82,3 +84,12 @@ system~a.DisplayText = \"~a~a\"
 ;      ))
 
 ;(define fname (new-f-name))
+
+(defun iterations-per-day (iteration year month date hour minute second )
+  (/ (* 24 60 60)
+     (second-per-iteration iteration year month date hour minute second)))
+
+(defun second-per-iteration (iteration year month date hour minute second )
+  (/ (- (get-universal-time)
+    (encode-universal-time second minute hour date month year) )
+   iteration))
