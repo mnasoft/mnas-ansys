@@ -320,6 +320,7 @@
          (s-obj-fn  (mk-fname-s-obj res-file-name))
          (res nil))
     (cond
+;;;; Если есть res и s-obj и нет признака обязательного повторного разбора
       ((and (probe-file res-fn)
             (probe-file s-obj-fn)
             (null force-load))
@@ -329,6 +330,7 @@
                             :pathname  (namestring s-obj-fn)))
        (setf res (mnas-ansys/cfx/file:load-instance res))
        res)
+;;;; Если есть res и и нет s-obj
       ((and (probe-file res-fn)
             (null (probe-file s-obj-fn)))
        (setf res
@@ -339,6 +341,7 @@
        (mnas-ansys/cfx/file:mon-extract res n-iter)
        (mnas-ansys/cfx/file:save        res)
        res)
+;;;; Если есть res и s-obj и есть признак обязательного повторного разбора      
       ((and (probe-file res-fn)
             (probe-file s-obj-fn)
             force-load)
