@@ -12,8 +12,8 @@
 
            fluid-dom
            solid-dom
-           ))
-
+           )
+  (:export load-mesh))
 
 (in-package :mnas-ansys/cfx/pre)
 
@@ -447,3 +447,24 @@ NIL
   (format t "    END~%")
   (format t "  END~%")
   (format t "END~%"))
+
+(defun load-mesh (dir-msh-template)
+"@b(Описание:) функция @b(load-mesh) - выводит на стандартный вывод
+сценарий, позволяющий загрузить сетки в CFX-PRE.
+
+ @b(Переменые:)
+@begin(list)
+ @item(dir-msh-template - шаблон, задающий имена файлов загружаемых сеток.)
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (load-mesh \"Z:/CFX/n70/msh/prj_29/*.msh\")
+@end(code)
+"  
+  (preambule)
+  (loop :for i :in (directory dir-msh-template)
+        :do (gtmImport (cl-ppcre:regex-replace-all "/" (namestring i) "\\")
+                       ;; :genopt "-n -D"
+                       :genopt "-n")
+                      (update)))
