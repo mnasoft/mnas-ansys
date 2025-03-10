@@ -9,6 +9,9 @@
            find-in-tree-key-value
            find-in-tree-in-deep
            )
+  (:export find-boundary-names
+           select-boundary-names
+           )
   (:export value
            digits-dimension)
   (:export make-domain-interface-rotational-periodicity
@@ -120,6 +123,26 @@
          (setf rez (apply #'find-in-tree-key-value (append i (list rez)))))))
     (if value (digits-dimension rez) rez)))
 
+(defun find-boundary-names (domain ccl-tree)
+  "@b(Описание:) функция @b(find-boundary-names) возвращает список
+имен BOUNDARY для домена с именем @b(domain)."
+  (loop :for i :in (mnas-ansys/ccl:find-in-tree-value domain ccl-tree :test #'equal)
+        :when (and (consp i) (string= (first i) "BOUNDARY"))
+          :collect (second i)))
+
+(defmethod select-boundary-names (regexp domain ccl-tree)
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (select-boundary-names \"GT OUT.*:Total Temperature\" *res*)
+=> (\"GT OUT 100 100:Total Temperature\"
+    \"GT OUT 100 101:Total Temperature\"
+    ... )
+@end(code)
+"
+  (let ((rgx (ppcre:create-scanner regexp)))
+      (loop :for i :in (find-boundary-names domain ccl-tree)
+            :when (ppcre:scan rgx i)
+              :collect i)))
 
 (defun value (x)
   "@b(Описание:) функция @b(value) извлекает второй элемент из списка.

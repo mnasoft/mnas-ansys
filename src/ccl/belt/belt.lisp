@@ -58,7 +58,8 @@
 (obj-number-reset)
 
 (defun for-list (stream parameter variable)
-  "@b(Описание:) функция @b(for-list) выводит в поток @b(stream) переменную @b(variable).
+  "@b(Описание:) функция @b(for-list) выводит в поток @b(stream)
+ переменную @b(variable).
 
  @b(Переменые:)
 @begin(list)

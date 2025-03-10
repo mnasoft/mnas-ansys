@@ -4,10 +4,13 @@
   (:use #:cl)
   (:export for-list)
   (:intern <object>
-           <object>-type)
+           <object>-type
+           )
   (:intern <obj>)
   (:export <obj>-name
-           <obj>-full-name)
+           <obj>-full-name
+           full-names
+           ) 
   (:export <object-view-transform>
            <object-view-transform>-apply-reflection
            <object-view-transform>-apply-rotation
@@ -352,7 +355,8 @@
            <table-cell>-background
            <table-cell>-show-value)
   (:export <table-cells>-cells)
-  (:export <table>-export-table-only
+  (:export <table>
+           <table>-export-table-only
            <table>-table-exists
            <table>-table-export-format
            <table>-table-export-html-border-width
@@ -385,7 +389,141 @@
            <output-control>-monitor-objects)
   (:export <flow>
            <flow>-output-control)
-  
+  (:export <clip-plane>
+           <clip-plane>-flip-normal
+           <clip-plane>-normal
+           <clip-plane>-option
+           <clip-plane>-point
+           <clip-plane>-point-1
+           <clip-plane>-point-2
+           <clip-plane>-point-3
+           <clip-plane>-slice-plane
+           <clip-plane>-x
+           <clip-plane>-y
+           <clip-plane>-z
+           )
+  (:export <streamline>
+           <streamline>-absolute-tolerance
+           <streamline>-Apply-Instancing-Transform
+           <streamline>-Colour
+           <streamline>-Colour-Map
+           <streamline>-Colour-Mode
+           <streamline>-Colour-Scale
+           <streamline>-Colour-Variable
+           <streamline>-Colour-Variable-Boundary-Values
+           <streamline>-Cross-Periodics
+           <streamline>-Culling-Mode
+           <streamline>-Domain-List
+           <streamline>-Draw-Faces
+           <streamline>-Draw-Lines
+           <streamline>-Draw-Streams
+           <streamline>-Draw-Symbols
+           <streamline>-Grid-Tolerance
+           <streamline>-Instancing-Transform
+           <streamline>-Lighting
+           <streamline>-Line-Width
+           <streamline>-Location-List
+           <streamline>-Locator-Sampling-Method
+           <streamline>-Max
+           <streamline>-Maximum-Number-of-Items
+           <streamline>-Min
+           <streamline>-Number-of-Samples
+           <streamline>-Number-of-Sides
+           <streamline>-Range
+           <streamline>-Reduction-Factor
+           <streamline>-Reduction-or-Max-Number
+           <streamline>-Sample-Spacing
+           <streamline>-Sampling-Aspect-Ratio
+           <streamline>-Sampling-Grid-Angle
+           <streamline>-Seed-Point-Type
+           <streamline>-Simplify-Geometry
+           <streamline>-Specular-Lighting
+           <streamline>-Stream-Drawing-Mode
+           <streamline>-Stream-Initial-Direction
+           <streamline>-Stream-Size
+           <streamline>-Stream-Symbol
+           <streamline>-Streamline-Direction
+           <streamline>-Streamline-Maximum-Periods
+           <streamline>-Streamline-Maximum-Segments
+           <streamline>-Streamline-Maximum-Time
+           <streamline>-Streamline-Type
+           <streamline>-Streamline-Width
+           <streamline>-Surface-Drawing
+           <streamline>-Surface-Streamline-Direction
+           <streamline>-Symbol-Size
+           <streamline>-Symbol-Start-Time
+           <streamline>-Symbol-Stop-Time
+           <streamline>-Symbol-Time-Interval
+           <streamline>-Tolerance-Mode
+           <streamline>-Transparency
+           <streamline>-Variable
+           <streamline>-Variable-Boundary-Values
+           <streamline>-Visibility
+           <streamline>-object-view-transform
+           )
+  (:export <colour-map>
+           <colour-map>-Colour-Map-Colours
+           <colour-map>-Colour-Map-Divisions
+           <colour-map>-Colour-Map-Storage-Type
+           <colour-map>-Colour-Map-Type
+           )
+  (:export  <output-settings>
+            <output-settings>-Chart-Image-Type
+            <output-settings>-Chart-Size
+            <output-settings>-Custom-Chart-Size-Height
+            <output-settings>-Custom-Chart-Size-Width
+            <output-settings>-Custom-Figure-Size-Height
+            <output-settings>-Custom-Figure-Size-Width
+            <output-settings>-Figure-Image-Type
+            <output-settings>-Figure-Size
+            <output-settings>-Fit-Views)
+  (:export <preview>
+           <preview>-output-settings)
+  (:export <publish>
+           <publish>-Generate-CVF
+           <publish>-Report-Format
+           <publish>-Report-Path
+           <publish>-Save-Images-In-Separate-Folder
+           <publish>-output-settings)
+  (:export <report>
+           <report>-Preview
+           <report>-Publish
+           <report>-Mesh-Statistics-Options
+           )
+  (:export  <mesh-statistics-options>
+            <mesh-statistics-options>-Include-In-Report
+            <mesh-statistics-options>-Show-Connectivity-Number
+            <mesh-statistics-options>-Show-Edge-Length-Ratio
+            <mesh-statistics-options>-Show-Element-Volume-Ratio
+            <mesh-statistics-options>-Show-Max-Face-Angle
+            <mesh-statistics-options>-Show-Min-Face-Angle
+            <mesh-statistics-options>-Show-Number-of-Elements
+            <mesh-statistics-options>-Show-Number-of-Hexahedra
+            <mesh-statistics-options>-Show-Number-of-Nodes
+            <mesh-statistics-options>-Show-Number-of-Polyhedra
+            <mesh-statistics-options>-Show-Number-of-Pyramids
+            <mesh-statistics-options>-Show-Number-of-Tetrahedra
+            <mesh-statistics-options>-Show-Number-of-Wedges
+            <mesh-statistics-options>-This-Exists
+            )
+  (:export  <physics-summary-options>
+            <physics-summary-options>-Include-In-Report
+            <physics-summary-options>-Show-Boundary-Physics
+            <physics-summary-options>-Show-Domain-Physics
+            <physics-summary-options>-This-Exists
+            )
+  (:export <solution-summary-options>
+           <solution-summary-options>-Include-In-Report
+           <solution-summary-options>-Show-Boundary-Flow-Summary
+           <solution-summary-options>-Show-Force-and-Torque-Summary
+           <solution-summary-options>-Show-Forces
+           <solution-summary-options>-Show-Torques
+           <solution-summary-options>-This-Exists
+           )
+  (:export    <file-information-options>
+              <file-information-options>-Include-In-Report
+              <file-information-options>-This-Exists
+              )
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -441,7 +579,11 @@
        '((" Of " " of ")
          (" Or " " or ")
          (" To Ar " " to AR ")
-         (" Html " " HTML ")))
+         (" Html " " HTML ")
+         (" And " " and ")
+         (" Cvf " " CVF ")
+         
+         ))
       (slot-value class (sb-mop:slot-definition-name slot))))
     ((eq 'standard-class
          (type-of (class-of (slot-value class (sb-mop:slot-definition-name slot)))))
@@ -481,9 +623,12 @@
          :documentation "<obj>-name")))
 
 (defmethod <obj>-full-name ((obj <obj>))
-  (format nil "/~A: ~A"
+  (format nil "/~A:~A"
           (<object>-type obj)
           (<obj>-name obj)))
+
+(defun full-names (&rest names)
+  (format nil "~{~A~^,~}" (mapcar #'<obj>-full-name names)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -567,11 +712,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <object-report-options> (<object>)
-  ((report-caption
-   :accessor <object-report-options>-report-caption
-   :initform "Caption for Report"
-   :initarg :report-caption
-   :documentation "report-caption")))
+  ((associated-case-name
+    :accessor <object-report-options>-associated-case-name
+    :initform ""
+    :initarg :associated-case-name
+    :documentation "associated-case-name")
+   (automatic-item
+    :accessor <object-report-options>-automatic-item
+    :initform "None"
+    :initarg :automatic-item
+    :documentation "automatic-item")
+   (generation
+    :accessor <object-report-options>-generation
+    :initform "Manual"
+    :initarg :generation
+    :documentation "generation")
+   (report-caption
+    :accessor <object-report-options>-report-caption
+    :initform "Caption for Report"
+    :initarg :report-caption
+    :documentation "report-caption")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1538,12 +1698,12 @@
     :documentation "option")
    (pan
     :accessor <camera>-pan
-    :initform "-0.00218911, 0.0109455"
+    :initform "0.0, 0.0"
     :initarg :pan
     :documentation "pan")
    (pivot-point
     :accessor <camera>-pivot-point
-    :initform "0.0495, 0.338411, 7.45058e-09"
+    :initform "0.0, 0.0, 0.0"
     :initarg :pivot-point
     :documentation "pivot-point")
    (rotation
@@ -1633,7 +1793,7 @@
     :documentation "light-angle")
    (local-object-list
     :accessor <view>-local-object-list
-    :initform "/CONTOUR:Contour TTMP X p49i5 Figure 1,/PLANE:Plane X p49i5 Figure 1"
+    :initform ""
     :initarg :local-object-list
     :documentation "local-object-list")
    (object-visibility-list
@@ -1791,12 +1951,12 @@
     :documentation "font")
    (legend-aspect
     :accessor <legend>-legend-aspect
-    :initform "0.05"
+    :initform "0.03"
     :initarg :legend-aspect
     :documentation "legend-aspect")
    (legend-format
     :accessor <legend>-legend-format
-    :initform "%4.1f"
+    :initform "%4.0f"
     :initarg :legend-format
     :documentation "legend-format")
    (legend-orientation
@@ -2218,6 +2378,11 @@
     :initform "True"
     :initarg :export-table-only 
     :documentation "export-table-only")
+   (table-default-case-name
+    :accessor <table>-table-default-case-name
+    :initform ""
+    :initarg :table-default-case-name
+    :documentation "table-default-case-name")
    (table-exists
     :accessor <table>-table-exists
     :initform "True"
@@ -2233,6 +2398,12 @@
     :initform "1"
     :initarg :table-export-html-border-width
     :documentation "table-export-html-border-width")
+   (table-export-html-caption
+    :accessor <table>-table-export-html-caption
+    :initform ""
+    :initarg :table-export-html-caption
+    :documentation "table-export-html-caption"
+    )
    (table-export-html-caption-position
     :accessor <table>-table-export-html-caption-position
     :initform "Bottom"
@@ -2248,6 +2419,11 @@
     :initform "1"
     :initarg :table-export-html-cell-spacing
     :documentation "table-export-html-cell-spacing")
+   (table-export-html-title
+    :accessor <table>-table-export-html-title
+    :initform ""
+    :initarg :table-export-lines
+    :documentation "table-export-html-title")
    (table-export-lines
     :accessor <table>-table-export-lines
     :initform "All"
@@ -2369,4 +2545,642 @@
     :initarg :output-control
     :documentation "output-control")))
 
+(defclass <clip-plane> (<obj>)
+  ((flip-normal
+    :accessor <clip-plane>-flip-normal
+    :initform "Off"
+    :initarg :flip-normal
+    :documentation "flip-normal: On; Off")
+   (normal
+    :accessor <clip-plane>-normal
+    :initform "1 , 0 , 0"
+    :initarg :normal
+    :documentation "normal: 1 , 0 , 0")
+   (option
+    :accessor <clip-plane>-option
+    :initform "From Slice Plane"
+    :initarg :option
+    :documentation "option: From Slice Plane")
+   (point
+    :accessor <clip-plane>-Point
+    :initform "0 [m], 0 [m], 0 [m]"
+    :initarg :point
+    :documentation "point: 0 [m], 0 [m], 0 [m]")
+   (point-1
+    :accessor <clip-plane>-point-1
+    :initform "0 [m], 0 [m], 0 [m]"
+    :initarg :point-1
+    :documentation "point: 0 [m], 0 [m], 0 [m]")
+   (point-2
+    :accessor <clip-plane>-point-2
+    :initform "1 [m], 0 [m], 0 [m]"
+    :initarg :point-2
+    :documentation "point: 1 [m], 0 [m], 0 [m]")
+   (point-3
+    :accessor <clip-plane>-point-3
+    :initform "0 [m], 1 [m], 0 [m]"
+    :initarg :point-3
+    :documentation "point: 0 [m], 1 [m], 0 [m]")
+   (slice-plane
+    :accessor <clip-plane>-slice-plane
+    :initform nil
+    :initarg :slice-plane
+    :documentation "slice-plane")
+   (x
+    :accessor <clip-plane>-x
+    :initform "0 [m]"
+    :initarg :x
+    :documentation "x")
+   (y
+    :accessor <clip-plane>-y
+    :initform "0 [m]"
+    :initarg :y
+    :documentation "y")
+   (z
+    :accessor <clip-plane>-z
+    :initform "0 [m]"
+    :initarg :z
+    :documentation "z")
+   )
+  )
+
+(defclass <streamline> (<obj>)
+  (
+   (absolute-tolerance
+    :accessor <streamline>-absolute-tolerance
+    :initform "0.0 [mm]"
+    :initarg :absolute-tolerance
+    :documentation "absolute-tolerance")
+   (Apply-Instancing-Transform
+    :accessor <streamline>-Apply-Instancing-Transform
+    :initform "On"
+    :initarg :Apply-Instancing-Transform
+    :documentation "Apply-Instancing-Transform")
+   (Colour
+    :accessor <streamline>-Colour
+    :initform "0.75, 0.75, 0.75"
+    :initarg :Colour
+    :documentation "Colour")
+   (Colour-Map
+    :accessor <streamline>-Colour-Map
+    :initform "Default Colour Map"
+    :initarg :Colour-Map
+    :documentation "Colour-Map")
+   (Colour-Mode
+    :accessor <streamline>-Colour-Mode
+    :initform "Use Plot Variable"
+    :initarg :Colour-Mode
+    :documentation "Colour-Mode")
+   (Colour-Scale
+    :accessor <streamline>-Colour-Scale
+    :initform "Linear"
+    :initarg :Colour-Scale
+    :documentation "Colour-Scale")
+   (Colour-Variable
+    :accessor <streamline>-Colour-Variable
+    :initform "Velocity"
+    :initarg :Colour-Variable
+    :documentation "Colour-Variable")
+   (Colour-Variable-Boundary-Values
+    :accessor <streamline>-Colour-Variable-Boundary-Values
+    :initform "Conservative"
+    :initarg :Colour-Variable-Boundary-Values
+    :documentation "Colour-Variable-Boundary-Values")
+   (Cross-Periodics
+    :accessor <streamline>-Cross-Periodics
+    :initform "On"
+    :initarg :Cross-Periodics
+    :documentation "Cross-Periodics")
+   (Culling-Mode
+    :accessor <streamline>-Culling-Mode
+    :initform "No Culling"
+    :initarg :Culling-Mode
+    :documentation "Culling-Mode")
+   (Domain-List
+    :accessor <streamline>-Domain-List
+    :initform "D1"
+    :initarg :Domain-List
+    :documentation "Domain-List")
+   (Draw-Faces
+    :accessor <streamline>-Draw-Faces
+    :initform "On"
+    :initarg :Draw-Faces
+    :documentation "Draw-Faces")
+   (Draw-Lines
+    :accessor <streamline>-Draw-Lines
+    :initform "Off"
+    :initarg :Draw-Lines
+    :documentation "Draw-Lines")
+   (Draw-Streams
+    :accessor <streamline>-Draw-Streams
+    :initform "On"
+    :initarg :Draw-Streams
+    :documentation "Draw-Streams")
+   (Draw-Symbols
+    :accessor <streamline>-Draw-Symbols
+    :initform "Off"
+    :initarg :Draw-Symbols
+    :documentation "Draw-Symbols")
+   (Grid-Tolerance
+    :accessor <streamline>-Grid-Tolerance
+    :initform "0.01"
+    :initarg :Grid-Tolerance
+    :documentation "Grid-Tolerance")
+   (Instancing-Transform
+    :accessor <streamline>-Instancing-Transform
+    :initform "/DEFAULT INSTANCE TRANSFORM:Default Transform"
+    :initarg :Instancing-Transform
+    :documentation "Instancing-Transform")
+   (Lighting
+    :accessor <streamline>-Lighting
+    :initform "On"
+    :initarg :Lighting
+    :documentation "Lighting")
+   (Line-Width
+    :accessor <streamline>-Line-Width
+    :initform "1"
+    :initarg :Line-Width
+    :documentation "Line-Width")
+   (Location-List
+    :accessor <streamline>-Location-List
+    :initform "G1 G2 02 01 Side 1,G1 G2 02 02 Side 1,G1 G2 02 03 Side 1,G1 G2 02 04 Side 1,G1 G2 02 05 Side 1,G1 G2 02 06 Side 1,G1 G2 02 07 Side 1,G1 G2 02 08 Side 1,G1 G2 02 09 Side 1,G1 G2 02 10 Side 1"
+    :initarg :Location-List
+    :documentation "Location-List")
+   (Locator-Sampling-Method
+    :accessor <streamline>-Locator-Sampling-Method
+    :initform "Equally Spaced"
+    :initarg :Locator-Sampling-Method
+    :documentation "Locator-Sampling-Method")
+   (Max
+    :accessor <streamline>-Max
+    :initform "150 [m s^-1]"
+    :initarg :Max
+    :documentation "Max")
+   (Maximum-Number-of-Items
+    :accessor <streamline>-Maximum-Number-of-Items
+    :initform "25"
+    :initarg :Maximum-Number-of-Items
+    :documentation "Maximum-Number-of-Items")
+   (Min
+    :accessor <streamline>-Min
+    :initform "50 [m s^-1]"
+    :initarg :Min
+    :documentation "Min")
+   (Number-of-Samples
+    :accessor <streamline>-Number-of-Samples
+    :initform "100"
+    :initarg :Number-of-Samples
+    :documentation "Number-of-Samples")
+   (Number-of-Sides
+    :accessor <streamline>-Number-of-Sides
+    :initform "8"
+    :initarg :Number-of-Sides
+    :documentation "Number-of-Sides")
+   (Range
+    :accessor <streamline>-Range
+    :initform "User Specified"
+    :initarg :Range
+    :documentation "Range")
+   (Reduction-Factor
+    :accessor <streamline>-Reduction-Factor
+    :initform "1.0"
+    :initarg :Reduction-Factor
+    :documentation "Reduction-Factor")
+   (Reduction-or-Max-Number
+    :accessor <streamline>-Reduction-or-Max-Number
+    :initform "Max Number"
+    :initarg :Reduction-or-Max-Number
+    :documentation "Reduction-or-Max-Number")
+   (Sample-Spacing
+    :accessor <streamline>-Sample-Spacing
+    :initform "0.1"
+    :initarg :Sample-Spacing
+    :documentation "Sample-Spacing")
+   (Sampling-Aspect-Ratio
+    :accessor <streamline>-Sampling-Aspect-Ratio
+    :initform "1"
+    :initarg :Sampling-Aspect-Ratio
+    :documentation "Sampling-Aspect-Ratio")
+   (Sampling-Grid-Angle
+    :accessor <streamline>-Sampling-Grid-Angle
+    :initform "0 [degree]"
+    :initarg :Sampling-Grid-Angle
+    :documentation "Sampling-Grid-Angle")
+   (Seed-Point-Type
+    :accessor <streamline>-Seed-Point-Type
+    :initform "Equally Spaced Samples"
+    :initarg :Seed-Point-Type
+    :documentation "Seed-Point-Type")
+   (Simplify-Geometry
+    :accessor <streamline>-Simplify-Geometry
+    :initform "Off"
+    :initarg :Simplify-Geometry
+    :documentation "Simplify-Geometry")
+   (Specular-Lighting
+    :accessor <streamline>-Specular-Lighting
+    :initform "On"
+    :initarg :Specular-Lighting
+    :documentation "Specular-Lighting")
+   (Stream-Drawing-Mode
+    :accessor <streamline>-Stream-Drawing-Mode
+    :initform "Line"
+    :initarg :Stream-Drawing-Mode
+    :documentation "Stream-Drawing-Mode")
+   (Stream-Initial-Direction
+    :accessor <streamline>-Stream-Initial-Direction
+    :initform "0 , 0 , 0"
+    :initarg :Stream-Initial-Direction
+    :documentation "Stream-Initial-Direction")
+   (Stream-Size
+    :accessor <streamline>-Stream-Size
+    :initform "1.0"
+    :initarg :Stream-Size
+    :documentation "Stream-Size")
+   (Stream-Symbol
+    :accessor <streamline>-Stream-Symbol
+    :initform "Ball"
+    :initarg :Stream-Symbol
+    :documentation "Stream-Symbol")
+   (Streamline-Direction
+    :accessor <streamline>-Streamline-Direction
+    :initform "Forward"
+    :initarg :Streamline-Direction
+    :documentation "Streamline-Direction")
+   (Streamline-Maximum-Periods
+    :accessor <streamline>-Streamline-Maximum-Periods
+    :initform "1"
+    :initarg :Streamline-Maximum-Periods
+    :documentation "Streamline-Maximum-Periods")
+   (Streamline-Maximum-Segments
+    :accessor <streamline>-Streamline-Maximum-Segments
+    :initform "10000"
+    :initarg :Streamline-Maximum-Segments
+    :documentation "Streamline-Maximum-Segments")
+   (Streamline-Maximum-Time
+    :accessor <streamline>-Streamline-Maximum-Time
+    :initform "0.01 [s]"
+    :initarg :Streamline-Maximum-Time
+    :documentation "Streamline-Maximum-Time")
+   (Streamline-Type
+    :accessor <streamline>-Streamline-Type
+    :initform "3D Streamline"
+    :initarg :Streamline-Type
+    :documentation "Streamline-Type")
+   (Streamline-Width
+    :accessor <streamline>-Streamline-Width
+    :initform "2"
+    :initarg :Streamline-Width
+    :documentation "Streamline-Width")
+   (Surface-Drawing
+    :accessor <streamline>-Surface-Drawing
+    :initform "Smooth Shading"
+    :initarg :Surface-Drawing
+    :documentation "Surface-Drawing")
+   (Surface-Streamline-Direction
+    :accessor <streamline>-Surface-Streamline-Direction
+    :initform "Forward and Backward"
+    :initarg :Surface-Streamline-Direction
+    :documentation "Surface-Streamline-Direction")
+   (Symbol-Size
+    :accessor <streamline>-Symbol-Size
+    :initform "1.0"
+    :initarg :Symbol-Size
+    :documentation "Symbol-Size")
+   (Symbol-Start-Time
+    :accessor <streamline>-Symbol-Start-Time
+    :initform "10.0 [s]"
+    :initarg :Symbol-Start-Time
+    :documentation "Symbol-Start-Time")
+   (Symbol-Stop-Time
+    :accessor <streamline>-Symbol-Stop-Time
+    :initform "-10.0 [s]"
+    :initarg :Symbol-Stop-Time
+    :documentation "Symbol-Stop-Time")
+   (Symbol-Time-Interval
+    :accessor <streamline>-Symbol-Time-Interval
+    :initform "1.0 [s]"
+    :initarg :Symbol-Time-Interval
+    :documentation "Symbol-Time-Interval")
+   (Tolerance-Mode
+    :accessor <streamline>-Tolerance-Mode
+    :initform "Grid Relative"
+    :initarg :Tolerance-Mode
+    :documentation "Tolerance-Mode")
+   (Transparency
+    :accessor <streamline>-Transparency
+    :initform "0.0"
+    :initarg :Transparency
+    :documentation "Transparency")
+   (Variable
+    :accessor <streamline>-Variable
+    :initform "Velocity"
+    :initarg :Variable
+    :documentation "Variable")
+   (Variable-Boundary-Values
+    :accessor <streamline>-Variable-Boundary-Values
+    :initform "Conservative"
+    :initarg :Variable-Boundary-Values
+    :documentation "Variable-Boundary-Values")
+   (Visibility
+    :accessor <streamline>-Visibility
+    :initform "On"
+    :initarg :Visibility
+    :documentation "Visibility")
+   (object-view-transform
+    :accessor <streamline>-object-view-transform
+    :initform (make-instance '<object-view-transform>)
+    :initarg :object-view-transform
+    :documentation "object-view-transform")
+   ))
+
+(defclass <colour-map> (<obj>)
+  (
+   (Colour-Map-Colours
+    :accessor <colour-map>-Colour-Map-Colours
+    :initform "0.000000,0.000000,0.000000,1.000000,1.000000,1.000000,1.000000,0.000000,0.015686,1.000000"
+    :initarg :Colour-Map-Colours
+    :documentation "Colour-Map-Colours")
+   (Colour-Map-Divisions
+    :accessor <colour-map>-Colour-Map-Divisions
+    :initform "2"
+    :initarg :Colour-Map-Divisions
+    :documentation "Colour-Map-Colours")
+   (Colour-Map-Storage-Type
+    :accessor <colour-map>-Colour-Map-Storage-Type
+    :initform "State"
+    :initarg :Colour-Map-Storage-Type
+    :documentation "Colour-Map-Storage-Type")
+   (Colour-Map-Type
+    :accessor <colour-map>-Colour-Map-Type
+    :initform "Gradient"
+    :initarg :Colour-Map-Type
+    :documentation "Colour-Map-Type")   
+   ))
+
+(defclass <output-settings> (<object>)
+  ((Chart-Image-Type
+    :accessor <output-settings>-Chart-Image-Type
+    :initform "png"
+    :initarg Chart-Image-Type
+    :documentation "Chart-Image-Type")
+   (Chart-Size
+    :accessor <output-settings>-Chart-Size
+    :initform "Same As Figure"
+    :initarg Chart-Size
+    :documentation "Chart-Size")
+   (Custom-Chart-Size-Height
+    :accessor <output-settings>-Custom-Chart-Size-Height
+    :initform "384"
+    :initarg Custom-Chart-Size-Height
+    :documentation "Custom-Chart-Size-Height")
+   (Custom-Chart-Size-Width
+    :accessor <output-settings>-Custom-Chart-Size-Width
+    :initform "512"
+    :initarg Custom-Chart-Size-Width
+    :documentation "Custom-Chart-Size-Width")
+   (Custom-Figure-Size-Height
+    :accessor <output-settings>-Custom-Figure-Size-Height
+    :initform "900"
+    :initarg Custom-Figure-Size-Height
+    :documentation "Custom-Figure-Size-Height")
+   (Custom-Figure-Size-Width
+    :accessor <output-settings>-Custom-Figure-Size-Width
+    :initform "1600"
+    :initarg Custom-Figure-Size-Width
+    :documentation "Custom-Figure-Size-Width")
+   (Figure-Image-Type
+    :accessor <output-settings>-Figure-Image-Type
+    :initform "png"
+    :initarg Figure-Image-Type
+    :documentation "Figure-Image-Type")
+   (Figure-Size
+    :accessor <output-settings>-Figure-Size
+    :initform "Custom"
+    :initarg Figure-Size
+    :documentation "Figure-Size")
+   (Fit-Views
+    :accessor <output-settings>-Fit-Views
+    :initform "Off"
+    :initarg Fit-Views
+    :documentation "Fit-Views")
+   ))
+
+(defclass <preview> (<object>)
+  ((output-settings
+    :accessor <preview>-output-settings
+    :initform (make-instance '<output-settings>)
+    :initarg output-settings
+    :documentation "Output-Settings")))
+
+(defclass <publish> (<object>)
+  ((Generate-CVF
+    :accessor <publish>-Generate-CVF
+    :initform "Off"
+    :initarg Generate-CVF
+    :documentation "Generate-CVF")
+   (Report-Format
+    :accessor <publish>-Report-Format
+    :initform "HTML"
+    :initarg Report-Format
+    :documentation "Report-Format")
+   (Report-Path
+    :accessor <publish>-Report-Path
+    :initform "Z:/CFX/n70/cfx/DP=003/N70_prj_34/Reports/N70_prj_34_003/Report_D.htm"
+    :initarg Report-Path
+    :documentation "Report-Path")
+   (Save-Images-In-Separate-Folder
+    :accessor <publish>-Save-Images-In-Separate-Folder
+    :initform "On"
+    :initarg Save-Images-In-Separate-Folder
+    :documentation "Save-Images-In-Separate-Folder")
+   (output-settings
+    :accessor <publish>-output-settings
+    :initform (make-instance '<output-settings>)
+    :initarg output-settings
+    :documentation "Output-Settings")))
+
+(defclass <file-information-options> (<object>)
+  ((Include-In-Report
+    :accessor <file-information-options>-Include-In-Report
+    :initform "false"
+    :initarg Include-In-Report
+    :documentation "Include-In-Report")
+   (This-Exists
+    :accessor <file-information-options>-This-Exists
+    :initform "true"
+    :initarg This-Exists
+    :documentation "This-Exists")))
+
+(defclass <mesh-statistics-options> (<object>)
+  ((Include-In-Report
+    :accessor <mesh-statistics-options>-Include-In-Report
+    :initform "false"
+    :initarg Include-In-Report
+    :documentation "Include-In-Report")
+   (Show-Connectivity-Number
+    :accessor <mesh-statistics-options>-Show-Connectivity-Number
+    :initform "false"
+    :initarg Show-Connectivity-Number
+    :documentation "Show-Connectivity-Number")
+   (Show-Edge-Length-Ratio
+    :accessor <mesh-statistics-options>-Show-Edge-Length-Ratio
+    :initform "false"
+    :initarg Show-Edge-Length-Ratio
+    :documentation "Show-Edge-Length-Ratio")
+   (Show-Element-Volume-Ratio
+    :accessor <mesh-statistics-options>-Show-Element-Volume-Ratio
+    :initform "false"
+    :initarg Show-Element-Volume-Ratio
+    :documentation "Show-Element-Volume-Ratio")
+   (Show-Max-Face-Angle
+    :accessor <mesh-statistics-options>-Show-Max-Face-Angle
+    :initform "false"
+    :initarg Show-Max-Face-Angle
+    :documentation "Show-Max-Face-Angle")
+   (Show-Min-Face-Angle
+    :accessor <mesh-statistics-options>-Show-Min-Face-Angle
+    :initform "false"
+    :initarg Show-Min-Face-Angle
+    :documentation "Show-Min-Face-Angle")
+   (Show-Number-of-Elements
+    :accessor <mesh-statistics-options>-Show-Number-of-Elements
+    :initform "true"
+    :initarg Show-Number-of-Elements
+    :documentation "Show-Number-of-Elements")
+   (Show-Number-of-Hexahedra
+    :accessor <mesh-statistics-options>-Show-Number-of-Hexahedra
+    :initform "false"
+    :initarg Show-Number-of-Hexahedra
+    :documentation "Show-Number-of-Hexahedra")
+   (Show-Number-of-Nodes
+    :accessor <mesh-statistics-options>-Show-Number-of-Nodes
+    :initform "true"
+    :initarg Show-Number-of-Nodes
+    :documentation "Show-Number-of-Nodes")
+   (Show-Number-of-Polyhedra
+    :accessor <mesh-statistics-options>-Show-Number-of-Polyhedra
+    :initform "false"
+    :initarg Show-Number-of-Polyhedra
+    :documentation "Show-Number-of-Polyhedra")
+   (Show-Number-of-Pyramids
+    :accessor <mesh-statistics-options>-Show-Number-of-Pyramids
+    :initform "false"
+    :initarg Show-Number-of-Pyramids
+    :documentation "Show-Number-of-Pyramids")
+   (Show-Number-of-Tetrahedra
+    :accessor <mesh-statistics-options>-Show-Number-of-Tetrahedra
+    :initform "false"
+    :initarg Show-Number-of-Tetrahedra
+    :documentation "Show-Number-of-Tetrahedra")
+   (Show-Number-of-Wedges
+    :accessor <mesh-statistics-options>-Show-Number-of-Wedges
+    :initform "false"
+    :initarg Show-Number-of-Wedges
+    :documentation "Show-Number-of-Wedges")
+   (This-Exists
+    :accessor <mesh-statistics-options>-This-Exists
+    :initform "true"
+    :initarg This-Exists
+    :documentation "This-Exists")))
+
+(defclass <physics-summary-options> (<object>)
+  ((Include-In-Report
+    :accessor <physics-summary-options>-Include-In-Report
+    :initform "false"
+    :initarg Include-In-Report
+    :documentation "Include-In-Report")
+   (Show-Boundary-Physics
+    :accessor <physics-summary-options>-Show-Boundary-Physics
+    :initform "true"
+    :initarg Show-Boundary-Physics
+    :documentation "Show-Boundary-Physics")
+   (Show-Domain-Physics
+    :accessor <physics-summary-options>-Show-Domain-Physics
+    :initform "true"
+    :initarg Show-Domain-Physics
+    :documentation "Show-Domain-Physics")
+   (This-Exists
+    :accessor <physics-summary-options>-This-Exists
+    :initform "true"
+    :initarg This-Exists
+    :documentation "This-Exists")))
+
+(defclass <solution-summary-options> (<object>)
+  ((Include-In-Report
+    :accessor <solution-summary-options>-Include-In-Report
+    :initform "false"
+    :initarg Include-In-Report
+    :documentation "Include-In-Report")
+   (Show-Boundary-Flow-Summary
+    :accessor <solution-summary-options>-Show-Boundary-Flow-Summary
+    :initform "true"
+    :initarg Show-Boundary-Flow-Summary
+    :documentation "Show-Boundary-Flow-Summary")
+   (Show-Force-and-Torque-Summary
+    :accessor <solution-summary-options>-Show-Force-and-Torque-Summary
+    :initform "false"
+    :initarg Show-Force-and-Torque-Summary
+    :documentation "Show-Force-and-Torque-Summary")
+   (Show-Forces
+    :accessor <solution-summary-options>-Show-Forces
+    :initform  "true"
+    :initarg Show-Forces
+    :documentation "Show-Forces")
+   (Show-Torques
+    :accessor <solution-summary-options>-Show-Torques
+    :initform "true"
+    :initarg Show-Torques
+    :documentation "Show-Torques")
+   (This-Exists
+    :accessor <solution-summary-options>-This-Exists
+    :initform "true"
+    :initarg This-Exists
+    :documentation "This-Exists")
+   ))
+
+
+(defclass <report> (<object>)
+  ((Excluded-Report-Items
+    :accessor <report>-Excluded-Report-Items
+    :initform "/TITLE PAGE,/COMMENT:User Data"
+    :initarg Excluded-Report-Items
+    :documentation "Excluded-Report-Items")
+   (Report-Items
+    :accessor <report>-Report-Items
+    :initform "/TITLE PAGE,/REPORT/FILE INFORMATION OPTIONS,/REPORT/MESH STATISTICS OPTIONS,/REPORT/PHYSICS SUMMARY OPTIONS,/REPORT/SOLUTION SUMMARY OPTIONS,/COMMENT:User Data"
+    :initarg Report-Items
+    :documentation "Report-Items")
+   (File-Information-Options
+    :accessor <report>-File-Information-Options
+    :initform (make-instance '<File-Information-Options>)
+    :initarg File-Information-Options
+    :documentation "File-Information-Options")
+   (Mesh-Statistics-Options
+    :accessor <report>-Mesh-Statistics-Options
+    :initform (make-instance '<mesh-statistics-options>)
+    :initarg Mesh-Statistics-Options
+    :documentation "Mesh-Statistics-Options")
+   (Physics-Summary-Options
+    :accessor <report>-Physics-Summary-Options
+    :initform (make-instance '<physics-summary-options>)
+    :initarg Physics-Summary-Options
+    :documentation "Physics-Summary-Options")   
+   (Preview
+    :accessor <report>-Preview
+    :initform (make-instance '<preview>)
+    :initarg Preview
+    :documentation "Preview")
+   (Publish
+    :accessor <report>-Publish
+    :initform (make-instance '<publish>)
+    :initarg Publish
+    :documentation "Publish")
+   (Solution-Summary-Options
+    :accessor <report>-Solution-Summary-Options
+    :initform (make-instance '<solution-summary-options>)
+    :initarg Solution-Summary-Options
+    :documentation "Solution-Summary-Options")
+   ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
