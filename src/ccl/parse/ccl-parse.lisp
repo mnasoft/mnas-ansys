@@ -10,6 +10,7 @@
            )
   (:export parse
            parse-file)
+  (:export convert-to-ccl)
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/parse) предназначен для
  парсинга (разбора) данных и файлов в формате ccl."))
@@ -94,5 +95,28 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun process-list (nested-list &key (stream t) (indent-level 0) )
+  (dolist (item nested-list)
+    (cond
+      ;; Если это key-value пара
+      ((and (listp item) (= (length item) 2) 
+            (every #'stringp item))
+       (format stream "~Vt~A = ~A~%" (* 2 indent-level) (first item) (second item)))
+      ;; Если это headed список
+      ((and (listp item) (>= (length item) 3) (stringp (first item)) (stringp (second item)))
+       (format stream "~Vt~A:~A~%" (* 2 indent-level) (first item) (second item)) ;; Двоеточие после заголовка
+       (process-list (cddr item) :stream stream :indent-level (1+ indent-level))
+       (format stream "~VtEND~%" (* 2 indent-level)))
+      ;; Если это строка
+      ((stringp item)
+       (format stream "~Vt~A~%" (* 2 indent-level) item)))))
 
- 
+(defun convert-to-ccl (nested-list &key (stream t))
+  "@b(Описание:) функция @b(convert-to-ccl)
+"
+  (process-list nested-list :stream stream))
+
+
+
+
+
