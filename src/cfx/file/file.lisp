@@ -15,6 +15,7 @@
   (:export mon-extract ;; Извлечение данных о мониторах из res-файла
            mon-select  ;; Выборка из объекта по определенным мониторам
            mon-table   ;; Список номер пп, имя, данные по монитору
+           mon-table-ave ;; ;; Список номер пп, имя, среднее значение по монитору СКО
            mon-to-org ; Вывод в файл с именем как у res-файла и расширением org
            mon-check ; Проверка монитора (списка мониторов) на корректность по имени (именам)
            )
@@ -263,6 +264,27 @@
                       (gethash name
                                (<res>-mon res)))
                      'list))))))
+
+(defmethod mon-table-ave (regexp (res <res>))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (mon-table \".*MFR.*\" *res*)
+@end(code)
+"
+  (when (<res>-mon res)
+    (let ((selected (mon-select regexp res)))
+      (loop :for name :in selected
+            :for i :from 1
+            :collect
+            (let ((data (mnas-ansys/cfx/file/mon:<mon>-data
+                         (gethash name (<res>-mon res)))))
+              (append (list i name)
+                    (list (math/stat:average-value data)
+                          (math/stat:standard-deviation (coerce data 'list))
+                          (math/stat:variation-coefficient (coerce data 'list))
+                          )))))))
+
+
 
 (defmethod mon-to-org (regexp (res <res>) &key (suffix ""))
   "@b(Описание:) метод @b(mon-to-org) возвращает имя org-файла, в

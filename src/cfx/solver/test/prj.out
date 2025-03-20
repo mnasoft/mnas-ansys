@@ -1,0 +1,3153 @@
+ This run of the CFX-14.5.7 Solver started at 13:52:56 on 19 Mar 2025 by
+ user namatv on N133906 (intel_xeon64.sse2_winnt) using the command:
+ 
+  C:\ANSYS\v145\CFX\bin\perllib\cfx5solve.pl -stdout-comms -batch -ccl -
+ 
+ Setting up CFX Solver run ...
+ 
+ Deleted /SIMULATION CONTROL/EXECUTION CONTROL/SOLVER STEP
+ CONTROL/PARALLEL ENVIRONMENT/Number of Processes since we are in
+ Distributed Parallel mode.
+ 
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                    CFX Command Language for Run                    |
+ |                                                                    |
+ +--------------------------------------------------------------------+
+
+ LIBRARY:
+   CEL:
+     EXPRESSIONS:
+       Expression 1 = massFlowAve(Total Pressure )@REGION:B AIR_IN \
+         D_16.000+massFlow()@REGION:C C_1_4 C_1_4_1 D_16.000
+       Expression 2 = HN60VT Specific Heat Capacity(T)
+     END
+     FUNCTION: HN60VT Specific Heat Capacity
+       Argument Units = C
+       Option = Interpolation
+       Result Units = kJ / (kg K)
+       INTERPOLATION DATA:
+         Data Pairs = 100 , 0.440 , 200 , 0.461 , 300 , 0.482 , 400 , 0.503 , \
+           500 , 0.524 , 600 , 0.545 , 700 , 0.545 , 800 , 0.566 , 900 , \
+           0.587 , 1000 , 0.625
+         Extend Max = On
+         Extend Min = On
+         Option = One Dimensional
+       END
+     END
+     FUNCTION: HN60VT Thermal Conductivity
+       Argument Units = C
+       Option = Interpolation
+       Result Units = W / (m K)
+       INTERPOLATION DATA:
+         Data Pairs = 25 , 9.64 , 100 , 10.5 , 200 , 11.7 , 300 , 13.8 , 400 \
+           , 16.4 , 500 , 18.9 , 600 , 21.4 , 700 , 23.5 , 800 , 25.6 , 900 , \
+           28.1
+         Extend Max = On
+         Extend Min = On
+         Option = One Dimensional
+       END
+     END
+   END
+   MATERIAL: CH4
+     Material Description = Methane CH4
+     Material Group = Gas Phase Combustion
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 16.04 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.07787415E+01 []
+           NASA a2 = 0.01747668E+00 [K^-1]
+           NASA a3 = -0.02783409E-03 [K^-2]
+           NASA a4 = 0.03049708E-06 [K^-3]
+           NASA a5 = -0.01223931E-09 [K^-4]
+           NASA a6 = -0.09825229E+05 [K]
+           NASA a7 = 0.01372219E+03 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.01683479E+02 []
+           NASA a2 = 0.01023724E+00 [K^-1]
+           NASA a3 = -0.03875129E-04 [K^-2]
+           NASA a4 = 0.06785585E-08 [K^-3]
+           NASA a5 = -0.04503423E-12 [K^-4]
+           NASA a6 = -0.01008079E+06 [K]
+           NASA a7 = 0.09623395E+02 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 11.1E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 343E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   MATERIAL: CO
+     Material Description = Carbon Monoxide CO
+     Material Group = Gas Phase Combustion
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 28.01 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03262452E+02 []
+           NASA a2 = 0.01511941E-01 [K^-1]
+           NASA a3 = -0.03881755E-04 [K^-2]
+           NASA a4 = 0.05581944E-07 [K^-3]
+           NASA a5 = -0.02474951E-10 [K^-4]
+           NASA a6 = -0.01431054E+06 [K]
+           NASA a7 = 0.04848897E+02 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03025078E+02 []
+           NASA a2 = 0.01442689E-01 [K^-1]
+           NASA a3 = -0.05630828E-05 [K^-2]
+           NASA a4 = 0.01018581E-08 [K^-3]
+           NASA a5 = -0.06910952E-13 [K^-4]
+           NASA a6 = -0.01426835E+06 [K]
+           NASA a7 = 0.06108218E+02 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 16.6E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 251E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   MATERIAL: CO2
+     Material Description = Carbon Dioxide CO2
+     Material Group = Gas Phase Combustion
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 44.01 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.02275725E+02 []
+           NASA a2 = 0.09922072E-01 [K^-1]
+           NASA a3 = -0.01040911E-03 [K^-2]
+           NASA a4 = 0.06866687E-07 [K^-3]
+           NASA a5 = -0.02117280E-10 [K^-4]
+           NASA a6 = -0.04837314E+06 [K]
+           NASA a7 = 0.01018849E+03 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.04453623E+02 []
+           NASA a2 = 0.03140169E-01 [K^-1]
+           NASA a3 = -0.01278411E-04 [K^-2]
+           NASA a4 = 0.02393997E-08 [K^-3]
+           NASA a5 = -0.01669033E-12 [K^-4]
+           NASA a6 = -0.04896696E+06 [K]
+           NASA a7 = -0.09553959E+01 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 14.9E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 145E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   MATERIAL: GAS
+     Material Group = User
+     Option = Reacting Mixture
+     Reactions List = Methane Air WD2 NO PDF
+   END
+   MATERIAL: H2O
+     Material Description = Water Vapour
+     Material Group = Gas Phase Combustion, Interphase Mass Transfer, Water \
+       Data
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 18.02 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03386842E+02 []
+           NASA a2 = 0.03474982E-01 [K^-1]
+           NASA a3 = -0.06354696E-04 [K^-2]
+           NASA a4 = 0.06968581E-07 [K^-3]
+           NASA a5 = -0.02506588E-10 [K^-4]
+           NASA a6 = -0.03020811E+06 [K]
+           NASA a7 = 0.02590233E+02 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.02672146E+02 []
+           NASA a2 = 0.03056293E-01 [K^-1]
+           NASA a3 = -0.08730260E-05 [K^-2]
+           NASA a4 = 0.01200996E-08 [K^-3]
+           NASA a5 = -0.06391618E-13 [K^-4]
+           NASA a6 = -0.02989921E+06 [K]
+           NASA a7 = 0.06862817E+02 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 9.4E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 193E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   MATERIAL: N2
+     Material Description = Nitrogen N2
+     Material Group = Gas Phase Combustion
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 28.01 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03298677E+02 []
+           NASA a2 = 0.01408240E-01 [K^-1]
+           NASA a3 = -0.03963222E-04 [K^-2]
+           NASA a4 = 0.05641515E-07 [K^-3]
+           NASA a5 = -0.02444855E-10 [K^-4]
+           NASA a6 = -0.01020900E+05 [K]
+           NASA a7 = 0.03950372E+02 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.02926640E+02 []
+           NASA a2 = 0.01487977E-01 [K^-1]
+           NASA a3 = -0.05684761E-05 [K^-2]
+           NASA a4 = 0.01009704E-08 [K^-3]
+           NASA a5 = -0.06753351E-13 [K^-4]
+           NASA a6 = -0.09227977E+04 [K]
+           NASA a7 = 0.05980528E+02 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 17.7E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 259E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   MATERIAL: NO
+     Material Description = Nitric Oxide NO
+     Material Group = Gas Phase Combustion
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 30.01 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03376542E+02 []
+           NASA a2 = 0.01253063E-01 [K^-1]
+           NASA a3 = -0.03302751E-04 [K^-2]
+           NASA a4 = 0.05217810E-07 [K^-3]
+           NASA a5 = -0.02446263E-10 [K^-4]
+           NASA a6 = 0.09817961E+05 [K]
+           NASA a7 = 0.05829590E+02 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03245435E+02 []
+           NASA a2 = 0.01269138E-01 [K^-1]
+           NASA a3 = -0.05015890E-05 [K^-2]
+           NASA a4 = 0.09169283E-09 [K^-3]
+           NASA a5 = -0.06275419E-13 [K^-4]
+           NASA a6 = 0.09800840E+05 [K]
+           NASA a7 = 0.06417294E+02 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 17.8E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 238E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   MATERIAL: O2
+     Material Description = Oxygen O2
+     Material Group = Gas Phase Combustion
+     Option = Pure Substance
+     Thermodynamic State = Gas
+     PROPERTIES:
+       Option = General Material
+       EQUATION OF STATE:
+         Molar Mass = 31.99 [kg kmol^-1]
+         Option = Ideal Gas
+       END
+       SPECIFIC HEAT CAPACITY:
+         Option = NASA Format
+         LOWER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03212936E+02 []
+           NASA a2 = 0.01127486E-01 [K^-1]
+           NASA a3 = -0.05756150E-05 [K^-2]
+           NASA a4 = 0.01313877E-07 [K^-3]
+           NASA a5 = -0.08768554E-11 [K^-4]
+           NASA a6 = -0.01005249E+05 [K]
+           NASA a7 = 0.06034738E+02 []
+         END
+         TEMPERATURE LIMITS:
+           Lower Temperature = 300 [K]
+           Midpoint Temperature = 1000 [K]
+           Upper Temperature = 5000 [K]
+         END
+         UPPER INTERVAL COEFFICIENTS:
+           NASA a1 = 0.03697578E+02 []
+           NASA a2 = 0.06135197E-02 [K^-1]
+           NASA a3 = -0.01258842E-05 [K^-2]
+           NASA a4 = 0.01775281E-09 [K^-3]
+           NASA a5 = -0.01136435E-13 [K^-4]
+           NASA a6 = -0.01233930E+05 [K]
+           NASA a7 = 0.03189166E+02 []
+         END
+       END
+       REFERENCE STATE:
+         Option = NASA Format
+         Reference Pressure = 1 [atm]
+         Reference Temperature = 25 [C]
+       END
+       DYNAMIC VISCOSITY:
+         Dynamic Viscosity = 19.2E-06 [kg m^-1 s^-1]
+         Option = Value
+       END
+       THERMAL CONDUCTIVITY:
+         Option = Value
+         Thermal Conductivity = 266E-04 [W m^-1 K^-1]
+       END
+       ABSORPTION COEFFICIENT:
+         Absorption Coefficient = 1.0 [m^-1]
+         Option = Value
+       END
+       SCATTERING COEFFICIENT:
+         Option = Value
+         Scattering Coefficient = 0.0 [m^-1]
+       END
+       REFRACTIVE INDEX:
+         Option = Value
+         Refractive Index = 1.0 [m m^-1]
+       END
+     END
+   END
+   REACTION: Methane Air WD2 NO PDF
+     Additional Materials List = CH4, O2, CO, CO2, H2O, NO, N2
+     Option = Multi Step
+     Reaction Description = Methane Air Two Step and NO Formation with \
+       Temperature PDF
+     Reactions List = Methane Oxygen WD2, NO Formation Methane PDF
+   END
+   REACTION: Methane Oxygen WD2
+     Option = Multi Step
+     Reactions List = WD2 Methane Oxidation, WD2 CO Oxidation
+   END
+   REACTION: NO Formation Methane PDF
+     Option = Multi Step
+     Reaction Description = NO Formation with Temperature PDF for Methane
+     Reactions List = Thermal NO PDF, Prompt NO Methane PDF
+   END
+   REACTION: Prompt NO Methane PDF
+     Option = Single Step
+     Reaction Description = Prompt NO Formation by Methane with Temperature PDF
+     COMBUSTION MODEL:
+       Option = Finite Rate Chemistry
+     END
+     FORWARD REACTION RATE:
+       Lower Temperature = 300 [K]
+       Option = Arrhenius with Temperature PDF
+       Pre Exponential Factor = 6.4E+6 [s^-1] * (mw/density)^1.5
+       Temperature Exponent = 0
+       Upper Temperature = 2300 [K]
+       REACTION ACTIVATION:
+         Activation Temperature = 36510 [K]
+         Option = Activation Temperature
+       END
+     END
+     PRODUCTS:
+       Materials List = NO
+       Option = Child Materials
+       CHILD MATERIAL: NO
+         Option = Stoichiometric
+         Stoichiometric Coefficient = 1.0
+       END
+     END
+     REACTANTS:
+       Materials List = O2, N2, CH4
+       Option = Child Materials
+       CHILD MATERIAL: CH4
+         Option = Stoichiometric
+         Reaction Order = 1.0
+         Stoichiometric Coefficient = 0.0
+       END
+       CHILD MATERIAL: N2
+         Option = Stoichiometric
+         Reaction Order = 1.0
+         Stoichiometric Coefficient = 0.5
+       END
+       CHILD MATERIAL: O2
+         Option = Stoichiometric
+         Reaction Order = 0.5
+         Stoichiometric Coefficient = 0.5
+       END
+     END
+   END
+   REACTION: Thermal NO PDF
+     Option = Single Step
+     Reaction Description = Thermal NO Formation with Temperature PDF
+     COMBUSTION MODEL:
+       Option = Finite Rate Chemistry
+     END
+     FORWARD REACTION RATE:
+       Lower Temperature = 300 [K]
+       Option = Arrhenius with Temperature PDF
+       Pre Exponential Factor = 1.8E+11 [kmol^-1 m^3 s^-1] * 12.567E+3 \
+         [kmol^0.5 m^-1.5 K^0.5]
+       Temperature Exponent = -0.5
+       Upper Temperature = 2300 [K]
+       REACTION ACTIVATION:
+         Activation Temperature = 38370 [K] + 31096 [K]
+         Option = Activation Temperature
+       END
+     END
+     PRODUCTS:
+       Materials List = NO
+       Option = Child Materials
+       CHILD MATERIAL: NO
+         Option = Stoichiometric
+         Stoichiometric Coefficient = 2.0
+       END
+     END
+     REACTANTS:
+       Materials List = N2, O2
+       Option = Child Materials
+       CHILD MATERIAL: N2
+         Option = Stoichiometric
+         Reaction Order = 1.0
+         Stoichiometric Coefficient = 1.0
+       END
+       CHILD MATERIAL: O2
+         Option = Stoichiometric
+         Reaction Order = 0.5
+         Stoichiometric Coefficient = 1.0
+       END
+     END
+   END
+   REACTION: WD2 CO Oxidation
+     Option = Single Step
+     FORWARD REACTION RATE:
+       Option = Arrhenius
+       Pre Exponential Factor = (10.^14.6) [mol^-0.75 cm^2.25 s^-1]
+       Temperature Exponent = 0.0
+       REACTION ACTIVATION:
+         Activation Energy = 40. [kcal mol^-1]
+         Option = Activation Energy
+       END
+     END
+     PRODUCTS:
+       Materials List = CO2
+       Option = Child Materials
+       CHILD MATERIAL: CO2
+         Option = Stoichiometric
+         Stoichiometric Coefficient = 1.0
+       END
+     END
+     REACTANTS:
+       Materials List = CO, O2, H2O
+       Option = Child Materials
+       CHILD MATERIAL: CO
+         Option = Stoichiometric
+         Reaction Order = 1.0
+         Stoichiometric Coefficient = 1.0
+       END
+       CHILD MATERIAL: H2O
+         Option = Stoichiometric
+         Reaction Order = 0.5
+         Stoichiometric Coefficient = 0.0
+       END
+       CHILD MATERIAL: O2
+         Option = Stoichiometric
+         Reaction Order = 0.25
+         Stoichiometric Coefficient = 0.5
+       END
+     END
+   END
+   REACTION: WD2 Methane Oxidation
+     Option = Single Step
+     FORWARD REACTION RATE:
+       Option = Arrhenius
+       Pre Exponential Factor = 1.5E7 [s^-1]
+       Temperature Exponent = 0.
+       REACTION ACTIVATION:
+         Activation Energy = 30. [kcal mol^-1]
+         Option = Activation Energy
+       END
+     END
+     PRODUCTS:
+       Materials List = CO, H2O
+       Option = Child Materials
+       CHILD MATERIAL: CO
+         Option = Stoichiometric
+         Stoichiometric Coefficient = 1.0
+       END
+       CHILD MATERIAL: H2O
+         Option = Stoichiometric
+         Stoichiometric Coefficient = 2.0
+       END
+     END
+     REACTANTS:
+       Materials List = CH4, O2
+       Option = Child Materials
+       CHILD MATERIAL: CH4
+         Option = Stoichiometric
+         Reaction Order = -0.3
+         Stoichiometric Coefficient = 1.0
+       END
+       CHILD MATERIAL: O2
+         Option = Stoichiometric
+         Reaction Order = 1.3
+         Stoichiometric Coefficient = 1.5
+       END
+     END
+   END
+ END
+ FLOW: Flow Analysis 1
+   SOLUTION UNITS:
+     Angle Units = [rad]
+     Length Units = [m]
+     Mass Units = [kg]
+     Solid Angle Units = [sr]
+     Temperature Units = [K]
+     Time Units = [s]
+   END
+   ANALYSIS TYPE:
+     Option = Steady State
+     EXTERNAL SOLVER COUPLING:
+       Option = None
+     END
+   END
+   DOMAIN: D1
+     Coord Frame = Coord 0
+     Domain Type = Fluid
+     Location = DG1 G1,DG2 G2,DG3 G3
+     BOUNDARY: D1 Default
+       Boundary Type = WALL
+       Location = DG1 M0 TR 002 D_0.0,DG1 M0 TR 003 D_0.0,DG1 M0 ZAV 006 \
+         D_3.0,DG1 M0 ZAV 007 D_0.0,DG1 M0 ZGL D_0.0,DG2 M0 ZAV 001 D_4.0,DG2 \
+         M0 ZAV 002 D_1.5,DG2 M0 ZAV 003 D_6.0,DG2 M0 ZAV 004 D_1.5,DG2 M0 \
+         ZAV 005 D_6.0,DG2 M0 ZAV IN 0002 D_1.5,DG2 M0 ZAV IN 001 D_0.0,DG2 \
+         M0 ZAV IN D_1.5,DG2 M0 ZAV IN D_2.0,DG2 M0 ZAV IN D_2.5,DG2 M0 ZAV \
+         OUT 02 D_0.5_S_1.0,DG3 M0 TRO 001 D_0.0,DG3 M0 ZAV 01 D_3.0,DG3 M0 \
+         ZAV T D_4.0,Primitive 2D,Primitive 2D A,Primitive 2D AA,Primitive 2D \
+         AB,Primitive 2D AC,Primitive 2D AD,Primitive 2D AE,Primitive 2D \
+         AF,Primitive 2D AG,Primitive 2D AH,Primitive 2D AI,Primitive 2D \
+         AJ,Primitive 2D AK,Primitive 2D AL,Primitive 2D AM,Primitive 2D \
+         AN,Primitive 2D AO,Primitive 2D AP,Primitive 2D AQ,Primitive 2D \
+         AR,Primitive 2D AS,Primitive 2D AT,Primitive 2D AU,Primitive 2D \
+         AV,Primitive 2D AW,Primitive 2D AX,Primitive 2D AY,Primitive 2D \
+         AZ,Primitive 2D B,Primitive 2D BA,Primitive 2D BB,Primitive 2D \
+         BC,Primitive 2D BD,Primitive 2D BE,Primitive 2D BF,Primitive 2D \
+         BG,Primitive 2D BH,Primitive 2D BI,Primitive 2D BJ,Primitive 2D \
+         BK,Primitive 2D BL,Primitive 2D BM,Primitive 2D BN,Primitive 2D \
+         BO,Primitive 2D BP,Primitive 2D BQ,Primitive 2D BR,Primitive 2D \
+         BS,Primitive 2D BT,Primitive 2D BU,Primitive 2D BV,Primitive 2D \
+         BW,Primitive 2D BX,Primitive 2D BY,Primitive 2D BZ,Primitive 2D \
+         C,Primitive 2D CA,Primitive 2D CB,Primitive 2D CC,Primitive 2D \
+         CD,Primitive 2D CE,Primitive 2D CF,Primitive 2D CG,Primitive 2D \
+         CH,Primitive 2D CI,Primitive 2D CJ,Primitive 2D CK,Primitive 2D \
+         CL,Primitive 2D CM,Primitive 2D CN,Primitive 2D CO,Primitive 2D \
+         CP,Primitive 2D CQ,Primitive 2D CR,Primitive 2D CS,Primitive 2D \
+         CT,Primitive 2D CU,Primitive 2D CV,Primitive 2D CW,Primitive 2D \
+         CX,Primitive 2D CY,Primitive 2D CZ,Primitive 2D D,Primitive 2D \
+         DA,Primitive 2D DB,Primitive 2D DC,Primitive 2D DD,Primitive 2D \
+         DE,Primitive 2D DF,Primitive 2D DG,Primitive 2D DH,Primitive 2D \
+         DI,Primitive 2D DJ,Primitive 2D DK,Primitive 2D DL,Primitive 2D \
+         DM,Primitive 2D DN,Primitive 2D DO,Primitive 2D DP,Primitive 2D \
+         DQ,Primitive 2D DR,Primitive 2D DS,Primitive 2D DT,Primitive 2D \
+         DU,Primitive 2D DV,Primitive 2D DW,Primitive 2D DX,Primitive 2D \
+         DY,Primitive 2D DZ,Primitive 2D E,Primitive 2D EA,Primitive 2D \
+         EB,Primitive 2D EC,Primitive 2D ED,Primitive 2D EE,Primitive 2D \
+         EF,Primitive 2D EG,Primitive 2D EH,Primitive 2D EI,Primitive 2D \
+         EJ,Primitive 2D EK,Primitive 2D EL,Primitive 2D EM,Primitive 2D \
+         EN,Primitive 2D EO,Primitive 2D EP,Primitive 2D EQ,Primitive 2D \
+         ER,Primitive 2D ES,Primitive 2D ET,Primitive 2D EU,Primitive 2D \
+         EV,Primitive 2D EW,Primitive 2D EX,Primitive 2D EY,Primitive 2D \
+         EZ,Primitive 2D F,Primitive 2D FA,Primitive 2D FB,Primitive 2D \
+         FC,Primitive 2D FD,Primitive 2D FE,Primitive 2D FF,Primitive 2D \
+         FG,Primitive 2D FH,Primitive 2D FI,Primitive 2D FJ,Primitive 2D \
+         FK,Primitive 2D FL,Primitive 2D FM,Primitive 2D FN,Primitive 2D \
+         FO,Primitive 2D FP,Primitive 2D FQ,Primitive 2D FR,Primitive 2D \
+         FS,Primitive 2D FT,Primitive 2D FU,Primitive 2D FV,Primitive 2D \
+         FW,Primitive 2D FX,Primitive 2D FY,Primitive 2D FZ,Primitive 2D \
+         G,Primitive 2D GA,Primitive 2D GB,Primitive 2D GC,Primitive 2D \
+         GD,Primitive 2D GE,Primitive 2D GF,Primitive 2D GG,Primitive 2D \
+         GH,Primitive 2D GI,Primitive 2D GJ,Primitive 2D GK,Primitive 2D \
+         GL,Primitive 2D H,Primitive 2D I,Primitive 2D J,Primitive 2D \
+         K,Primitive 2D L,Primitive 2D M,Primitive 2D N,Primitive 2D \
+         O,Primitive 2D P,Primitive 2D Q,Primitive 2D R,Primitive 2D \
+         S,Primitive 2D T,Primitive 2D U,Primitive 2D V,Primitive 2D \
+         W,Primitive 2D X,Primitive 2D Y,Primitive 2D Z
+       BOUNDARY CONDITIONS:
+         HEAT TRANSFER:
+           Option = Adiabatic
+         END
+         MASS AND MOMENTUM:
+           Option = No Slip Wall
+         END
+         WALL ROUGHNESS:
+           Option = Smooth Wall
+         END
+       END
+     END
+     BOUNDARY: G1 G2 01 Side 1
+       Boundary Type = INTERFACE
+       Location = C G1 G2 01 D_1.0_S_1.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 01 Side 2
+       Boundary Type = INTERFACE
+       Location = C G1 G2 01 D_1.0_S_1.0 2
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 02 Side 1
+       Boundary Type = INTERFACE
+       Location = C G1 G2 02 D_1.0_S_1.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 02 Side 2
+       Boundary Type = INTERFACE
+       Location = C G1 G2 02 D_1.0_S_1.0 2
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 03 Side 1
+       Boundary Type = INTERFACE
+       Location = C G1 G2 03 D_1.0_S_1.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 03 Side 2
+       Boundary Type = INTERFACE
+       Location = C G1 G2 03 D_1.0_S_1.0 2
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 04 Side 1
+       Boundary Type = INTERFACE
+       Location = C G1 G2 04 D_1.0_S_1.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G1 G2 04 Side 2
+       Boundary Type = INTERFACE
+       Location = C G1 G2 04 D_1.0_S_1.0 2
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G2 G3 01 Side 1
+       Boundary Type = INTERFACE
+       Location = C G2 G3 01 D_1.0_S_1.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: G2 G3 01 Side 2
+       Boundary Type = INTERFACE
+       Location = C G2 G3 01 D_1.0_S_1.0 2
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: CO2
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: H2O
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: NO
+           Option = Conservative Interface Flux
+         END
+         COMPONENT: O2
+           Option = Conservative Interface Flux
+         END
+         HEAT TRANSFER:
+           Option = Conservative Interface Flux
+         END
+         MASS AND MOMENTUM:
+           Option = Conservative Interface Flux
+         END
+         TURBULENCE:
+           Option = Conservative Interface Flux
+         END
+       END
+     END
+     BOUNDARY: INLET
+       Boundary Type = INLET
+       Location = DG1 B1 INLET D_0.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: CO
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: CO2
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: H2O
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: NO
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: O2
+           Mass Fraction = 0.232
+           Option = Mass Fraction
+         END
+         FLOW DIRECTION:
+           Option = Normal to Boundary Condition
+         END
+         FLOW REGIME:
+           Option = Subsonic
+         END
+         HEAT TRANSFER:
+           Option = Total Temperature
+           Total Temperature = 15 [C]
+         END
+         MASS AND MOMENTUM:
+           Option = Total Pressure
+           Relative Pressure = 2.0 [kPa]
+         END
+         TURBULENCE:
+           Option = Medium Intensity and Eddy Viscosity Ratio
+         END
+       END
+     END
+     BOUNDARY: OUTLET
+       Boundary Type = OPENING
+       Location = DG3 B3 T OUT D_0.0,DG3 B3 C OUT D_0.0
+       BOUNDARY CONDITIONS:
+         COMPONENT: CH4
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: CO
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: CO2
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: H2O
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: NO
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         COMPONENT: O2
+           Mass Fraction = 0.0
+           Option = Mass Fraction
+         END
+         FLOW DIRECTION:
+           Option = Normal to Boundary Condition
+         END
+         FLOW REGIME:
+           Option = Subsonic
+         END
+         HEAT TRANSFER:
+           Opening Temperature = 15 [C]
+           Option = Opening Temperature
+         END
+         MASS AND MOMENTUM:
+           Option = Opening Pressure and Direction
+           Relative Pressure = 0 [kPa]
+         END
+         TURBULENCE:
+           Option = Medium Intensity and Eddy Viscosity Ratio
+         END
+       END
+     END
+     DOMAIN MODELS:
+       BUOYANCY MODEL:
+         Option = Non Buoyant
+       END
+       DOMAIN MOTION:
+         Option = Stationary
+       END
+       MESH DEFORMATION:
+         Option = None
+       END
+       REFERENCE PRESSURE:
+         Reference Pressure = 101.325 [kPa]
+       END
+     END
+     FLUID DEFINITION: Fluid 1
+       Material = GAS
+       Option = Material Library
+       MORPHOLOGY:
+         Option = Continuous Fluid
+       END
+     END
+     FLUID MODELS:
+       COMBUSTION MODEL:
+         Option = None
+       END
+       COMPONENT: CH4
+         Option = Transport Equation
+       END
+       COMPONENT: CO
+         Option = Transport Equation
+       END
+       COMPONENT: CO2
+         Option = Transport Equation
+       END
+       COMPONENT: H2O
+         Option = Transport Equation
+       END
+       COMPONENT: N2
+         Option = Constraint
+       END
+       COMPONENT: NO
+         Option = Transport Equation
+       END
+       COMPONENT: O2
+         Option = Transport Equation
+       END
+       HEAT TRANSFER MODEL:
+         Option = Total Energy
+       END
+       THERMAL RADIATION MODEL:
+         Option = None
+       END
+       TURBULENCE MODEL:
+         Option = SST
+       END
+       TURBULENT WALL FUNCTIONS:
+         High Speed Model = Off
+         Option = Automatic
+       END
+     END
+     INITIALISATION:
+       Option = Automatic
+       INITIAL CONDITIONS:
+         Velocity Type = Cartesian
+         CARTESIAN VELOCITY COMPONENTS:
+           Option = Automatic
+         END
+         COMPONENT: CH4
+           Option = Automatic
+         END
+         COMPONENT: CO
+           Option = Automatic
+         END
+         COMPONENT: CO2
+           Option = Automatic
+         END
+         COMPONENT: H2O
+           Option = Automatic
+         END
+         COMPONENT: NO
+           Option = Automatic
+         END
+         COMPONENT: O2
+           Mass Fraction = 0.232
+           Option = Automatic with Value
+         END
+         STATIC PRESSURE:
+           Option = Automatic with Value
+           Relative Pressure = 0 [kPa]
+         END
+         TEMPERATURE:
+           Option = Automatic with Value
+           Temperature = 15 [C]
+         END
+         TURBULENCE INITIAL CONDITIONS:
+           Option = Medium Intensity and Eddy Viscosity Ratio
+         END
+       END
+     END
+   END
+   DOMAIN INTERFACE: G1 G2 01
+     Boundary List1 = G1 G2 01 Side 1
+     Boundary List2 = G1 G2 01 Side 2
+     Interface Type = Fluid Fluid
+     INTERFACE MODELS:
+       Option = General Connection
+       FRAME CHANGE:
+         Option = None
+       END
+       MASS AND MOMENTUM:
+         Option = Conservative Interface Flux
+         MOMENTUM INTERFACE MODEL:
+           Option = None
+         END
+       END
+       PITCH CHANGE:
+         Option = None
+       END
+     END
+     MESH CONNECTION:
+       Option = Automatic
+     END
+   END
+   DOMAIN INTERFACE: G1 G2 02
+     Boundary List1 = G1 G2 02 Side 1
+     Boundary List2 = G1 G2 02 Side 2
+     Interface Type = Fluid Fluid
+     INTERFACE MODELS:
+       Option = General Connection
+       FRAME CHANGE:
+         Option = None
+       END
+       MASS AND MOMENTUM:
+         Option = Conservative Interface Flux
+         MOMENTUM INTERFACE MODEL:
+           Option = None
+         END
+       END
+       PITCH CHANGE:
+         Option = None
+       END
+     END
+     MESH CONNECTION:
+       Option = Automatic
+     END
+   END
+   DOMAIN INTERFACE: G1 G2 03
+     Boundary List1 = G1 G2 03 Side 1
+     Boundary List2 = G1 G2 03 Side 2
+     Interface Type = Fluid Fluid
+     INTERFACE MODELS:
+       Option = General Connection
+       FRAME CHANGE:
+         Option = None
+       END
+       MASS AND MOMENTUM:
+         Option = Conservative Interface Flux
+         MOMENTUM INTERFACE MODEL:
+           Option = None
+         END
+       END
+       PITCH CHANGE:
+         Option = None
+       END
+     END
+     MESH CONNECTION:
+       Option = Automatic
+     END
+   END
+   DOMAIN INTERFACE: G1 G2 04
+     Boundary List1 = G1 G2 04 Side 1
+     Boundary List2 = G1 G2 04 Side 2
+     Interface Type = Fluid Fluid
+     INTERFACE MODELS:
+       Option = General Connection
+       FRAME CHANGE:
+         Option = None
+       END
+       MASS AND MOMENTUM:
+         Option = Conservative Interface Flux
+         MOMENTUM INTERFACE MODEL:
+           Option = None
+         END
+       END
+       PITCH CHANGE:
+         Option = None
+       END
+     END
+     MESH CONNECTION:
+       Option = Automatic
+     END
+   END
+   DOMAIN INTERFACE: G2 G3 01
+     Boundary List1 = G2 G3 01 Side 1
+     Boundary List2 = G2 G3 01 Side 2
+     Interface Type = Fluid Fluid
+     INTERFACE MODELS:
+       Option = General Connection
+       FRAME CHANGE:
+         Option = None
+       END
+       MASS AND MOMENTUM:
+         Option = Conservative Interface Flux
+         MOMENTUM INTERFACE MODEL:
+           Option = None
+         END
+       END
+       PITCH CHANGE:
+         Option = None
+       END
+     END
+     MESH CONNECTION:
+       Option = Automatic
+     END
+   END
+   OUTPUT CONTROL:
+     BACKUP RESULTS: Backup Results 1
+       File Compression Level = Default
+       Option = Standard
+       OUTPUT FREQUENCY:
+         Elapsed Time Interval = 24 [h]
+         Option = Elapsed Time Interval
+       END
+     END
+     MONITOR OBJECTS:
+       MONITOR BALANCES:
+         Option = Full
+       END
+       MONITOR FORCES:
+         Option = Full
+       END
+       MONITOR PARTICLES:
+         Option = Full
+       END
+       MONITOR POINT: MFR IN OUT
+         Coord Frame = Coord 0
+         Expression Value = massFlow()@INLET + massFlow()@OUTLET
+         Option = Expression
+       END
+       MONITOR POINT: MFR INLET
+         Coord Frame = Coord 0
+         Expression Value = massFlow()@INLET
+         Option = Expression
+       END
+       MONITOR POINT: MFR OUTLET
+         Coord Frame = Coord 0
+         Expression Value = massFlow()@OUTLET
+         Option = Expression
+       END
+       MONITOR POINT: T OUTLET
+         Coord Frame = Coord 0
+         Expression Value = massFlowAveAbs(Total Temperature)@OUTLET
+         Option = Expression
+       END
+       MONITOR POINT: TP INLET
+         Coord Frame = Coord 0
+         Expression Value = massFlowAve(Total Pressure)@INLET
+         Option = Expression
+       END
+       MONITOR POINT: TP OUTLET
+         Coord Frame = Coord 0
+         Expression Value = massFlowAve(Total Pressure)@OUTLET
+         Option = Expression
+       END
+       MONITOR RESIDUALS:
+         Option = Full
+       END
+       MONITOR TOTALS:
+         Option = Full
+       END
+     END
+     RESULTS:
+       File Compression Level = Default
+       Option = Standard
+     END
+   END
+   SOLVER CONTROL:
+     Turbulence Numerics = First Order
+     ADVECTION SCHEME:
+       Option = High Resolution
+     END
+     CONVERGENCE CONTROL:
+       Maximum Number of Iterations = 2000
+       Minimum Number of Iterations = 1
+       Physical Timescale = 0.0002 [s]
+       Timescale Control = Physical Timescale
+     END
+     CONVERGENCE CRITERIA:
+       Residual Target = 1.E-4
+       Residual Type = RMS
+     END
+     DYNAMIC MODEL CONTROL:
+       Global Dynamic Model Control = On
+     END
+   END
+ END
+ COMMAND FILE:
+   Results Version = 14.5.7
+   Version = 14.5
+ END
+ SIMULATION CONTROL:
+   EXECUTION CONTROL:
+     EXECUTABLE SELECTION:
+       Double Precision = Off
+     END
+     INTERPOLATOR STEP CONTROL:
+       Runtime Priority = Standard
+       MEMORY CONTROL:
+         Memory Allocation Factor = 1.0
+       END
+     END
+     PARALLEL HOST LIBRARY:
+       HOST DEFINITION: n133906
+         Installation Root = C:\ANSYS\v%v\CFX
+         Host Architecture String = winnt-amd64
+       END
+     END
+     PARTITIONER STEP CONTROL:
+       Multidomain Option = Independent Partitioning
+       Runtime Priority = Standard
+       EXECUTABLE SELECTION:
+         Use Large Problem Partitioner = Off
+       END
+       MEMORY CONTROL:
+         Memory Allocation Factor = 1.0
+       END
+       PARTITIONING TYPE:
+         Option = MeTiS
+         Partition Size Rule = Automatic
+         MeTiS Type = k-way
+         Partition Weight Factors = 0.12500, 0.12500, 0.12500, 0.12500, \
+           0.12500, 0.12500, 0.12500, 0.12500
+       END
+     END
+     RUN DEFINITION:
+       Run Mode = Full
+       Solver Input File = \
+         Z:\CFX\t71\cfx\T71030091_prj_01\DP=002\T71030091_prj_01.def
+       INITIAL VALUES SPECIFICATION:
+         INITIAL VALUES CONTROL:
+           Continue History From = Initial Values 1
+           Use Mesh From = Solver Input File
+         END
+         INITIAL VALUES: Initial Values 1
+           File Name = \
+             Z:\CFX\t71\cfx\T71030091_prj_01\DP=002\T71030091_prj_01_008.res
+           Option = Results File
+         END
+       END
+     END
+     SOLVER STEP CONTROL:
+       Runtime Priority = Standard
+       MEMORY CONTROL:
+         Memory Allocation Factor = 1.0
+       END
+       PARALLEL ENVIRONMENT:
+         Parallel Host List = n133906*8
+         Start Method = Platform MPI Distributed Parallel
+       END
+     END
+   END
+ END
+ 
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                  Interpolation of Initial Values                   |
+ |                                                                    |
+ +--------------------------------------------------------------------+
+
+ 
+
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                 ANSYS(R) CFX(R) Interpolator 14.5.7                |
+ |                                                                    |
+ | Version 2013.03.12-10.53            Tue Mar 12 11:06:45 GMTST 2013 |
+ |                                                                    |
+ |                        Executable Attributes                       |
+ |                                                                    |
+ | single-int32-64bit-novc8-noifort-novc6-optimised-supfort-noprof-nos|
+ |                                                                    |
+ | (C) 2013 ANSYS, Inc.                                               |
+ |                                                                    |
+ | All rights reserved. Unauthorized use, distribution or duplication |
+ | is prohibited. This product is subject to U.S. laws governing      |
+ | export and re-export. For full Legal Notice, see documentation.    |
+ +--------------------------------------------------------------------+
+
+
+
+
+ +--------------------------------------------------------------------+
+ |                  Job Information at Start of Run                   |
+ +--------------------------------------------------------------------+
+
+ Run mode:       serial run
+
+ Host computer:  N133906 (PID:11676)
+ Job started:    Wed Mar 19 13:53:02 2025
+
+
+ +--------------------------------------------------------------------+
+ |        Memory Allocated for Run  (Actual usage may be less)        |
+ +--------------------------------------------------------------------+
+
+  Data Type      Mwords  Words/Node  Words/Elem      Mbytes Bytes/Node
+ 
+  Real           115.21       71.80       13.25      439.49     287.18
+  Integer        154.16       96.07       17.74      588.08     384.29
+  Character        0.50        0.31        0.06        0.48       0.31
+  Logical          0.01        0.01        0.00        0.04       0.02
+  Double           0.30        0.19        0.03        2.29       1.50
+
+
+ +--------------------------------------------------------------------+
+ |                  Host Memory Information (Mbytes)                  |
+ +--------------------------------------------------------------------+
+ |          Host           |     System     |   Allocated    |   %    |
+ +-------------------------+----------------+----------------+--------+
+ | N133906                 |     65470.47   |      1030.37   |   1.57 |
+ +-------------------------+----------------+----------------+--------+
+
+ ======================================================================
+                     Interpolating Onto Domain "D1"
+ ======================================================================
+
+ Total Number of Nodes in the Target Domain              =      1604659
+ Bounding Box Volume of the Target Mesh                  =  1.48999E-02
+
+
+ Checking all source domains from the source file:
+   Target mesh is the same as domain "D1".
+
+ Start direct copying of variables from domain "D1".
+
+ +--------------------------------------------------------------------+
+ |                     Variable Range Information                     |
+ +--------------------------------------------------------------------+
+ +--------------------------------------------------------------------+
+ |      Variable Name                         |    min    |    max    |
+ +--------------------------------------------------------------------+
+ | Density.Beta                               |  8.24E-07 |  1.00E+00 |
+ | Energy and Mass Fractions.Beta             |  0.00E+00 |  1.00E+00 |
+ | Temperature Variance.Beta                  |  0.00E+00 |  1.00E+00 |
+ | Velocity u.Beta                            |  4.77E-07 |  1.00E+00 |
+ | Velocity v.Beta                            |  1.19E-07 |  1.00E+00 |
+ | Velocity w.Beta                            |  1.19E-07 |  1.00E+00 |
+ | Isothermal Compressibility                 |  9.67E-06 |  1.01E-05 |
+ | Thermal Conductivity                       |  2.59E-02 |  2.61E-02 |
+ | Courant Number                             |  8.40E-04 |  3.03E+02 |
+ | Density                                    |  1.18E+00 |  1.25E+00 |
+ | Total Density                              |  1.18E+00 |  1.25E+00 |
+ | Density Derivative wrt Pressure at Constant|  1.17E-05 |  1.21E-05 |
+ | Static Enthalpy                            | -1.24E+04 | -1.01E+04 |
+ | Total Enthalpy                             | -1.08E+04 | -9.85E+03 |
+ | Static Entropy                             |  6.70E+03 |  6.80E+03 |
+ | Volume Porosity                            |  1.00E+00 |  1.00E+00 |
+ | Density.Gradient                           |  1.09E-08 |  5.90E+03 |
+ | Total Enthalpy.Gradient                    |  0.00E+00 |  4.85E+07 |
+ | CH4.Conservative Mass Fraction.Gradient    |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction.Gradient     |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction.Gradient    |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction.Gradient    |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction.Gradient     |  0.00E+00 |  0.00E+00 |
+ | O2.Conservative Mass Fraction.Gradient     |  0.00E+00 |  1.12E+03 |
+ | Pressure.Gradient                          |  1.80E-02 |  6.57E+06 |
+ | Temperature Variance.Gradient              |  9.69E-11 |  8.57E+01 |
+ | Velocity u.Gradient                        |  1.91E-02 |  1.60E+05 |
+ | Velocity v.Gradient                        |  8.97E-04 |  2.52E+05 |
+ | Velocity w.Gradient                        |  2.04E-03 |  2.72E+05 |
+ | Wall Scale.Gradient                        |  1.34E-05 |  2.55E-01 |
+ | Mach Number                                |  9.24E-06 |  2.00E-01 |
+ | CH4.Mass Concentration                     |  0.00E+00 |  0.00E+00 |
+ | CO.Mass Concentration                      |  0.00E+00 |  0.00E+00 |
+ | CO2.Mass Concentration                     |  0.00E+00 |  0.00E+00 |
+ | H2O.Mass Concentration                     |  0.00E+00 |  0.00E+00 |
+ | N2.Mass Concentration                      |  9.21E-01 |  1.18E+00 |
+ | NO.Mass Concentration                      |  0.00E+00 |  3.53E-29 |
+ | O2.Mass Concentration                      |  0.00E+00 |  2.89E-01 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | N2.Conservative Mass Fraction              |  7.67E-01 |  1.00E+00 |
+ | NO.Conservative Mass Fraction              | -4.71E-30 |  2.84E-29 |
+ | O2.Conservative Mass Fraction              | -3.22E-04 |  2.33E-01 |
+ | CH4.Mass Fraction                          |  0.00E+00 |  0.00E+00 |
+ | CO.Mass Fraction                           |  0.00E+00 |  0.00E+00 |
+ | CO2.Mass Fraction                          |  0.00E+00 |  0.00E+00 |
+ | H2O.Mass Fraction                          |  0.00E+00 |  0.00E+00 |
+ | N2.Mass Fraction                           |  7.67E-01 |  1.00E+00 |
+ | NO.Mass Fraction                           |  0.00E+00 |  2.84E-29 |
+ | O2.Mass Fraction                           |  0.00E+00 |  2.33E-01 |
+ | CH4.Molar Concentration                    |  0.00E+00 |  0.00E+00 |
+ | CO.Molar Concentration                     |  0.00E+00 |  0.00E+00 |
+ | CO2.Molar Concentration                    |  0.00E+00 |  0.00E+00 |
+ | H2O.Molar Concentration                    |  0.00E+00 |  0.00E+00 |
+ | N2.Molar Concentration                     |  3.29E+01 |  4.23E+01 |
+ | NO.Molar Concentration                     |  0.00E+00 |  1.18E-27 |
+ | O2.Molar Concentration                     |  0.00E+00 |  9.04E+00 |
+ | CH4.Molar Fraction                         |  0.00E+00 |  0.00E+00 |
+ | CO.Molar Fraction                          |  0.00E+00 |  0.00E+00 |
+ | CO2.Molar Fraction                         |  0.00E+00 |  0.00E+00 |
+ | H2O.Molar Fraction                         |  0.00E+00 |  0.00E+00 |
+ | N2.Molar Fraction                          |  7.90E-01 |  1.00E+00 |
+ | NO.Molar Fraction                          |  0.00E+00 |  2.73E-29 |
+ | O2.Molar Fraction                          |  0.00E+00 |  2.10E-01 |
+ | Absolute Pressure                          |  9.92E+04 |  1.03E+05 |
+ | Pressure                                   | -2.09E+03 |  2.12E+03 |
+ | Total Pressure                             | -1.54E+03 |  2.38E+03 |
+ | Prompt NO Methane PDF.Molar Reaction Rate  |  0.00E+00 |  0.00E+00 |
+ | Thermal NO PDF.Molar Reaction Rate         |  0.00E+00 |  0.00E+00 |
+ | WD2 CO Oxidation.Molar Reaction Rate       |  0.00E+00 |  0.00E+00 |
+ | WD2 Methane Oxidation.Molar Reaction Rate  |  0.00E+00 |  0.00E+00 |
+ | Real Partition Number                      |  1.00E+00 |  8.00E+00 |
+ | Local Speed of Sound                       |  3.40E+02 |  3.46E+02 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.04E+03 |
+ | Specific Heat Capacity at Constant Volume  |  7.22E+02 |  7.41E+02 |
+ | Specific Volume                            |  8.02E-01 |  8.45E-01 |
+ | First Blending Function for BSL and SST mod|  3.92E-15 |  1.00E+00 |
+ | Second Blending Function for SST model     |  7.97E-05 |  1.00E+00 |
+ | Shear Strain Rate                          |  5.40E-02 |  2.92E+05 |
+ | Turbulence Eddy Dissipation                |  8.52E-05 |  1.22E+06 |
+ | Turbulence Eddy Frequency                  |  1.06E+01 |  2.40E+07 |
+ | Temperature                                |  2.86E+02 |  2.88E+02 |
+ | Turbulence Kinetic Energy                  |  2.96E-08 |  1.69E+02 |
+ | Total Temperature                          |  2.87E+02 |  2.88E+02 |
+ | Temperature Variance                       | -4.52E-03 |  1.19E-01 |
+ | Velocity                                   |  3.15E-03 |  6.81E+01 |
+ | Dynamic Viscosity                          |  1.77E-05 |  1.80E-05 |
+ | Eddy Viscosity                             |  4.51E-13 |  2.20E-02 |
+ | Wall Distance                              |  1.45E-06 |  1.02E-01 |
+ | Wall Scale                                 |  3.51E-09 |  5.45E-03 |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+             Copy GGI Data Onto Domain Interface "G1 G2 01"
+ ======================================================================
+
+ Checking all source domain interfaces from the source file:
+   Target GGI is the same as domain interface "G1 G2 01".
+
+ Start direct copying of variables from domain interface "G1 G2 01".
+
+ +--------------------------------------------------------------------+
+ |                   CS Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Density                                    |  1.24E+00 |  1.24E+00 |
+ | Density Derivative wrt Pressure at Constant|  1.20E-05 |  1.20E-05 |
+ | Static Enthalpy                            | -1.01E+04 | -1.01E+04 |
+ | Total Enthalpy                             | -1.01E+04 | -1.01E+04 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction              | -5.07E-37 |  8.39E-38 |
+ | O2.Conservative Mass Fraction              |  2.32E-01 |  2.32E-01 |
+ | Pressure                                   |  1.97E+03 |  1.99E+03 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.01E+03 |
+ | Turbulence Eddy Frequency                  |  1.23E+02 |  7.67E+04 |
+ | Temperature                                |  2.88E+02 |  2.88E+02 |
+ | Turbulence Kinetic Energy                  |  4.19E-03 |  1.44E-02 |
+ | Temperature Variance                       |  3.65E-09 |  7.96E-08 |
+ | Velocity                                   |  3.43E+00 |  6.20E+00 |
+ | Wall Scale                                 |  4.14E-05 |  7.07E-04 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                   IP Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Mass Flow                                  | -4.76E-07 |  4.76E-07 |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+             Copy GGI Data Onto Domain Interface "G1 G2 02"
+ ======================================================================
+
+ Checking all source domain interfaces from the source file:
+   Target GGI is different from domain interface "G1 G2 01".
+   Target GGI is the same as domain interface "G1 G2 02".
+
+ Start direct copying of variables from domain interface "G1 G2 02".
+
+ +--------------------------------------------------------------------+
+ |                   CS Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Density                                    |  1.24E+00 |  1.24E+00 |
+ | Density Derivative wrt Pressure at Constant|  1.20E-05 |  1.20E-05 |
+ | Static Enthalpy                            | -1.01E+04 | -1.01E+04 |
+ | Total Enthalpy                             | -1.01E+04 | -1.01E+04 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction              | -1.59E-31 |  4.30E-30 |
+ | O2.Conservative Mass Fraction              |  2.32E-01 |  2.32E-01 |
+ | Pressure                                   |  1.98E+03 |  2.00E+03 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.01E+03 |
+ | Turbulence Eddy Frequency                  |  1.23E+02 |  5.07E+02 |
+ | Temperature                                |  2.88E+02 |  2.88E+02 |
+ | Turbulence Kinetic Energy                  |  4.78E-03 |  9.11E-02 |
+ | Temperature Variance                       | -6.41E-04 |  6.23E-07 |
+ | Velocity                                   |  2.23E+00 |  5.54E+00 |
+ | Wall Scale                                 |  5.69E-04 |  7.00E-04 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                   IP Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Mass Flow                                  | -5.34E-07 |  5.34E-07 |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+             Copy GGI Data Onto Domain Interface "G1 G2 03"
+ ======================================================================
+
+ Checking all source domain interfaces from the source file:
+   Target GGI is different from domain interface "G1 G2 01".
+   Target GGI is different from domain interface "G1 G2 02".
+   Target GGI is the same as domain interface "G1 G2 03".
+
+ Start direct copying of variables from domain interface "G1 G2 03".
+
+ +--------------------------------------------------------------------+
+ |                   CS Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Density                                    |  1.24E+00 |  1.24E+00 |
+ | Density Derivative wrt Pressure at Constant|  1.20E-05 |  1.20E-05 |
+ | Static Enthalpy                            | -1.01E+04 | -1.01E+04 |
+ | Total Enthalpy                             | -1.01E+04 | -1.01E+04 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction              | -1.62E-30 |  4.26E-30 |
+ | O2.Conservative Mass Fraction              |  2.32E-01 |  2.32E-01 |
+ | Pressure                                   |  1.99E+03 |  2.00E+03 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.01E+03 |
+ | Turbulence Eddy Frequency                  |  1.74E+02 |  6.44E+02 |
+ | Temperature                                |  2.88E+02 |  2.88E+02 |
+ | Turbulence Kinetic Energy                  |  4.78E-03 |  8.35E-02 |
+ | Temperature Variance                       | -6.42E-04 |  7.44E-07 |
+ | Velocity                                   |  2.23E+00 |  3.05E+00 |
+ | Wall Scale                                 |  3.11E-04 |  5.86E-04 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                   IP Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Mass Flow                                  | -2.32E-07 |  2.32E-07 |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+             Copy GGI Data Onto Domain Interface "G1 G2 04"
+ ======================================================================
+
+ Checking all source domain interfaces from the source file:
+   Target GGI is different from domain interface "G1 G2 01".
+   Target GGI is different from domain interface "G1 G2 02".
+   Target GGI is different from domain interface "G1 G2 03".
+   Target GGI is the same as domain interface "G1 G2 04".
+
+ Start direct copying of variables from domain interface "G1 G2 04".
+
+ +--------------------------------------------------------------------+
+ |                   CS Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Density                                    |  1.24E+00 |  1.24E+00 |
+ | Density Derivative wrt Pressure at Constant|  1.20E-05 |  1.20E-05 |
+ | Static Enthalpy                            | -1.01E+04 | -1.01E+04 |
+ | Total Enthalpy                             | -1.01E+04 | -1.01E+04 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction              | -1.61E-30 |  4.09E-30 |
+ | O2.Conservative Mass Fraction              |  2.32E-01 |  2.32E-01 |
+ | Pressure                                   |  1.97E+03 |  2.00E+03 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.01E+03 |
+ | Turbulence Eddy Frequency                  |  3.40E+02 |  7.79E+04 |
+ | Temperature                                |  2.88E+02 |  2.88E+02 |
+ | Turbulence Kinetic Energy                  |  1.53E-04 |  5.39E-02 |
+ | Temperature Variance                       | -6.91E-04 |  4.52E-07 |
+ | Velocity                                   |  1.94E+00 |  5.03E+00 |
+ | Wall Scale                                 |  2.51E-05 |  3.24E-04 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                   IP Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Mass Flow                                  | -6.26E-07 |  6.26E-07 |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+             Copy GGI Data Onto Domain Interface "G2 G3 01"
+ ======================================================================
+
+ Checking all source domain interfaces from the source file:
+   Target GGI is different from domain interface "G1 G2 01".
+   Target GGI is different from domain interface "G1 G2 02".
+   Target GGI is different from domain interface "G1 G2 03".
+   Target GGI is different from domain interface "G1 G2 04".
+   Target GGI is the same as domain interface "G2 G3 01".
+
+ Start direct copying of variables from domain interface "G2 G3 01".
+
+ +--------------------------------------------------------------------+
+ |                   CS Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Density                                    |  1.21E+00 |  1.23E+00 |
+ | Density Derivative wrt Pressure at Constant|  1.20E-05 |  1.21E-05 |
+ | Static Enthalpy                            | -1.15E+04 | -1.02E+04 |
+ | Total Enthalpy                             | -1.06E+04 | -9.84E+03 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction              | -1.05E-31 |  4.87E-31 |
+ | O2.Conservative Mass Fraction              |  2.05E-01 |  2.32E-01 |
+ | Pressure                                   | -6.65E+02 |  3.73E+02 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.01E+03 |
+ | Turbulence Eddy Frequency                  |  5.01E+03 |  5.32E+05 |
+ | Temperature                                |  2.87E+02 |  2.88E+02 |
+ | Turbulence Kinetic Energy                  |  1.83E+00 |  8.00E+01 |
+ | Temperature Variance                       |  1.86E-05 |  2.48E-02 |
+ | Velocity                                   |  7.07E+00 |  5.49E+01 |
+ | Wall Scale                                 |  6.94E-05 |  9.78E-04 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                   IP Variable Range Information                    |
+ +--------------------------------------------------------------------+
+ | Mass Flow                                  | -6.23E-06 |  6.23E-06 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                 CPU Requirements of Interpolation                  |
+ +--------------------------------------------------------------------+
+
+ Interpolation Step              Time    Percentage
+                                (secs.   %total)
+ ----------------------------------------------------------------------
+ Tree Setup                     1.77E+01   71.2 %
+ Interpolation                  3.28E-01    1.3 %
+ Miscellaneous                  6.84E+00   27.5 %
+                                --------
+ Total                          2.49E+01
+
+ +--------------------------------------------------------------------+
+ |                   Job Information at End of Run                    |
+ +--------------------------------------------------------------------+
+
+ Host computer:  N133906 (PID:11676)
+ Job finished:   Wed Mar 19 13:53:27 2025
+ Total CPU time: 2.489E+01 seconds
+             or: (          0:         0:         0:    24.891 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Total wall clock time: 2.489E+01 seconds
+             or: (          0:         0:         0:    24.891 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                            Partitioning                            |
+ |                                                                    |
+ +--------------------------------------------------------------------+
+
+
+
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                 ANSYS(R) CFX(R) Partitioner 14.5.7                 |
+ |                                                                    |
+ | Version 2013.03.12-10.53            Tue Mar 12 11:06:45 GMTST 2013 |
+ |                                                                    |
+ |                        Executable Attributes                       |
+ |                                                                    |
+ | single-int32-64bit-novc8-noifort-novc6-optimised-supfort-noprof-nos|
+ |                                                                    |
+ | (C) 2013 ANSYS, Inc.                                               |
+ |                                                                    |
+ | All rights reserved. Unauthorized use, distribution or duplication |
+ | is prohibited. This product is subject to U.S. laws governing      |
+ | export and re-export. For full Legal Notice, see documentation.    |
+ +--------------------------------------------------------------------+
+
+
+
+
+ +--------------------------------------------------------------------+
+ |                  Job Information at Start of Run                   |
+ +--------------------------------------------------------------------+
+
+ Run mode:       partitioning run
+
+ Host computer:  N133906 (PID:12572)
+ Job started:    Wed Mar 19 13:53:32 2025
+
+
+ +--------------------------------------------------------------------+
+ |        Memory Allocated for Run  (Actual usage may be less)        |
+ +--------------------------------------------------------------------+
+
+  Data Type      Mwords  Words/Node  Words/Elem      Mbytes Bytes/Node
+ 
+  Real            20.87       13.00        2.40       79.61      52.02
+  Integer        161.74      100.80       18.61      617.00     403.18
+  Character        3.87        2.41        0.44        3.69       2.41
+  Logical          0.12        0.07        0.01        0.46       0.30
+  Double           0.60        0.37        0.07        4.58       2.99
+
+
+ +--------------------------------------------------------------------+
+ |                  Host Memory Information (Mbytes)                  |
+ +--------------------------------------------------------------------+
+ |          Host           |     System     |   Allocated    |   %    |
+ +-------------------------+----------------+----------------+--------+
+ | N133906                 |     65470.47   |       705.33   |   1.08 |
+ +-------------------------+----------------+----------------+--------+
+
+ +--------------------------------------------------------------------+
+ |                          Mesh Statistics                           |
+ +--------------------------------------------------------------------+
+
+ Domain Name : D1
+
+     Total Number of Nodes                                =     1604659
+
+     Total Number of Elements                             =     8692485
+         Total Number of Tetrahedrons                     =     8692485
+
+     Total Number of Faces                                =      568450
+
+ Domain Interface Name : G1 G2 01
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    1.45E-04
+     Non-overlap area fraction on side 2                  =    1.10E-04
+
+ Domain Interface Name : G1 G2 02
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    2.19E-05
+     Non-overlap area fraction on side 2                  =    2.74E-05
+
+ Domain Interface Name : G1 G2 03
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    6.72E-05
+     Non-overlap area fraction on side 2                  =    6.30E-05
+
+ Domain Interface Name : G1 G2 04
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    1.64E-04
+     Non-overlap area fraction on side 2                  =    1.85E-04
+
+ Domain Interface Name : G2 G3 01
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    1.02E-04
+     Non-overlap area fraction on side 2                  =    7.24E-06
+
+ +--------------------------------------------------------------------+
+ |                     Vertex Based Partitioning                      |
+ +--------------------------------------------------------------------+
+
+ Partitioning of domain: D1
+
+ - Partitioning tool:       MeTiS multilevel k-way algorithm
+ - Number of partitions:             8
+ - Number of graph-nodes:      1604659
+ - Number of graph-edges:     22839360
+
+ +--------------------------------------------------------------------+
+ |                      Partitioning Information                      |
+ +--------------------------------------------------------------------+
+
+ Partitioning information for domain: D1
+
+        +------------------+------------------------+-----------------+
+        |     Elements     |        Vertices        |     Faces       |
+ +------+------------------+------------------------+-----------------+
+ | Part |   Number     %   |   Number     %   %Ovlp |  Number     %   |
+ +------+------------------+------------------------+-----------------+
+ | Full |   8692485        |   1604659              |   568450        |
+ +------+------------------+------------------------+-----------------+
+ |    1 |   1162948   13.1 |    214737   12.8   5.3 |    51952    9.0 |
+ |    2 |   1132897   12.7 |    210600   12.5   4.6 |    58852   10.2 |
+ |    3 |   1233463   13.9 |    227691   13.5   5.7 |    54740    9.4 |
+ |    4 |   1191145   13.4 |    221743   13.2   5.3 |    61685   10.6 |
+ |    5 |   1097685   12.3 |    203695   12.1   3.0 |    66604   11.5 |
+ |    6 |   1030514   11.6 |    203803   12.1   4.1 |   102453   17.7 |
+ |    7 |   1018200   11.4 |    198159   11.8   3.5 |    92131   15.9 |
+ |    8 |   1026030   11.5 |    200344   11.9   4.5 |    91311   15.8 |
+ +------+------------------+------------------------+-----------------+
+ | Sum  |   8892882  100.0 |   1680772  100.0   4.5 |   579728  100.0 |
+ +------+------------------+------------------------+-----------------+
+
+ +--------------------------------------------------------------------+
+ |                 Partitioning CPU-Time Requirements                 |
+ +--------------------------------------------------------------------+
+  
+ - Preparations                                       6.266E+00 seconds
+ - Low-level mesh partitioning                        1.265E+00 seconds
+ - Gather zone interface information                  7.030E-01 seconds
+ - Global partitioning information                    1.410E-01 seconds
+ - Element and face partitioning information          2.650E-01 seconds
+ - Vertex partitioning information                    4.700E-02 seconds
+ - Partitioning information compression               1.600E-02 seconds
+ - Summed CPU-time for mesh partitioning              8.891E+00 seconds
+
+ +--------------------------------------------------------------------+
+ |                   Job Information at End of Run                    |
+ +--------------------------------------------------------------------+
+
+ Host computer:  N133906 (PID:12572)
+ Job finished:   Wed Mar 19 13:53:45 2025
+ Total CPU time: 1.286E+01 seconds
+             or: (          0:         0:         0:    12.859 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Total wall clock time: 1.286E+01 seconds
+             or: (          0:         0:         0:    12.860 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                               Solver                               |
+ |                                                                    |
+ +--------------------------------------------------------------------+
+
+
+
+
+ +--------------------------------------------------------------------+
+ |                                                                    |
+ |                    ANSYS(R) CFX(R) Solver 14.5.7                   |
+ |                                                                    |
+ | Version 2013.03.12-10.53            Tue Mar 12 11:06:45 GMTST 2013 |
+ |                                                                    |
+ |                        Executable Attributes                       |
+ |                                                                    |
+ | single-int32-64bit-novc8-noifort-novc6-optimised-supfort-noprof-nos|
+ |                                                                    |
+ | (C) 2013 ANSYS, Inc.                                               |
+ |                                                                    |
+ | All rights reserved. Unauthorized use, distribution or duplication |
+ | is prohibited. This product is subject to U.S. laws governing      |
+ | export and re-export. For full Legal Notice, see documentation.    |
+ +--------------------------------------------------------------------+
+
+
+
+
+ +--------------------------------------------------------------------+
+ |                  Job Information at Start of Run                   |
+ +--------------------------------------------------------------------+
+
+ Run mode:       parallel run (PCMPI)
+
+ Host computer:  N133906 (PID:11752)
+ Par. Process:   Master running on mesh partition:       1
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:6260)
+ Par. Process:   Slave  running on mesh partition:       2
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:14440)
+ Par. Process:   Slave  running on mesh partition:       3
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:1836)
+ Par. Process:   Slave  running on mesh partition:       4
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:16200)
+ Par. Process:   Slave  running on mesh partition:       5
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:13160)
+ Par. Process:   Slave  running on mesh partition:       6
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:8656)
+ Par. Process:   Slave  running on mesh partition:       7
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ Host computer:  N133906 (PID:6800)
+ Par. Process:   Slave  running on mesh partition:       8
+ Solver Build:   Tue Mar 12 11:06:45 GMTST 2013
+ Attributes:     single-int32-64bit-novc8-noifort-novc6-optimised-su...
+ Job started:    Wed Mar 19 13:53:46 2025
+
+ +--------------------------------------------------------------------+
+ |                        License Information                         |
+ +--------------------------------------------------------------------+
+ 
+ License Cap:    ANSYS CFX Solver (> 512K Nodes)
+ License Cap:     Parallel
+ License ID:     LicSrv02_zorya_com-SYSTEM-1608-031432
+
+
+ +--------------------------------------------------------------------+
+ |        Memory Allocated for Run  (Actual usage may be less)        |
+ +--------------------------------------------------------------------+
+
+ Allocated storage in:    Mwords
+                          Words/Node
+                          Words/Elem
+                          Mbytes
+                          Bytes/Node
+
+ Partition | Real       | Integer    | Character | Logical  | Double
+ ----------+------------+------------+-----------+----------+----------
+         1 |     134.96 |      37.66 |      4.32 |     0.12 |     0.61
+           |     628.49 |     175.36 |     20.10 |     0.56 |     2.83
+           |     116.05 |      32.38 |      3.71 |     0.10 |     0.52
+           |     514.83 |     143.65 |      4.12 |     0.11 |     4.64
+           |    2513.95 |     701.46 |     20.10 |     0.56 |    22.65
+ ----------+------------+------------+-----------+----------+----------
+         2 |     131.06 |      36.60 |      4.32 |     0.12 |     0.61
+           |     622.30 |     173.79 |     20.50 |     0.57 |     2.89
+           |     115.68 |      32.31 |      3.81 |     0.11 |     0.54
+           |     499.94 |     139.62 |      4.12 |     0.11 |     4.64
+           |    2489.19 |     695.17 |     20.50 |     0.57 |    23.10
+ ----------+------------+------------+-----------+----------+----------
+         3 |     121.65 |      36.42 |      4.32 |     0.12 |     0.61
+           |     534.30 |     159.97 |     18.96 |     0.53 |     2.67
+           |      98.63 |      29.53 |      3.50 |     0.10 |     0.49
+           |     464.08 |     138.95 |      4.12 |     0.11 |     4.64
+           |    2137.19 |     639.90 |     18.96 |     0.53 |    21.36
+ ----------+------------+------------+-----------+----------+----------
+         4 |     119.39 |      35.53 |      4.32 |     0.12 |     0.61
+           |     538.40 |     160.24 |     19.47 |     0.54 |     2.74
+           |     100.23 |      29.83 |      3.62 |     0.10 |     0.51
+           |     455.42 |     135.54 |      4.12 |     0.11 |     4.64
+           |    2153.60 |     640.95 |     19.47 |     0.54 |    21.94
+ ----------+------------+------------+-----------+----------+----------
+         5 |     145.81 |      38.71 |      4.32 |     0.12 |     0.61
+           |     715.84 |     190.03 |     21.19 |     0.59 |     2.99
+           |     132.84 |      35.26 |      3.93 |     0.11 |     0.55
+           |     556.23 |     147.66 |      4.12 |     0.11 |     4.64
+           |    2863.35 |     760.12 |     21.19 |     0.59 |    23.88
+ ----------+------------+------------+-----------+----------+----------
+         6 |     152.26 |      38.86 |      4.32 |     0.12 |     0.61
+           |     747.10 |     190.67 |     21.18 |     0.59 |     2.98
+           |     147.75 |      37.71 |      4.19 |     0.12 |     0.59
+           |     580.83 |     148.24 |      4.12 |     0.11 |     4.64
+           |    2988.40 |     762.70 |     21.18 |     0.59 |    23.87
+ ----------+------------+------------+-----------+----------+----------
+         7 |     157.03 |      39.64 |      4.32 |     0.12 |     0.61
+           |     792.44 |     200.03 |     21.79 |     0.61 |     3.07
+           |     154.22 |      38.93 |      4.24 |     0.12 |     0.60
+           |     599.02 |     151.21 |      4.12 |     0.11 |     4.64
+           |    3169.77 |     800.14 |     21.79 |     0.61 |    24.55
+ ----------+------------+------------+-----------+----------+----------
+         8 |     150.47 |      38.52 |      4.32 |     0.12 |     0.61
+           |     751.06 |     192.28 |     21.55 |     0.60 |     3.04
+           |     146.65 |      37.54 |      4.21 |     0.12 |     0.59
+           |     574.00 |     146.95 |      4.12 |     0.11 |     4.64
+           |    3004.25 |     769.12 |     21.55 |     0.60 |    24.28
+ ----------+------------+------------+-----------+----------+----------
+     Total |    1112.63 |     301.94 |     34.54 |     0.96 |     4.86
+           |     693.38 |     188.17 |     21.52 |     0.60 |     3.03
+           |     128.00 |      34.74 |      3.97 |     0.11 |     0.56
+           |    4244.35 |    1151.82 |     32.94 |     0.92 |    37.11
+           |    2773.50 |     752.67 |     21.52 |     0.60 |    24.25
+ ----------+------------+------------+-----------+----------+----------
+
+
+ +--------------------------------------------------------------------+
+ |                  Host Memory Information (Mbytes)                  |
+ +--------------------------------------------------------------------+
+ |           Host         | Npart |   System    |  Allocated  |   %   |
+ +------------------------+-------+-------------+-------------+-------+
+ | N133906                |    8  |    65470.47 |     5467.13 |  8.35 |
+ +------------------------+-------+-------------+-------------+-------+
+
+
+ +--------------------------------------------------------------------+
+ |                     ****** Notice ******                           |
+ | The Wall Heat Transfer Coefficient written to the results file for |
+ |   phase:     Fluid 1                                               |
+ |   on domain: D1                                                    |
+ | is based on the turbulent wall function coefficient. It is         |
+ | consistent with the Wall Heat Flux, the wall temperature, and the  |
+ | Wall Adjacent Temperature (near-wall temperature).  If you would   |
+ | like it to be based on a user-specified bulk temperature instead,  |
+ | please set the expert parameter "tbulk for htc = <value>".         |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                          Mesh Statistics                           |
+ +--------------------------------------------------------------------+
+ | Domain Name          | Orthog. Angle | Exp. Factor  | Aspect Ratio |
+ +----------------------+---------------+--------------+--------------+
+ |                      | Minimum [deg] |   Maximum    |    Maximum   |
+ +----------------------+---------------+--------------+--------------+
+ | D1                   |       32.0 ok |       599  ! |         9 OK |
+ +----------------------+---------------+--------------+--------------+
+ |                      |  %!  %ok  %OK | %!  %ok  %OK | %!  %ok  %OK |
+ +----------------------+---------------+--------------+--------------+
+ | D1                   |   0   <1  100 | <1   13   87 |  0    0  100 |
+ +----------------------+---------------+--------------+--------------+
+
+ Domain Name : D1
+
+     Total Number of Nodes                                =     1604659
+
+     Total Number of Elements                             =     8692485
+         Total Number of Tetrahedrons                     =     8692485
+
+     Total Number of Faces                                =      568450
+
+ Domain Interface Name : G1 G2 01
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    1.45E-04
+     Non-overlap area fraction on side 2                  =    1.10E-04
+
+ Domain Interface Name : G1 G2 02
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    2.19E-05
+     Non-overlap area fraction on side 2                  =    2.74E-05
+
+ Domain Interface Name : G1 G2 03
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    6.72E-05
+     Non-overlap area fraction on side 2                  =    6.30E-05
+
+ Domain Interface Name : G1 G2 04
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    1.64E-04
+     Non-overlap area fraction on side 2                  =    1.85E-04
+
+ Domain Interface Name : G2 G3 01
+
+     Discretization type                                  =         GGI
+     Intersection type                                    =   Restarted
+     Non-overlap area fraction on side 1                  =    1.02E-04
+     Non-overlap area fraction on side 2                  =    7.24E-06
+
+ +--------------------------------------------------------------------+
+ |                  User Defined Monitor Information                  |
+ +--------------------------------------------------------------------+
+
+ Monitor Point: TP OUTLET
+
+ Monitor Point: TP INLET
+
+ Monitor Point: T OUTLET
+
+ Monitor Point: MFR OUTLET
+
+ Monitor Point: MFR INLET
+
+ Monitor Point: MFR IN OUT
+
+ +--------------------------------------------------------------------+
+ |      Initial Conditions Supplied by Fields in the Input Files      |
+ +--------------------------------------------------------------------+
+
+ Domain Name : D1
+     Absolute Pressure
+     CH4.Conservative Mass Fraction
+     CH4.Conservative Mass Fraction.Gradient
+     CH4.Mass Concentration
+     CH4.Mass Fraction
+     CH4.Molar Concentration
+     CH4.Molar Fraction
+     CO.Conservative Mass Fraction
+     CO.Conservative Mass Fraction.Gradient
+     CO.Mass Concentration
+     CO.Mass Fraction
+     CO.Molar Concentration
+     CO.Molar Fraction
+     CO2.Conservative Mass Fraction
+     CO2.Conservative Mass Fraction.Gradient
+     CO2.Mass Concentration
+     CO2.Mass Fraction
+     CO2.Molar Concentration
+     CO2.Molar Fraction
+     Courant Number
+     Density
+     Density Derivative wrt Pressure at Constant Temperature
+     Density.Beta
+     Density.Gradient
+     Dynamic Viscosity
+     Eddy Viscosity
+     First Blending Function for BSL and SST model
+     H2O.Conservative Mass Fraction
+     H2O.Conservative Mass Fraction.Gradient
+     H2O.Mass Concentration
+     H2O.Mass Fraction
+     H2O.Molar Concentration
+     H2O.Molar Fraction
+     Isothermal Compressibility
+     Local Speed of Sound
+     Mach Number
+     N2.Conservative Mass Fraction
+     N2.Mass Concentration
+     N2.Mass Fraction
+     N2.Molar Concentration
+     N2.Molar Fraction
+     NO.Conservative Mass Fraction
+     NO.Conservative Mass Fraction.Gradient
+     NO.Mass Concentration
+     NO.Mass Fraction
+     NO.Molar Concentration
+     NO.Molar Fraction
+     O2.Conservative Mass Fraction
+     O2.Conservative Mass Fraction.Gradient
+     O2.Mass Concentration
+     O2.Mass Fraction
+     O2.Molar Concentration
+     O2.Molar Fraction
+     Pressure
+     Pressure.Gradient
+     Prompt NO Methane PDF.Molar Reaction Rate
+     Real Partition Number
+     Second Blending Function for SST model
+     Shear Strain Rate
+     Specific Heat Capacity at Constant Pressure
+     Specific Heat Capacity at Constant Volume
+     Specific Volume
+     Static Enthalpy
+     Static Entropy
+     Temperature
+     Temperature Variance
+     Temperature Variance.Beta
+     Temperature Variance.Gradient
+     Thermal Conductivity
+     Thermal NO PDF.Molar Reaction Rate
+     Total Density
+     Total Enthalpy
+     Total Enthalpy.Gradient
+     Total Pressure
+     Total Temperature
+     Turbulence Eddy Dissipation
+     Turbulence Eddy Frequency
+     Turbulence Kinetic Energy
+     Velocity
+     Velocity.Beta
+     Velocity.Gradient
+     Volume Porosity
+     WD2 CO Oxidation.Molar Reaction Rate
+     WD2 Methane Oxidation.Molar Reaction Rate
+     Wall Distance
+     Wall Scale
+     Wall Scale.Gradient
+
+ +--------------------------------------------------------------------+
+ |                 Single Step Reactions Heat Release                 |
+ +--------------------------------------------------------------------+
+
+ Enthalpy per [mol] of reaction at reference conditions
+ (Pressure= 1.01325E+05, Temperature= 2.98150E+02)
+
+     WD2 Methane Oxidation                                =  5.1934E+05
+     WD2 CO Oxidation                                     =  2.8301E+05
+     Thermal NO PDF                                       = -1.8060E+05
+     Prompt NO Methane PDF                                = -9.0298E+04
+
+ +--------------------------------------------------------------------+
+ |            Multi-Component Specific Enthalpy Diffusion             |
+ +--------------------------------------------------------------------+
+
+ Enthalpy equation assembly for secondary terms derived from multi-
+ component species transport.  Molecular and turbulent transport may
+ use either Unity Lewis Number (Le=1) assumption or generic assembly.
+
+ Domain Name : D1
+     Fluid 1                                   (Le_mol=1  , Le_trb=1  )
+
+ +--------------------------------------------------------------------+
+ |                     Average Scale Information                      |
+ +--------------------------------------------------------------------+
+
+ Domain Name : D1
+     Global Length                                         = 2.2394E-01
+     Minimum Extent                                        = 2.0000E-01
+     Maximum Extent                                        = 3.7250E-01
+     Density                                               = 1.2280E+00
+     Dynamic Viscosity                                     = 1.8032E-05
+     Velocity                                              = 2.8927E+01
+     Advection Time                                        = 7.7416E-03
+     Reynolds Number                                       = 4.4117E+05
+     Speed of Sound                                        = 3.4088E+02
+     Mach Number                                           = 8.4860E-02
+     Thermal Conductivity                                  = 2.6055E-02
+     Specific Heat Capacity at Constant Pressure           = 1.0112E+03
+     Specific Heat Capacity at Constant Volume             = 7.2254E+02
+     Specific Heat Ratio                                   = 1.3995E+00
+     Prandtl Number                                        = 6.9983E-01
+     Temperature Range                                     = 2.2977E+00
+
+ +--------------------------------------------------------------------+
+ |                Checking for Isolated Fluid Regions                 |
+ +--------------------------------------------------------------------+
+ 
+ No isolated fluid regions were found.
+
+ +--------------------------------------------------------------------+
+ |              The Equations Solved in This Calculation              |
+ +--------------------------------------------------------------------+
+
+ Subsystem : Momentum and Mass
+
+   U-Mom
+   V-Mom
+   W-Mom
+   P-Mass
+
+ Subsystem : Heat Transfer
+
+   H-Energy
+
+ Subsystem : Temperature Variance
+
+   T-Variance
+
+ Subsystem : TurbKE and TurbFreq
+
+   K-TurbKE
+   O-TurbFreq
+
+ Subsystem : Mass Fractions
+
+   CH4-Mass Fraction
+   O2-Mass Fraction
+   CO-Mass Fraction
+   CO2-Mass Fraction
+   H2O-Mass Fraction
+   NO-Mass Fraction
+                   
+ CFD Solver started: Wed Mar 19 13:54:20 2025
+
+
+ +--------------------------------------------------------------------+
+ |                       Convergence History                          |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+ |                        Timescale Information                       |
+ ----------------------------------------------------------------------
+ |       Equation       |         Type           |      Timescale     |
+ +----------------------+------------------------+--------------------+
+ | U-Mom                | Physical Timescale     |     2.00000E-04    |
+ | V-Mom                | Physical Timescale     |     2.00000E-04    |
+ | W-Mom                | Physical Timescale     |     2.00000E-04    |
+ | P-Mass               | Physical Timescale     |     2.00000E-04    |
+ +----------------------+------------------------+--------------------+
+ | H-Energy             | Physical Timescale     |     2.00000E-04    |
+ +----------------------+------------------------+--------------------+
+ | T-Variance           | Physical Timescale     |     2.00000E-04    |
+ +----------------------+------------------------+--------------------+
+ | K-TurbKE             | Physical Timescale     |     2.00000E-04    |
+ | O-TurbFreq           | Physical Timescale     |     2.00000E-04    |
+ +----------------------+------------------------+--------------------+
+ | CH4-Mass Fraction    | Physical Timescale     |     2.00000E-04    |
+ | O2-Mass Fraction     | Physical Timescale     |     2.00000E-04    |
+ | CO-Mass Fraction     | Physical Timescale     |     2.00000E-04    |
+ | CO2-Mass Fraction    | Physical Timescale     |     2.00000E-04    |
+ | H2O-Mass Fraction    | Physical Timescale     |     2.00000E-04    |
+ | NO-Mass Fraction     | Physical Timescale     |     2.00000E-04    |
+ +----------------------+------------------------+--------------------+
+
+ ======================================================================
+ OUTER LOOP ITERATION = 2432 (    1) CPU SECONDS = 9.135E+05 (2.749E+02)
+ ----------------------------------------------------------------------
+ |       Equation       | Rate | RMS Res | Max Res |  Linear Solution |
+ +----------------------+------+---------+---------+------------------+
+ | U-Mom                | 1.00 | 2.8E-04 | 9.0E-03 |       1.8E-03  OK|
+ | V-Mom                | 1.00 | 2.7E-04 | 1.3E-02 |       2.1E-03  OK|
+ | W-Mom                | 0.99 | 2.9E-04 | 2.2E-02 |       1.9E-03  OK|
+ | P-Mass               | 1.00 | 1.7E-05 | 1.1E-03 |  8.7  3.2E-02  OK|
+ +----------------------+------+---------+---------+------------------+
+ | H-Energy             | 0.99 | 3.9E-04 | 1.7E-02 |  5.6  5.0E-03  OK|
+ +----------------------+------+---------+---------+------------------+
+ | T-Variance           | 0.99 | 3.6E-04 | 1.2E-02 |  5.6  1.2E-02  OK|
+ +----------------------+------+---------+---------+------------------+
+ | K-TurbKE             | 0.99 | 5.6E-04 | 4.4E-02 |  5.6  2.2E-03  OK|
+ | O-TurbFreq           | 1.00 | 1.3E-05 | 1.7E-03 |  8.3  4.5E-03  OK|
+ +----------------------+------+---------+---------+------------------+
+ | CH4-Mass Fraction    | 0.00 | 0.0E+00 | 0.0E+00 |  5.6  0.0E+00  OK|
+ | O2-Mass Fraction     | 1.00 | 9.4E-04 | 9.2E-02 |  5.6  2.0E-04  OK|
+ | CO-Mass Fraction     | 0.00 | 0.0E+00 | 0.0E+00 |  5.6  0.0E+00  OK|
+ | CO2-Mass Fraction    | 0.00 | 0.0E+00 | 0.0E+00 |  5.6  0.0E+00  OK|
+ | H2O-Mass Fraction    | 0.00 | 0.0E+00 | 0.0E+00 |  5.6  0.0E+00  OK|
+ | NO-Mass Fraction     | 1.00 | 3.0E-07 | 3.1E-05 |  5.6  0.0E+00  OK|
+ +----------------------+------+---------+---------+------------------+
+
+
+ Execution terminating: STP file found.
+ 
+
+
+                   
+ CFD Solver finished: Wed Mar 19 13:55:12 2025
+ CFD Solver wall clock seconds: 5.2531E+01
+
+ ======================================================================
+              Termination and Interrupt Condition Summary
+ ======================================================================
+    
+ CFD Solver: Stop instruction received
+
+ ======================================================================
+              Boundary Flow and Total Source Term Summary
+ ======================================================================
+
+ +--------------------------------------------------------------------+
+ |                               U-Mom                                |
+ +--------------------------------------------------------------------+
+ Boundary         : D1 Default                             -6.1875E+01
+ Boundary         : INLET                                   6.2793E+01
+ Boundary         : OUTLET                                 -9.7216E-01
+ Domain Interface : G1 G2 01 (Side 1)                      -1.4780E+00
+ Domain Interface : G1 G2 01 (Side 2)                       1.4779E+00
+ Domain Interface : G1 G2 02 (Side 1)                      -8.1941E+00
+ Domain Interface : G1 G2 02 (Side 2)                       8.1942E+00
+ Domain Interface : G1 G2 03 (Side 1)                       2.9758E+00
+ Domain Interface : G1 G2 03 (Side 2)                      -2.9758E+00
+ Domain Interface : G1 G2 04 (Side 1)                       2.5282E+00
+ Domain Interface : G1 G2 04 (Side 2)                      -2.5283E+00
+ Domain Interface : G2 G3 01 (Side 1)                      -9.7400E-01
+ Domain Interface : G2 G3 01 (Side 2)                       9.7399E-01
+                                                           -----------
+ Domain Imbalance :                                        -5.4280E-02
+
+ Domain Imbalance, in %:                                     -0.0864 %
+
+ +--------------------------------------------------------------------+
+ |                               V-Mom                                |
+ +--------------------------------------------------------------------+
+ Boundary         : D1 Default                              4.4910E-03
+ Boundary         : INLET                                  -5.4625E-08
+ Boundary         : OUTLET                                 -2.4321E-01
+ Domain Interface : G1 G2 01 (Side 1)                      -3.2974E-04
+ Domain Interface : G1 G2 01 (Side 2)                       3.2981E-04
+ Domain Interface : G1 G2 02 (Side 1)                      -1.4676E-03
+ Domain Interface : G1 G2 02 (Side 2)                       1.4675E-03
+ Domain Interface : G1 G2 03 (Side 1)                      -3.2985E-04
+ Domain Interface : G1 G2 03 (Side 2)                       3.2985E-04
+ Domain Interface : G1 G2 04 (Side 1)                       7.3593E-04
+ Domain Interface : G1 G2 04 (Side 2)                      -7.3593E-04
+ Domain Interface : G2 G3 01 (Side 1)                      -4.3379E-03
+ Domain Interface : G2 G3 01 (Side 2)                       4.3379E-03
+                                                           -----------
+ Domain Imbalance :                                        -2.3872E-01
+
+ Domain Imbalance, in %:                                     -0.3802 %
+
+ +--------------------------------------------------------------------+
+ |                               W-Mom                                |
+ +--------------------------------------------------------------------+
+ Boundary         : D1 Default                              1.2565E-02
+ Boundary         : INLET                                   5.4278E-08
+ Boundary         : OUTLET                                 -1.1269E-01
+ Domain Interface : G1 G2 01 (Side 1)                       9.8377E-05
+ Domain Interface : G1 G2 01 (Side 2)                      -9.8377E-05
+ Domain Interface : G1 G2 02 (Side 1)                       5.5003E-04
+ Domain Interface : G1 G2 02 (Side 2)                      -5.4991E-04
+ Domain Interface : G1 G2 03 (Side 1)                      -2.8551E-05
+ Domain Interface : G1 G2 03 (Side 2)                       2.8491E-05
+ Domain Interface : G1 G2 04 (Side 1)                       2.1088E-06
+ Domain Interface : G1 G2 04 (Side 2)                      -2.1093E-06
+ Domain Interface : G2 G3 01 (Side 1)                      -7.6597E-03
+ Domain Interface : G2 G3 01 (Side 2)                       7.6597E-03
+                                                           -----------
+ Domain Imbalance :                                        -1.0012E-01
+
+ Domain Imbalance, in %:                                     -0.1594 %
+
+ +--------------------------------------------------------------------+
+ |                               P-Mass                               |
+ +--------------------------------------------------------------------+
+ Boundary         : INLET                                   4.1859E-02
+ Boundary         : OUTLET                                 -4.1831E-02
+ Domain Interface : G1 G2 01 (Side 1)                      -4.6707E-03
+ Domain Interface : G1 G2 01 (Side 2)                       4.6707E-03
+ Domain Interface : G1 G2 02 (Side 1)                      -2.7260E-02
+ Domain Interface : G1 G2 02 (Side 2)                       2.7260E-02
+ Domain Interface : G1 G2 03 (Side 1)                      -5.7941E-03
+ Domain Interface : G1 G2 03 (Side 2)                       5.7941E-03
+ Domain Interface : G1 G2 04 (Side 1)                      -4.1311E-03
+ Domain Interface : G1 G2 04 (Side 2)                       4.1311E-03
+ Domain Interface : G2 G3 01 (Side 1)                      -4.1848E-02
+ Domain Interface : G2 G3 01 (Side 2)                       4.1848E-02
+                                                           -----------
+ Domain Imbalance :                                         2.8029E-05
+
+ Domain Imbalance, in %:                                      0.0670 %
+
+ +--------------------------------------------------------------------+
+ |                              H-Energy                              |
+ +--------------------------------------------------------------------+
+ Boundary         : INLET                                  -4.2138E+02
+ Boundary         : OUTLET                                  4.2214E+02
+ Domain Interface : G1 G2 01 (Side 1)                       4.7017E+01
+ Domain Interface : G1 G2 01 (Side 2)                      -4.7017E+01
+ Domain Interface : G1 G2 02 (Side 1)                       2.7441E+02
+ Domain Interface : G1 G2 02 (Side 2)                      -2.7441E+02
+ Domain Interface : G1 G2 03 (Side 1)                       5.8327E+01
+ Domain Interface : G1 G2 03 (Side 2)                      -5.8327E+01
+ Domain Interface : G1 G2 04 (Side 1)                       4.1586E+01
+ Domain Interface : G1 G2 04 (Side 2)                      -4.1586E+01
+ Domain Interface : G2 G3 01 (Side 1)                       4.2148E+02
+ Domain Interface : G2 G3 01 (Side 2)                      -4.2148E+02
+                                                           -----------
+ Domain Imbalance :                                         7.6050E-01
+
+ Domain Imbalance, in %:                                      0.1802 %
+
+ +--------------------------------------------------------------------+
+ |                             T-Variance                             |
+ +--------------------------------------------------------------------+
+ Boundary         : OUTLET                                 -1.7571E-04
+ Domain Src (Neg) : D1                                     -3.4556E-03
+ Domain Src (Pos) : D1                                      3.6472E-03
+ Domain Interface : G1 G2 01 (Side 1)                      -1.1339E-10
+ Domain Interface : G1 G2 01 (Side 2)                       1.1339E-10
+ Domain Interface : G1 G2 02 (Side 1)                       1.0085E-07
+ Domain Interface : G1 G2 02 (Side 2)                      -1.0085E-07
+ Domain Interface : G1 G2 03 (Side 1)                       2.5048E-07
+ Domain Interface : G1 G2 03 (Side 2)                      -2.5048E-07
+ Domain Interface : G1 G2 04 (Side 1)                       2.8082E-07
+ Domain Interface : G1 G2 04 (Side 2)                      -2.8082E-07
+ Domain Interface : G2 G3 01 (Side 1)                      -2.6392E-04
+ Domain Interface : G2 G3 01 (Side 2)                       2.6392E-04
+                                                           -----------
+ Domain Imbalance :                                         1.5923E-05
+
+ Domain Imbalance, in %:                                      0.4366 %
+
+ +--------------------------------------------------------------------+
+ |                         CH4-Mass Fraction                          |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                          O2-Mass Fraction                          |
+ +--------------------------------------------------------------------+
+ Boundary         : INLET                                   9.7114E-03
+ Boundary         : OUTLET                                 -8.6976E-03
+ Domain Interface : G1 G2 01 (Side 1)                      -1.0836E-03
+ Domain Interface : G1 G2 01 (Side 2)                       1.0836E-03
+ Domain Interface : G1 G2 02 (Side 1)                      -6.3242E-03
+ Domain Interface : G1 G2 02 (Side 2)                       6.3242E-03
+ Domain Interface : G1 G2 03 (Side 1)                      -1.3442E-03
+ Domain Interface : G1 G2 03 (Side 2)                       1.3442E-03
+ Domain Interface : G1 G2 04 (Side 1)                      -9.5842E-04
+ Domain Interface : G1 G2 04 (Side 2)                       9.5842E-04
+ Domain Interface : G2 G3 01 (Side 1)                      -9.6856E-03
+ Domain Interface : G2 G3 01 (Side 2)                       9.6856E-03
+                                                           -----------
+ Domain Imbalance :                                         1.0138E-03
+
+ Domain Imbalance, in %:                                     10.4395 %
+
+ +--------------------------------------------------------------------+
+ |                          CO-Mass Fraction                          |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                         CO2-Mass Fraction                          |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                         H2O-Mass Fraction                          |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                          NO-Mass Fraction                          |
+ +--------------------------------------------------------------------+
+
+ ======================================================================
+                     Wall Force and Moment Summary
+ ======================================================================
+                                                                          
+ Notes:
+ 1. Pressure integrals exclude the reference pressure.  To include
+    it, set the expert parameter 'include pref in forces = t'.
+
+
+ +--------------------------------------------------------------------+
+ |                      Pressure Force On Walls                       |
+ +--------------------------------------------------------------------+
+                                    X-Comp.      Y-Comp.      Z-Comp.
+
+ Domain Group: D1
+
+ D1 Default                       6.1827E+01  -5.5208E-03  -1.4611E-02
+                                  -----------  -----------  -----------
+ Domain Group Totals :            6.1827E+01  -5.5208E-03  -1.4611E-02
+
+
+ +--------------------------------------------------------------------+
+ |                       Viscous Force On Walls                       |
+ +--------------------------------------------------------------------+
+                                    X-Comp.      Y-Comp.      Z-Comp.
+
+ Domain Group: D1
+
+ D1 Default                       4.8239E-02   1.0334E-03   2.0442E-03
+                                  -----------  -----------  -----------
+ Domain Group Totals :            4.8239E-02   1.0334E-03   2.0442E-03
+
+
+ +--------------------------------------------------------------------+
+ |                      Pressure Moment On Walls                      |
+ +--------------------------------------------------------------------+
+                                    X-Comp.      Y-Comp.      Z-Comp.
+
+ Domain Group: D1
+
+ D1 Default                       2.6396E-02  -1.1888E-03   5.4394E-04
+                                  -----------  -----------  -----------
+ Domain Group Totals :            2.6396E-02  -1.1888E-03   5.4394E-04
+
+
+ +--------------------------------------------------------------------+
+ |                       Viscous Moment On Walls                      |
+ +--------------------------------------------------------------------+
+                                    X-Comp.      Y-Comp.      Z-Comp.
+
+ Domain Group: D1
+
+ D1 Default                      -2.0369E-03  -9.4876E-05   3.0492E-05
+                                  -----------  -----------  -----------
+ Domain Group Totals :           -2.0369E-03  -9.4876E-05   3.0492E-05
+
+
+ +--------------------------------------------------------------------+
+ |                   Locations of Maximum Residuals                   |
+ +--------------------------------------------------------------------+
+ |       Equation       |  Node # |     X     |     Y     |     Z     |
+ +--------------------------------------------------------------------+
+ | U-Mom                | 1434462 | 3.571E-02 |-1.140E-02 | 2.330E-02 |
+ | V-Mom                | 1519291 | 1.141E-02 | 1.154E-03 |-1.027E-02 |
+ | W-Mom                | 1534228 | 1.343E-01 | 3.343E-02 |-9.422E-02 |
+ | P-Mass               | 1523862 | 7.250E-02 |-4.019E-03 |-2.568E-02 |
+ | H-Energy             | 1534322 | 1.725E-01 | 7.835E-03 |-4.395E-02 |
+ | T-Variance           | 1059610 | 3.875E-02 | 2.052E-02 |-2.650E-04 |
+ | K-TurbKE             | 1534322 | 1.725E-01 | 7.835E-03 |-4.395E-02 |
+ | O-TurbFreq           |  472969 | 2.279E-02 | 1.387E-02 | 1.589E-02 |
+ | CH4-Mass Fraction    |       0 | 0.000E+00 | 0.000E+00 | 0.000E+00 |
+ | O2-Mass Fraction     | 1534322 | 1.725E-01 | 7.835E-03 |-4.395E-02 |
+ | CO-Mass Fraction     |       0 | 0.000E+00 | 0.000E+00 | 0.000E+00 |
+ | CO2-Mass Fraction    |       0 | 0.000E+00 | 0.000E+00 | 0.000E+00 |
+ | H2O-Mass Fraction    |       0 | 0.000E+00 | 0.000E+00 | 0.000E+00 |
+ | NO-Mass Fraction     |  126272 | 3.740E-02 |-5.985E-02 | 5.242E-02 |
+ +--------------------------------------------------------------------+
+
+
+ +--------------------------------------------------------------------+
+ |                      Peak Values of Residuals                      |
+ +--------------------------------------------------------------------+
+ |       Equation       |   Loop #  |  Peak Residual | Final Residual |
+ +--------------------------------------------------------------------+
+ | U-Mom                |        1  |   2.82419E-04  |   2.82419E-04  |
+ | V-Mom                |        1  |   2.73470E-04  |   2.73470E-04  |
+ | W-Mom                |        1  |   2.89140E-04  |   2.89140E-04  |
+ | P-Mass               |        1  |   1.71533E-05  |   1.71533E-05  |
+ | H-Energy             |        1  |   3.91662E-04  |   3.91662E-04  |
+ | T-Variance           |        1  |   3.57334E-04  |   3.57334E-04  |
+ | K-TurbKE             |        1  |   5.58785E-04  |   5.58785E-04  |
+ | O-TurbFreq           |        1  |   1.26888E-05  |   1.26888E-05  |
+ | CH4-Mass Fraction    |        0  |   0.00000E+00  |   0.00000E+00  |
+ | O2-Mass Fraction     |        1  |   9.37775E-04  |   9.37775E-04  |
+ | CO-Mass Fraction     |        0  |   0.00000E+00  |   0.00000E+00  |
+ | CO2-Mass Fraction    |        0  |   0.00000E+00  |   0.00000E+00  |
+ | H2O-Mass Fraction    |        0  |   0.00000E+00  |   0.00000E+00  |
+ | NO-Mass Fraction     |        1  |   3.00343E-07  |   3.00343E-07  |
+ +--------------------------------------------------------------------+
+
+
+ +--------------------------------------------------------------------+
+ |                   False Transient Information                      |
+ +--------------------------------------------------------------------+
+ |       Equation       |       Type        |   Elapsed Pseudo-Time   |
+ +--------------------------------------------------------------------+
+ | U-Mom                | Physical          |      2.58203E-01        |
+ | V-Mom                | Physical          |      2.58203E-01        |
+ | W-Mom                | Physical          |      2.58203E-01        |
+ | P-Mass               | Physical          |      2.58203E-01        |
+ | H-Energy             | Physical          |      2.58203E-01        |
+ | T-Variance           | Physical          |      2.58203E-01        |
+ | K-TurbKE             | Physical          |      2.58203E-01        |
+ | O-TurbFreq           | Physical          |      2.58203E-01        |
+ | CH4-Mass Fraction    | Physical          |      2.58203E-01        |
+ | O2-Mass Fraction     | Physical          |      2.58203E-01        |
+ | CO-Mass Fraction     | Physical          |      2.58203E-01        |
+ | CO2-Mass Fraction    | Physical          |      2.58203E-01        |
+ | H2O-Mass Fraction    | Physical          |      2.58203E-01        |
+ | NO-Mass Fraction     | Physical          |      2.58203E-01        |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |                     Average Scale Information                      |
+ +--------------------------------------------------------------------+
+
+ Domain Name : D1
+     Global Length                                         = 2.2394E-01
+     Minimum Extent                                        = 2.0000E-01
+     Maximum Extent                                        = 3.7250E-01
+     Density                                               = 1.2281E+00
+     Dynamic Viscosity                                     = 1.8032E-05
+     Velocity                                              = 2.8930E+01
+     Advection Time                                        = 7.7409E-03
+     Reynolds Number                                       = 4.4121E+05
+     Speed of Sound                                        = 3.4088E+02
+     Mach Number                                           = 8.4867E-02
+     Thermal Conductivity                                  = 2.6055E-02
+     Specific Heat Capacity at Constant Pressure           = 1.0112E+03
+     Specific Heat Capacity at Constant Volume             = 7.2254E+02
+     Specific Heat Ratio                                   = 1.3995E+00
+     Prandtl Number                                        = 6.9983E-01
+     Temperature Range                                     = 2.2977E+00
+
+ +--------------------------------------------------------------------+
+ |                     Variable Range Information                     |
+ +--------------------------------------------------------------------+
+
+ Domain Name : D1
+ +--------------------------------------------------------------------+
+ |      Variable Name                         |    min    |    max    |
+ +--------------------------------------------------------------------+
+ | Density                                    |  1.18E+00 |  1.25E+00 |
+ | Specific Heat Capacity at Constant Pressure|  1.01E+03 |  1.04E+03 |
+ | Dynamic Viscosity                          |  1.77E-05 |  1.80E-05 |
+ | Thermal Conductivity                       |  2.59E-02 |  2.61E-02 |
+ | Isothermal Compressibility                 |  9.67E-06 |  1.01E-05 |
+ | Static Entropy                             |  6.70E+03 |  6.80E+03 |
+ | CH4.Density                                |  6.67E-01 |  6.93E-01 |
+ | CH4.Specific Heat Capacity at Constant Pres|  2.20E+03 |  2.20E+03 |
+ | CH4.Dynamic Viscosity                      |  1.11E-05 |  1.11E-05 |
+ | CH4.Thermal Conductivity                   |  3.43E-02 |  3.43E-02 |
+ | CH4.Isothermal Compressibility             |  9.67E-06 |  1.01E-05 |
+ | CH4.Static Enthalpy                        | -4.70E+06 | -4.69E+06 |
+ | CH4.Static Entropy                         |  1.15E+04 |  1.15E+04 |
+ | O2.Density                                 |  1.33E+00 |  1.38E+00 |
+ | O2.Specific Heat Capacity at Constant Press|  9.17E+02 |  9.17E+02 |
+ | O2.Dynamic Viscosity                       |  1.92E-05 |  1.92E-05 |
+ | O2.Thermal Conductivity                    |  2.66E-02 |  2.66E-02 |
+ | O2.Isothermal Compressibility              |  9.67E-06 |  1.01E-05 |
+ | O2.Static Enthalpy                         | -1.13E+04 | -9.19E+03 |
+ | O2.Static Entropy                          |  6.37E+03 |  6.38E+03 |
+ | CO.Density                                 |  1.16E+00 |  1.21E+00 |
+ | CO.Specific Heat Capacity at Constant Press|  1.04E+03 |  1.04E+03 |
+ | CO.Dynamic Viscosity                       |  1.66E-05 |  1.66E-05 |
+ | CO.Thermal Conductivity                    |  2.51E-02 |  2.51E-02 |
+ | CO.Isothermal Compressibility              |  9.67E-06 |  1.01E-05 |
+ | CO.Static Enthalpy                         | -3.96E+06 | -3.96E+06 |
+ | CO.Static Entropy                          |  7.01E+03 |  7.02E+03 |
+ | CO2.Density                                |  1.83E+00 |  1.90E+00 |
+ | CO2.Specific Heat Capacity at Constant Pres|  8.47E+02 |  8.47E+02 |
+ | CO2.Dynamic Viscosity                      |  1.49E-05 |  1.49E-05 |
+ | CO2.Thermal Conductivity                   |  1.45E-02 |  1.45E-02 |
+ | CO2.Isothermal Compressibility             |  9.67E-06 |  1.01E-05 |
+ | CO2.Static Enthalpy                        | -8.95E+06 | -8.95E+06 |
+ | CO2.Static Entropy                         |  4.82E+03 |  4.83E+03 |
+ | H2O.Density                                |  7.49E-01 |  7.79E-01 |
+ | H2O.Specific Heat Capacity at Constant Pres|  1.86E+03 |  1.86E+03 |
+ | H2O.Dynamic Viscosity                      |  9.40E-06 |  9.40E-06 |
+ | H2O.Thermal Conductivity                   |  1.93E-02 |  1.93E-02 |
+ | H2O.Isothermal Compressibility             |  9.67E-06 |  1.01E-05 |
+ | H2O.Static Enthalpy                        | -1.34E+07 | -1.34E+07 |
+ | H2O.Static Entropy                         |  1.04E+04 |  1.04E+04 |
+ | NO.Density                                 |  1.25E+00 |  1.30E+00 |
+ | NO.Specific Heat Capacity at Constant Press|  9.91E+02 |  9.91E+02 |
+ | NO.Dynamic Viscosity                       |  1.78E-05 |  1.78E-05 |
+ | NO.Thermal Conductivity                    |  2.38E-02 |  2.38E-02 |
+ | NO.Isothermal Compressibility              |  9.67E-06 |  1.01E-05 |
+ | NO.Static Enthalpy                         |  3.00E+06 |  3.00E+06 |
+ | NO.Static Entropy                          |  6.98E+03 |  6.99E+03 |
+ | N2.Density                                 |  1.16E+00 |  1.21E+00 |
+ | N2.Specific Heat Capacity at Constant Press|  1.04E+03 |  1.04E+03 |
+ | N2.Dynamic Viscosity                       |  1.77E-05 |  1.77E-05 |
+ | N2.Thermal Conductivity                    |  2.59E-02 |  2.59E-02 |
+ | N2.Isothermal Compressibility              |  9.67E-06 |  1.01E-05 |
+ | N2.Static Enthalpy                         | -1.27E+04 | -1.03E+04 |
+ | N2.Static Entropy                          |  6.79E+03 |  6.81E+03 |
+ | Velocity u                                 | -4.49E+01 |  5.60E+01 |
+ | Velocity v                                 | -5.68E+01 |  5.68E+01 |
+ | Velocity w                                 | -5.71E+01 |  5.83E+01 |
+ | Pressure                                   | -2.09E+03 |  2.12E+03 |
+ | Turbulence Kinetic Energy                  |  2.89E-08 |  1.69E+02 |
+ | Turbulence Eddy Frequency                  |  1.06E+01 |  2.40E+07 |
+ | Eddy Viscosity                             |  4.54E-13 |  2.21E-02 |
+ | Temperature                                |  2.86E+02 |  2.88E+02 |
+ | Static Enthalpy                            | -1.24E+04 | -1.01E+04 |
+ | Total Enthalpy                             | -1.08E+04 | -9.85E+03 |
+ | Temperature Variance                       | -4.52E-03 |  1.19E-01 |
+ | CH4.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CH4.Mass Fraction                          |  0.00E+00 |  0.00E+00 |
+ | O2.Conservative Mass Fraction              | -3.24E-04 |  2.33E-01 |
+ | O2.Mass Fraction                           |  0.00E+00 |  2.33E-01 |
+ | CO.Conservative Mass Fraction              |  0.00E+00 |  0.00E+00 |
+ | CO.Mass Fraction                           |  0.00E+00 |  0.00E+00 |
+ | CO2.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | CO2.Mass Fraction                          |  0.00E+00 |  0.00E+00 |
+ | H2O.Conservative Mass Fraction             |  0.00E+00 |  0.00E+00 |
+ | H2O.Mass Fraction                          |  0.00E+00 |  0.00E+00 |
+ | NO.Conservative Mass Fraction              | -4.71E-30 |  2.84E-29 |
+ | NO.Mass Fraction                           |  0.00E+00 |  2.84E-29 |
+ | N2.Mass Fraction                           |  7.67E-01 |  1.00E+00 |
+ | Wall Scale                                 |  3.51E-09 |  5.45E-03 |
+ | Wall Distance                              |  1.45E-06 |  1.02E-01 |
+ +--------------------------------------------------------------------+
+
+ +--------------------------------------------------------------------+
+ |           CPU Requirements of Numerical Solution - Total           |
+ +--------------------------------------------------------------------+
+
+ Subsystem Name                  Discretization       Linear Solution
+                                (secs.   %total)     (secs.   %total) 
+ ----------------------------------------------------------------------
+ Momentum and Mass              1.05E+02  11.3 %     3.66E+01   3.9 %
+ Heat Transfer                  2.56E+01   2.7 %     8.70E+00   0.9 %
+ Temperature Variance           2.14E+01   2.3 %     8.61E+00   0.9 %
+ TurbKE and TurbFreq            2.89E+01   3.1 %     1.76E+01   1.9 %
+ Mass Fractions                 6.75E+01   7.2 %     4.49E+01   4.8 %
+                                -------- -------     --------  ------
+ Subsystem Summary              2.49E+02  26.6 %     1.16E+02  12.5 %
+
+ Variable Updates               4.47E+01    4.8 %
+ GGI Intersection               1.36E+00    0.1 %
+ Search Calculations            2.17E-01    0.0 %
+ File Reading                   1.69E+02   18.1 %
+ File Writing                   7.49E+01    8.0 %
+ Miscellaneous                  2.79E+02   29.9 %
+                                --------
+ Total                          9.34E+02
+
+ +--------------------------------------------------------------------+
+ |                   Job Information at End of Run                    |
+ +--------------------------------------------------------------------+
+
+ Host computer:  N133906 (PID:11752)
+ Par. Process:   Master running on mesh partition:       1
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.168E+02 seconds
+             or: (          0:         0:         1:    56.750 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:6260)
+ Par. Process:   Slave  running on mesh partition:       2
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.167E+02 seconds
+             or: (          0:         0:         1:    56.734 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:14440)
+ Par. Process:   Slave  running on mesh partition:       3
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.168E+02 seconds
+             or: (          0:         0:         1:    56.750 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:1836)
+ Par. Process:   Slave  running on mesh partition:       4
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.167E+02 seconds
+             or: (          0:         0:         1:    56.734 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:16200)
+ Par. Process:   Slave  running on mesh partition:       5
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.167E+02 seconds
+             or: (          0:         0:         1:    56.734 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:13160)
+ Par. Process:   Slave  running on mesh partition:       6
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.167E+02 seconds
+             or: (          0:         0:         1:    56.734 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:8656)
+ Par. Process:   Slave  running on mesh partition:       7
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.167E+02 seconds
+             or: (          0:         0:         1:    56.734 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Host computer:  N133906 (PID:6800)
+ Par. Process:   Slave  running on mesh partition:       8
+ Job finished:   Wed Mar 19 13:55:42 2025
+ Total CPU time: 1.168E+02 seconds
+             or: (          0:         0:         1:    56.844 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+ Total wall clock time: 1.162E+02 seconds
+             or: (          0:         0:         1:    56.203 )
+                 (       Days:     Hours:   Minutes:   Seconds )
+
+
+
+ --> Final synchronization point reached by all partitions.
+End of solution stage.
+
+ +--------------------------------------------------------------------+
+ | The results from this run of the ANSYS CFX Solver have been        |
+ | written to                                                         |
+ | Z:\CFX\t71\cfx\T71030091_prj_01\DP=002\T71030091_prj_01_009.res    |
+ +--------------------------------------------------------------------+
+
+
+This run of the ANSYS CFX Solver has finished.

@@ -46,35 +46,15 @@
   (let ((rez (search "END" string)))
     (when (numberp rez) (floor rez 2))))
 
-(defun parse (string)
-  (let ((os (make-string-output-stream))
-        (is (make-string-input-stream string)))
-    (loop :for line = (read-line is nil)
-          :while line
-          :do
-             (let ((s-tr (string-trim " " line)))
-               (cond
-                 ((key-value-p line)
-                  (format os "~A~%"
-                          (concatenate 'string "(\""
-                                       (ppcre:regex-replace
-                                        " *= *" s-tr "\" \"")
-                                       "\")")))
-                 ((header-p line)
-                  (format os "~A~%"
-                          (concatenate
-                           'string "(\""
-                           (ppcre:regex-replace ": *" s-tr "\" \"") "\"")))
-                 ((end-p line)
-                  (format os "~A~%"
-                          (ppcre:regex-replace "END" s-tr ")"))))))
-    (read-from-string
-     (concatenate 'string "(" (get-output-stream-string os)")"))))
+(defun remove-space (lines)
+  (loop :for i :in lines
+        :collect
+        (ppcre:regex-replace-all "\\s+" i " ")))
 
-(defun read-file-as-lines-wo-back-slesh (file-name)
+(defun remove-back-slesh (lines)
   (let ((os (make-string-output-stream))
         (str ""))
-    (loop :for i :in (uiop:read-file-lines file-name)
+    (loop :for i :in lines
           :do
              (if (eq (uiop:last-char i) #\\)
                  (setf str (concatenate 'string str (subseq i 0 (1- (length i)))))
@@ -83,5 +63,36 @@
                            (setf str ""))))
     (get-output-stream-string os)))
 
+(defun parse (lines)
+  (labels ((out (lst os)
+             (cond ((= (length lst) 1) (format os "(~{~S~} \"\"" lst))
+                   ((= (length lst) 2) (format os "(~{~S~^ ~}" lst)))))
+    (let ((os (make-string-output-stream))
+          (is (make-string-input-stream 
+               (ppcre:regex-replace-all
+                "[ ]+"
+                (remove-back-slesh lines)
+                " "))))
+      (format os "(~%")
+      (loop :for line = (read-line is nil)
+            :while line
+            :do
+               (let ((s-tr (string-trim " " line)))
+                 (cond
+                   ((key-value-p line)
+                    (out (ppcre:split " *= *" s-tr ) os)
+                    (format os ")~%"))
+                   ((header-p line)
+                    (out (ppcre:split ": *" s-tr ) os))
+                   ((end-p line)
+                    (format os ")~%")))))
+      (format os ")~%")
+      (read-from-string (get-output-stream-string os)))))
+
 (defun parse-file (file-name)
-  (parse (read-file-as-lines-wo-back-slesh file-name)))
+  (parse (uiop:read-file-lines file-name)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+ 
