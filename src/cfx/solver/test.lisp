@@ -24,3 +24,5 @@
      :remove-empty-subseqs t)))
 
 (equalp (mnas-ansys/ccl/parse:parse *lines*) *lst*)
+
+"Updating Command Language with the following changes:"
