@@ -10,19 +10,22 @@
    "src/cfx/solver/test/prj.out"
    (asdf:system-source-directory "mnas-ansys/cfx/solver")))
 
-(defparameter *lst* (out-file-find-cel-start-end *fn*))
 
-;; Пример использования:
-(defparameter *lines*
-  (let ((os (make-string-output-stream)))
-    (mnas-ansys/ccl/parse:convert-to-ccl
-     *lst*
-     :stream os)
-    (split-sequence:split-sequence
-     #\newline
-     (get-output-stream-string os)
-     :remove-empty-subseqs t)))
+(defun subseq-by-predicate (sequence predicate-start predicate-stop &key (start 0))
+  (let* ((s (position-if predicate-start sequence :start start))
+         (e (position-if predicate-stop  sequence :start s)))
+    (values 
+     (subseq sequence s e)
+     (list s e))))
 
-(equalp (mnas-ansys/ccl/parse:parse *lines*) *lst*)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-"Updating Command Language with the following changes:"
+(defparameter *out*
+  (make-instance '<out> :file "Z:/CFX/n70/cfx/DP=007/N70_prj_36_001.out"))
+
+
+(update *out*)
+(<out>-lines *out*)
+(cel  *out*)
+(changes *out*)
+(outer-loop-iteration *out*)
