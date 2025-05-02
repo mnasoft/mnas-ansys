@@ -1,0 +1,157 @@
+
+(directory "//zorya/fs/CAD_Archive/CAE/ANSYS/Обучение/2023/Видео/Fluent_Introduction/*")
+
+1. [ ] jqa-hyfw-fum (2023-11-06 08 12 GMT+2).mp4
+2. [ ] jqa-hyfw-fum (2023-11-07 08 10 GMT+2).mp4
+3. [ ] jqa-hyfw-fum (2023-11-07 10 53 GMT+2).mp4
+4. [ ] jqa-hyfw-fum (2023-11-08 08 13 GMT+2).mp4
+5. [ ] jqa-hyfw-fum (2023-11-09 08 13 GMT+2).mp4
+6. [ ] jqa-hyfw-fum (2023-11-10 08 11 GMT+2).mp4
+7. [ ] jqa-hyfw-fum (2023-11-13 08 12 GMT+2).mp4
+8. [ ] jqa-hyfw-fum (2023-11-14 08 14 GMT+2).mp4
+9. [ ] eis-eufn-vpb (2023-11-15 08_27 GMT+2).mp4
+10. [ ] jqa-hyfw-fum (2023-11-16 08 15 GMT+2).mp4
+11. [ ] jqa-hyfw-fum (2023-11-16 09 27 GMT+2).mp4
+12. [ ] jqa-hyfw-fum (2023-11-17 08 16 GMT+2).mp4
+    - [ ] 05:10 - Обзор многофазных потоков (Гарин, лекция)
+    - [ ] 53:40 - VOF (Гарин, лекция)
+13. [ ] eis-eufn-vpb (2023-11-20 08_28 GMT+2).mp4
+    - [ ] 00:00:00 WS02.1 VOF (Трифонов, рабочий пример)
+    - [ ] 02:46:40 Многофазные потоки (Трифонов, лекция 3)
+14. [ ] eis-eufn-vpb (2023-11-21 08_31 GMT+2).mp4
+    - [ ] 00:00:00 Многофазные потоки (Трифонов, лекция 3 продолжение)
+    - [ ] 00:40:45 WS03.1 Using the Discrete Phase Model (Трифонов,
+      рабочий пример)
+15. [ ] eis-eufn-vpb (2023-11-22 08_31 GMT+2).mp4
+    - [ ] 00:00:38 Многофазные потоки ANSYS Fluent. Модель Эйлера
+      (Трифонов, лекция 4)
+    - [ ] 01:43:20 WS. Bubble Colomn (Трифонов,
+      рабочий пример)
+16. [ ] eis-eufn-vpb (2023-11-23 08_31 GMT+2).mp4
+    - [ ] 00:00:00 WS. Моделирование гранулированных сред (Трифонов,
+      рабочий пример)
+    - [ ] 02:00:40 WS. Моделирование гранулированных сред (Трифонов,
+      рабочий пример)
+    - [ ] 03:09:10 VOF-DPM (Трифонов, разгавор про завтра)
+17. [ ] eis-eufn-vpb (2023-11-24 08_34 GMT+2).mp4
+    - 00:00:40 WS. VOF-DPM (Трифонов, рабочий пример)
+18. [ ] eis-eufn-vpb (2023-11-27 08_32 GMT+2).mp4
+    - [ ] 00:00:20 Многофазные потоки межфазный массоперенос Кавитация
+      (Трифонов, лекция)
+    - [ ] 00:40:00 WS. Кавитация (Трифонов, рабочий пример)
+19. [ ] eis-eufn-vpb (2023-11-28 08_38 GMT+2).mp4
+    - [ ] 
+    - [ ]       
+20. [ ] eis-eufn-vpb (2023-11-29 08_37 GMT+2).mp4
+21. [ ] eis-eufn-vpb (2023-11-30 08_32 GMT+2).mp4
+22. [ ] eis-eufn-vpb (2023-12-01 08_37 GMT+2).mp4
+23. [ ] eis-eufn-vpb (2023-12-04 08_33 GMT+2).mp4
+    - [ ] 00:30:22 Non-preixed модели горения (Трифонов, лекция)
+    - [ ] 00:44:30 Перерыв
+    - [ ] 00:50:20 Non-preixed модели горения (Трифонов, лекция
+      продолжение)
+    - [ ] 02:23:55 Перерыв (Трифонов, лекция продолжение) 
+    - [ ] WS03 - Non-Premixed combustion (Трифонов, рабочий пример)
+24. [ ] eis-eufn-vpb (2023-12-05 08_33 GMT+2).mp4
+    - [ ] Premixed и partially premixed модели (Трифонов, лекция)
+    - [ ] 01:24:30 Перерыв
+    - [ ] 01:39:20 Partially premixed модель (Трифонов, лекция)
+    - [ ] 02:31:20 Вопросы  
+25. [ ] eis-eufn-vpb (2023-12-06 08_32 GMT+2).mp4
+    - [ ] 00:00:15 WS - Can combastor - FGM Diffusion (Трифонов,
+      рабочий пример)
+    - [ ] 01:45:30 Перерыв
+    - [ ] 02:00:55 WS - Can combastor - FGM Diffusion (Трифонов,
+      рабочий пример продолжение)
+26. [ ] eis-eufn-vpb (2023-12-07 08_35 GMT+2).mp4
+    - [ ] 00:02:00 Горение и многофазный поток (Трифонов, лекция 6)
+    - [ ] 01:42:00 Перерыв
+    - [ ] 02:00:50 Горение и многофазный поток (Трифонов, лекция 6
+      продолжение)
+    - [ ] 03:17:15 Вопросы
+27. [ ] eis-eufn-vpb (2023-12-08 08_33 GMT+2).mp4
+    - [ ] 00:00:00 Вопросы
+    - [ ] 00:52:00 WS05 - Spray combustion (Трифонов, рабочий пример)
+    - [ ] 01:31:00 Перерыв
+    - [ ] 01:43:050 WS05 - Spray combustion (Трифонов, рабочий пример продолжение) 
+28. [ ] eis-eufn-vpb (2023-12-11 08_32 GMT+2).mp4
+29. [ ] eis-eufn-vpb (2023-12-12 08_34 GMT+2).mp4
+    - [ ] 00:51:20 WS Дополнительный пример с использование
+      эффузионного охлаждения (Трифонов, рабочий пример)    
+30. [ ] eis-eufn-vpb (2023-12-13 08_33 GMT+2).mp4
+    - [ ]  WS Дополнительный пример с использование эффузионного
+      охлаждения (Трифонов, рабочий пример продолжение)
+    - [ ] 01:04:36 WS Expression in Ansys Fluent
+    - [ ] 01:19:42 WS Дополнительный пример с использование
+      эффузионного охлаждения (Трифонов, рабочий пример продолжение)
+    - [ ] 01:39:00 Перерыв
+    - [ ] WS Дополнительный пример с использование
+      эффузионного охлаждения (Трифонов, рабочий пример продолжение)
+      - [ ] 02:04:50 Вопрос: Может-ли модель эффузионноого охлаждения
+        быть учтена для расчета температуры стенки?
+        - [ ] 02:09:20 Теплообмен через стенку
+        - [ ] Построение модели
+        - [ ] 02:11:30  Наименование периодики по материалу стенки
+        - [ ] 02:13:00 Fluent Mesh
+        - [ ] 02:36:00 Fluent Solution
+        - [ ] 02:47:15 Добавление файла с солидом.
+        - [ ] 02:48:40 Добавление интерфейсов флюид-солид.
+31. [ ] eis-eufn-vpb (2023-12-14 08_34 GMT+2).mp4
+    - [ ] 00:00:00 Радиационный теплообмен (Трифонов, лекция)
+    - [ ] 02:16:00 WS 7 Моделирование каталитического фильтра
+      атомобиля очищающего выхлопные газы от гидрокарбонатов
+      (Трифонов, рабочий пример).
+32. [ ] eis-eufn-vpb (2023-12-15 08_39 GMT+2).mp4
+    - [ ] 00:00:00 WS 7 Моделирование каталитического фильтра
+      атомобиля очищающего выхлопные газы от гидрокарбонатов
+      (Трифонов, рабочий пример продолжение).
+    - [ ] 01:42:00 Рекомендации по моделированию камер сгорания
+      газовых турбин (Трифонов, лекция)
+33. [ ] eis-eufn-vpb (2023-12-18 08_32 GMT+2).mp4
+    - [ ] 00:00:00 Моделирование водородного пламени 19-01-2022
+      - [ ] 00:00:00 - Space Claime
+      - [ ] 00:42:30 - Fluent Mesh
+      - [ ] 01:08:30 - Обзор параметров задачи
+      - [ ] 01:11:50 - Копирование файлов
+        - grimech30_chem.inp
+        - grimech30_thermo.dat
+        - grimech30_ttransport.dat
+      - [ ] 01:12:30 - Fluent Solver
+      - [ ] 01:16:00 - Генерирование Species Model
+      - [ ] 01:38:30 - Перерыв
+      - [ ] 01:58:30 - Продолжение (быстрый повтор сначала) его то и
+        нужно смотреть.
+        - 02:02:10 Calculate PDF table start
+        - 02:04:15 Calculate PDF table stop (Трифонов, рабочий
+          пример).
+      - [ ] 02:04:50 Моделирование излучения
+      - [ ] 02:09:20 Cell Zone Conditions
+        - fluid
+        
+34. [ ] eis-eufn-vpb (2023-12-19 08_34 GMT+2).mp4
+35. [ ] eis-eufn-vpb (2023-12-20 08_33 GMT+2).mp4
+36. [ ] eis-eufn-vpb (2023-12-21 08_38 GMT+2).mp4
+37. [X] eis-eufn-vpb (2023-12-22 08_32 GMT+2).mp4
+
+
+C:\ANSYS\v241\fluent\fluent24.1.0\KINetics\data\grimech30_50spec_mech.inp
+C:\ANSYS\v241\fluent\fluent24.1.0\KINetics\data\grimech30_thermo.dat
+C:\ANSYS\v241\fluent\fluent24.1.0\KINetics\data\grimech30_transport.dat
+C:\ANSYS\v241\reaction\chemkin.win64\samples\diffusion_flamelet\MethaneGRI\Copy_of_grimech30.cks
+
+C:\ANSYS\v241\reaction\data\kinetics\grimech30_thermo.dat
+C:\ANSYS\v241\reaction\data\kinetics\grimech30_transport.dat
+C:\ANSYS\v241\reaction\data\kinetics\grimech30_50spec_mech.inp
+
+C:\ANSYS\v241\reaction\chemkin.win64\samples\reactor_network\two_stage_catalytic_combustor\grimech30_chem_PT.inp
+C:\ANSYS\v241\reaction\chemkin.win64\samples\honeycomb_monolith\reaction_rate_param_study\grimech30_chem_PT.inp
+C:\ANSYS\v241\reaction\chemkin.win64\samples\honeycomb_monolith\reaction_rate_param_study\grimech30_thermo.dat
+
+C:\ANSYS\v241\reaction\data\grimech30.cks
+C:\ANSYS\v241\reaction\data\grimech30_chem.inp - основной механизм из которого все
+C:\ANSYS\v241\reaction\data\grimech30_thermo.dat
+C:\ANSYS\v241\reaction\data\grimech30_transport.dat
+
+
+C:\ANSYS\v241\reaction\data\ModelFuelLibrary\Skeletal - здесь расположены иные механизмы для построения флеймлетов.
+

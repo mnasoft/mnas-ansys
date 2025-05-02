@@ -520,10 +520,53 @@
            <solution-summary-options>-Show-Torques
            <solution-summary-options>-This-Exists
            )
-  (:export    <file-information-options>
-              <file-information-options>-Include-In-Report
-              <file-information-options>-This-Exists
-              )
+  (:export <file-information-options>
+           <file-information-options>-Include-In-Report
+           <file-information-options>-This-Exists
+           )
+  (:export <mesh-transformation>
+           <mesh-transformation>-Angle-End
+           <mesh-transform>-Angle-Start
+           <mesh-transform>-Delete-Original
+           <mesh-transform>-Glue-Copied
+           <mesh-transform>-Glue-Reflected
+           <mesh-transform>-Glue-Strategy
+           <mesh-transform>-Nonuniform-Scale
+           <mesh-transform>-Normal
+           <mesh-transform>-Number-of-Copies
+           <mesh-transform>-Option
+           <mesh-transform>-Passages-in-360
+           <mesh-transform>-Passages-per-Mesh
+           <mesh-transform>-Passages-to-Model
+           <mesh-transform>-Point
+           <mesh-transform>-Point-1
+           <mesh-transform>-Point-2
+           <mesh-transform>-Point-3
+           <mesh-transform>-Preserve-Assembly-Name-Strategy
+           <mesh-transform>-Principal-Axis
+           <mesh-transform>-Reflection-Method
+           <mesh-transform>-Reflection-Option
+           <mesh-transform>-Rotation-Angle-Option
+           <mesh-transform>-Rotation-Axis-Begin
+           <mesh-transform>-Rotation-Axis-End
+           <mesh-transform>-Rotation-Option
+           <mesh-transform>-Scale-Method
+           <mesh-transform>-Scale-Option
+           <mesh-transform>-Scale-Origin
+           <mesh-transform>-Target-Location
+           <mesh-transform>-Theta-Offset
+           <mesh-transform>-Transform-Targets-Independently
+           <mesh-transform>-Translation-Deltas
+           <mesh-transform>-Translation-Option
+           <mesh-transform>-Translation-Root
+           <mesh-transform>-Translation-Tip
+           <mesh-transform>-Uniform-Scale
+           <mesh-transform>-Use-Coord-Frame
+           <mesh-transform>-Use-Multiple-Copy
+           <mesh-transform>-X-Pos
+           <mesh-transform>-Y-Pos
+           <mesh-transform>-Z-Pos
+           )
   (:documentation
    "@b(Описание:) пакет @b(mnas-ansys/ccl/core) определяет некоторые
   объекты языка CCl ANSYS-CFX-Post."))
@@ -582,6 +625,9 @@
          (" Html " " HTML ")
          (" And " " and ")
          (" Cvf " " CVF ")
+         ("Passages In "  "Passages in ")
+         ("Passages Per " "Passages per ")
+         ("Passages To "  "Passages to ")
          
          ))
       (slot-value class (sb-mop:slot-definition-name slot))))
@@ -3184,3 +3230,216 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defclass <mesh-transformation> (<object>)
+  (
+   (Angle-End
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transformation>-Angle-End
+    :initarg Angle-End
+    :documentation "Angle-End")
+   (Angle-Start
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Angle-Start
+    :initarg Angle-Start
+    :documentation "Angle-Start")
+   (Delete-Original
+    :initform "Off"
+    :accessor <mesh-transform>-Delete-Original
+    :initarg Delete-Original
+    :documentation "Delete-Original")
+   (Glue-Copied
+    :initform "Off"
+    :accessor <mesh-transform>-Glue-Copied
+    :initarg Glue-Copied
+    :documentation "Glue-Copied")
+   (Glue-Reflected
+    :initform "On"
+    :accessor <mesh-transform>-Glue-Reflected
+    :initarg Glue-Reflected
+    :documentation "Glue-Reflected")
+   (Glue-Strategy
+    :initform "Location And Transformed Only"
+    :accessor <mesh-transform>-Glue-Strategy
+    :initarg Glue-Strategy
+    :documentation "Glue-Strategy")
+   (Nonuniform-Scale
+    :initform "1 , 1 , 1"
+    :accessor <mesh-transform>-Nonuniform-Scale
+    :initarg Nonuniform-Scale
+    :documentation "Nonuniform-Scale")
+   (Normal
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Normal
+    :initarg Normal
+    :documentation "Normal")
+   (Number-of-Copies
+    :initform "1"
+    :accessor <mesh-transform>-Number-of-Copies
+    :initarg Number-of-Copies
+    :documentation "Number-of-Copies")
+   (Option
+    :initform "Rotation"
+    :accessor <mesh-transform>-Option
+    :initarg Option
+    :documentation "Option")
+   (Passages-in-360
+    :initform "1"
+    :accessor <mesh-transform>-Passages-in-360
+    :initarg Passages-in-360
+    :documentation "Passages-in-360")
+   (Passages-per-Mesh
+    :initform "1"
+    :accessor <mesh-transform>-Passages-per-Mesh
+    :initarg Passages-per-Mesh
+    :documentation "Passages-per-Mesh")
+   (Passages-to-Model
+    :initform "1"
+    :accessor <mesh-transform>-Passages-to-Model
+    :initarg Passages-to-Model
+    :documentation "Passages-to-Model")
+   (Point
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Point
+    :initarg Point
+    :documentation "Point")
+   (Point-1
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Point-1
+    :initarg Point-1
+    :documentation "Point-1")
+   (Point-2
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Point-2
+    :initarg Point-2
+    :documentation "Point-2")
+   (Point-3
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Point-3
+    :initarg Point-3
+    :documentation "Point-3")
+   (Preserve-Assembly-Name-Strategy
+    :initform "Existing"
+    :accessor <mesh-transform>-Preserve-Assembly-Name-Strategy
+    :initarg Preserve-Assembly-Name-Strategy
+    :documentation "Preserve-Assembly-Name-Strategy")
+   (Principal-Axis
+    :initform "X"
+    :accessor <mesh-transform>-Principal-Axis
+    :initarg Principal-Axis
+    :documentation "Principal-Axis")
+   (Reflection-Method
+    :initform "Original (No Copy)"
+    :accessor <mesh-transform>-Reflection-Method
+    :initarg Reflection-Method
+    :documentation "Reflection-Method")
+   (Reflection-Option
+    :initform "YZ Plane"
+    :accessor <mesh-transform>-Reflection-Option
+    :initarg Reflection-Option
+    :documentation "Reflection-Option")
+   (Rotation-Angle
+    :initform "-22.5 [degree]"
+    :accessor <mesh-transform>-Rotation-Angle
+    :initarg Rotation-Angle
+    :documentation "Rotation-Angle")
+   (Rotation-Angle-Option
+    :initform "Specified"
+    :accessor <mesh-transform>-Rotation-Angle-Option
+    :initarg Rotation-Angle-Option
+    :documentation "Rotation-Angle-Option")
+   (Rotation-Axis-Begin
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Rotation-Axis-Begin
+    :initarg Rotation-Axis-Begin
+    :documentation "Rotation-Axis-Begin")
+   (Rotation-Axis-End
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Rotation-Axis-End
+    :initarg Rotation-Axis-End
+    :documentation "Rotation-Axis-End")
+   (Rotation-Option
+    :initform "Principal Axis"
+    :accessor <mesh-transform>-Rotation-Option
+    :initarg Rotation-Option
+    :documentation "Rotation-Option")
+   (Scale-Method
+    :initform "Original (No Copy)"
+    :accessor <mesh-transform>-Scale-Method
+    :initarg Scale-Method
+    :documentation "Scale-Method")
+   (Scale-Option
+    :initform "Uniform"
+    :accessor <mesh-transform>-Scale-Option
+    :initarg Scale-Option
+    :documentation "Scale-Option")
+   (Scale-Origin
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Scale-Origin
+    :initarg Scale-Origin
+    :documentation "Scale-Origin")
+   (Target-Location
+    :initform "DG2 G2"
+    :accessor <mesh-transform>-Target-Location
+    :initarg Target-Location
+    :documentation "Target-Location")
+   (Theta-Offset
+    :initform "0.0 [degree]"
+    :accessor <mesh-transform>-Theta-Offset
+    :initarg Theta-Offset
+    :documentation "Theta-Offset")
+   (Transform-Targets-Independently
+    :initform "Off"
+    :accessor <mesh-transform>-Transform-Targets-Independently
+    :initarg Transform-Targets-Independently
+    :documentation "Transform-Targets-Independently")
+   (Translation-Deltas
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Translation-Deltas
+    :initarg Translation-Deltas
+    :documentation "Translation-Deltas")
+   (Translation-Option
+    :initform "Deltas"
+    :accessor <mesh-transform>-Translation-Option
+    :initarg Translation-Option
+    :documentation "Translation-Option")
+   (Translation-Root
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Translation-Root
+    :initarg Translation-Root
+    :documentation "Translation-Root")
+   (Translation-Tip
+    :initform "0 , 0 , 0"
+    :accessor <mesh-transform>-Translation-Tip
+    :initarg Translation-Tip
+    :documentation "Translation-Tip")
+   (Uniform-Scale
+    :initform "1.0"
+    :accessor <mesh-transform>-Uniform-Scale
+    :initarg Uniform-Scale
+    :documentation "Uniform-Scale")
+   (Use-Coord-Frame
+    :initform "Off"
+    :accessor <mesh-transform>-Use-Coord-Frame
+    :initarg Use-Coord-Frame
+    :documentation "Use-Coord-Frame")
+   (Use-Multiple-Copy
+    :initform "On"
+    :accessor <mesh-transform>-Use-Multiple-Copy
+    :initarg Use-Multiple-Copy
+    :documentation "Use-Multiple-Copy")
+   (X-Pos
+    :initform "0.0"
+    :accessor <mesh-transform>-X-Pos
+    :initarg X-Pos
+    :documentation "X-Pos")
+   (Y-Pos
+    :initform "0.0"
+    :accessor <mesh-transform>-Y-Pos
+    :initarg Y-Pos
+    :documentation "Y-Pos")
+   (Z-Pos
+    :initform "0.0"
+    :accessor <mesh-transform>-Z-Pos
+    :initarg Z-Pos
+    :documentation "Z-Pos")   
+   ))

@@ -23,6 +23,8 @@
 (defparameter *out*
   (make-instance '<out> :file "Z:/CFX/n70/cfx/DP=007/N70_prj_36_001.out"))
 
+(defparameter *out*
+  (make-instance '<out> :file *fn*))
 
 (update *out*)
 (<out>-lines *out*)

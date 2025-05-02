@@ -444,3 +444,17 @@ CFX-PRE.
                 :serial nil
                 :components
                 ((:file "res-to-s-obj")))))
+
+(defsystem "mnas-ansys/icem"
+  :description
+  "Подсистема @(mnas-ansys/icem) определяет функции для преобразования
+uns-файлов icem в msh-файлы, предназначенные для импорта в другие
+системы (fluent, cfx)."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
+  :serial nil
+  :depends-on ("cl-ppcre")
+  :components ((:module "src/icem" 
+                :serial nil
+                :components
+                ((:file "icem")))))
