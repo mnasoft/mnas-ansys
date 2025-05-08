@@ -297,15 +297,15 @@ END~%"
             d-i d-i d-i i-reg-lst-1 i-reg-lst-2)))
 
 (defun mk-split (name)
-  (mnas-string:split "/-" name))
+  (mnas-string:split "/- " name))
 
 (defun mk-path (name)
-  (mnas-string:split "/" name))
+  (mnas-string:split "/ " name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun is-interface (name)
-  (string= "C" (first (mnas-ansys/ccl:mk-path name))))
+  (string= "C" (first (mk-path name))))
 
 (defun is-interface-fluid (name)
   (let ((from-to (second (mnas-ansys/ccl:mk-path name))))
