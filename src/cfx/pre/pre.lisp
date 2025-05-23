@@ -20,7 +20,9 @@
            make-ic-point
            mk-t-f-points
            )
-  (:export mk-mfr)
+  (:export mk-mfr
+           mk-mfr-region
+           )
   )
 
 (in-package :mnas-ansys/cfx/pre)
@@ -569,3 +571,16 @@ NIL
   (format t "  END")
   (format t "END~2%"))
 
+
+(defun mk-mfr-region (region)
+  (format t "FLOW: Flow Analysis 1~%")
+  (format t "  OUTPUT CONTROL: ~%")
+  (format t "    MONITOR OBJECTS: ~%")
+  (format t "      &replace MONITOR POINT: MFR ~A~%" (mnas-ansys/ccl:good-name region))
+  (format t "        Coord Frame = Coord 0~%")
+  (format t "        Expression Value = massFlow()@REGION:~A~%" region)
+  (format t "        Option = Expression~%")
+  (format t "      END~%")
+  (format t "    END~%")
+  (format t "  END~%")
+  (format t "END~2%"))
