@@ -20,6 +20,7 @@
            make-ic-point
            mk-t-f-points
            )
+  (:export mk-mfr)
   )
 
 (in-package :mnas-ansys/cfx/pre)
@@ -521,7 +522,8 @@ NIL
 
 (defun make-ic-point (pnt &optional (part "GEOM") (names "pnt"))
   (loop :for (name p) :in pnt :do
-    (format t "ic_point {} ~A ~A {~{~8,3F~^,~}};~%" part names p)))
+    (format t "ic_point {} ~A ~A {~{~8,3F~^,~}}; " part names p))
+  (format t "~3%"))
 
 
 (defun mk-t-f-points (p1
@@ -549,3 +551,21 @@ NIL
                               axis-start                         
                               axis-end
                               teta)))))))
+(defun mk-mfr (name
+               &key (side "Side 1")
+               &aux (nm
+                     (concatenate
+                      'string
+                      name " " side)))
+  (format t "FLOW: Flow Analysis 1")
+  (format t "  OUTPUT CONTROL: ")
+  (format t "    MONITOR OBJECTS: ")
+  (format t "      &replace MONITOR POINT: MFR ~A"  nm)
+  (format t "        Coord Frame = Coord 0")
+  (format t "        Expression Value = massFlow()@~A" nm)
+  (format t "        Option = Expression")
+  (format t "      END")
+  (format t "    END")
+  (format t "  END")
+  (format t "END~2%"))
+
