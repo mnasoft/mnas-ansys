@@ -13,6 +13,7 @@
            mk-key       ;; fam+name+type
            )
   (:export mk-mon)
+  (:export mon-format)
   (:documentation
    "Пакет @(mnas-ansys/exchande) определяет функции, позволяющие извлечь
     информацию из файлов, которые экспортирует Ansys"))
@@ -67,16 +68,42 @@
     :documentation "Данные монитора. Вектор значений.")
    ))
 
-(defmethod print-object ((mon <mon>) stream)
-  (format stream "number   = ~S~%" (<mon>-number mon))
-  (format stream "des      = ~S~%" (<mon>-des mon))
-  (format stream "fam      = ~S~%" (<mon>-fam mon))
-  (format stream "name     = ~S~%" (<mon>-name mon))
+(defparameter *mon-print-format* :short)
 
-  (format stream "domen    = ~S~%" (<mon>-domen mon))
-  (format stream "location = ~S~%" (<mon>-location mon))
-  (format stream "coords   = ~S~%" (<mon>-coords mon))
-  (format stream "type     = ~S~%" (<mon>-type mon)))
+(defun mon-format (fmt)
+  (assert (member fmt '(:short :values :full)))
+  (setf *mon-print-format* fmt))
+
+(defmethod print-object ((mon <mon>) stream)
+  (print-unreadable-object (mon stream  :type t)
+    (case *mon-print-format*
+      ((:short)
+       (format stream "~S : ~A"
+               (concatenate 'string (<mon>-name mon) ":"
+                            (<mon>-type mon))
+               (length (<mon>-data mon))))
+      ((:values)
+       (let* ((data (<mon>-data mon))
+              (averavge (math/stat:average-value data))
+              (min      (math/stat:min-value data))
+              (max      (math/stat:max-value data)))
+         (format stream "~S/~A= ~7A [~6A;~6A] Δ=~4A"
+                 (concatenate
+                  'string (<mon>-name mon) ":"
+                  (<mon>-type mon))
+                 (length data)
+                 averavge min max
+                 (math/stat:standard-deviation data))))
+      (otherwise
+       (format stream "number   = ~S~%" (<mon>-number mon))
+       (format stream "des      = ~S~%" (<mon>-des mon))
+       (format stream "fam      = ~S~%" (<mon>-fam mon))
+       (format stream "name     = ~S~%" (<mon>-name mon))
+
+       (format stream "domen    = ~S~%" (<mon>-domen mon))
+       (format stream "location = ~S~%" (<mon>-location mon))
+       (format stream "coords   = ~S~%" (<mon>-coords mon))
+       (format stream "type     = ~S~%" (<mon>-type mon))))))
 
 (defun mk-mon (mon-num-name)
   (let ((mon (make-instance '<mon>)))

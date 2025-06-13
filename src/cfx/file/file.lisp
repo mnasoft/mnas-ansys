@@ -212,9 +212,21 @@
 "
   (when (<res>-mon res)
     (let ((rgx (ppcre:create-scanner regexp)))
-      (loop :for i :in (mnas-hash-table:keys (<res>-mon res))
-            :when (ppcre:scan rgx i)
+      (loop :for i :in (alexandria:hash-table-values (<res>-mon res))
+            :when (ppcre:scan rgx (mnas-ansys/cfx/file/mon:<mon>-name i))
               :collect i))))
+
+(defmethod mon-select ((strings cons) (res <res>))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (mon-select \"GT OUT.*:Total Temperature\" *res*)
+=> (\"GT OUT 100 100:Total Temperature\"
+    \"GT OUT 100 101:Total Temperature\"
+    ... )
+@end(code)
+"
+  (loop :for key :in strings
+        :collect (gethash key (<res>-mon res))))
 
 (defmethod iterations ((res <res>))
   " @b(Пример использования:)
