@@ -212,9 +212,9 @@
 "
   (when (<res>-mon res)
     (let ((rgx (ppcre:create-scanner regexp)))
-      (loop :for i :in (alexandria:hash-table-values (<res>-mon res))
-            :when (ppcre:scan rgx (mnas-ansys/cfx/file/mon:<mon>-name i))
-              :collect i))))
+      (loop :for i :in (alexandria:hash-table-keys (<res>-mon res))
+            :when (ppcre:scan rgx i)
+              :collect (gethash i (<res>-mon res))))))
 
 (defmethod mon-select ((strings cons) (res <res>))
   " @b(Пример использования:)
