@@ -377,8 +377,12 @@ CFX-PRE.
   ;; :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange" )
   :depends-on ("mnas-ansys/ccl")
   :components ((:module "src/cfx/pre"
-                :serial nil
-                :components ((:file "pre")))))
+                :serial t
+                :components ((:file "pre")
+                             (:file "class")
+                             (:file "generic")
+                             (:file "method")
+                             ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
