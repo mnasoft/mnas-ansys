@@ -17,23 +17,43 @@
   (:documentation
    "Возвращает список солидовых доменов."))
 
-(defgeneric solid-domains (dom-sur)
+(defgeneric icem-domains (domains)
   (:documentation
-   "Возвращает список солидовых доменов."))
+   "Возвращает список солтдовых доменов на основании списка поверхностей
+ICEM."))
 
-(defgeneric faces (dom dom-sur)
+(defgeneric icem-fluid-domains (domains)
   (:documentation
-   "Возвращает список поверхностей домена @b(dom)."))
+   "Возвращает список флюидовых доменов на основании списка поверхностей
+ICEM."))
 
-(defgeneric find-body (body dom-sur)
+(defgeneric icem-solid-domains (domains)
+  (:documentation
+   "Возвращает список солтдовых доменов на основании списка поверхностей
+ICEM."))
+
+(defgeneric icem-fluid-domain-p (name domains)
+  (:documentation
+   "Возвращает T, если имя представляет флюидовый домен на основании
+списка поверхностей ICEM, иначе - NIL."))
+
+(defgeneric icem-solid-domain-p (name domains)
+  (:documentation
+   "Возвращает T, если имя представляет солидовый домен на основании
+списка поверхностей ICEM, иначе - NIL."))
+
+(defgeneric find-icem-surfaces (name domains)
+  (:documentation
+   "Возвращает список поверхностей T, если имя представляет солидовый домен на основании
+списка поверхностей ICEM, иначе - NIL."))
+
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric faces (name domains)
+  (:documentation
+   "Возвращает список поверхностей домена @b(name)."))
+
+(defgeneric find-body (name domains)
   (:documentation
    "Возвращает список доменов по имени тела (материальной точки)
 body-name."))
-
-
-
-;;(<dom-sur>-data *ds*)
-;(solid-domains  *ds*)
-;(<dom-sur>-parts *ds*)
-;(faces "DG1 G1" *ds*)
-;(domains "M1"  *ds*)

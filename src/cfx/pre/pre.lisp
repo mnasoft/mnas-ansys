@@ -25,7 +25,15 @@
            mk-tt
            mk-tp
            )
-  )
+  (:export domains
+           fluid-domains
+           solid-domains
+           )
+  (:export icem-domains
+           icem-fluid-domains
+           icem-solid-domains)
+  (:export icem-fluid-domain-p
+           icem-solid-domain-p))
  
 (in-package :mnas-ansys/cfx/pre)
 
@@ -181,9 +189,9 @@ NIL
 
 (defun gtmImport (filename
                   &key
-                  (type "Generic")
-                  (units "mm")
-                  (genOpt "-n")
+                    (type "Generic")
+                    (units "mm")
+                    (genOpt "-n")
                     (nameStrategy "Assembly"))
   "@b(Описание:) функция @b(gtmImport)
 

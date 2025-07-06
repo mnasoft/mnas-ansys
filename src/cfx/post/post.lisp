@@ -14,6 +14,7 @@
            )
   (:export mk-report
            mk-reports)
+  (:export gt-metal-compare)
   (:documentation
    "Пакет @(mnas-ansys/cfx/post) определяет функции, позволяющие
   создавать сценарии для генерирования отчетов CFX-POST."))
@@ -171,3 +172,64 @@
 "
   (loop :for res-filename :in (directory dir)
         :do (mk-report (namestring res-filename) domains state-filename cmds)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun gt-metal-compare (tbl trd utime
+                         monitor-tbl
+                         res
+                         &key
+                           (header-lines 2)
+                           (mon-convertor #'(lambda (el) el))
+                           )
+  "@b(Описание:) функция @b(gt-metal-compare)
+
+ @b(Переменые:)
+@begin(list)
+ @item(tbl - 2d-list с заголовком длиной header-lines;)
+ @item(trd - тренд;)
+ @item(utime - универсальное время;)
+ @item(header-lines - высота заголовка таблицы, там где нет имен сигналова;)
+ @item(monitor-tbl - 2d-list с именами мониторов;)
+ @item(res - CFX - res-файл.)
+@end(list)
+"
+  (let ((tb-cdr tbl)
+        (rez nil))
+    (mnas-format:round-2d-list
+     (append
+      (loop :for l :in tbl
+            :for i :from 0 :to (1- header-lines)
+            :collect
+            (progn (setf tb-cdr (cdr tb-cdr)) l))
+      (progn 
+        (loop :for l :in tb-cdr
+              :for mon-line :in monitor-tbl
+              :do
+                 (push l rez)
+                 (push (recoder/get:trd-analog-mid-by-utime
+                        trd
+                        utime
+                        (recoder/slist:a-signals trd l))
+                       rez)
+                 (when (and monitor-tbl res)
+                   (let ((mons (mnas-ansys/cfx/file:mon-select mon-line res)))
+                     (push 
+                      (mapcar
+                       #'(lambda (mon)
+                           (if mon
+                               (mnas-ansys/cfx/file/mon:<mon>-name mon)
+                               ""))
+                       mons)
+                      rez)
+                     (push 
+                      (mapcar
+                       #'(lambda (mon)
+                           (if mon
+                               (funcall mon-convertor
+                                        (math/stat:average-value
+                                         (mnas-ansys/cfx/file/mon:<mon>-data mon)))
+                               ""))
+                       mons)
+                      rez))))
+        (reverse rez))))))

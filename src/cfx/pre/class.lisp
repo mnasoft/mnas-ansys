@@ -19,7 +19,7 @@
 (defclass <cfx-domains> ()
   ((icem-parts
     :accessor <cfx-domains>-icem-parts
-    :initarg  :parts
+    ;;:initarg  :parts
     :initform (make-hash-table :test #'equal)
     :documentation
     "Хеш-таблица частей, в которых присутствуют поверхности импортируется
@@ -43,9 +43,18 @@ ICEM CFD.")))
 (defmethod print-object ((domains <cfx-domains>) s)
   (print-unreadable-object (domains s :type t)
     (format s "icem-parts: ~S ~S"
-            (length (<cfx-domains>-icem-parts domains))
+            (hash-table-count (<cfx-domains>-icem-parts domains))
             (<cfx-domains>-domains domains))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(defmethod initialize-instance :after ((cfx-domains <cfx-domains>)
+                                       &key icem-parts)
+  (mapcar
+   #'(lambda (el)
+       (setf
+        (gethash el
+                 (<cfx-domains>-icem-parts cfx-domains))
+        el))
+   icem-parts)
+  cfx-domains)

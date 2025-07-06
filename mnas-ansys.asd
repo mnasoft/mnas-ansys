@@ -375,13 +375,15 @@ CFX-PRE.
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
   ;; :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange" )
-  :depends-on ("mnas-ansys/ccl")
+  :depends-on ("mnas-ansys/ccl" "mnas-format" "math/matr") 
   :components ((:module "src/cfx/pre"
                 :serial t
                 :components ((:file "pre")
                              (:file "class")
                              (:file "generic")
+                             (:file "predicat")                             
                              (:file "method")
+                             (:file "test-data")
                              ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
