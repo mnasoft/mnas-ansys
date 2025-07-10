@@ -47,6 +47,14 @@ ICEM."))
    "Возвращает список поверхностей T, если имя представляет солидовый домен на основании
 списка поверхностей ICEM, иначе - NIL."))
 
+(defgeneric surfaces (obj)
+  (:documentation
+   "Возвращает список поверхностей объекта @b(obj)."))
+
+(defgeneric add (item  collection)
+  (:documentation
+   "Добавляем объект @b(item) в коллекцию @b(collection)."))
+
 ;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric faces (name domains)

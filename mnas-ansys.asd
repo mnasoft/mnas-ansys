@@ -374,11 +374,10 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  ;; :depends-on ("serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange" )
-  :depends-on ("mnas-ansys/ccl" "mnas-format" "math/matr") 
+  :depends-on ("mnas-ansys/ccl" "mnas-format" "math/matr" "mnas-ansys/tin") 
   :components ((:module "src/cfx/pre"
                 :serial t
-                :components ((:file "pre")
+                :components ((:file "package") 
                              (:file "class")
                              (:file "generic")
                              (:file "predicat")                             

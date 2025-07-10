@@ -2,6 +2,130 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
+(defun underscore-name-by-pathname (pathname)
+  "@b(Описание:) функция @b(underscore-name-by-pathname) выделяет из пути
+@b(pathname) последнюю часть имени перед которой стоит знак подчерка.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (underscore-name-by-pathname #P\"z:/ANSYS/CFX/a32/tin/DOM/G5/A32_prj_06_DG10.tin\") => \"DG10\"
+@end(code)"
+  (first 
+   (nreverse
+    (ppcre:split "_" (pathname-name pathname)))))
+
+(defun domain-name-by-pathname (pathname)
+  "@b(Описание:) функция @b(domain-name-by-pathname) возвращает имя
+домена основываясь на имени tin-файла.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (domain-name-by-pathname #P\"z:/ANSYS/CFX/a32/tin/DOM/G5/A32_prj_06_DG10.tin\") => \"G10\"
+@end(code)"
+  (tail-of-string
+   (underscore-name-by-pathname pathname)))
+
+(defun make-icem-domain (pathname)
+  (let* ((domain (make-instance '<icem-domain>))
+        (tin (mnas-ansys/tin:open-tin-file pathname)))
+    (setf (<icem-domain>-name domain)
+          (domain-name-by-pathname pathname))
+    (map 'nil
+         #'(lambda (el)
+             (setf
+              (gethash el (<icem-domain>-surfaces domain))
+              el))
+         (remove-duplicates 
+          (loop :for sur
+                  :in (alexandria:hash-table-values
+                       (mnas-ansys/tin:<tin>-surfaces tin))
+                :collect 
+                (mnas-ansys/tin:<ent>-family sur))
+          :test #'equal))
+    domain))
+
+(defmethod surfaces ((icem-domain <icem-domain>))
+  (sort 
+   (alexandria:hash-table-values (<icem-domain>-surfaces icem-domain))
+   #'string<))
+
+(defmethod add ((item <icem-domain>) (collection <icem-domains>))
+  (setf (gethash
+         (<icem-domain>-name item)
+         (<icem-domains>-domains collection))
+        item)
+  collection)
+
+(defmethod domains ((icem-domains <icem-domains>))
+  (sort 
+   (alexandria:hash-table-keys (<icem-domains>-domains icem-domains))
+   #'string<))
+
+(defun make-icem-domains (directory-template)
+  (let ((icem-domains (make-instance '<icem-domains>)))
+    (loop :for d :in (directory directory-template)
+          :do (add (make-icem-domain d) icem-domains))
+    icem-domains))
+
+(defun make-cfx-domains (directory-template)
+  (let ((cfx-domains (make-instance '<cfx-domains>)))
+    (loop :for d :in (directory directory-template)
+          :do (add (make-icem-domain d) cfx-domains))
+    cfx-domains))
+
+(defmethod next-domain-name ((mesh-name string) (cfx-domains <cfx-domains>))
+  "@b(Описание:) метод @b(next-domain-name) возвращает следующее
+доступное имя для домена при вставке сетки в симуляцию CFX.
+"
+  (when (gethash mesh-name (<icem-domains>-domains cfx-domains))
+    (let ((d-name (concatenate 'string "D" mesh-name " " mesh-name)))
+      (if (gethash d-name (<cfx-domains>-domains cfx-domains))
+          (loop :for i :from 2 
+                :do
+                   (unless (gethash (format nil "~A ~D" d-name i)
+                                    (<cfx-domains>-domains cfx-domains))
+                     (return-from next-domain-name (format nil "~A ~D" d-name i))))
+          d-name))))
+
+(defun name-icem->cfx (name)
+  (ppcre:regex-replace-all "[/-]" name " "))
+
+
+(defmethod next-surface-name ((mesh-name string) (cfx-domains <cfx-domains>))
+  (let ((surface-name (name-icem->cfx mesh-name)))
+    (if (gethash surface-name (<cfx-domains>-surfaces cfx-domains))
+          (loop :for i :from 2 
+                :do
+                   (unless (gethash (format nil "~A ~D" surface-name i)
+                                    (<cfx-domains>-surfaces cfx-domains))
+                     (return-from next-surface-name (format nil "~A ~D" surface-name i))))
+          surface-name)))
+
+(defmethod insert ((mesh string) (cfx-domains <cfx-domains>))
+  (let ((d-name (next-domain-name mesh cfx-domains)))
+    (when d-name
+      (let ((cfx-domain (make-instance '<cfx-domain> :name d-name)))
+        (loop :for sur :in (alexandria:hash-table-keys
+                            (<icem-domain>-surfaces
+                             (gethash mesh
+                                      (<icem-domains>-domains cfx-domains))))
+              :do
+                 (let ((cfx-suf (next-surface-name sur cfx-domains)))
+                   (unless (gethash cfx-suf (<cfx-domains>-surfaces cfx-domains))
+                     (setf (gethash cfx-suf (<cfx-domain>-surfaсes cfx-domain)) ;; добавляем поверхность в домен
+                           cfx-suf) 
+                     (setf (gethash cfx-suf (<cfx-domains>-surfaces cfx-domains)) ;; добавляем поверхность в перечень поверхностей
+                           cfx-suf)))) ;; loop
+
+        (setf (gethash (<cfx-domain>-name cfx-domain) ;; Добавляем домен в симуляцию
+                       (<cfx-domains>-domains cfx-domains))
+              cfx-domain)
+
+        cfx-domains ;; возвращаем симуляцию
+        ))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defmethod domains ((cfx-domains <cfx-domains>))
   " @b(Пример использования:)
 @begin[lang=lisp](code)
@@ -325,5 +449,3 @@
           :collect (list name (math/matr:transform p rotate-teta)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-

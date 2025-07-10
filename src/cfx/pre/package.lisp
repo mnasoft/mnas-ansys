@@ -1,3 +1,5 @@
+;;;; ../src/cfx/pre/package.lisp
+
 (defpackage :mnas-ansys/cfx/pre
   (:use #:cl )
   (:export preambule
@@ -33,7 +35,17 @@
            icem-fluid-domains
            icem-solid-domains)
   (:export icem-fluid-domain-p
-           icem-solid-domain-p))
+           icem-solid-domain-p)
+  (:export <cfx-domains>
+           <cfx-domains>-domains
+           <cfx-domains>-surfaces
+           )
+  (:export <icem-domain>
+           <icem-domain>-name
+           <icem-domain>-surfaces
+           )
+  (:export surfaces)
+  )
  
 (in-package :mnas-ansys/cfx/pre)
 
