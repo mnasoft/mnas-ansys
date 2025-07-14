@@ -23,9 +23,32 @@
   "Возвращает подстроку строки S без первого символа."
   (subseq s 1))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Не предикаты
+
 (defun is-icem-fluid-surface (surface-name domain-name)
   (let* ((path (ppcre:split "/" surface-name)))
     (or
      (string= (first path) (concatenate 'string "D" domain-name))
      (and (string= (first path) "C")
           (member domain-name (ppcre:split "-" (second path)) :test #'equal)))))
+
+(defun filter-by-prefix (prefix strings)
+  "Возвращает список строк, начало которых имеет префикс @b(prefix).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (filter-by-prefix \"AaB\" '(\"AaB 123\" \"AaB123\" \"Aw\" \"Aa\"))
+@end(code)
+"
+  (remove-if-not
+   #'(lambda (s)
+       (uiop:string-prefix-p prefix s))
+   strings))
+
+(defun extract-suffix (prefix string)
+  "@b(Описание:) функция @b(extract-suffix) возвращает суффикс."
+  (when (uiop:string-prefix-p prefix string)
+    (string-trim " " (subseq string (length prefix)))))
+
+

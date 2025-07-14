@@ -26,14 +26,14 @@
    (underscore-name-by-pathname pathname)))
 
 (defun make-icem-domain (pathname)
-  (let* ((domain (make-instance '<icem-domain>))
+  (let* ((domain (make-instance '<mesh>))
         (tin (mnas-ansys/tin:open-tin-file pathname)))
-    (setf (<icem-domain>-name domain)
+    (setf (<mesh>-name domain)
           (domain-name-by-pathname pathname))
     (map 'nil
          #'(lambda (el)
              (setf
-              (gethash el (<icem-domain>-surfaces domain))
+              (gethash el (<mesh>-surfaces domain))
               el))
          (remove-duplicates 
           (loop :for sur
@@ -44,46 +44,84 @@
           :test #'equal))
     domain))
 
-(defmethod surfaces ((icem-domain <icem-domain>))
-  (sort 
-   (alexandria:hash-table-values (<icem-domain>-surfaces icem-domain))
-   #'string<))
+(defun ht-values-sort (ht &optional (func #'string<))
+  (sort (alexandria:hash-table-values ht) func))
 
-(defmethod add ((item <icem-domain>) (collection <icem-domains>))
+(defmethod surfaces ((icem-domain <mesh>))
+  (ht-values-sort (<mesh>-surfaces icem-domain)))
+
+(defmethod surfaces ((domain <domain>))
+  (ht-values-sort (<domain>-surfaсes domain)))
+
+(defmethod surfaces ((simulation <simulation>))
+  (ht-values-sort (<simulation>-surfaces simulation)))
+
+(defmethod surfaces ((d (eql nil)))
+  d)
+
+(defmethod add ((mesh <mesh>) (meshes <meshes>))
+    "Добавляем сетку к коллекции сеток."
   (setf (gethash
-         (<icem-domain>-name item)
-         (<icem-domains>-domains collection))
-        item)
-  collection)
+         (<mesh>-name mesh)
+         (<meshes>-domains meshes))
+        mesh)
+  meshes)
 
-(defmethod domains ((icem-domains <icem-domains>))
+(defmethod add ((domain <domain>) (simulation <simulation>))
+  "Добавляем домен в симуляцию"
+  (setf (gethash (<domain>-name domain) 
+                 (<simulation>-domains simulation))
+        domain)
+  simulation)
+
+(defmethod domains ((icem-domains <meshes>))
   (sort 
-   (alexandria:hash-table-keys (<icem-domains>-domains icem-domains))
+   (alexandria:hash-table-keys (<meshes>-domains icem-domains))
    #'string<))
 
 (defun make-icem-domains (directory-template)
-  (let ((icem-domains (make-instance '<icem-domains>)))
+  (let ((icem-domains (make-instance '<meshes>)))
     (loop :for d :in (directory directory-template)
           :do (add (make-icem-domain d) icem-domains))
     icem-domains))
 
 (defun make-cfx-domains (directory-template)
-  (let ((cfx-domains (make-instance '<cfx-domains>)))
+  (let ((cfx-domains (make-instance '<simulation>)))
     (loop :for d :in (directory directory-template)
           :do (add (make-icem-domain d) cfx-domains))
     cfx-domains))
 
-(defmethod next-domain-name ((mesh-name string) (cfx-domains <cfx-domains>))
+(defun mesh-name->domain-name (mesh-name)
+  "@b(Описание:) функция @b(mesh-name->domain-name) возвращает имя домена
+на основании имени сетки.
+ 
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mesh-name->domain-name \"G1\") => \"DG1 G1\"
+@end(code)"
+  (concatenate 'string "D" mesh-name " " mesh-name))
+
+(defun domain-name->mesh-name (domain-name)
+  "@b(Описание:) функция @b(domain-name->mesh-name) возвращает имя сетки
+на основании имени домена.
+ 
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (domain-name->mesh-name \"DG1 G1\") => \"G1\"
+@end(code)"
+  (second (ppcre:split " " domain-name)))
+
+(defmethod next-domain-name ((mesh-name string) (cfx-domains <simulation>))
   "@b(Описание:) метод @b(next-domain-name) возвращает следующее
 доступное имя для домена при вставке сетки в симуляцию CFX.
 "
-  (when (gethash mesh-name (<icem-domains>-domains cfx-domains))
-    (let ((d-name (concatenate 'string "D" mesh-name " " mesh-name)))
-      (if (gethash d-name (<cfx-domains>-domains cfx-domains))
+  (when (gethash mesh-name (<meshes>-domains cfx-domains))
+    (let ((d-name (mesh-name->domain-name mesh-name)))
+      (if (gethash d-name (<simulation>-domains cfx-domains))
           (loop :for i :from 2 
                 :do
                    (unless (gethash (format nil "~A ~D" d-name i)
-                                    (<cfx-domains>-domains cfx-domains))
+                                    (<simulation>-domains cfx-domains))
                      (return-from next-domain-name (format nil "~A ~D" d-name i))))
           d-name))))
 
@@ -91,54 +129,124 @@
   (ppcre:regex-replace-all "[/-]" name " "))
 
 
-(defmethod next-surface-name ((mesh-name string) (cfx-domains <cfx-domains>))
+(defmethod next-surface-name ((mesh-name string) (cfx-domains <simulation>))
   (let ((surface-name (name-icem->cfx mesh-name)))
-    (if (gethash surface-name (<cfx-domains>-surfaces cfx-domains))
+    (if (gethash surface-name (<simulation>-surfaces cfx-domains))
           (loop :for i :from 2 
                 :do
                    (unless (gethash (format nil "~A ~D" surface-name i)
-                                    (<cfx-domains>-surfaces cfx-domains))
+                                    (<simulation>-surfaces cfx-domains))
                      (return-from next-surface-name (format nil "~A ~D" surface-name i))))
           surface-name)))
 
-(defmethod insert ((mesh string) (cfx-domains <cfx-domains>))
-  (let ((d-name (next-domain-name mesh cfx-domains)))
+(defmethod simulation-doman-surfaces ((domain-name string) (simulation <simulation>))
+  "
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (simulation-doman-surfaces \"DG1 G1\" *simulation*)
+@end(code)
+"
+  ;; поверхности, которые входят в домен
+  (surfaces
+   (gethash domain-name
+            (<simulation>-domains simulation))))
+
+(defun check-equality (variable string)
+  (equalp 
+   (sort (ppcre:split "," variable) #'string<)
+   (sort
+    (alexandria:hash-table-keys
+     (<domain>-surfaсes
+      (gethash string
+               (<simulation>-domains *simulation*))))
+    #'string<)))
+
+(defmethod insert ((mesh string) (simulation <simulation>))
+  (let ((d-name (next-domain-name mesh simulation)))
     (when d-name
-      (let ((cfx-domain (make-instance '<cfx-domain> :name d-name)))
+      (let ((domain (make-instance '<domain> :name d-name)))
         (loop :for sur :in (alexandria:hash-table-keys
-                            (<icem-domain>-surfaces
+                            (<mesh>-surfaces
                              (gethash mesh
-                                      (<icem-domains>-domains cfx-domains))))
+                                      (<meshes>-domains simulation))))
               :do
-                 (let ((cfx-suf (next-surface-name sur cfx-domains)))
-                   (unless (gethash cfx-suf (<cfx-domains>-surfaces cfx-domains))
-                     (setf (gethash cfx-suf (<cfx-domain>-surfaсes cfx-domain)) ;; добавляем поверхность в домен
+                 (let ((cfx-suf (next-surface-name sur simulation)))
+                   (unless (gethash cfx-suf (<simulation>-surfaces simulation))
+                     (setf (gethash cfx-suf (<domain>-surfaсes domain)) ;; добавляем поверхность в домен
                            cfx-suf) 
-                     (setf (gethash cfx-suf (<cfx-domains>-surfaces cfx-domains)) ;; добавляем поверхность в перечень поверхностей
+                     (setf (gethash cfx-suf (<simulation>-surfaces simulation)) ;; добавляем поверхность в перечень поверхностей
                            cfx-suf)))) ;; loop
-
-        (setf (gethash (<cfx-domain>-name cfx-domain) ;; Добавляем домен в симуляцию
-                       (<cfx-domains>-domains cfx-domains))
-              cfx-domain)
-
-        cfx-domains ;; возвращаем симуляцию
+        (add domain simulation)
+        simulation ;; возвращаем симуляцию
         ))))
+
+(defmethod copy ((domain-name string) (simulation <simulation>))
+  (let ((d-name-next (next-domain-name
+                      (domain-name->mesh-name domain-name)
+                      simulation)))
+    (when d-name-next
+      (let ((domain (make-instance '<domain> :name d-name-next)))
+        (loop :for sur :in (simulation-doman-surfaces domain-name simulation)
+              :collect sur))
+
+      #+nil (progn
+              (add domain simulation) 
+              domain
+              d-name-next
+              ))))
+
+(defmethod copy ((domain-name string) (simulation <simulation>))
+  (let ((d-name-next (next-domain-name
+                      (domain-name->mesh-name domain-name)
+                      simulation)))
+    (when d-name-next
+      (let ((domain (make-instance '<domain> :name d-name-next)))
+        (loop :for sur :in (simulation-doman-surfaces domain-name simulation)
+              :do
+                 (let ((cfx-suf (next-surface-name sur simulation)))
+                   (unless (gethash cfx-suf (<simulation>-surfaces simulation))
+                     (setf (gethash cfx-suf (<domain>-surfaсes domain)) ;; добавляем поверхность в домен
+                           cfx-suf)
+                     (setf ;; добавляем поверхность в перечень поверхностей
+                      (gethash cfx-suf (<simulation>-surfaces simulation)) 
+                           cfx-suf))))
+        (add domain simulation)))
+    simulation))
+
+#+nil (progn domain d-name-next)
+(defun make-corelation (domain-name result simulation)
+  (let ((dom-result (ppcre:split "," result)))
+    (loop :for i :in (simulation-doman-surfaces domain-name simulation)
+          :collect
+          (list i
+                (extract-suffix i (first (filter-by-prefix i dom-result)))
+                (mapcar
+                 #'(lambda (el) (extract-suffix i el))
+                 (filter-by-prefix i (surfaces simulation)))))))
+
+(defun make-corelation-0 (domain-name result simulation)
+  (let ((dom-result (ppcre:split "," result)))
+    (loop :for i :in (simulation-doman-surfaces domain-name simulation)
+          :collect
+          (list i
+                (first (filter-by-prefix i dom-result))
+                (filter-by-prefix i (surfaces simulation))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod domains ((cfx-domains <cfx-domains>))
+(defmethod domains ((cfx-domains <simulation>))
   " @b(Пример использования:)
 @begin[lang=lisp](code)
  (all-domains *ds*)
 @end(code)"
-  (alexandria:hash-table-keys (<cfx-domains>-domains cfx-domains)))
+  (alexandria:hash-table-keys (<simulation>-domains cfx-domains)))
 
-(defmethod icem-fluid-domains ((cfx-domains <cfx-domains>))
+(defmethod icem-fluid-domains ((cfx-domains <simulation>))
   (let ((rez nil))
     (alexandria:maphash-keys
      #'(lambda (el)
          (push (first (ppcre:split "/" el)) rez))
-     (<cfx-domains>-icem-parts cfx-domains))
+     (<simulation>-icem-parts cfx-domains))
     (mapcar
      #'tail-of-string
      (sort
@@ -151,12 +259,12 @@
        :test #'equal)
       #'string<))))
 
-(defmethod icem-solid-domains ((cfx-domains <cfx-domains>))
+(defmethod icem-solid-domains ((cfx-domains <simulation>))
   (let ((rez nil))
     (alexandria:maphash-keys
      #'(lambda (el)
          (push (second (ppcre:split "/" el)) rez))
-     (<cfx-domains>-icem-parts cfx-domains))
+     (<simulation>-icem-parts cfx-domains))
     (sort 
      (remove-duplicates 
       (remove-if
@@ -169,18 +277,18 @@
       :test #'equal)
      #'string<)))
 
-(defmethod icem-domains ((cfx-domains <cfx-domains>))
+(defmethod icem-domains ((cfx-domains <simulation>))
   (append
    (icem-fluid-domains cfx-domains)
    (icem-solid-domains cfx-domains)))
 
-(defmethod icem-fluid-domain-p (domain-name (cfx-domains <cfx-domains>))
+(defmethod icem-fluid-domain-p (domain-name (cfx-domains <simulation>))
   (not (null (member domain-name (icem-fluid-domains cfx-domains) :test #'equal))))
 
-(defmethod icem-solid-domain-p (domain-name (cfx-domains <cfx-domains>))
+(defmethod icem-solid-domain-p (domain-name (cfx-domains <simulation>))
   (not (null (member domain-name (icem-solid-domains cfx-domains) :test #'equal))))
 
-(defmethod find-icem-surfaces (domain-name (cfx-domains <cfx-domains>))
+(defmethod find-icem-surfaces (domain-name (cfx-domains <simulation>))
   (let ((rez nil))
     (cond
       ((icem-fluid-domain-p domain-name cfx-domains)
@@ -189,13 +297,13 @@
             (when
                 (is-icem-fluid-surface key domain-name)
               (push key rez)))
-        (<cfx-domains>-icem-parts cfx-domains)))
+        (<simulation>-icem-parts cfx-domains)))
 
       ((icem-solid-domain-p domain-name cfx-domains)
        rez))
     rez))
 
-(defmethod fluid-domains ((cfx-domains <cfx-domains>))
+(defmethod fluid-domains ((cfx-domains <simulation>))
   " @b(Пример использования:)
 @begin[lang=lisp](code)
  (fluid-domains  *ds*)
@@ -205,7 +313,7 @@
                   (uiop:string-prefix-p "DG" el)))
              (all-domains cfx-domains)))
 
-(defmethod solid-domains ((cfx-domains <cfx-domains>))
+(defmethod solid-domains ((cfx-domains <simulation>))
   " @b(Пример использования:)
 @begin[lang=lisp](code)
  (solid-domains  *ds*)
@@ -215,10 +323,10 @@
                   (uiop:string-prefix-p "DM" el)))
              (all-domains cfx-domains)))
 
-(defmethod faces (dom (cfx-domains <cfx-domains>))
-  (second (assoc dom (<cfx-domains>-data cfx-domains) :test #'equal)))
+(defmethod faces (dom (cfx-domains <simulation>))
+  (second (assoc dom (<simulation>-data cfx-domains) :test #'equal)))
 
-(defmethod interfaces (dom (cfx-domains <cfx-domains>))
+(defmethod interfaces (dom (cfx-domains <simulation>))
   (sort 
    (remove-if #'(lambda (el)
                   (not
@@ -226,7 +334,7 @@
               (faces dom cfx-domains))
    #'string<))
 
-(defmethod find-body (body-name (cfx-domains <cfx-domains>))
+(defmethod find-body (body-name (cfx-domains <simulation>))
   "
  @b(Пример использования:)
 @begin[lang=lisp](code)
@@ -242,7 +350,7 @@
            (all-domains cfx-domains))
    #'string<))
 
-(defmethod interfaces-dom (dom di-1 di-2 (cfx-domains <cfx-domains>))
+(defmethod interfaces-dom (dom di-1 di-2 (cfx-domains <simulation>))
   "
  @b(Пример использования:)
 @begin[lang=lisp](code)
@@ -263,14 +371,14 @@
                 (interfaces dom cfx-domains))
      #'string<)))
 
-(defmethod mk-gen-interfaces-1-1 (dom-1 dom-2 di-1 di-2 (cfx-domains <cfx-domains>) &key (postfix ""))
+(defmethod mk-gen-interfaces-1-1 (dom-1 dom-2 di-1 di-2 (cfx-domains <simulation>) &key (postfix ""))
   (loop :for i1 :in (interfaces-dom  dom-1 di-1 di-2 cfx-domains)
         :for i2 :in (interfaces-dom dom-2 di-1 di-2 cfx-domains)
         :collect
         (make-domain-interface-general-connection
          (mnas-string:common-prefix (list i1 i2)) i1 i2 :postfix postfix)))
 
-(defmethod mk-gen-interfaces-n-m (g1 g2 (cfx-domains <cfx-domains>))
+(defmethod mk-gen-interfaces-n-m (g1 g2 (cfx-domains <simulation>))
   (let* ((d1 (domains g1 cfx-domains))
          (d2 (domains g2 cfx-domains))
          (il1 (apply #'append
@@ -288,15 +396,15 @@
 ;;;; Функции для создания вращательного интерфейса
 ;;;; Вращательная часть
 
-(defmethod domain-min (g1 (cfx-domains <cfx-domains>))
+(defmethod domain-min (g1 (cfx-domains <simulation>))
   (let ((doms (domains g1 cfx-domains)))
     (first (sort doms #'string<))))
 
-(defmethod domain-max (g1 (cfx-domains <cfx-domains>))
+(defmethod domain-max (g1 (cfx-domains <simulation>))
   (let ((doms (domains g1 cfx-domains)))
     (first (sort doms #'string>))))
 
-(defmethod int-rot-max (g1 (cfx-domains <cfx-domains>))
+(defmethod int-rot-max (g1 (cfx-domains <simulation>))
   (let ((d-max (domain-max g1 cfx-domains)))
     (sort 
      (loop :for i :in (interfaces-dom d-max g1 g1 cfx-domains)
@@ -306,7 +414,7 @@
      #'string<)))
 
 
-(defmethod int-rot-min (g1 (cfx-domains <cfx-domains>))
+(defmethod int-rot-min (g1 (cfx-domains <simulation>))
   (let ((d-max (domain-min g1 cfx-domains)))
     (sort 
      (loop :for i :in (interfaces-dom d-max g1 g1 cfx-domains)
@@ -315,7 +423,7 @@
              :collect i)
      #'string<)))
 
-(defmethod mk-rot-per-interfaces-n-m (g1 (cfx-domains <cfx-domains>) &key (postfix "ROT"))
+(defmethod mk-rot-per-interfaces-n-m (g1 (cfx-domains <simulation>) &key (postfix "ROT"))
   (let* ((i-min (int-rot-min g1 cfx-domains))
          (i-max (int-rot-max g1 cfx-domains)))
     (when (and i-min i-max)
@@ -327,15 +435,15 @@
 ;;;; Функции для создания вращательного интерфейса
 ;;;; Генеральная часть
 
-(defmethod domains-left (g1 (cfx-domains <cfx-domains>))
+(defmethod domains-left (g1 (cfx-domains <simulation>))
   (let ((doms (domains g1 cfx-domains)))
    (cdr (reverse doms))))
 
-(defmethod domains-right (g1 (cfx-domains <cfx-domains>))
+(defmethod domains-right (g1 (cfx-domains <simulation>))
   (let ((doms (domains g1 cfx-domains)))
     (cdr doms)))
 
-(defmethod int-rot-left (g1 (cfx-domains <cfx-domains>))
+(defmethod int-rot-left (g1 (cfx-domains <simulation>))
   (let ((d-left (domains-left g1 cfx-domains)))
     (sort
      (apply #'append 
@@ -347,7 +455,7 @@
                           :collect i)))
      #'string<)))
 
-(defmethod int-rot-right (g1 (cfx-domains <cfx-domains>))
+(defmethod int-rot-right (g1 (cfx-domains <simulation>))
   (let ((d-left (domains-right g1 cfx-domains)))
     (sort
      (apply #'append 
@@ -359,7 +467,7 @@
                           :collect i)))
      #'string<)))
     
-(defmethod mk-rot-gen-interfaces-n-m (g1 (cfx-domains <cfx-domains>) &key (postfix "ROT GEN"))
+(defmethod mk-rot-gen-interfaces-n-m (g1 (cfx-domains <simulation>) &key (postfix "ROT GEN"))
   (let* ((i-left  (int-rot-left g1 cfx-domains))
          (i-right (int-rot-right g1 cfx-domains)))
     (when (and i-left i-right)
@@ -369,14 +477,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod domains-surs (doms (cfx-domains <cfx-domains>))
+(defmethod domains-surs (doms (cfx-domains <simulation>))
   (apply #'append
          (mapcar
           #'(lambda (dom)
               (faces dom cfx-domains))
           doms)))
 
-(defmethod fluid-surs (s-body-name (cfx-domains <cfx-domains>))
+(defmethod fluid-surs (s-body-name (cfx-domains <simulation>))
   (let ((surs (domains-surs (fluid-domains cfx-domains) cfx-domains)))
     (sort 
     (remove-if
@@ -386,7 +494,7 @@
      surs)
     #'string<)))
 
-(defmethod solid-surs (s-body-name (cfx-domains <cfx-domains>))
+(defmethod solid-surs (s-body-name (cfx-domains <simulation>))
   (let ((surs (domains-surs (solid-domains cfx-domains) cfx-domains)))
     (sort 
      (remove-if
@@ -400,7 +508,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Создание интерфесов типа флюид-солид
 
-(defmethod mk-f-s-interface-n-m (fluid-dom solid-dom (cfx-domains <cfx-domains>))
+(defmethod mk-f-s-interface-n-m (fluid-dom solid-dom (cfx-domains <simulation>))
   "
  @b(Пример использования:)
 @begin[lang=lisp](code)
@@ -413,14 +521,14 @@
    (fluid-surs solid-dom cfx-domains)
    (solid-surs solid-dom cfx-domains)))
 
-(defmethod bodys ((cfx-domains <cfx-domains>))
+(defmethod bodys ((cfx-domains <simulation>))
   (remove-duplicates 
    (loop :for i :in (all-domains cfx-domains)
          :collect
          (second (ppcre:split " " i)))
    :test #'equal))
 
-(defmethod bodys-of-fluid ((cfx-domains <cfx-domains>))
+(defmethod bodys-of-fluid ((cfx-domains <simulation>))
     "
  @b(Пример использования:)
 @begin[lang=lisp](code)
@@ -431,7 +539,7 @@
         :when (uiop:string-prefix-p "G" i)
           :collect i))
 
-(defmethod bodys-of-solid ((cfx-domains <cfx-domains>))
+(defmethod bodys-of-solid ((cfx-domains <simulation>))
   "
  @b(Пример использования:)
 @begin[lang=lisp](code)

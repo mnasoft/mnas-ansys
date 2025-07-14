@@ -36,16 +36,17 @@
            icem-solid-domains)
   (:export icem-fluid-domain-p
            icem-solid-domain-p)
-  (:export <cfx-domains>
-           <cfx-domains>-domains
-           <cfx-domains>-surfaces
+  (:export <simulation>
+           <simulation>-domains
+           <simulation>-surfaces
            )
-  (:export <icem-domain>
-           <icem-domain>-name
-           <icem-domain>-surfaces
+  (:export <mesh>
+           <mesh>-name
+           <mesh>-surfaces
            )
   (:export surfaces)
-  )
+  (:export mesh-name->domain-name
+           domain-name->mesh-name))
  
 (in-package :mnas-ansys/cfx/pre)
 
