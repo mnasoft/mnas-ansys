@@ -14,14 +14,10 @@
 (map
  nil
  #'(lambda (el)
-     (uiop:copy-file el
- 
-  (foo (first (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
-      "/n000339/Users/namatv/pp"))
-     )
- )
+     (uiop:copy-file el (foo el "/n000339/Users/namatv/pp")))
+ (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
 
-(directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin")
+
 
 (uiop:copy-file
  (first (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
