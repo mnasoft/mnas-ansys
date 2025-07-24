@@ -15,6 +15,47 @@
   (:export mk-report
            mk-reports)
   (:export gt-metal-compare)
+  (:export <res-report>
+           <res>-res              ;; Объект с результатами расчета
+           <res-report>-boundares ;; Список мониторов по местам граничных условий
+           *boundares*            ;; Перечень граничных условий
+           reference-pressure     ;; Опорное давление
+           p-02
+           p-03
+           dp-ks
+           dpr-ks
+           t-02
+           t-03
+           dt-ks
+           )
+  (:export <result>
+           <result>-result
+           )
+  (:export <res-report>-boundares
+           <res-report>-mfr-flame-tubes
+           )
+  (:export <mfr-gt-tract>
+           <mfr-gt-tract>-designation
+           <mfr-gt-tract>-x
+           <mfr-gt-tract>-monitor
+           <mfr-gt-tract>-group
+           <mfr-gt-tract>-description
+           <mfr-gt-tract>-sign
+           )
+  (:export <mfr-gt>           
+           <mfr-gt>-name
+           <mfr-gt>-tracts
+           mfr-by-tract
+           mass-flow-rate
+           gropus
+           order-by-x
+           mfr-by-group
+           mfr-by-group-relative
+           mfr-by-tract-relative
+           mfr-table
+           table-header
+           mfr-table-group 
+           )
   (:documentation
    "Пакет @(mnas-ansys/cfx/post) определяет функции, позволяющие
   создавать сценарии для генерирования отчетов CFX-POST."))
@@ -233,3 +274,16 @@
                        mons)
                       rez))))
         (reverse rez))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod reference-pressure ((res mnas-ansys/cfx/file:<res>))
+  (mnas-dim-value:<vd>-val 
+   (multiple-value-bind (v dim)
+       (mnas-ansys/ccl:find-in-tree-in-deep 
+        '(("FLOW" "Flow Analysis 1")
+          ("DOMAIN" "D1")
+          ("DOMAIN MODELS" "")
+          "Reference Pressure")
+        (mnas-ansys/cfx/file:<res>-ccl res) t)
+     (mdv:vd~* v dim))))
