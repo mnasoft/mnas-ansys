@@ -5,28 +5,9 @@
 (defparameter *simulation*
   (make-cfx-domains "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
 
-(defun foo (pathname directory)
-  (namestring
-   (make-pathname :directory directory
-                  :name (pathname-name pathname)
-                  :type (pathname-type pathname))))
-
-(map
- nil
- #'(lambda (el)
-     (uiop:copy-file el (foo el "/n000339/Users/namatv/pp")))
- (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
-
-
-
-(uiop:copy-file
- (first (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
-  (foo (first (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
-      "/n000339/Users/namatv/pp"))
-
-
 (map nil #'(lambda (el) (insert el *simulation*))
      '("G1" "G10" "G2" "G31" "G32" "G33" "G34" "G41" "G42" "G5" "G6" "G7" "G8" "G9" "M1" "M2" "M3"))
+
 
 (progn ;; Возврат в исходное состояние
   (clrhash (<simulation>-domains  *simulation*))
@@ -54,10 +35,13 @@
  (check-equality *DM1-M1*   "DM1 M1")
  (check-equality *DM2-M2*   "DM2 M2")
  (check-equality *DM3-M3*   "DM3 M3")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (check-equality *DG1-G1-2*   "DG1 G1 2")
  (check-equality *DG2-G2-2*   "DG2 G2 2")
  )
+
+
+
 
 ;; <simulation>-icem-parts - исключить
 

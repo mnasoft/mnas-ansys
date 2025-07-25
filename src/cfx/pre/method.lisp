@@ -25,7 +25,7 @@
   (tail-of-string
    (underscore-name-by-pathname pathname)))
 
-(defun make-icem-domain (pathname)
+(defun make-mesh (pathname)
   (let* ((domain (make-instance '<mesh>))
         (tin (mnas-ansys/tin:open-tin-file pathname)))
     (setf (<mesh>-name domain)
@@ -74,21 +74,21 @@
         domain)
   simulation)
 
-(defmethod domains ((icem-domains <meshes>))
+(defmethod domains ((obj <meshes>))
   (sort 
-   (alexandria:hash-table-keys (<meshes>-domains icem-domains))
+   (alexandria:hash-table-keys (<meshes>-domains obj))
    #'string<))
 
-(defun make-icem-domains (directory-template)
+(defun make-meshes (directory-template)
   (let ((icem-domains (make-instance '<meshes>)))
     (loop :for d :in (directory directory-template)
-          :do (add (make-icem-domain d) icem-domains))
+          :do (add (make-mesh d) icem-domains))
     icem-domains))
 
 (defun make-cfx-domains (directory-template)
   (let ((cfx-domains (make-instance '<simulation>)))
     (loop :for d :in (directory directory-template)
-          :do (add (make-icem-domain d) cfx-domains))
+          :do (add (make-mesh d) cfx-domains))
     cfx-domains))
 
 (defun mesh-name->domain-name (mesh-name)
@@ -187,21 +187,6 @@
     (when d-name-next
       (let ((domain (make-instance '<domain> :name d-name-next)))
         (loop :for sur :in (simulation-doman-surfaces domain-name simulation)
-              :collect sur))
-
-      #+nil (progn
-              (add domain simulation) 
-              domain
-              d-name-next
-              ))))
-
-(defmethod copy ((domain-name string) (simulation <simulation>))
-  (let ((d-name-next (next-domain-name
-                      (domain-name->mesh-name domain-name)
-                      simulation)))
-    (when d-name-next
-      (let ((domain (make-instance '<domain> :name d-name-next)))
-        (loop :for sur :in (simulation-doman-surfaces domain-name simulation)
               :do
                  (let ((cfx-suf (next-surface-name sur simulation)))
                    (unless (gethash cfx-suf (<simulation>-surfaces simulation))
@@ -259,12 +244,12 @@
        :test #'equal)
       #'string<))))
 
-(defmethod icem-solid-domains ((cfx-domains <simulation>))
+(defmethod icem-solid-domains ((obj <simulation>))
   (let ((rez nil))
     (alexandria:maphash-keys
      #'(lambda (el)
          (push (second (ppcre:split "/" el)) rez))
-     (<simulation>-icem-parts cfx-domains))
+     (<simulation>-icem-parts obj))
     (sort 
      (remove-duplicates 
       (remove-if
@@ -277,10 +262,10 @@
       :test #'equal)
      #'string<)))
 
-(defmethod icem-domains ((cfx-domains <simulation>))
+(defmethod icem-domains ((obj <simulation>))
   (append
-   (icem-fluid-domains cfx-domains)
-   (icem-solid-domains cfx-domains)))
+   (icem-fluid-domains obj)
+   (icem-solid-domains obj)))
 
 (defmethod icem-fluid-domain-p (domain-name (cfx-domains <simulation>))
   (not (null (member domain-name (icem-fluid-domains cfx-domains) :test #'equal))))

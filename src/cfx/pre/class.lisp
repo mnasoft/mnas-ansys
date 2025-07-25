@@ -11,16 +11,17 @@
 ;; <icem-domain>  -> <mesh>
 
 (defclass <mesh> ()
-  ((icem-domain-name
+  ((name
     :accessor <mesh>-name
     :initarg  :name
     :initform nil
     :documentation "Именя домена, например: \"G1\".")
-   (icem-domain-surfases
+   (surfaces
     :accessor <mesh>-surfaces
     :initform (make-hash-table :test #'equal)
     :documentation "Хеш-таблица имен поверхностей, относящихся к домену по именному
-соглашению ICEM.")))
+соглашению ICEM."))
+  (:documentation "Класс @b(<mesh>) представляет 3d-сетку системы ICEM."))
 
 (defclass <meshes> ()
   ((icem-domains
