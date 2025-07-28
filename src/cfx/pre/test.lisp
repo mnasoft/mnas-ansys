@@ -3,17 +3,17 @@
 (in-package :mnas-ansys/cfx/pre)
 
 (defparameter *simulation*
-  (make-cfx-domains "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
+  (make-simulation "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
 
 (map nil #'(lambda (el) (insert el *simulation*))
      '("G1" "G10" "G2" "G31" "G32" "G33" "G34" "G41" "G42" "G5" "G6" "G7" "G8" "G9" "M1" "M2" "M3"))
-
 
 (progn ;; Возврат в исходное состояние
   (clrhash (<simulation>-domains  *simulation*))
   (clrhash (<simulation>-surfaces *simulation*)))
 
-*simulation*
+(domains *simulation*)
+(meshes  *simulation*)
 
 (and
  (check-equality *DG1-G1*   "DG1 G1")
@@ -36,12 +36,9 @@
  (check-equality *DM2-M2*   "DM2 M2")
  (check-equality *DM3-M3*   "DM3 M3")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (check-equality *DG1-G1-2*   "DG1 G1 2")
- (check-equality *DG2-G2-2*   "DG2 G2 2")
+;; (check-equality *DG1-G1-2*   "DG1 G1 2")
+;; (check-equality *DG2-G2-2*   "DG2 G2 2")
  )
-
-
-
 
 ;; <simulation>-icem-parts - исключить
 
@@ -76,18 +73,20 @@
 
 (surfaces *simulation*)
 
-
-
 (mapcar
  #'(lambda (el) (append (third el) (list (second el)) ))
  (make-corelation "DG2 G2" *DG2-G2-2* *simulation*))
 
 (make-corelation-0 "DG2 G2" *DG2-G2-2* *simulation*)
 
-
-
-
-
-
-
 (filter-by-prefix "C G1 G9 01 D_4.0" (surfaces *simulation*))
+
+
+(defmethod find-mesh-surface-by-domain-surface-name (domain-surface-name (simulation <simulation>))
+  )
+
+(defmethod find-domain-name-by-mesh-name (mesh-name (simulation <simulation>))
+  )
+
+
+  

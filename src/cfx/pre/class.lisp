@@ -9,9 +9,10 @@
 ;; <cfx-domain>   -> <domain>
 ;; <icem-domains> -> <meshes>
 ;; <icem-domain>  -> <mesh>
+;; <meshes>-domains -> ht
 
 (defclass <mesh> ()
-  ((name
+  ((mesh-name
     :accessor <mesh>-name
     :initarg  :name
     :initform nil
@@ -24,15 +25,15 @@
   (:documentation "Класс @b(<mesh>) представляет 3d-сетку системы ICEM."))
 
 (defclass <meshes> ()
-  ((icem-domains
-    :accessor <meshes>-domains
+  ((meshes
+    :accessor <meshes>-meshes
     :initform (make-hash-table :test #'equal)
     :documentation
     "Хеш-таблица частей, в которых присутствуют поверхности, для каждого
 сеточного домена ICEM CFD.")))
 
 (defclass <domain> ()
-  ((cfx-domain-name
+  ((domain-name
     :accessor <domain>-name
     :initarg  :name
     :initform nil
@@ -45,13 +46,13 @@
 соглашению CFX.")))
 
 (defclass <simulation> (<meshes>)
-  ((cfx-domains
+  ((simulation-domains
     :accessor <simulation>-domains
     :initform (make-hash-table :test #'equal)
     :documentation
     "Список частей, в которых присутствуют поверхности импортируется из
 ICEM CFD.")
-   (cfx-domainssurfaces
+   (simulation-surfaces
     :accessor <simulation>-surfaces
     :initform (make-hash-table :test #'equal)
     :documentation "Хеш-таблица имен поверхностей, относящихся ко всей симуляции по
@@ -59,37 +60,7 @@ ICEM CFD.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod print-object ((domain <mesh>) s)
-  (print-unreadable-object (domain s :type t)
-    (format s "~S ~S"
-            (<mesh>-name domain)
-            (<mesh>-surfaces domain))))
 
-(defmethod print-object ((domains <meshes>) s)
-  (print-unreadable-object (domains s :type t)
-    (format s "~S" (domains domains))))
-
-(defmethod print-object ((domain <domain>) s)
-  (print-unreadable-object (domain s :type t)
-    (format s "~%~S~%~S"
-            (<domain>-name domain)
-            (sort (alexandria:hash-table-keys
-                   (<domain>-surfaсes domain))
-                  #'string<))))
-
-(defmethod print-object ((simulation <simulation>) s)
-  (print-unreadable-object (simulation s :type t)
-    (format s "~%Meshes  : ~S"
-            (sort
-             (alexandria:hash-table-keys
-              (<meshes>-domains simulation))
-             #'string<))
-    (format s "~%~S~%Surfaces: ~S"
-            (sort 
-             (alexandria:hash-table-values
-              (<simulation>-domains simulation))
-             #'string< :key #'<domain>-name)
-            (<simulation>-surfaces simulation))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

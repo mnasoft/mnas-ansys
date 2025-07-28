@@ -36,14 +36,17 @@
            icem-solid-domains)
   (:export icem-fluid-domain-p
            icem-solid-domain-p)
-  (:export <simulation>
-           <simulation>-domains
-           <simulation>-surfaces
-           )
   (:export <mesh>
            <mesh>-name
            <mesh>-surfaces
+           make-meshes
            )
+  (:export <simulation>
+           <simulation>-domains
+           <simulation>-surfaces
+           make-simulation
+           )
+
   (:export surfaces)
   (:export mesh-name->domain-name
            domain-name->mesh-name))

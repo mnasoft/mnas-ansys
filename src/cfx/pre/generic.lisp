@@ -22,22 +22,22 @@
    "Возвращает список солтдовых доменов на основании списка поверхностей
 ICEM."))
 
-(defgeneric icem-fluid-domains (domains)
+(defgeneric fluid-meshes (obj)
   (:documentation
    "Возвращает список флюидовых доменов на основании списка поверхностей
 ICEM."))
 
-(defgeneric icem-solid-domains (domains)
+(defgeneric solid-meshes (obj)
   (:documentation
    "Возвращает список солтдовых доменов на основании списка поверхностей
 ICEM."))
 
-(defgeneric icem-fluid-domain-p (name domains)
+(defgeneric fluid-mesh-p (name obj)
   (:documentation
    "Возвращает T, если имя представляет флюидовый домен на основании
 списка поверхностей ICEM, иначе - NIL."))
 
-(defgeneric icem-solid-domain-p (name domains)
+(defgeneric solid-mesh-p (name obj)
   (:documentation
    "Возвращает T, если имя представляет солидовый домен на основании
 списка поверхностей ICEM, иначе - NIL."))

@@ -397,7 +397,15 @@ CFX-PRE.
                              (:file "predicat")                             
                              (:file "method")
                              (:file "test-data")
-                             ))))
+                             (:module "./method"
+                              :serial t
+                              :components ((:file "print-object")
+                                           (:file "domains")
+                                           (:file "meshes")
+                                           (:file "make")
+                                           (:file "surfaces")
+                                           (:file "add")
+                                           ))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
