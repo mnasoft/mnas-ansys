@@ -73,53 +73,39 @@
                      (return-from next-surface-name (format nil "~A ~D" surface-name i))))
           surface-name)))
 
-(defmethod simulation-doman-surfaces ((domain-name string) (simulation <simulation>))
-  "
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (simulation-doman-surfaces \"DG1 G1\" *simulation*)
-@end(code)
-"
-  ;; поверхности, которые входят в домен
-  (surfaces
-   (gethash domain-name
-            (<simulation>-domains simulation))))
-
 (defun check-equality (variable string)
   (equalp 
    (sort (ppcre:split "," variable) #'string<)
    (sort
-    (alexandria:hash-table-keys
+    (alexandria:hash-table-values
      (<domain>-surfaсes
       (gethash string
                (<simulation>-domains *simulation*))))
     #'string<)))
 
-
-
-
-
-#+nil (progn domain d-name-next)
-(defun make-corelation (domain-name result simulation)
-  (let ((dom-result (ppcre:split "," result)))
-    (loop :for i :in (simulation-doman-surfaces domain-name simulation)
-          :collect
-          (list i
-                (extract-suffix i (first (filter-by-prefix i dom-result)))
-                (mapcar
-                 #'(lambda (el) (extract-suffix i el))
-                 (filter-by-prefix i (surfaces simulation)))))))
-
-(defun make-corelation-0 (domain-name result simulation)
-  (let ((dom-result (ppcre:split "," result)))
-    (loop :for i :in (simulation-doman-surfaces domain-name simulation)
-          :collect
-          (list i
-                (first (filter-by-prefix i dom-result))
-                (filter-by-prefix i (surfaces simulation))))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defmethod suffix (mesh-surface-name (domain <domain>))
+  "Возвращает строку, которая представляет суффикс. Он добавляется к
+имени преобразованному из именного соглашения ICEM в именное
+соглашение CFX.
 
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (suffix \"C/G1-G2/X_049.5/D_1.0\" (domain \"DG2 G2\" *simulation*))
+@end(code)"
+  (extract-suffix (name-icem->cfx  mesh-surface-name)
+                  (gethash mesh-surface-name (<domain>-surfaсes domain))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmethod suffix (mesh-surface-name (simulation <simulation>))
+  "Возвращает список суффиксов для поверхности и с менем @b(mesh-surface-name),
+представленном в именном соглашении ICEM, для симуляции @b(simulation).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (suffix \"C/G1-G2/X_075.0/PPR_D_0.0\" *simulation*)
+@end(code)
+"
+  (loop :for d :in (domains simulation)
+        :when (suffix mesh-surface-name (domain d simulation)) 
+          :collect :it))

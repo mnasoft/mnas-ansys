@@ -11,6 +11,9 @@
 (defmethod surfaces ((domain <domain>))
   (ht-values-sort (<domain>-surfaсes domain)))
 
+(defmethod surface-keys ((domain <domain>))
+  (ht-keys-sort (<domain>-surfaсes domain)))
+
 (defmethod surfaces ((simulation <simulation>))
   (ht-values-sort (<simulation>-surfaces simulation)))
 

@@ -12,7 +12,7 @@
   (clrhash (<simulation>-domains  *simulation*))
   (clrhash (<simulation>-surfaces *simulation*)))
 
-(domains *simulation*)
+(<domain>-parent (domain "DG1 G1" *simulation*))
 (meshes  *simulation*)
 
 (and
@@ -61,32 +61,43 @@
 
 *simulation*
 
-(format t "~{~S~%~}"
-        (let ((simulation *simulation*)
-              (domain-name "DG1 G1")
-              (dom-result (ppcre:split "," *DG1-G1-2*)))
-          (loop :for i :in (simulation-doman-surfaces domain-name *simulation*)
-                :collect
-                (list i
-                      (first (filter-by-prefix i dom-result))
-                      (filter-by-prefix i (surfaces *simulation*))))))
-
-(surfaces *simulation*)
-
-(mapcar
- #'(lambda (el) (append (third el) (list (second el)) ))
- (make-corelation "DG2 G2" *DG2-G2-2* *simulation*))
-
-(make-corelation-0 "DG2 G2" *DG2-G2-2* *simulation*)
-
-(filter-by-prefix "C G1 G9 01 D_4.0" (surfaces *simulation*))
 
 
-(defmethod find-mesh-surface-by-domain-surface-name (domain-surface-name (simulation <simulation>))
-  )
-
-(defmethod find-domain-name-by-mesh-name (mesh-name (simulation <simulation>))
-  )
+(find-mesh-surface-by-domain-surface-name
+ "DG1 M0 A_G1 SA 01 D_16.0"
+ (domain "DG1 G1" *simulation*))
 
 
+
+(let* ((ht (<domain>-surfaсes (domain "DG1 G1" *simulation*))))
+  (loop :for i :in (alexandria:hash-table-keys ht)
+        :collect
+        (gethash i ht)
+        ))
+
+
+
+
+
+(surface-keys (domain "DG2 G2" *simulation*))
+
+(mesh-name->domain-name "DG1/M0/KL/ST/OUT/01/D_1.0")
+
+
+(alexandria:hash-table-keys  
+ (<domain>-surfaсes (domain "DG1 G1" *simulation*)))
+
+
+
+
+(meshes   (domain "DG1 G1" *simulation*))
+"C/G1-G2/X_075.0/PPR_D_0.0"
   
+
+
+(defmethod suffix (mesh-surface-name (simulation <simulation>))
+  (loop :for d :in (domains simulation)
+        :when (suffix mesh-surface-name (domain d simulation)) 
+          :collect :it))
+
+(suffix "C/G1-G2/X_075.0/PPR_D_0.0" *simulation*)

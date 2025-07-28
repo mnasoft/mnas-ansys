@@ -32,3 +32,35 @@
     (loop :for d :in (directory directory-template)
           :do (add (make-mesh d) simulation))
     simulation))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun make-corelation (domain-name result simulation)
+  "
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-corelation \"DG2 G2\" *DG2-G2* *simulation*)
+@end(code)
+"
+  (let ((dom-result (ppcre:split "," result)))
+    (loop :for i :in (simulation-doman-surfaces domain-name simulation)
+          :collect
+          (list i
+                (extract-suffix i (first (filter-by-prefix i dom-result)))
+                (mapcar
+                 #'(lambda (el) (extract-suffix i el))
+                 (filter-by-prefix i (surfaces simulation)))))))
+
+(defun make-corelation-0 (domain-name result simulation)
+  "
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-corelation-0 \"DG2 G2\" *DG2-G2* *simulation*)
+@end(code)
+"
+  (let ((dom-result (ppcre:split "," result)))
+    (loop :for i :in (simulation-doman-surfaces domain-name simulation)
+          :collect
+          (list i
+                (first (filter-by-prefix i dom-result))
+                (filter-by-prefix i (surfaces simulation))))))

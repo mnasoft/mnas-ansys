@@ -22,21 +22,21 @@
 
 (defmethod insert ((mesh-name string) (simulation <simulation>))
   "@b(Описание:) метод @b(insert) добавляет в симуляцию @(simulation)
-домен на имени 3d-сетки ICEM."
+домен по имени 3d-сетки ICEM."
   (let ((d-name (next-domain-name mesh-name simulation)))
     (when d-name
-      (let ((domain (make-instance '<domain> :name d-name)))
+      (let ((domain (make-instance '<domain> :name d-name :parent simulation)))
         (loop :for sur :in (alexandria:hash-table-keys
                             (<mesh>-surfaces
                              (gethash mesh-name
                                       (<meshes>-meshes simulation))))
               :do
-                 (let ((cfx-suf (next-surface-name sur simulation)))
-                   (unless (gethash cfx-suf (<simulation>-surfaces simulation))
-                     (setf (gethash cfx-suf (<domain>-surfaсes domain)) ;; добавляем поверхность в домен
-                           cfx-suf) 
-                     (setf (gethash cfx-suf (<simulation>-surfaces simulation)) ;; добавляем поверхность в перечень поверхностей
-                           cfx-suf)))) ;; loop
+                 (let ((cfx-sur (next-surface-name sur simulation)))
+                   (unless (gethash cfx-sur (<simulation>-surfaces simulation))
+                     (setf (gethash sur (<domain>-surfaсes domain)) ;; добавляем поверхность в домен
+                           cfx-sur) 
+                     (setf (gethash cfx-sur (<simulation>-surfaces simulation)) ;; добавляем поверхность в перечень поверхностей
+                           cfx-sur)))) ;; loop
         (add domain simulation)
         simulation ;; возвращаем симуляцию
         ))))
@@ -49,12 +49,12 @@
       (let ((domain (make-instance '<domain> :name d-name-next)))
         (loop :for sur :in (simulation-doman-surfaces domain-name simulation)
               :do
-                 (let ((cfx-suf (next-surface-name sur simulation)))
-                   (unless (gethash cfx-suf (<simulation>-surfaces simulation))
-                     (setf (gethash cfx-suf (<domain>-surfaсes domain)) ;; добавляем поверхность в домен
-                           cfx-suf)
+                 (let ((cfx-sur (next-surface-name sur simulation)))
+                   (unless (gethash cfx-sur (<simulation>-surfaces simulation))
+                     (setf (gethash sur (<domain>-surfaсes domain)) ;; добавляем поверхность в домен
+                           cfx-sur)
                      (setf ;; добавляем поверхность в перечень поверхностей
-                      (gethash cfx-suf (<simulation>-surfaces simulation)) 
-                           cfx-suf))))
+                      (gethash cfx-sur (<simulation>-surfaces simulation)) 
+                           cfx-sur))))
         (add domain simulation)))
     simulation))

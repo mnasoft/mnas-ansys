@@ -16,7 +16,7 @@
   (print-unreadable-object (domain s :type t)
     (format s "~%~S~%~S"
             (<domain>-name domain)
-            (ht-keys-sort (<domain>-surfaсes domain)))))
+            (ht-values-sort (<domain>-surfaсes domain)))))
 
 (defmethod print-object ((simulation <simulation>) s)
   (print-unreadable-object (simulation s :type t)

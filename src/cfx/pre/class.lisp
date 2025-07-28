@@ -33,17 +33,23 @@
 сеточного домена ICEM CFD.")))
 
 (defclass <domain> ()
-  ((domain-name
+  ((domain-parent
+    :accessor <domain>-parent
+    :initarg  :parent
+    :initform nil
+    :documentation "Ссылка на объект типа <simulation>.")
+   (domain-name
     :accessor <domain>-name
     :initarg  :name
     :initform nil
-    :documentation "Именя домена, например: \"DG1 G1\".")
-   (cfx-domain-surfaces
+    :documentation "Имя домена, например: \"DG1 G1\".")
+   (domain-surfaces
     :accessor <domain>-surfaсes
     ;; :initarg  :surfases
     :initform (make-hash-table :test #'equal)
-    :documentation "Хеш-таблица имен поверхностей, относящихся к домену по именному
-соглашению CFX.")))
+    :documentation "Хеш-таблица имен поверхностей, относящихся к домену.
+У которой ключ - строка в именном соглашении ICEM, а значение - строка
+в именном соглашении CFX.")))
 
 (defclass <simulation> (<meshes>)
   ((simulation-domains
@@ -61,17 +67,3 @@ ICEM CFD.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#+nil
-(defmethod initialize-instance :after ((cfx-domains <simulation>)
-                                       &key icem-parts)
-  (mapcar
-   #'(lambda (el)
-       (setf
-        (gethash el
-                 (<simulation>-icem-parts cfx-domains))
-        el))
-   icem-parts)
-  cfx-domains)

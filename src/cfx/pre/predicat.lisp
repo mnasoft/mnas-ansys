@@ -51,6 +51,8 @@
   (when (uiop:string-prefix-p prefix string)
     (string-trim " " (subseq string (length prefix)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun ht-values-sort (ht &optional (func #'string<))
   (sort (alexandria:hash-table-values ht) func))
 
