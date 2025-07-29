@@ -9,4 +9,3 @@
         :key #'(lambda (el)
                  (gethash el (<domain>-surfaсes domain)))))
 
-(defmethod suffix (domain-surface-name (domain <domain>))

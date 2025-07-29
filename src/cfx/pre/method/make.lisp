@@ -3,6 +3,18 @@
 (in-package :mnas-ansys/cfx/pre)
 
 (defun make-mesh (pathname)
+      "@b(Описание:) функция @b(make-mesh) возвращает объект класса
+@b(<mesh>).
+
+ @b(Переменые:)
+@begin(list)
+@item(pathname - задает путь к файлу геометрии ICEM (tin-файл).)
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-mesh \"z:/ANSYS/CFX/a32/tin/DOM/G1/A32_prj_06_DG1.tin\")
+@end(code)"
   (let* ((domain (make-instance '<mesh>))
         (tin (mnas-ansys/tin:open-tin-file pathname)))
     (setf (<mesh>-name domain)
@@ -22,12 +34,41 @@
     domain))
 
 (defun make-meshes (directory-template)
+    "@b(Описание:) функция @b(make-meshes) возвращает объект класса
+@b(<meshes>). Объект наполняется 3d-сетками ICEM.
+ 
+ @b(Переменые:)
+@begin(list)
+@item(directory-template - задает шаблон для поиска файлов геометрии
+     ICEM (tin-файлов).)
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-meshes \"z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin\")
+@end(code)
+"
+
   (let ((meshes (make-instance '<meshes>)))
     (loop :for d :in (directory directory-template)
           :do (add (make-mesh d) meshes))
     meshes))
 
 (defun make-simulation (directory-template)
+  "@b(Описание:) функция @b(make-simulation) возвращает объект класса
+@b(<simulation>). Объект наполняется 3d-сетками ICEM.
+ 
+ @b(Переменые:)
+@begin(list)
+@item(directory-template - задает шаблон для поиска файлов геометрии
+     ICEM (tin-файлов).)
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (make-simulation \"z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin\")
+@end(code)
+"
   (let ((simulation (make-instance '<simulation>)))
     (loop :for d :in (directory directory-template)
           :do (add (make-mesh d) simulation))

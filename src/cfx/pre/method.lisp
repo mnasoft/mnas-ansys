@@ -73,6 +73,7 @@
                      (return-from next-surface-name (format nil "~A ~D" surface-name i))))
           surface-name)))
 
+#+nil
 (defun check-equality (variable string)
   (equalp 
    (sort (ppcre:split "," variable) #'string<)
@@ -82,6 +83,21 @@
       (gethash string
                (<simulation>-domains *simulation*))))
     #'string<)))
+
+(defun check-equality (variable string)
+  (let ((control (sort (ppcre:split "," variable) #'string<))
+        (test (sort
+               (alexandria:hash-table-values
+                (<domain>-surfaсes
+                 (gethash string
+                          (<simulation>-domains *simulation*))))
+               #'string<)))
+    
+    (if  (equalp control test) t
+         (let ((u (union control test :test #'equal)))
+           (list string
+           (set-difference u test     :test #'equal)
+           (set-difference u control  :test #'equal))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -104,8 +120,13 @@
  @b(Пример использования:)
 @begin[lang=lisp](code)
  (suffix \"C/G1-G2/X_075.0/PPR_D_0.0\" *simulation*)
-@end(code)
-"
+@end(code)"
+  #+nil
+  (sort 
+   (loop :for d :in (domains simulation)
+         :when (suffix mesh-surface-name (domain d simulation)) 
+           :collect :it)
+   #'string<)
   (loop :for d :in (domains simulation)
-        :when (suffix mesh-surface-name (domain d simulation)) 
-          :collect :it))
+         :when (suffix mesh-surface-name (domain d simulation)) 
+           :collect :it))

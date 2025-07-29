@@ -14,6 +14,12 @@
 (defmethod surface-keys ((domain <domain>))
   (ht-keys-sort (<domain>-surfaсes domain)))
 
+(defmethod surface-value (key (domain <domain>))
+  (gethash key (<domain>-surfaсes domain)))
+
+(defmethod surface-keys ((mesh <mesh>))
+  (ht-keys-sort (<mesh>-surfaces mesh)))
+
 (defmethod surfaces ((simulation <simulation>))
   (ht-values-sort (<simulation>-surfaces simulation)))
 
