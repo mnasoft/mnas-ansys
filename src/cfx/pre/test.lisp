@@ -2,119 +2,82 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
-(progn
-  (defparameter *G31-mesh*
-    (make-instance '<mesh> 
-                   :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G31/A32_prj_07_DG31.tin"
-                   :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG31.msh"))
-  
-  (defparameter *G9-mesh*
-    (make-instance '<mesh> 
-                   :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G9/A32_prj_07_DG9.tin"
-                   :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG9.msh"))
-
-  (defparameter *G10-mesh*
-    (make-instance '<mesh> 
-                   :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G10/A32_prj_07_DG10.tin"
-                   :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG10.msh"))
-
+(progn 
   (defparameter *simulation*
     (make-instance '<simulation>))
 
-  (add *G31-mesh* *simulation*)
-  (add *G9-mesh* *simulation*)
-  (add *G10-mesh* *simulation*))
+  (defparameter *msh-num*
+    '(("G1"  2)
+      ("G10" 1)
+      ("G2"  2)
+      ("G31" 2)
+      ("G32" 2)
+      ("G33" 2)
+      ("G34" 2)
+      ("G41" 2)
+      ("G42" 2)
+      ("G5"  2)
+      ("G6"  1)
+      ("G7"  1)
+      ("G8"  1)
+      ("G9"  2)
+      ("M1"  2)
+      ("M2"  2)
+      ("M3"  2)))
 
-(add (make-instance '<3d-region>
-                    :mesh (mesh "G9" *simulation*))
-     *simulation*)
+  (map nil
+     #'(lambda (tin msh)
+         (add (make-instance '<mesh>
+                             :tin-pathname tin 
+                             :msh-pathname msh)
+              *simulation*))
+     (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_D*.tin")
+     (directory "z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_D*.msh")))
 
-(3d-region "DG9 G9 2" *simulation*)
+(map nil
+     #'(lambda (msh-num)
+         (loop :for i :from 0 :below (second msh-num)
+               :do
+                  (add
+                   (make-instance '<3d-region>
+                                  :mesh (mesh (first msh-num) *simulation*))
+                   *simulation*)))
+     *msh-num*)
 
+(map nil
+     #'(lambda (msh-num)
+         (mk-mesh-rotation "DG31 G31 2" "-22.5 [degree]" *simulation*))
+     *msh-num*)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defparameter *simulation*
-  (make-simulation "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_*.tin"))
+(format nil "~A" msh)
 
-(map nil #'(lambda (el) (insert el *simulation*))
-     '("G1" "G10" "G2" "G31" "G32" "G33" "G34" "G41" "G42" "G5" "G6" "G7" "G8" "G9" "M1" "M2" "M3"))
+  (mk-mesh-rotation "DG31 G31 2" "-22.5 [degree]" *simulation*)
+  (mk-mesh-rotation "DG32 G32 2" "-22.5 [degree]" *simulation*)
+  (mk-mesh-rotation "DG33 G33 2" "-22.5 [degree]" *simulation*)
+  (mk-mesh-rotation "DG32 G34 2" "-22.5 [degree]" *simulation*)
 
-(gtmAction-rename-Region "C G1 G9 XP_261.5 D_0.0" "C G1 G9 XP_261.5 D_0.0 0000001")
-(gtmAction-rename-Region "DG9 G9" "DG9 G9 1")
-
-(map nil #'(lambda (el) (copy el *simulation*))
-     '("DG1 G1" "DG2 G2" "DG31 G31" "DG32 G32" "DG33 G33" "DG34 G34" "DG41 G41" "DG42 G42" "DG5 G5" "DG9 G9" "DM1 M1" "DM2 M2" "DM3 M3"))
-
-(progn ;; Возврат в исходное состояние
-  (clrhash (<simulation>-domains  *simulation*))
-  (clrhash (<simulation>-surfaces *simulation*)))
-
-(<domain>-parent (domain "DG1 G1" *simulation*))
-(meshes  *simulation*)
-
-(insert "G9" *simulation*)
-
-
-(and
- (check-equality *DG1-G1*   "DG1 G1")
- (check-equality *DG10-G10* "DG10 G10")
- (check-equality *DG2-G2*   "DG2 G2")
- (check-equality *DG31-G31* "DG31 G31")
- (check-equality *DG32-G32* "DG32 G32")
- (check-equality *DG33-G33* "DG33 G33")
- (check-equality *DG34-G34* "DG34 G34")
- (check-equality *DG41-G41* "DG41 G41")
- (check-equality *DG42-G42* "DG42 G42")
- (check-equality *DG5-G5*   "DG5 G5")
- (check-equality *DG6-G6*   "DG6 G6")
- (check-equality *DG7-G7*   "DG7 G7")
-
- (check-equality *DG8-G8*   "DG8 G8")
- (check-equality *DG9-G9*   "DG9 G9")
-
- (check-equality *DM1-M1*   "DM1 M1")
- (check-equality *DM2-M2*   "DM2 M2")
- (check-equality *DM3-M3*   "DM3 M3")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (check-equality *DG1-G1-2*     "DG1 G1 2")
- (check-equality *DG2-G2-2*     "DG2 G2 2")
- (check-equality *DG31-G31-2*   "DG31 G31 2")
- (check-equality *DG32-G32-2*   "DG32 G32 2")
- (check-equality *DG33-G33-2*   "DG33 G33 2")
- (check-equality *DG34-G34-2*   "DG34 G34 2")
- (check-equality *DG41-G41-2*   "DG41 G41 2")
- (check-equality *DG42-G42-2*   "DG42 G42 2")
- (check-equality *DG5-G5-2*     "DG5 G5 2")
- (check-equality *DG9-G9-2*     "DG9 G9 2")
- (check-equality *DM1-M1-2*     "DM1 M1 2")
- (check-equality *DM2-M2-2*     "DM2 M2 2")
- (check-equality *DM3-M3-2*     "DM3 M3 2")
-
- )
-
-;; <simulation>-icem-parts - исключить
-
-(copy "DG1 G1" *simulation*)
-(copy "DG2 G2" *simulation*)
-(copy "DG32 G32" *simulation*)
-(copy "DG33 G33" *simulation*)
-(copy "DG34 G34" *simulation*)
-
-(format t "~S" (ppcre:split "," *DG2-G2-2*))
-
-#+nil
-(let* ((domain      (domain "DG1 G1"   *simulation*))
-       (domain-copy (domain "DG1 G1 2" *simulation*)))
-  (loop :for surface-key :in (surface-keys domain)
-        :collect 
-        (insert-to-domain-copy surface-key domain domain-copy)))
-
-(progn 
-  (defparameter *control* (ppcre:split "," *DG32-G32-2*))
-  (defparameter *test* (surfaces (domain "DG32 G32 2" *simulation*)))
-  (defparameter *u* (union *control* *test* :test #'equal)))
+  (mk-mesh-rotation "DG41 G41 2" "-22.5 [degree]" *simulation*)
+  (mk-mesh-rotation "DG42 G42 2" "-22.5 [degree]" *simulation*)  
+  
+  (mk-mesh-rotation "DG9 G9 2" "-22.5 [degree]" *simulation*)
+  
+;;;;
+  (create-script *simulation* t))
 
 
-(set-difference *u* *test* :test #'equal)  ; => ("C G2 G32 01 D_16.0 4" "C G1 G32 XM_40.2 D_16.0 4")
-(set-difference *u* *control* :test #'equal) ; => ("C G2 G32 01 D_16.0 2 2" "C G1 G32 XM_40.2 D_16.0 2 2")
+
+
+(defmacro mk-mesh-rotation (Target-Location Rotation-Angle simulation)
+  `(add (make-instance '<simulation-mesh-transformation>
+                      :mesh-transformation (make-instance 'mnas-ansys/ccl/core:<mesh-transformation>
+                                                          :Target-Location ,Target-Location
+                                                          :Use-Multiple-Copy "Off"
+                                                          :Delete-Original nil
+                                                          :Glue-Copied "On"
+                                                          :Glue-Reflected "On"
+                                                          :Number-of-Copies nil
+                                                          :Rotation-Angle ,Rotation-Angle))
+        ,simulation))
+
+
 

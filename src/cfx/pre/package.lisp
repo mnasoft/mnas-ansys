@@ -3,7 +3,9 @@
 (defpackage :mnas-ansys/cfx/pre
   (:use #:cl )
   (:export gtmImport
-           gtmAction-rename-Region)
+           gtmAction-rename-Region
+           gtmTransform
+           )
   (:export preambule
            cmd-invoke
            update
@@ -233,6 +235,9 @@ ICEM в файл CFX.
           old-name
           new-name))
 
+(defun gtmTransform (3d-region)
+  (format t "~A ~A~%" "> gtmTransform" 3d-region))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun outlet-mfr-boundary (domain boundary location mfr

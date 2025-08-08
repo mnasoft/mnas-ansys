@@ -133,3 +133,38 @@
 
 (defmethod 2d-region (key (mesh <mesh>))
   (gethash key (<mesh>-2d-regions mesh)))
+
+(defmethod do-add ((3d-region string) (simulation <simulation>))
+  (gtmImport (namestring (<mesh>-msh-pathname
+                          (<3d-region>-mesh
+                           (3d-region 3d-region simulation))))
+             :genopt "-n")
+  (gtmAction-rename-Region 
+   (name-old (3d-region 3d-region simulation))
+   (name (3d-region 3d-region simulation)))
+  (loop :for key :in (ht-keys-sort
+                      (<mesh>-2d-regions
+                       (<3d-region>-mesh
+                        (3d-region 3d-region simulation))))
+        :do (let ((val (gethash key (<mesh>-2d-regions
+                                     (<3d-region>-mesh
+                                      (3d-region 3d-region simulation))))))
+              (gtmAction-rename-Region
+               val
+               (format nil "~A ~A" val
+                       (<3d-region>-2d-suffix (3d-region 3d-region simulation)))))))
+
+(defmethod create-script ((simulation <simulation>) stream)
+  (loop :for 3d-region :in (3d-regions simulation)
+        :do (do-add 3d-region simulation))
+  (loop :for cmd :in (reverse (<simulation>-commands simulation))
+        :do (create-script cmd stream)))
+
+(defmethod create-script ((obj <simulation-mesh-transformation>) stream)
+  (format t "~A" (<simulation>-mesh-transformation obj))
+  (gtmtransform
+   (mnas-ansys/ccl/core:<mesh-transform>-Target-Location
+                 (<simulation>-mesh-transformation obj))))
+
+
+

@@ -69,10 +69,25 @@
     :initform (make-hash-table :test #'equal)
     :documentation
     "Хеш-таблица; ключ - объект типа <domain>; значение - объект типа
-<domain>"))
-  (:documentation "")
+<domain>")
+   (simulation-commands
+    :accessor <simulation>-commands
+    :initform '()
+    :documentation
+    "Список команд-объектов"))
+  (:documentation "Симуляция CFX-Pre")
   )
 
+(defclass <simulation-command> ()
+  ()
+  (:documentation "Базовый класс для команд-объектов симуляции CFX-Pre"))
+
+(defclass <simulation-mesh-transformation> (<simulation-command>)
+  ((simulation-mesh-transformation
+    :accessor <simulation>-mesh-transformation
+    :initarg :mesh-transformation
+    :type mnas-ansys/ccl/core:<mesh-transformation>))
+  (:documentation "Базовый класс для команд-объектов симуляции CFX-Pre"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

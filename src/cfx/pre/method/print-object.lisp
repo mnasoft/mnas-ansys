@@ -22,7 +22,7 @@
 
 (defmethod print-object ((obj <3d-region>) s)
   (print-unreadable-object (obj s :type t)
-    (format s "| Mesh: ~S | 3D-Suffix: ~S | 2D-Suffix: ~S | Simulation: ~S |"
+    (format s "Mesh: ~5S 3D-Suffix: ~2S 2D-Suffix: ~2S Simulation: ~3S"
             (<mesh>-name (<3d-region>-mesh obj))
             (<3d-region>-3d-suffix obj)
             (<3d-region>-2d-suffix obj)
@@ -34,13 +34,3 @@
     (format s "~%Meshes    : ~S~%3D-Regions: ~S"
             (ht-keys-sort (<simulation>-meshes simulation))
             (ht-keys-sort (<simulation>-3d-regions simulation)))))
-
-
-(format s "~%~S~%Surfaces: ~S"
-        (sort 
-         (alexandria:hash-table-values
-          (<simulation>-domains simulation))
-         #'string< :key #'<domain>-name)
-        (<simulation>-surfaces simulation))
-
-

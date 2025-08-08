@@ -18,8 +18,3 @@
  (domain \"DG1 G1\" *simulation*)
 @end(code)"
   (gethash name (<simulation>-3d-regions simulation)))
-
-
-
-
-

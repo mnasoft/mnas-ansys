@@ -15,10 +15,12 @@
 
 (defmethod name ((3d-region <3d-region>))
   (let ((mesh-name (<mesh>-name (<3d-region>-mesh 3d-region))))
-    (format nil "D~A ~A ~A" mesh-name mesh-name (<3d-region>-3d-suffix 3d-region))
-    #+nil
-    (concatenate 'string "D" mesh-name " " mesh-name)
-    ))
+    (format nil "D~A ~A ~A" mesh-name mesh-name (<3d-region>-3d-suffix 3d-region))))
+
+(defmethod name-old ((3d-region <3d-region>))
+  "Возвращает имя 3d-региона при добавлении."
+  (let ((mesh-name (<mesh>-name (<3d-region>-mesh 3d-region))))
+    (format nil "D~A ~A" mesh-name mesh-name)))
 
 (defmethod add ((mesh <mesh>) (simulation <simulation>))
   "Добавляем сетку к сиуляции."
@@ -27,6 +29,9 @@
         mesh)
   simulation)
 
+(defmethod add ((obj <simulation-mesh-transformation>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation)))
+  
 (defmethod insert ((mesh-name string) (simulation <simulation>))
   "@b(Описание:) метод @b(insert) добавляет в симуляцию @(simulation)
 домен по имени 3d-сетки ICEM."
