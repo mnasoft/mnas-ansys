@@ -6,19 +6,19 @@
   d)
 
 (defmethod surfaces ((mesh <mesh>))
-  (ht-values-sort (<mesh>-surfaces mesh)))
-
+  (ht-values-sort (<mesh>-2d-regions mesh)))
+#+nil 
 (defmethod surfaces ((domain <domain>))
   (ht-values-sort (<domain>-surfaсes domain)))
-
+#+nil 
 (defmethod surface-keys ((domain <domain>))
   (ht-keys-sort (<domain>-surfaсes domain)))
-
+#+nil 
 (defmethod surface-value (key (domain <domain>))
   (gethash key (<domain>-surfaсes domain)))
 
 (defmethod surface-keys ((mesh <mesh>))
-  (ht-keys-sort (<mesh>-surfaces mesh)))
+  (ht-keys-sort (<mesh>-2d-regions mesh)))
 
 (defmethod surfaces ((simulation <simulation>))
   (ht-values-sort (<simulation>-surfaces simulation)))

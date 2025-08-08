@@ -100,7 +100,7 @@
            (set-difference u control  :test #'equal))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+#+nil 
 (defmethod suffix (mesh-surface-name (domain <domain>))
   "Возвращает строку, которая представляет суффикс. Он добавляется к
 имени преобразованному из именного соглашения ICEM в именное
@@ -130,3 +130,6 @@
   (loop :for d :in (domains simulation)
          :when (suffix mesh-surface-name (domain d simulation)) 
            :collect :it))
+
+(defmethod 2d-region (key (mesh <mesh>))
+  (gethash key (<mesh>-2d-regions mesh)))

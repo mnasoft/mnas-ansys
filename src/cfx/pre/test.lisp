@@ -2,11 +2,45 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
+(progn
+  (defparameter *G31-mesh*
+    (make-instance '<mesh> 
+                   :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G31/A32_prj_07_DG31.tin"
+                   :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG31.msh"))
+  
+  (defparameter *G9-mesh*
+    (make-instance '<mesh> 
+                   :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G9/A32_prj_07_DG9.tin"
+                   :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG9.msh"))
+
+  (defparameter *G10-mesh*
+    (make-instance '<mesh> 
+                   :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G10/A32_prj_07_DG10.tin"
+                   :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG10.msh"))
+
+  (defparameter *simulation*
+    (make-instance '<simulation>))
+
+  (add *G31-mesh* *simulation*)
+  (add *G9-mesh* *simulation*)
+  (add *G10-mesh* *simulation*))
+
+(add (make-instance '<3d-region>
+                    :mesh (mesh "G9" *simulation*))
+     *simulation*)
+
+(3d-region "DG9 G9 2" *simulation*)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defparameter *simulation*
-  (make-simulation "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
+  (make-simulation "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_*.tin"))
 
 (map nil #'(lambda (el) (insert el *simulation*))
      '("G1" "G10" "G2" "G31" "G32" "G33" "G34" "G41" "G42" "G5" "G6" "G7" "G8" "G9" "M1" "M2" "M3"))
+
+(gtmAction-rename-Region "C G1 G9 XP_261.5 D_0.0" "C G1 G9 XP_261.5 D_0.0 0000001")
+(gtmAction-rename-Region "DG9 G9" "DG9 G9 1")
 
 (map nil #'(lambda (el) (copy el *simulation*))
      '("DG1 G1" "DG2 G2" "DG31 G31" "DG32 G32" "DG33 G33" "DG34 G34" "DG41 G41" "DG42 G42" "DG5 G5" "DG9 G9" "DM1 M1" "DM2 M2" "DM3 M3"))
@@ -17,6 +51,9 @@
 
 (<domain>-parent (domain "DG1 G1" *simulation*))
 (meshes  *simulation*)
+
+(insert "G9" *simulation*)
+
 
 (and
  (check-equality *DG1-G1*   "DG1 G1")

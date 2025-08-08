@@ -22,7 +22,7 @@
     (map 'nil
          #'(lambda (el)
              (setf
-              (gethash el (<mesh>-surfaces domain))
+              (gethash el (<mesh>-2d-regions domain))
               el))
          (remove-duplicates 
           (loop :for sur

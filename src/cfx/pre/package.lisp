@@ -39,7 +39,7 @@
            icem-solid-domain-p)
   (:export <mesh>
            <mesh>-name
-           <mesh>-surfaces
+           <mesh>-2d-regions
            make-meshes
            )
   (:export <simulation>
@@ -227,13 +227,11 @@ ICEM в файл CFX.
           nameStrategy))
 
 (defun gtmAction-rename-Region (old-name  new-name)
-  "@b(Описание:) функция @b(gtmAction-rename-Region) осуществляет переименование 2d-региона (principal-2d-region)
-"
-    (format t "> gtmAction op=renameRegion,~A,~A~%"
-            old-name
-            new-name))
-
-(gtmAction-rename-Region "C G1 G9 XP_261.5 D_0.0" "C G1 G9 XP_261.5 D_0.0 0000001")
+  "@b(Описание:) функция @b(gtmAction-rename-Region) осуществляет
+переименование 2d-региона (principal-2d-region)"
+  (format t "> gtmAction op=renameRegion,~A,~A~%"
+          old-name
+          new-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
