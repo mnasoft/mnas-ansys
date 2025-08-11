@@ -406,7 +406,9 @@ CFX-PRE.
                                            (:file "surfaces")
                                            (:file "add")
                                            (:file "initialize-instance")
-                                           ))))))
+                                           (:file "create-script")
+                                           (:file "ht")
+                                           (:file "reset")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

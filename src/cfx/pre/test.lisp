@@ -31,53 +31,46 @@
                              :tin-pathname tin 
                              :msh-pathname msh)
               *simulation*))
-     (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_D*.tin")
-     (directory "z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_D*.msh")))
+     (directory "~/work/tin/A32_prj_06_D*.tin"
+                #+nil
+                "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_D*.tin")
+     (directory "~/work/tin/A32_prj_06_D*.tin"
+                #+nil "z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_D*.msh")))
 
-(map nil
-     #'(lambda (msh-num)
-         (loop :for i :from 0 :below (second msh-num)
-               :do
-                  (add
-                   (make-instance '<3d-region>
-                                  :mesh (mesh (first msh-num) *simulation*))
-                   *simulation*)))
-     *msh-num*)
+(progn
+  (map nil
+       #'(lambda (msh-num)
+           (loop :for i :from 0 :below (second msh-num)
+                 :do
+                    (add
+                     (make-instance '<3d-region>
+                                    :mesh (mesh (first msh-num) *simulation*))
+                     *simulation*)))
+       *msh-num*)
 
-(map nil
-     #'(lambda (msh-num)
-         (mk-mesh-rotation "DG31 G31 2" "-22.5 [degree]" *simulation*))
-     *msh-num*)
+  (map nil
+       #'(lambda (msh-num)
+           (let ((msh (first msh-num))
+                 (num (second msh-num)))
+             (when (= num 2)
+               (mk-mesh-rotation (format nil "D~A ~A 2" msh msh)
+                                 "-22.5 [degree]"
+                                 *simulation*))))
+       *msh-num*))
 
-(format nil "~A" msh)
+*simulation*
+(reset *simulation*)
 
-  (mk-mesh-rotation "DG31 G31 2" "-22.5 [degree]" *simulation*)
-  (mk-mesh-rotation "DG32 G32 2" "-22.5 [degree]" *simulation*)
-  (mk-mesh-rotation "DG33 G33 2" "-22.5 [degree]" *simulation*)
-  (mk-mesh-rotation "DG32 G34 2" "-22.5 [degree]" *simulation*)
 
-  (mk-mesh-rotation "DG41 G41 2" "-22.5 [degree]" *simulation*)
-  (mk-mesh-rotation "DG42 G42 2" "-22.5 [degree]" *simulation*)  
-  
-  (mk-mesh-rotation "DG9 G9 2" "-22.5 [degree]" *simulation*)
-  
+
 ;;;;
-  (create-script *simulation* t))
+  (create-script *simulation* t)
+
+(clrhash (<simulation>-3d-regions *simulation*))
+(setf (<simulation>-commands *simulation*) nil)
 
 
 
-
-(defmacro mk-mesh-rotation (Target-Location Rotation-Angle simulation)
-  `(add (make-instance '<simulation-mesh-transformation>
-                      :mesh-transformation (make-instance 'mnas-ansys/ccl/core:<mesh-transformation>
-                                                          :Target-Location ,Target-Location
-                                                          :Use-Multiple-Copy "Off"
-                                                          :Delete-Original nil
-                                                          :Glue-Copied "On"
-                                                          :Glue-Reflected "On"
-                                                          :Number-of-Copies nil
-                                                          :Rotation-Angle ,Rotation-Angle))
-        ,simulation))
 
 
 

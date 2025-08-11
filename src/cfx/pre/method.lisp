@@ -154,17 +154,14 @@
                (format nil "~A ~A" val
                        (<3d-region>-2d-suffix (3d-region 3d-region simulation)))))))
 
-(defmethod create-script ((simulation <simulation>) stream)
-  (loop :for 3d-region :in (3d-regions simulation)
-        :do (do-add 3d-region simulation))
-  (loop :for cmd :in (reverse (<simulation>-commands simulation))
-        :do (create-script cmd stream)))
-
-(defmethod create-script ((obj <simulation-mesh-transformation>) stream)
-  (format t "~A" (<simulation>-mesh-transformation obj))
-  (gtmtransform
-   (mnas-ansys/ccl/core:<mesh-transform>-Target-Location
-                 (<simulation>-mesh-transformation obj))))
-
-
-
+(defmacro mk-mesh-rotation (Target-Location Rotation-Angle simulation)
+  `(add (make-instance '<simulation-mesh-transformation>
+                      :mesh-transformation (make-instance 'mnas-ansys/ccl/core:<mesh-transformation>
+                                                          :Target-Location ,Target-Location
+                                                          :Use-Multiple-Copy "Off"
+                                                          :Delete-Original nil
+                                                          :Glue-Copied "On"
+                                                          :Glue-Reflected "On"
+                                                          :Number-of-Copies nil
+                                                          :Rotation-Angle ,Rotation-Angle))
+        ,simulation))
