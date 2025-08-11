@@ -408,7 +408,9 @@ CFX-PRE.
                                            (:file "initialize-instance")
                                            (:file "create-script")
                                            (:file "ht")
-                                           (:file "reset")))))))
+                                           (:file "reset")
+                                           (:file "select")
+                                           ))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

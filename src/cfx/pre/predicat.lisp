@@ -2,6 +2,21 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
+(defun 3d-region-with-mesh-name (mesh-name)
+  "@b(Описание:) функция @b(3d-region-with-mesh-name) возвращает
+функцию-предикат, которая возвратит T для объекта 3d-region класса
+<3d-region> если его сеть имеет имя mesh-name.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (remove-if
+  (complement (predicate-msh-name \"G1\"))
+  (ht-values (<simulation>-3d-regions *simulation*)))
+@end(code)"
+  #'(lambda (3d-region)
+      (string= mesh-name (<mesh>-name (<3d-region>-mesh 3d-region)))))
+
+
 (defun is-dash-string (s)
   "Возвращает T, если строка содержит #\\-, иначе NIL.
 
