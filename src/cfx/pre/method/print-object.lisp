@@ -37,7 +37,7 @@
             (reverse (<simulation>-commands simulation)))))
 
 (defmethod print-object ((obj <simulation-mesh-transformation>) s)
-  (print-unreadable-object (obj s :type t))
+  (print-unreadable-object (obj s :type t)
   (when (string= "Rotation"
                  (mnas-ansys/ccl/core:<mesh-transformation>-option
                   (<simulation>-mesh-transformation obj)))
@@ -49,5 +49,14 @@
              (<simulation>-mesh-transformation obj)))
     (format s "~15S "
             (mnas-ansys/ccl/core:<mesh-transformation>-Rotation-Angle
-             (<simulation>-mesh-transformation obj)))
-    ))
+             (<simulation>-mesh-transformation obj))))))
+
+(defmethod print-object ((obj <simulation-interface-general>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S ~S"
+            (<simulation-interfaces-general>-mesh-name-1 obj)
+            (<simulation-interfaces-general>-mesh-name-2 obj)
+            (null (null (<simulation-command>-simulation obj)))
+    )))
+
+

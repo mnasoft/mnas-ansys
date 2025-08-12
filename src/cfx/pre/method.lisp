@@ -131,8 +131,7 @@
          :when (suffix mesh-surface-name (domain d simulation)) 
            :collect :it))
 
-(defmethod 2d-region (key (mesh <mesh>))
-  (gethash key (<mesh>-2d-regions mesh)))
+
 
 (defmethod do-add ((3d-region string) (simulation <simulation>))
   (gtmImport (namestring (<mesh>-msh-pathname
@@ -166,55 +165,13 @@
                                                           :Rotation-Angle ,Rotation-Angle))
         ,simulation))
 
-(defmethod 2d-regions ((3d-region <3d-region>))
-  "
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (2d-regions (second (select-3d-regions-by-mesh-name \"G2\" *simulation*)))
-@end(code)
-"
-  (loop :for 2d-region
-          :in (ht-values
-               (<mesh>-2d-regions
-                (<3d-region>-mesh 3d-region)))
-        :collect (format nil "~A ~A"
-                         2d-region
-                         (<3d-region>-2d-suffix 3d-region))))
-
-(defmethod interfaces ((3d-region <3d-region>))
-  (sort 
-   (remove-if #'(lambda (el)
-                  (not
-                   (uiop:string-prefix-p "C" el)))
-              (2d-regions 3d-region))
-   #'string<))
-
-(defmethod interfaces-dom ((3d-region <3d-region>) mesh-name-1 mesh-name-2)
-  (remove-if
-   #'(lambda (el)
-       (not
-        (mk-pred el di-1 di-2)))
-   (interfaces dom dom-sur))
-  (interfaces 3d-region)
-  )
+(defmacro mk-interface-general (mesh-name-1 mesh-name-2 simulation)
+  `(add
+    (make-instance
+     '<simulation-interface-general>
+     :mesh-name-1 ,mesh-name-1
+     :mesh-name-2 ,mesh-name-2
+     :simulation ,simulation)
+    ,simulation))
 
 
-
-(defmethod interfaces-with ((3d-region <3d-region>) mesh-name-2)
-  (let ((mesh-name-1 (<mesh>-name (<3d-region>-mesh 3d-region))))
-    (remove-if-not
-     #'(lambda (el)
-         (let ((lst (foo el)))
-           (equalp 
-           (sort lst #'string<)
-           (sort (list mesh-name-1 mesh-name-2) #'string<)))
-         )
-     (interfaces 3d-region))
-
-    ))
-
-(defun foo (str)
-  (let ((lst (ppcre:split " " str)))
-    (list (second lst) (third lst))))
-
-(foo "C G1 G2 X_456.0 D_0.0 1")

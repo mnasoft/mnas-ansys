@@ -2,18 +2,6 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
-#+nil
-(defmethod initialize-instance :after ((cfx-domains <simulation>)
-                                       &key icem-parts)
-  (mapcar
-   #'(lambda (el)
-       (setf
-        (gethash el
-                 (<simulation>-icem-parts cfx-domains))
-        el))
-   icem-parts)
-  cfx-domains)
-
 (defmethod initialize-instance :after ((obj <mesh>) &key)
   "@b(Описание:) функция @b(make-mesh) возвращает объект класса
 @b(<mesh>).
@@ -33,7 +21,7 @@
     (block  2d-regions-populating
       (map 'nil
            #'(lambda (el)
-               (setf (gethash el (<mesh>-2d-regions obj))
+               (setf (gethash el (<mesh>-2d-regions obj)) ;; (2d-region el obj)
                      (name-icem->cfx el)))
            (remove-duplicates 
             (loop :for sur

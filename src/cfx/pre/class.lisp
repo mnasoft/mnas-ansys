@@ -79,7 +79,12 @@
   )
 
 (defclass <simulation-command> ()
-  ()
+  ((simulation-command-simulation
+    :accessor <simulation-command>-simulation
+    :initarg  :simulation
+    :initform nil
+    :type (or <simulation> null)
+    :documentation "Ссылка на объект типа <simulation>."))
   (:documentation "Базовый класс для команд-объектов симуляции CFX-Pre"))
 
 (defclass <simulation-mesh-transformation> (<simulation-command>)
@@ -90,4 +95,15 @@
   (:documentation "Базовый класс для команд-объектов симуляции CFX-Pre"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(defclass <simulation-interface-general> (<simulation-command>)
+  ((mesh-name-1
+    :accessor <simulation-interfaces-general>-mesh-name-1
+    :initarg :mesh-name-1
+    :type string
+    :documentation "Имя первой сетки, сопрягаемой интефейсом")
+   (mesh-name-2
+    :accessor <simulation-interfaces-general>-mesh-name-2
+    :initarg :mesh-name-2
+    :type string
+    :documentation "Имя второй сетки, сопрягаемой интефейсом."))
+  (:documentation "Представляет Имя второй сетки, сопрягаемой интефейсом."))

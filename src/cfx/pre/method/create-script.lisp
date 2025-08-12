@@ -12,5 +12,14 @@
   (format t "~A" (<simulation>-mesh-transformation obj))
   (gtmtransform
    (mnas-ansys/ccl/core:<mesh-transformation>-Target-Location
+    (<simulation>-mesh-transformation obj))))
+
+
+(defmethod create-script ((obj <simulation-mesh-transformation>) stream)
+  (format t "~A" (<simulation>-mesh-transformation obj))
+  (gtmtransform
+   (mnas-ansys/ccl/core:<mesh-transformation>-Target-Location
                  (<simulation>-mesh-transformation obj))))
 
+
+mk-gen-interfaces-n-m (g1 g2 (simulation <simulation>))
