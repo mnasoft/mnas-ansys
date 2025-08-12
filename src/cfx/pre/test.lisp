@@ -78,41 +78,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod 2d-regions ((3d-region <3d-region>))
-  (loop :for 2d-region
-          :in (ht-values
-               (<mesh>-2d-regions
-                (<3d-region>-mesh 3d-region)))
-        :collect (format nil "~A ~A"
-                         2d-region
-                         (<3d-region>-2d-suffix 3d-region))))
+(let ((foo #'2d-regions)) ;; interfaces 2d-regions
 
-(defmethod interfaces ((3d-region <3d-region>))
-  (sort 
-   (remove-if #'(lambda (el)
-                  (not
-                   (uiop:string-prefix-p "C" el)))
-              (2d-regions 3d-region))
-   #'string<))
+  (funcall foo (second (select-3d-regions-by-mesh-name "G2" *simulation*))))
 
-(defmethod interfaces-dom ((3d-region <3d-region>) mesh-name-1 mesh-name-2)
-  (remove-if
-   #'(lambda (el)
-       (not
-        (mk-pred el di-1 di-2)))
-   (interfaces dom dom-sur))
-  (interfaces 3d-region)
-  )
 
-(2d-regions (second (select-3d-regions-by-mesh-name "G2" *simulation*)))
-(interfaces (first (select-3d-regions-by-mesh-name "G1" *simulation*)))
-(interfaces-dom (first (select-3d-regions-by-mesh-name "G1" *simulation*))
-                "G1" "G2"
+(interfaces-with (first (select-3d-regions-by-mesh-name "G1" *simulation*)) "G42"
                 )
 
-(interfaces (ht-values (<simulation>-3d-regions *simulation*)))
-(select-3d-regions-by-mesh-name "G1" *simulation*)
-(select-3d-regions-name-by-mesh-name "G1" *simulation*)
 
 
 

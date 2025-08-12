@@ -5,7 +5,7 @@
 (defmethod select-3d-regions-by-mesh-name (mesh-name (simulation <simulation>))
   (sort
    (remove-if
-    (complement (predicate-msh-name mesh-name))
+    (complement (3d-region-with-mesh-name mesh-name))
     (ht-values (<simulation>-3d-regions simulation)))
     #'<
    :key #'<3d-region>-3d-suffix))
