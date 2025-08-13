@@ -29,12 +29,19 @@
         mesh)
   simulation)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defmethod add ((obj <simulation-mesh-transformation>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation)))
 
 (defmethod add ((obj <simulation-interface-general>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation)))
-  
+
+(defmethod add ((obj <simulation-interface-rotational-periodicity>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defmethod insert ((mesh-name string) (simulation <simulation>))
   "@b(Описание:) метод @b(insert) добавляет в симуляцию @(simulation)
 домен по имени 3d-сетки ICEM."

@@ -107,3 +107,12 @@
     :type string
     :documentation "Имя второй сетки, сопрягаемой интефейсом."))
   (:documentation "Представляет Имя второй сетки, сопрягаемой интефейсом."))
+
+(defclass <simulation-interface-rotational-periodicity> (<simulation-command>)
+  ((mesh-name
+    :accessor <simulation-interface-rotational-periodicity>-mesh-name
+    :initarg :mesh-name
+    :type string
+    :documentation "Имя первой сетки."))
+  (:documentation "Вращательный периодичный интерфейс."))
+

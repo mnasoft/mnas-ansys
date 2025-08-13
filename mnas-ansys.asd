@@ -400,7 +400,6 @@ CFX-PRE.
                              (:module "./method"
                               :serial t
                               :components ((:file "print-object")
-                                           (:file "domains")
                                            (:file "meshes")
                                            (:file "make")
                                            (:file "surfaces")
@@ -411,6 +410,7 @@ CFX-PRE.
                                            (:file "reset")
                                            (:file "select")
                                            (:file "2d-region")
+                                           (:file "3d-region")
                                            (:file "interface")
                                            ))))))
 

@@ -186,13 +186,7 @@
              :collect i)
      #'string<)))
 
-(defmethod mk-rot-per-interfaces-n-m (g1 (cfx-domains <simulation>) &key (postfix "ROT"))
-  (let* ((i-min (int-rot-min g1 cfx-domains))
-         (i-max (int-rot-max g1 cfx-domains)))
-    (when (and i-min i-max)
-      (make-domain-interface-rotational-periodicity 
-       (mnas-string:common-prefix (append i-min i-max)) i-min i-max
-       :postfix postfix))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Функции для создания вращательного интерфейса

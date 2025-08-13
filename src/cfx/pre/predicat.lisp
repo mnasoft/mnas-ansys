@@ -65,3 +65,12 @@
   "@b(Описание:) функция @b(extract-suffix) возвращает суффикс."
   (when (uiop:string-prefix-p prefix string)
     (string-trim " " (subseq string (length prefix)))))
+
+
+(defun 2d-region-right-p (2d-region-name)
+  (some #'(lambda (el) (string= "R" el))
+        (mnas-ansys/ccl:mk-split 2d-region-name)))
+
+(defun 2d-region-left-p (2d-region-name)
+  (some #'(lambda (el) (string= "L" el))
+            (mnas-ansys/ccl:mk-split 2d-region-name)))

@@ -86,7 +86,15 @@
        ("G1"  "G10")
        ("G2"  "G6"))))
 
+(map nil
+     #'(lambda (el)
+         (mk-interface-rot-per el *simulation*))
+     '("G1" "G2" "G6" "G7" "G8" "G10"))
 
+ 
+
+
+mk-interface-rot-per
 
 ;; Вывод на печать
 *simulation*
@@ -98,39 +106,6 @@
 (create-script *simulation* t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(let ((foo #'2d-regions)) ;; interfaces 2d-regions
-  (funcall foo (second (select-3d-regions-by-mesh-name "G2" *simulation*))))
-
-(interfaces-with
- (first (select-3d-regions-by-mesh-name "G1" *simulation*)) "G2")
-
-
-
-(let ((g1 "G1")
-      (g2 "G2")
-      (simulation *simulation*))
-  (let* ((g1-3d-regions
-           (select-3d-regions-by-mesh-name g1 simulation))
-         (g2-3d-regions (select-3d-regions-by-mesh-name g2 simulation))
-         (il1 (apply #'append
-                     (mapcar
-                      #'(lambda (el)
-                          (interfaces-with  el g2))
-                      g1-3d-regions)))
-         (il2 (apply #'append
-                     (mapcar
-                      #'(lambda (el)
-                          (interfaces-with  el g1))
-                      g2-3d-regions))))
-
-    (make-domain-interface-general-connection
-     (mnas-string:common-prefix (append il1 il2)) il1 il2)
-    ))
-
-(mk-gen-interfaces-n-m "G1" "G2" *simulation*)
-
-
 
 (progn
   (mk-gen-interfaces-n-m "G1"  "G2"  *simulation*)
@@ -153,6 +128,7 @@
   (mk-gen-interfaces-n-m "G1"  "G8" *simulation*)
   (mk-gen-interfaces-n-m "G1" "G10" *simulation*)
   (mk-gen-interfaces-n-m "G2"  "G6" *simulation*)
+  
   ;; Вращательные периодичные кратность n-m
   (mk-rot-per-interfaces-n-m "G1" *simulation*)
   (mk-rot-per-interfaces-n-m "G2" *simulation*)
@@ -160,6 +136,7 @@
   (mk-rot-per-interfaces-n-m "G7" *simulation*)
   (mk-rot-per-interfaces-n-m "G8" *simulation*)
   (mk-rot-per-interfaces-n-m "G10" *simulation*)
+  
   ;; Вращательные генеральные
   (mk-rot-gen-interfaces-n-m "G1" *simulation*)
   (mk-rot-gen-interfaces-n-m "G2" *simulation*)
@@ -167,3 +144,4 @@
   (mk-rot-gen-interfaces-n-m "G7" *simulation*)
   (mk-rot-gen-interfaces-n-m "G8" *simulation*)
   (mk-rot-gen-interfaces-n-m "G10" *simulation*))
+
