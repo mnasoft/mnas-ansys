@@ -64,6 +64,13 @@
   (print-unreadable-object (obj s :type t)
     (format s "~S ~S"
             (<simulation-interface-rotational-periodicity>-mesh-name obj)
-            (null (null (<simulation-command>-simulation obj)))
-    )))
-  
+            (null (null (<simulation-command>-simulation obj))))))
+
+(defmethod print-object ((obj <simulation-interface-rotational-general>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S"
+            (<simulation-interface-rotational-general>-mesh-name obj)
+            (null (null (<simulation-command>-simulation obj))))))
+
+
+

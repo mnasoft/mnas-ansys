@@ -49,3 +49,19 @@
   (first (sort (3d-region-mesh mesh-name simulation)
                #'>
                :key #'<3d-region>-3d-suffix)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod 3d-region-left (mesh-name (simulation <simulation>))
+  (let ((3d-regions (3d-region-mesh mesh-name simulation)))
+    (butlast
+     (sort 3d-regions
+           #'<
+           :key #'<3d-region>-3d-suffix))))
+
+(defmethod 3d-region-right (mesh-name (simulation <simulation>))
+  (let ((3d-regions (3d-region-mesh mesh-name simulation)))
+    (cdr
+     (sort 3d-regions
+           #'<
+           :key #'<3d-region>-3d-suffix))))

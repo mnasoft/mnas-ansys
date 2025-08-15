@@ -116,3 +116,10 @@
     :documentation "Имя первой сетки."))
   (:documentation "Вращательный периодичный интерфейс."))
 
+(defclass <simulation-interface-rotational-general> (<simulation-command>)
+  ((mesh-name
+    :accessor <simulation-interface-rotational-general>-mesh-name
+    :initarg :mesh-name
+    :type string
+    :documentation "Имя первой сетки."))
+  (:documentation "Вращательный генеральный интерфейс."))

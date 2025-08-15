@@ -19,3 +19,9 @@
         :collect (format nil "~A ~A"
                          2d-region
                          (<3d-region>-2d-suffix 3d-region))))
+
+(defmethod 2d-regions ((seq sequence))
+  (apply #'append
+         (loop :for i :across (coerce seq 'vector)
+               :collect
+               (2d-regions i))))

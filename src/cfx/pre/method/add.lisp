@@ -40,6 +40,9 @@
 (defmethod add ((obj <simulation-interface-rotational-periodicity>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation)))
 
+(defmethod add ((obj <simulation-interface-rotational-general>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod insert ((mesh-name string) (simulation <simulation>))

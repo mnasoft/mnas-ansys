@@ -24,3 +24,9 @@
   (mk-rot-per-interfaces-n-m
    (<simulation-interface-rotational-periodicity>-mesh-name obj)
    (<simulation-command>-simulation obj)))
+
+(defmethod create-script ((obj <simulation-interface-rotational-general>) stream)
+  (mk-rot-gen-interfaces-n-m
+   (<simulation-interface-rotational-general>-mesh-name obj)
+   (<simulation-command>-simulation obj)))
+

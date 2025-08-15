@@ -174,7 +174,7 @@
      :simulation ,simulation)
     ,simulation))
 
-(defmacro mk-interface-rot-per (mesh-name  simulation)
+(defmacro mk-interface-rot-per (mesh-name simulation)
   `(add
     (make-instance
      '<simulation-interface-rotational-periodicity>
@@ -182,8 +182,10 @@
      :simulation ,simulation)
     ,simulation))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
+(defmacro mk-interface-rot-gen (mesh-name simulation)
+  `(add
+    (make-instance
+     '<simulation-interface-rotational-general>
+     :mesh-name ,mesh-name
+     :simulation ,simulation)
+    ,simulation))

@@ -41,8 +41,8 @@
         ((string= (machine-instance) "N000325") "z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_D*.msh")
         (t "~/work/tin/A32_prj_06_D*.tin")))))
 
-(progn
-;; Создаем 3d-регионы
+(block 3d-region-cration
+  ;; Создаем 3d-регионы
   (map nil
        #'(lambda (msh-num)
            (loop :for i :from 0 :below (second msh-num)
@@ -53,7 +53,7 @@
                      *simulation*)))
        *msh-num*)
 
-;; Создаем команды для вращения доменов
+  ;; Создаем команды для вращения доменов
   (map nil
        #'(lambda (msh-num)
            (let ((msh (first msh-num))
@@ -63,41 +63,48 @@
                                  "-22.5 [degree]"
                                  *simulation*))))
        *msh-num*)
-;; Создаем команды для добавления генеральных флюидовых интерфейсов
-(map nil
-     #'(lambda (el)
-         (mk-interface-general (first el)  (second el) *simulation*))
-     '(("G1"  "G2")
-       ("G1"  "G32")
-       ("G1"  "G33")
-       ("G1"  "G42")
-       ("G1"  "G5")
-       ("G1"  "G9")
-       ("G2"  "G32")
-       ("G2"  "G42")
-       ("G2"  "G5")
-       ("G2"  "G9")
-       ("G31" "G32")
-       ("G32" "G34")
-       ("G33" "G34")
-       ("G41" "G42")
-       ("G6"  "G7")
-       ("G1"  "G8")
-       ("G1"  "G10")
-       ("G2"  "G6"))))
+  ;; Создаем команды для добавления генеральных флюидовых интерфейсов
+  (map nil
+       #'(lambda (el)
+           (mk-interface-general (first el)  (second el) *simulation*))
+       '(("G1"  "G2")
+         ("G1"  "G32")
+         ("G1"  "G33")
+         ("G1"  "G42")
+         ("G1"  "G5")
+         ("G1"  "G9")
+         ("G2"  "G32")
+         ("G2"  "G42")
+         ("G2"  "G5")
+         ("G2"  "G9")
+         ("G31" "G32")
+         ("G32" "G34")
+         ("G33" "G34")
+         ("G41" "G42")
+         ("G6"  "G7")
+         ("G1"  "G8")
+         ("G1"  "G10")
+         ("G2"  "G6")))
+    ;; Вывод на печать
+  *simulation*
+  )
 
-(map nil
-     #'(lambda (el)
-         (mk-interface-rot-per el *simulation*))
-     '("G1" "G2" "G6" "G7" "G8" "G10"))
+(block inreface-creation
+  ;; Создаем команды для генерирования вращательных интерфейсов периодического типа
+  (map nil
+       #'(lambda (el)
+           (mk-interface-rot-per el *simulation*))
+       '("G1" "G2" "G6" "G7" "G8" "G10"))
 
- 
+  ;; Создаем команды для генерирования вращательных интерфейсов генерального типа
 
-
-mk-interface-rot-per
-
-;; Вывод на печать
-*simulation*
+  (map nil
+       #'(lambda (el)
+           (mk-interface-rot-gen el *simulation*))
+       '("G1" "G2" "G6" "G7" "G8" "G10"))
+  ;; Вывод на печать
+  *simulation*
+  )
 
 ;; Сброс настроек симуляции
 (reset *simulation*)
@@ -144,4 +151,5 @@ mk-interface-rot-per
   (mk-rot-gen-interfaces-n-m "G7" *simulation*)
   (mk-rot-gen-interfaces-n-m "G8" *simulation*)
   (mk-rot-gen-interfaces-n-m "G10" *simulation*))
+
 
