@@ -106,50 +106,12 @@
   *simulation*
   )
 
-;; Сброс настроек симуляции
+;;;; Сброс настроек симуляции
 (reset *simulation*)
 
-;;;;
+;;;; 
 (create-script *simulation* t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(progn
-  (mk-gen-interfaces-n-m "G1"  "G2"  *simulation*)
-  (mk-gen-interfaces-n-m "G1"  "G32" *simulation*)
-  (mk-gen-interfaces-n-m "G1"  "G33" *simulation*)
-  (mk-gen-interfaces-n-m "G1"  "G42" *simulation*)
-  (mk-gen-interfaces-n-m "G1"  "G5"  *simulation*)
-  (mk-gen-interfaces-n-m "G1"  "G9"  *simulation*)
-  (mk-gen-interfaces-n-m "G2"  "G32" *simulation*)
-  (mk-gen-interfaces-n-m "G2"  "G42" *simulation*)
-  (mk-gen-interfaces-n-m "G2"  "G5"  *simulation*)
-  (mk-gen-interfaces-n-m "G2"  "G9"  *simulation*)
-  (mk-gen-interfaces-n-m "G31" "G32" *simulation*)
-  (mk-gen-interfaces-n-m "G32" "G34" *simulation*)
-  (mk-gen-interfaces-n-m "G33" "G34" *simulation*)
-  (mk-gen-interfaces-n-m "G41" "G42" *simulation*)
-  (mk-gen-interfaces-n-m "G6"  "G7"  *simulation*)
-  
-  ;; Генеральные кратность n-m
-  (mk-gen-interfaces-n-m "G1"  "G8" *simulation*)
-  (mk-gen-interfaces-n-m "G1" "G10" *simulation*)
-  (mk-gen-interfaces-n-m "G2"  "G6" *simulation*)
-  
-  ;; Вращательные периодичные кратность n-m
-  (mk-rot-per-interfaces-n-m "G1" *simulation*)
-  (mk-rot-per-interfaces-n-m "G2" *simulation*)
-  (mk-rot-per-interfaces-n-m "G6" *simulation*)
-  (mk-rot-per-interfaces-n-m "G7" *simulation*)
-  (mk-rot-per-interfaces-n-m "G8" *simulation*)
-  (mk-rot-per-interfaces-n-m "G10" *simulation*)
-  
-  ;; Вращательные генеральные
-  (mk-rot-gen-interfaces-n-m "G1" *simulation*)
-  (mk-rot-gen-interfaces-n-m "G2" *simulation*)
-  (mk-rot-gen-interfaces-n-m "G6" *simulation*)
-  (mk-rot-gen-interfaces-n-m "G7" *simulation*)
-  (mk-rot-gen-interfaces-n-m "G8" *simulation*)
-  (mk-rot-gen-interfaces-n-m "G10" *simulation*))
-
-
+(make-instance '<FUNCTION> :name "HN60VT Thermal Conductivity") 

@@ -1,0 +1,30 @@
+FLOW: Flow Analysis 1
+  &replace DOMAIN: M1
+    Coord Frame = Coord 0
+    Domain Type = Solid
+    Location = DM1 M1 2,DM1 M1
+    DOMAIN MODELS: 
+      DOMAIN MOTION: 
+        Option = Stationary
+      END
+      MESH DEFORMATION: 
+        Option = None
+      END
+    END
+    SOLID DEFINITION: Solid 1
+      Material = HN60VT
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Solid
+      END
+    END
+    SOLID MODELS: 
+      HEAT TRANSFER MODEL: 
+        Option = Thermal Energy
+      END
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END
+    END
+  END
+END

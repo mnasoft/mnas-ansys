@@ -1,0 +1,67 @@
+FLOW: Flow Analysis 1
+  &replace DOMAIN: D1
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = DG1 G1,DG1 G1 2,DG10 G10,DG2 G2,DG2 G2 2,DG31 G31,DG31 G31 2,DG32 G32,DG32 G32 2,DG33 G33,DG33 G33 2,DG34 G34,DG34 G34 2,DG41 G41,DG41 G41 2,DG42 G42,DG42 G42 2,DG5 G5,DG5 G5 2,DG6 G6,DG7 G7,DG8 G8,DG9 G9,DG9 G9 2
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END
+      DOMAIN MOTION: 
+        Option = Stationary
+      END
+      MESH DEFORMATION: 
+        Option = None
+      END
+      REFERENCE PRESSURE: 
+        Reference Pressure = 1.943 [MPa]
+      END
+    END
+    FLUID DEFINITION: Fluid 1
+      Material = GAS
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END
+    END
+    FLUID MODELS: 
+      COMBUSTION MODEL: 
+        Option = Finite Rate Chemistry and Eddy Dissipation
+      END
+      COMPONENT: CH4
+        Option = Transport Equation
+      END
+      COMPONENT: CO
+        Option = Transport Equation
+      END
+      COMPONENT: CO2
+        Option = Transport Equation
+      END
+      COMPONENT: H2O
+        Option = Transport Equation
+      END
+      COMPONENT: N2
+        Option = Constraint
+      END
+      COMPONENT: NO
+        Option = Transport Equation
+      END
+      COMPONENT: O2
+        Option = Transport Equation
+      END
+      HEAT TRANSFER MODEL: 
+        Option = Total Energy
+      END
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END
+      TURBULENCE MODEL: 
+        Option = SST
+      END
+      TURBULENT WALL FUNCTIONS: 
+        High Speed Model = Off
+        Option = Automatic
+      END
+    END
+  END
+END

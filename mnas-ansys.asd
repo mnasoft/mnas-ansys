@@ -412,6 +412,13 @@ CFX-PRE.
                                            (:file "2d-region")
                                            (:file "3d-region")
                                            (:file "interface")
+                                           ))
+                             (:module "classes"
+                              :serial t
+                              :components ((:file "domain")
+                                           (:file "library")
+                                           (:file "initialisation")
+        
                                            ))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,0 +1,54 @@
+
+;;;; MATERIAL
+LIBRARY: 
+  &replace MATERIAL: GAS
+    Material Group = User
+    Option = Reacting Mixture
+    Reactions List = Methane Air WD2 NO PDF
+  END
+END
+
+;;;;
+
+LIBRARY: 
+  CEL: 
+    &replace EXPRESSIONS: 
+      Expression 2 = HN60VT Specific Heat Capacity(T)
+    END
+  END
+END
+
+
+LIBRARY: 
+  CEL: 
+    &replace FUNCTION: HN60VT Specific Heat Capacity
+      Argument Units = C
+      Option = Interpolation
+      Result Units = kJ / (kg K)
+      INTERPOLATION DATA: 
+        Data Pairs = 100 , 0.440 , 200 , 0.461 , 300 , 0.482 , 400 , 0.503 , 500 , 0.524 , 600 , 0.545 , 700 , 0.545 , 800 , 0.566 , 900 , 0.587 , 1000 , 0.625
+        Extend Max = On
+        Extend Min = On
+        Option = One Dimensional
+      END
+    END
+  END
+END
+
+LIBRARY: 
+  CEL: 
+    &replace FUNCTION: HN60VT Thermal Conductivity
+      Argument Units = C
+      Option = Interpolation
+      Result Units = W / (m K)
+      INTERPOLATION DATA: 
+        Data Pairs = 25 , 9.64 , 100 , 10.5 , 200 , 11.7 , 300 , 13.8 , 400 , 16.4 , 500 , 18.9 , 600 , 21.4 , 700 , 23.5 , 800 , 25.6 , 900 , 28.1
+        Extend Max = On
+        Extend Min = On
+        Option = One Dimensional
+      END
+    END
+  END
+END
+
+
