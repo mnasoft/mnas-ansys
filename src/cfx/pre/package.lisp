@@ -47,12 +47,12 @@
   (:export <simulation>
            <simulation>-domains
            <simulation>-surfaces
-           make-simulation
-           )
-
+           make-simulation)
   (:export surfaces)
   (:export mesh-name->domain-name
-           domain-name->mesh-name))
+           domain-name->mesh-name)
+  (:export mk-domain-fluid
+           mk-domain-solid))
  
 (in-package :mnas-ansys/cfx/pre)
 

@@ -17,7 +17,7 @@
     :initarg :Reactions-List
     :documentation "Reactions List")))
 
-(make-instance '<material> :name "GAS")
+
 
 (defclass <LIBRARY> (mnas-ansys/ccl/core:<obj>)
   ((objects
@@ -26,8 +26,7 @@
     :initarg :objects
     :documentation "objects")
    ))
-
-(make-instance '<FUNCTION>)
+(in-package :mnas-ansys/cfx/pre)
 
 (defclass <interpolation-data> (mnas-ansys/ccl/core:<obj>)
   ((Data-Pairs
@@ -75,3 +74,7 @@
     :documentation "INTERPOLATION DATA")
    ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(make-instance '<material> :name "GAS")
+(make-instance '<FUNCTION>)

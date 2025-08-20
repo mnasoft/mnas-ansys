@@ -418,8 +418,7 @@ CFX-PRE.
                               :components ((:file "domain")
                                            (:file "library")
                                            (:file "initialisation")
-        
-                                           ))))))
+                                           (:file "domain-interface")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

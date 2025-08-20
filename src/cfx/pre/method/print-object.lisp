@@ -72,5 +72,10 @@
             (<simulation-interface-rotational-general>-mesh-name obj)
             (null (null (<simulation-command>-simulation obj))))))
 
-
-
+(defmethod print-object ((obj <simulation-flow>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S ~S ~S"
+            (<simulation-flow>-flow-name obj)
+            (<simulation-flow>-domain-fluid-name obj)
+            (<simulation-flow>-domain-solid-names obj)
+            (null (null (<simulation-command>-simulation obj))))))

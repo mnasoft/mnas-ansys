@@ -1,5 +1,7 @@
 (in-package :mnas-ansys/cfx/pre)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Fluid
 (defclass <buoyancy-model> (mnas-ansys/ccl/core:<obj>)
   ((option
     :accessor <buoyancy-model>-option
@@ -53,7 +55,7 @@
 (defclass <morphology> (mnas-ansys/ccl/core:<obj>)
   ((option
     :accessor <morphology>-option
-    :initform "Continuous Fluid"
+    :initform "Continuous Fluid" ;; "Continuous Solid"
     :initarg :option
     :documentation "Option")))
 
@@ -146,66 +148,115 @@
     :documentation "Option")))
 
 (defclass <fluid-models> (mnas-ansys/ccl/core:<obj>)
-  ((combustion-model
-    :accessor <fluid-models>-combustion-model
-    :initform (make-instance '<combustion-model>)
-    :initarg :combustion-model
-    :documentation "COMBUSTION MODEL")
-   (components
-    :accessor <fluid-models>-components
-    :initform (make-instance '<component-list>)
-    :initarg :components
-    :documentation "COMBUSTION MODEL")
-   (heat-transfer-model
-    :accessor <fluid-models>-heat-transfer-model
-    :initform (make-instance '<heat-transfer-model>)
-    :initarg :heat-transfer-model
-    :documentation "HEAT TRANSFER MODEL")
-   (thermal-radiation-model
-    :accessor <fluid-models>-thermal-radiation-model
-    :initform (make-instance '<thermal-radiation-model>)
-    :initarg :thermal-radiation-model
-    :documentation "THERMAL RADIATION MODEL")
-   (turbulence-model
-    :accessor <fluid-models>-turbulence-model
-    :initform (make-instance '<turbulence-model>)
-    :initarg :turbulence-model
-    :documentation "TURBULENCE MODEL")
-   (turbulent-wall-functions
-    :accessor <fluid-models>-turbulent-wall-functions
-    :initform (make-instance '<turbulent-wall-functions>)
-    :initarg :turbulent-wall-functions
-    :documentation "TURBULENT WALL FUNCTIONS")   
-   ))
+  ((combustion-model          :accessor <fluid-models>-combustion-model
+                              :initform (make-instance '<combustion-model>)
+                              :initarg :combustion-model
+                              :documentation "COMBUSTION MODEL")
+   (components                :accessor <fluid-models>-components
+                              :initform (make-instance '<component-list>)
+                              :initarg :components
+                              :documentation "COMBUSTION MODEL")
+   (heat-transfer-model       :accessor <fluid-models>-heat-transfer-model
+                              :initform (make-instance '<heat-transfer-model>
+                                                       :option "Total Energy")
+                              :initarg :heat-transfer-model
+                              :documentation "HEAT TRANSFER MODEL")
+   (thermal-radiation-model   :accessor <fluid-models>-thermal-radiation-model
+                              :initform (make-instance '<thermal-radiation-model>)
+                              :initarg :thermal-radiation-model
+                              :documentation "THERMAL RADIATION MODEL")
+   (turbulence-model          :accessor <fluid-models>-turbulence-model
+                              :initform (make-instance '<turbulence-model>)
+                              :initarg :turbulence-model
+                              :documentation "TURBULENCE MODEL")
+   (turbulent-wall-functions  :accessor <fluid-models>-turbulent-wall-functions
+                              :initform (make-instance '<turbulent-wall-functions>)
+                              :initarg :turbulent-wall-functions
+                              :documentation "TURBULENT WALL FUNCTIONS")))
 
 (defclass <domain> (mnas-ansys/ccl/core:<obj>)
-  ((coord-frame
-    :accessor <domain>-coord-frame
-    :initform "Coord 0"
-    :initarg :coord-frame
-    :documentation "Coord Frame")
-   (Domain-Type
-    :accessor <domain>-Domain-Type
-    :initform "Fluid"
-    :initarg :Domain-Type
-    :documentation "Domain Type")
-   (Location
-    :accessor <domain>-Location
-    :initform ""
-    :initarg :Location
-    :documentation "Location")
-   (domain-models
-    :accessor <domain>-domain-models
-    :initform (make-instance '<domain-models>)
-    :initarg :domain-models
-    :documentation "DOMAIN MODELS")
-   (FLUID-DEFINITION
-    :accessor <domain>-FLUID-DEFINITION
-    :initform (make-instance '<FLUID-DEFINITION>)
-    :initarg :fluid-definition
-    :documentation "FLUID DEFINITION")
-   (FLUID-MODELS
-    :accessor <domain>-FLUID-MODELS
-    :initform (make-instance '<FLUID-MODELS>)
-    :initarg :FLUID-MODELS
-    :documentation "FLUID-MODELS")))
+  ((coord-frame               :accessor <domain>-coord-frame
+                              :initform "Coord 0"
+                              :initarg :coord-frame
+                              :documentation "Coord Frame")
+   (domain-type               :accessor <domain>-Domain-Type
+                              :initform "Fluid"
+                              :initarg :Domain-Type
+                              :documentation "Domain Type")
+   (Location                  :accessor <domain>-location
+                              :initform ""
+                              :initarg :Location
+                              :documentation "Location")
+   (domain-models             :accessor <domain>-domain-models
+                              :initform (make-instance '<domain-models>)
+                              :initarg :domain-models
+                              :documentation "DOMAIN MODELS")
+   (fluid-definition          :accessor <domain>-FLUID-DEFINITION
+                              :initform (make-instance '<fluid-definition>
+                                                       :morphology
+                                                       (make-instance '<morphology>
+                                                                      :option
+                                                                      "Continuous Fluid"))
+                              :initarg :fluid-definition
+                              :documentation "FLUID DEFINITION")
+   (fluid-models              :accessor <domain>-FLUID-MODELS
+                              :initform (make-instance '<FLUID-MODELS>)
+                              :initarg :fluid-models
+                              :documentation "FLUID-MODELS")
+   (solid-definition          :accessor <domain>-solid-definition
+                              :initform (make-instance '<solid-definition>)
+                              :initarg :solid-definition
+                              :documentation "SOLID DEFINITION")
+   (solid-models              :accessor <domain>-solid-models
+                              :initform (make-instance '<solid-models>)
+                              :initarg :solid-models
+                              :documentation "SOLID MODELS")))
+;;;; Fluid
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Solid
+
+(defclass <solid-definition> (mnas-ansys/ccl/core:<obj>)
+  ((material                  :accessor <solid-definition>-Material
+                              :initform "HN60VT"
+                              :initarg :material
+                              :documentation "Material")
+   (option                    :accessor <solid-definition>-Option
+                              :initform "Material Library"
+                              :initarg :Option
+                              :documentation "Option")
+   (morphology                :accessor <solid-definition>-morphology
+                              :initform (make-instance '<morphology>
+                                                       :option "Continuous Solid")
+                              :initarg :morphology
+                              :documentation "MORPHOLOGY")))
+
+(defclass <solid-models> (mnas-ansys/ccl/core:<obj>)
+  ((heat-transfer-model       :accessor <solid-models>-heat-transfer-model
+                              :initform (make-instance '<heat-transfer-model>
+                                                       :option "Thermal Energy")
+                              :initarg :heat-transfer-model
+                              :documentation "HEAT TRANSFER MODEL")
+   (thermal-radiation-model   :accessor <solid-models>-thermal-radiation-model
+                              :initform (make-instance '<thermal-radiation-model>)
+                              :initarg :thermal-radiation-model
+                              :documentation "THERMAL RADIATION MODEL")))
+
+(defclass <domains-list> ()
+  ((domains                   :accessor <domains-list>-domains
+                              :initform ()
+                              :initarg :domains
+                              :documentation "domains")))
+
+(defmethod print-object ((obj <domains-list>) s)
+  (loop :for i :in (<domains-list>-domains obj)
+        :do (print-object i s)))
+
+(defclass <flow> (mnas-ansys/ccl/core:<obj>)
+  ((domains                   :accessor <flow>-domains
+                              :initform (make-instance '<domains-list>)
+                              :initarg :domains
+                              :documentation "domains")))
+
+

@@ -20,8 +20,18 @@
        (uiop:string-prefix-p "DG" (name el)))
    (ht-values (<simulation>-3d-regions simulation))))
 
+(defmethod simulation-fluid-domain-location ((simulation <simulation>))
+  (format nil "~{~A~^,~}"
+          (sort (mapcar #'name (select-3d-regions-fluid simulation))
+                #'string<)))
+
 (defmethod select-3d-regions-solid ((simulation <simulation>))
   (remove-if-not
    #'(lambda (el)
        (uiop:string-prefix-p "DM" (name el)))
    (ht-values (<simulation>-3d-regions simulation))))
+
+
+(defmethod simulation-solid-domain-mesh-location (mesh-name (simulation <simulation>))
+  (format nil "~{~A~^,~}"
+          (select-3d-regions-name-by-mesh-name mesh-name simulation)))

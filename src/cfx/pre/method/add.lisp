@@ -43,6 +43,12 @@
 (defmethod add ((obj <simulation-interface-rotational-general>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation)))
 
+(defmethod add ((obj <simulation-materials>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation)))
+
+(defmethod add ((obj <simulation-flow>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod insert ((mesh-name string) (simulation <simulation>))
@@ -135,3 +141,4 @@
           :do
              (insert-to-domain-copy sur-key domain domain-copy))
     (add domain-copy simulation)))
+

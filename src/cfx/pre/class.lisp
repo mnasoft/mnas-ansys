@@ -123,3 +123,30 @@
     :type string
     :documentation "Имя первой сетки."))
   (:documentation "Вращательный генеральный интерфейс."))
+
+(defclass <simulation-materials> (<simulation-command>)
+  ()
+  (:documentation "Добавляет материалы."))
+
+(defclass <simulation-flow> (<simulation-command>)
+  ((flow-name
+    :accessor <simulation-flow>-flow-name
+    :initarg :flow-name
+    :initform "Flow Analysis 1"
+    :type string
+    :documentation "Имя симуляции.")
+   (domain-fluid-name
+    :accessor <simulation-flow>-domain-fluid-name
+    :initarg :domain-fluid-name
+    :initform "D1"
+    :type string
+    :documentation "Имя флюидового домена.")
+   (domain-solid-names
+    :accessor <simulation-flow>-domain-solid-names
+    :initarg :domain-solid-names
+    :initform '("M1" "M2" "M3")
+    :type list
+    :documentation "Имена солидовых доменов."))
+  (:documentation "Команда для создания домена."))
+
+
