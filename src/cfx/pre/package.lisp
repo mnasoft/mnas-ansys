@@ -30,12 +30,9 @@
            mk-tp
            )
   (:export domains
-           fluid-domains
+           
            solid-domains
            )
-  (:export icem-domains
-           icem-fluid-domains
-           icem-solid-domains)
   (:export icem-fluid-domain-p
            icem-solid-domain-p)
   (:export <mesh>
@@ -51,7 +48,20 @@
   (:export mesh-name->domain-name
            domain-name->mesh-name)
   (:export mk-domain-fluid
-           mk-domain-solid))
+           mk-domain-solid
+           )
+  (:export main-test
+           reset
+           2d-region
+           2d-regions
+           3d-region
+           3d-regions
+           3d-region-mesh
+           3d-region-min
+           3d-region-max
+           3d-region-left
+           3d-region-right
+           ))
  
 (in-package :mnas-ansys/cfx/pre)
 

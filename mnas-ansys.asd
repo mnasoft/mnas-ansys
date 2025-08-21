@@ -396,7 +396,6 @@ CFX-PRE.
                              (:file "generic")
                              (:file "predicat")                             
                              (:file "method")
-                             (:file "test-data")
                              (:module "./method"
                               :serial t
                               :components ((:file "print-object")
@@ -418,7 +417,8 @@ CFX-PRE.
                               :components ((:file "domain")
                                            (:file "library")
                                            (:file "initialisation")
-                                           (:file "domain-interface")))))))
+                                           (:file "domain-interface")))
+                             (:file "test-data")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -5,48 +5,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; generic
 
-(defgeneric domains (domains)
-  (:documentation
-   "Возвращает список доменов."))
-
-(defgeneric fluid-domains (dom-sur)
-  (:documentation
-   "Возвращает список флюидовых доменов."))
-
-(defgeneric solid-domains (dom-sur)
-  (:documentation
-   "Возвращает список солидовых доменов."))
-
-(defgeneric icem-domains (domains)
-  (:documentation
-   "Возвращает список солтдовых доменов на основании списка поверхностей
-ICEM."))
-
-(defgeneric fluid-meshes (obj)
-  (:documentation
-   "Возвращает список флюидовых доменов на основании списка поверхностей
-ICEM."))
-
-(defgeneric solid-meshes (obj)
-  (:documentation
-   "Возвращает список солтдовых доменов на основании списка поверхностей
-ICEM."))
-
-(defgeneric fluid-mesh-p (name obj)
-  (:documentation
-   "Возвращает T, если имя представляет флюидовый домен на основании
-списка поверхностей ICEM, иначе - NIL."))
-
-(defgeneric solid-mesh-p (name obj)
-  (:documentation
-   "Возвращает T, если имя представляет солидовый домен на основании
-списка поверхностей ICEM, иначе - NIL."))
-
-(defgeneric find-icem-surfaces (name domains)
-  (:documentation
-   "Возвращает список поверхностей T, если имя представляет солидовый домен на основании
-списка поверхностей ICEM, иначе - NIL."))
-
 (defgeneric surfaces (obj)
   (:documentation
    "Возвращает список поверхностей объекта @b(obj)."))
@@ -55,13 +13,38 @@ ICEM."))
   (:documentation
    "Добавляем объект @b(item) в коллекцию @b(collection)."))
 
-;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric faces (name domains)
+(defgeneric 2d-region (key obj)
   (:documentation
-   "Возвращает список поверхностей домена @b(name)."))
+   "Возвращает имя 2d-региона по ключу имя Icem."))
 
-(defgeneric find-body (name domains)
+(defgeneric 2d-regions (obj)
   (:documentation
-   "Возвращает список доменов по имени тела (материальной точки)
-body-name."))
+   "Возвращает список имен 2d-регионов объекта @b(obj)."))
+
+(defgeneric 3d-regions (obj)
+  (:documentation
+   "Возвращает список имен 3d-регионов объекта @b(obj)."))
+
+(defgeneric 3d-region (name obj)
+  (:documentation
+   "Возвращает 3d-регион для объекта @b(obj) по его имени."))
+
+(defgeneric 3d-region-mesh (mesh-name obj)
+  (:documentation "Возвращает список объектов типа @b(<3d-region>) по имени сетки
+@b(mesh-name) для объекта @b(obj)."))
+
+(defgeneric 3d-region-min (mesh-name obj)
+  (:documentation "Возвращает объект типа @b(<3d-region>) с минимальным 3d-суффиксом по
+имени сетки @b(mesh-name) для объекта @b(obj)"))
+
+(defgeneric 3d-region-max (mesh-name obj)
+  (:documentation "Возвращает объект типа @b(<3d-region>) с минимальным 3d-суффиксом по
+имени сетки @b(mesh-name) для объекта @b(obj)"))
+
+(defgeneric 3d-region-left (mesh-name obj)
+  (:documentation "Возвращает список объектов типа @b(<3d-region>) с минимальными
+3d-суффиксом по имени сетки @b(mesh-name) из симуляции @b(obj)."))
+
+(defgeneric 3d-region-right (mesh-name obj)
+  (:documentation "Возвращает список объектов типа @b(<3d-region>) с максимальными
+3d-суффиксом по имени сетки @b(mesh-name) из симуляции @b(obj)."))

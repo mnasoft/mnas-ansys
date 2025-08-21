@@ -306,9 +306,27 @@
         :when (uiop:string-prefix-p "M" i)
           :collect i))
 
+(bodys-of-solid *simulation*)
+
 (defun rotate-around (named-points p-axis-start p-axis-end teta)
   "Функция вращает именованные точки повернутые вокруг оси, определяемой
 точками p-axis-start p-axis-end на угол teta."
   (let ((rotate-teta (math/matr:rotate-around p-axis-start p-axis-end teta))) ;; Определяем матрицу поворота
     (loop :for (name p) :in named-points
           :collect (list name (math/matr:transform p rotate-teta)))))
+
+;;;; ./src/cfx/pre/test.lisp
+
+(in-package :mnas-ansys/cfx/pre)
+
+(defun foo (pathname directory)
+  (namestring
+   (make-pathname :directory directory
+                  :name (pathname-name pathname)
+                  :type (pathname-type pathname))))
+
+(map
+ nil
+ #'(lambda (el)
+     (uiop:copy-file el (foo el "//n000339/Users/namatv/pp")))
+ (directory "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_06_*.tin"))
