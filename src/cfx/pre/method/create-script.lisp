@@ -829,4 +829,17 @@ END
           (mk-flow :simulation         (<simulation-command>-simulation      obj)
                    :flow-name          (<simulation-flow>-flow-name          obj)
                    :domain-fluid-name  (<simulation-flow>-domain-fluid-name  obj)
-                   :domain-solid-names (<simulation-flow>-domain-solid-names obj))))
+                   :domain-solid-names (<simulation-flow>-domain-solid-names obj)))
+  (loop :for solid-dom :in (<simulation-flow>-domain-solid-names obj)
+        :do
+           (mk-f-s-interface-n-m
+                    (<simulation-flow>-domain-fluid-name  obj)
+                    solid-dom
+                    (<simulation-command>-simulation obj))))
+
+#+nil
+(format stream "~A"
+                   (mk-f-s-interface-n-m
+                    (<simulation-flow>-domain-fluid-name  obj)
+                    solid-dom
+                    (<simulation-command>-simulation obj)))

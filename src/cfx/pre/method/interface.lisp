@@ -163,6 +163,7 @@
        :postfix postfix))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Интерфейс флюид-солид
 
 (defun make-f-s-interface-general-connection (fluid-dom
                                               solid-dom
@@ -192,7 +193,7 @@
   (format t "  END~%")
   (format t "END~%~%"))
 
-(defmethod fluid-surs (s-body-name (simulation <simulation>))
+(defmethod fluid-2d-regions (s-body-name (simulation <simulation>))
   (sort 
     (remove-if
      #'(lambda (el)
@@ -201,7 +202,7 @@
      (2d-regions (select-3d-regions-fluid simulation)))
     #'string<))
 
-(defmethod solid-surs (s-body-name (simulation <simulation>))
+(defmethod solid-2d-regions (s-body-name (simulation <simulation>))
   (sort 
    (remove-if
     #'(lambda (el)
@@ -211,15 +212,20 @@
     (2d-regions (select-3d-regions-solid simulation)))
    #'string<))
 
-(defmethod mk-f-s-interface-n-m (fluid-mesh-name solid-mesh-name (simulation <simulation>))
-  "
+(defmethod mk-f-s-interface-n-m (fluid-domain-name solid-domain-name (simulation <simulation>))
+  "Создает генеральный интерфейс типа флюд-солид по местам контакта
+доменов флюидова @b(fluid-domain-name) и солидова
+@b(solid-domain-name).
+
  @b(Пример использования:)
 @begin[lang=lisp](code)
  (mk-f-s-interface-n-m \"D1\" \"M3\" *i*)
 @end(code)
 "
   (make-f-s-interface-general-connection
-   fluid-mesh-name
-   solid-mesh-name
-   (fluid-surs solid-mesh-name simulation)
-   (solid-surs solid-mesh-name simulation)))
+   fluid-domain-name
+   solid-domain-name
+   (fluid-2d-regions solid-domain-name simulation)
+   (solid-2d-regions solid-domain-name  simulation)))
+
+
