@@ -836,10 +836,3 @@ END
                     (<simulation-flow>-domain-fluid-name  obj)
                     solid-dom
                     (<simulation-command>-simulation obj))))
-
-#+nil
-(format stream "~A"
-                   (mk-f-s-interface-n-m
-                    (<simulation-flow>-domain-fluid-name  obj)
-                    solid-dom
-                    (<simulation-command>-simulation obj)))

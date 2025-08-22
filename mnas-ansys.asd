@@ -391,7 +391,8 @@ CFX-PRE.
   :depends-on ("mnas-ansys/ccl" "mnas-format" "math/matr" "mnas-ansys/tin") 
   :components ((:module "src/cfx/pre"
                 :serial t
-                :components ((:file "package") 
+                :components ((:file "package")
+                             (:file "functions") 
                              (:file "class")
                              (:file "generic")
                              (:file "predicat")                             

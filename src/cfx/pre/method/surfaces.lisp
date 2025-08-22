@@ -5,23 +5,20 @@
 (defmethod surfaces ((d (eql nil)))
   d)
 
-(defmethod surfaces ((mesh <mesh>))
-  (ht-values-sort (<mesh>-2d-regions mesh)))
-#+nil 
-(defmethod surfaces ((domain <domain>))
-  (ht-values-sort (<domain>-surfaсes domain)))
-#+nil 
-(defmethod surface-keys ((domain <domain>))
-  (ht-keys-sort (<domain>-surfaсes domain)))
-#+nil 
-(defmethod surface-value (key (domain <domain>))
-  (gethash key (<domain>-surfaсes domain)))
 
+;;;; surfaces -> 2d-region-values
+(defmethod surfaces ((mesh <mesh>))
+  "@b(Описание:) метод @b(surfaces) возвращает список имен 2d-регионов...
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (surfaces (mesh \"G1\" *simulation*))
+@end(code)"
+  (ht-values-sort (<mesh>-2d-regions mesh)))
+
+;;;;  surface-keys -> 2d-region-keys
 (defmethod surface-keys ((mesh <mesh>))
   (ht-keys-sort (<mesh>-2d-regions mesh)))
-
-(defmethod surfaces ((simulation <simulation>))
-  (ht-values-sort (<simulation>-surfaces simulation)))
 
 (defmethod simulation-doman-surfaces ((domain-name string) (simulation <simulation>))
   "@b(Описание:) метод @b(simulation-doman-surfaces) возвращает список

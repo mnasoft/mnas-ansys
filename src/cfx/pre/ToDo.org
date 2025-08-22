@@ -1,3 +1,6 @@
+* Область переходов
+[[../../../mnas-ansys.asd]]
+
 * Пакет mnas-ansys/cfx/pre
 
 * ToDo

@@ -2,8 +2,14 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
-
 (defmethod interfaces ((3d-region <3d-region>))
+  "@b(Описание:) метод @b(interfaces) возвращает список имен 2d-регионов,
+являющихся интерфейсами для 3d-региона @b(3d-region).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (interfaces (3d-region \"DG1 G1 1\" *simulation*))
+@end(code)"
   (sort 
    (remove-if #'(lambda (el)
                   (not
@@ -12,6 +18,14 @@
    #'string<))
 
 (defmethod interfaces-with ((3d-region <3d-region>) mesh-name-2)
+  "@b(Описание:) метод @b(interfaces-with) возвращает список имен
+2d-регионов для 3d-региона @b(3d-region) сопряженных с 3d-регионом с
+именем сетки @b(mesh-name-2).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (interfaces-with (3d-region \"DG1 G1 1\" *simulation*) \"G2\")
+@end(code)"
   (labels ((foo (str)
              (let ((lst (ppcre:split " " str)))
                (list (second lst) (third lst)))))
