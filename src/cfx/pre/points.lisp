@@ -1,38 +1,6 @@
-;;;; ./src/cfx/pre/functions.lisp
+;;;; ./src/cfx/pre/points.lisp
 
 (in-package :mnas-ansys/cfx/pre)
-
-(defun preambule (&optional (stream t))
-  "@b(Описание:) функция @b(preambule) выводит в поток преамбулу для
-командного файла CFX PRE.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (preambule)
-->
- COMMAND FILE:
-   CFX Pre Version = 14.5
- END
-NIL
-@end(code)
-"
-  (format stream "~A~%~A~%~A~2%" "COMMAND FILE:" "  CFX Pre Version = 14.5" "END"))
-
-(defun cmd-invoke (cmd &optional (stream t))
-  (format stream "> ~A~%" cmd))
-
-(defun update (&optional (stream t))
-  "@b(Описание:) функция @b(update) выводит в поток команду update
-командного файла CFX PRE.
-
- @b(Пример использования:)
-@begin[lang=lisp](code)
- (update) ->
- > update
-@end(code)"
-  (cmd-invoke "update" stream))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun rotate-point-around-vector (point-3d point-1 point-2 teta)
   (let* ((rotate-teta (math/matr:rotate-around point-1 point-2  (math/coord:dtr teta)))
@@ -90,8 +58,7 @@ NIL
                         (h-start    100)
                         (teta-start 100)
                         (h-list    (math/core:split-range-at-center 0.0 1.0 10))
-                        (teta-list (math/core:split-range -17.0 17.0 34))
-                        )
+                        (teta-list (math/core:split-range -17.0 17.0 34)))
   (let ((d-p1-p2 (math/core:distance p1 p2)))
     (apply #'append
            (loop :for hight   :in h-list

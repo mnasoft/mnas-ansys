@@ -13,5 +13,11 @@
   (gethash name (<simulation>-meshes simulation)))
 
 (defmethod mesh (name (ht hash-table))
-  (gethash name ht))
+  "@b(Описание:) метод @b(mesh) возвращает из хеш-таблицы @b(ht),
+сетку по ее имени.
 
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mesh \"G1\" (<simulation>-meshes *simulation*))
+@end(code)"
+  (gethash name ht))

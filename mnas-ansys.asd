@@ -392,17 +392,19 @@ CFX-PRE.
   :components ((:module "src/cfx/pre"
                 :serial t
                 :components ((:file "package")
+                             (:file "gtm")
                              (:file "functions") 
                              (:file "class")
                              (:file "generic")
                              (:file "predicat")                             
                              (:file "method")
+                             (:module "monitor-objects"
+                              :serial t
+                              :components ((:file "monitor-objects")))
                              (:module "./method"
                               :serial t
                               :components ((:file "print-object")
-                                           (:file "meshes")
-                                           (:file "make")
-                                           (:file "surfaces")
+                                           (:file "mesh")
                                            (:file "add")
                                            (:file "initialize-instance")
                                            (:file "create-script")

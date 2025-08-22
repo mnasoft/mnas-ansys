@@ -25,3 +25,19 @@
          (loop :for i :across (coerce seq 'vector)
                :collect
                (2d-regions i))))
+
+
+;;;; surfaces -> 2d-region-values
+(defmethod 2d-region-values ((mesh <mesh>))
+  "@b(Описание:) метод @b(2d-region-values) возвращает список имен
+2d-регионов...
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (surfaces (mesh \"G1\" *simulation*))
+@end(code)"
+  (ht-values-sort (<mesh>-2d-regions mesh)))
+
+;;;;  surface-keys -> 2d-region-keys
+(defmethod 2d-region-keys ((mesh <mesh>))
+  (ht-keys-sort (<mesh>-2d-regions mesh)))

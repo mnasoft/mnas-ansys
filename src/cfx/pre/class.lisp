@@ -2,12 +2,6 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
-;; <cfx-domains>  -> <simulation>
-;; *cfx-domains*  -> *simulation*
-;; <icem-domains> -> <meshes>
-;; <icem-domain>  -> <mesh>
-;; <meshes>-domains -> ht
-
 (defclass <mesh> ()
   ((mesh-3d-region-instance-number
     :accessor <mesh>-3d-region-instance-number

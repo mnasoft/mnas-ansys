@@ -3,7 +3,15 @@
 (in-package :mnas-ansys/cfx/pre)
 
 (defmethod add ((3d-region <3d-region>) (simulation <simulation>))
-  "Добавляем домен в симуляцию"
+  "@b(Описание:) метод @b(add) добавляет 3d-region @b(3d-region) в
+симуляцию @b(simulation).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (add (make-instance '<3d-region>
+                     :mesh (mesh \"G1\" *simulation*) :simulation *simulation*)
+      *simulation*)
+@end(code)"
   (setf (<3d-region>-3d-suffix 3d-region)
         (incf (<mesh>-3d-region-instance-number (<3d-region>-mesh 3d-region))))
   (setf (gethash (name 3d-region)
@@ -13,14 +21,6 @@
         (hash-table-count (<simulation>-3d-regions simulation)))
   simulation)
 
-(defmethod name ((3d-region <3d-region>))
-  (let ((mesh-name (<mesh>-name (<3d-region>-mesh 3d-region))))
-    (format nil "D~A ~A ~A" mesh-name mesh-name (<3d-region>-3d-suffix 3d-region))))
-
-(defmethod name-old ((3d-region <3d-region>))
-  "Возвращает имя 3d-региона при добавлении."
-  (let ((mesh-name (<mesh>-name (<3d-region>-mesh 3d-region))))
-    (format nil "D~A ~A" mesh-name mesh-name)))
 
 (defmethod add ((mesh <mesh>) (simulation <simulation>))
   "Добавляем сетку к сиуляции."
@@ -48,10 +48,3 @@
 
 (defmethod add ((obj <simulation-flow>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-

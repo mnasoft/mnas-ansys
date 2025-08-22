@@ -127,4 +127,6 @@
 ;;;; Сброс настроек симуляции
 #+nil (reset *simulation*)
 
-(main-test)
+#+nil (main-test)
+
+

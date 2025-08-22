@@ -89,6 +89,3 @@
                               :initform (make-instance '<interface-models>)
                               :initarg :interface-models
                               :documentation "INTERFACE MODELS")))
-  
-(make-instance '<domain-interface>)
-

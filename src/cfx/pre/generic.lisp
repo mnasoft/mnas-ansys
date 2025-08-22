@@ -5,10 +5,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; generic
 
-(defgeneric surfaces (obj)
-  (:documentation
-   "Возвращает список поверхностей объекта @b(obj)."))
-
 (defgeneric add (item  collection)
   (:documentation
    "Добавляем объект @b(item) в коллекцию @b(collection)."))

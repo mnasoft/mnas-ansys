@@ -1,0 +1,610 @@
+* Пример использования
+
+** Создание экземпляра класса =<simulation>=
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+
+  (defparameter *s* (make-instance '<simulation>))
+  *s*
+#+end_src
+
+#+RESULTS:
+: #<<SIMULATION> 
+: Meshes    : NIL
+: 3D-Regions: NIL
+: Commands  : NIL>
+
+** Создание экземпляра класса =<mesh>=
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+
+  (defparameter *m*
+      (make-instance '<mesh>
+                     :tin-pathname #P"z:/ANSYS/CFX/a32/tin/DOM/G1/A32_prj_07_DG1.tin"
+                     :msh-pathname #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG1.msh"))
+  ,*m*
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#<<MESH> "G1" Instances: 0
+tin-pathname: #P"z:/ANSYS/CFX/a32/tin/DOM/G1/A32_prj_07_DG1.tin"
+msh-pathname: #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG1.msh"
+2D-Regions:
+Keys                                    Values
+"C/G1-G1/L/01/D_0.0"                    "C G1 G1 L 01 D_0.0"                    
+"C/G1-G1/L/02/02_D_8.0"                 "C G1 G1 L 02 02_D_8.0"                 
+"C/G1-G1/L/03/03_D_8.0"                 "C G1 G1 L 03 03_D_8.0"                 
+"C/G1-G1/R/01/D_0.0"                    "C G1 G1 R 01 D_0.0"                    
+"C/G1-G1/R/02/02_D_8.0"                 "C G1 G1 R 02 02_D_8.0"                 
+"C/G1-G1/R/03/03_D_8.0"                 "C G1 G1 R 03 03_D_8.0"                 
+"C/G1-G10/A_G1/01/D_0.0"                "C G1 G10 A_G1 01 D_0.0"                
+"C/G1-G10/A_G1/02/D_0.0"                "C G1 G10 A_G1 02 D_0.0"                
+"C/G1-G2/X_049.5/D_1.0"                 "C G1 G2 X_049.5 D_1.0"                 
+"C/G1-G2/X_060.5/PP_D_0.0"              "C G1 G2 X_060.5 PP_D_0.0"              
+"C/G1-G2/X_071.5/D_0.0"                 "C G1 G2 X_071.5 D_0.0"                 
+"C/G1-G2/X_075.0/PPL_D_0.0"             "C G1 G2 X_075.0 PPL_D_0.0"             
+"C/G1-G2/X_075.0/PPR_D_0.0"             "C G1 G2 X_075.0 PPR_D_0.0"             
+"C/G1-G2/X_093.5/D_0.0"                 "C G1 G2 X_093.5 D_0.0"                 
+"C/G1-G2/X_115.5/D_0.0"                 "C G1 G2 X_115.5 D_0.0"                 
+"C/G1-G2/X_137.5/D_0.0"                 "C G1 G2 X_137.5 D_0.0"                 
+"C/G1-G2/X_159.5/D_0.0"                 "C G1 G2 X_159.5 D_0.0"                 
+"C/G1-G2/X_181.5/D_0.0"                 "C G1 G2 X_181.5 D_0.0"                 
+"C/G1-G2/X_203.5/D_0.0"                 "C G1 G2 X_203.5 D_0.0"                 
+"C/G1-G2/X_225.5/D_0.0"                 "C G1 G2 X_225.5 D_0.0"                 
+"C/G1-G2/X_254.9/D_0.0"                 "C G1 G2 X_254.9 D_0.0"                 
+"C/G1-G2/X_261.5/D_14.5"                "C G1 G2 X_261.5 D_14.5"                
+"C/G1-G2/X_302.9/D_0.0"                 "C G1 G2 X_302.9 D_0.0"                 
+"C/G1-G2/X_350.9/D_0.0"                 "C G1 G2 X_350.9 D_0.0"                 
+"C/G1-G2/X_401.5/D_0.0"                 "C G1 G2 X_401.5 D_0.0"                 
+"C/G1-G2/X_436.5/D_0.0"                 "C G1 G2 X_436.5 D_0.0"                 
+"C/G1-G2/X_456.0/D_0.0"                 "C G1 G2 X_456.0 D_0.0"                 
+"C/G1-G2/X_466.5/D_0.0"                 "C G1 G2 X_466.5 D_0.0"                 
+"C/G1-G32/XM_40.2/D_16.0"               "C G1 G32 XM_40.2 D_16.0"               
+"C/G1-G33/XP_15.5/D_0.0"                "C G1 G33 XP_15.5 D_0.0"                
+"C/G1-G42/XM_14.8/D_16.0"               "C G1 G42 XM_14.8 D_16.0"               
+"C/G1-G5/XP_15.4/D_0.0"                 "C G1 G5 XP_15.4 D_0.0"                 
+"C/G1-G8/A_G1/01/D_0.0"                 "C G1 G8 A_G1 01 D_0.0"                 
+"C/G1-G9/XP_261.5/D_0.0"                "C G1 G9 XP_261.5 D_0.0"                
+"DG1/B/AIR_IN/D_32.0"                   "DG1 B AIR_IN D_32.0"                   
+"DG1/B/AIR_RL/D_5.0"                    "DG1 B AIR_RL D_5.0"                    
+"DG1/M0/A_G1/SA/01/D_16.0"              "DG1 M0 A_G1 SA 01 D_16.0"              
+"DG1/M0/GT/FIX/IN/01/01_D_16.0"         "DG1 M0 GT FIX IN 01 01_D_16.0"         
+"DG1/M0/GT/FIX/IN/01/02_D_4.0"          "DG1 M0 GT FIX IN 01 02_D_4.0"          
+"DG1/M0/GT/FIX/IN/01/03_D_4.0"          "DG1 M0 GT FIX IN 01 03_D_4.0"          
+"DG1/M0/GT/FIX/OUT/01/D_16.0"           "DG1 M0 GT FIX OUT 01 D_16.0"           
+"DG1/M0/GT/FIX/OUT/02/D_4.0"            "DG1 M0 GT FIX OUT 02 D_4.0"            
+"DG1/M0/GT/FIX/OUT/03/D_4.0"            "DG1 M0 GT FIX OUT 03 D_4.0"            
+"DG1/M0/GT/FIX/OUT/06/D_1.0"            "DG1 M0 GT FIX OUT 06 D_1.0"            
+"DG1/M0/GT/FIX/OUT/07/D_2.6"            "DG1 M0 GT FIX OUT 07 D_2.6"            
+"DG1/M0/GT/FIX/OUT/08/D_2.6"            "DG1 M0 GT FIX OUT 08 D_2.6"            
+"DG1/M0/GT/FIX/OUT/09/D_4.0"            "DG1 M0 GT FIX OUT 09 D_4.0"            
+"DG1/M0/GT/SPH/02/D_16.0"               "DG1 M0 GT SPH 02 D_16.0"               
+"DG1/M0/GT/SPH/03/D_16.0"               "DG1 M0 GT SPH 03 D_16.0"               
+"DG1/M0/KL/ST/HOLE/08/D_8.0"            "DG1 M0 KL ST HOLE 08 D_8.0"            
+"DG1/M0/KL/ST/OUT/01/D_1.0"             "DG1 M0 KL ST OUT 01 D_1.0"             
+"DG1/M0/KL/ST/OUT/02/D_8.0"             "DG1 M0 KL ST OUT 02 D_8.0"             
+"DG1/M0/KL/ST/OUT/03/D_16.0"            "DG1 M0 KL ST OUT 03 D_16.0"            
+"DG1/M0/KL/ST/OUT/06/D_8.0"             "DG1 M0 KL ST OUT 06 D_8.0"             
+"DG1/M0/KL/ST/OUT/07/D_6.0"             "DG1 M0 KL ST OUT 07 D_6.0"             
+"DG1/M0/KL/ST/OUT/10/01_D_16.0"         "DG1 M0 KL ST OUT 10 01_D_16.0"         
+"DG1/M0/KL/ST/OUT/10/02_D_4.0"          "DG1 M0 KL ST OUT 10 02_D_4.0"          
+"DG1/M0/KL/ST/OUT/10/03_D_16.0"         "DG1 M0 KL ST OUT 10 03_D_16.0"         
+"DG1/M0/KL/ST/OUT/11/01_D_4.0"          "DG1 M0 KL ST OUT 11 01_D_4.0"          
+"DG1/M0/KL/ST/OUT/12/01_D_4.0"          "DG1 M0 KL ST OUT 12 01_D_4.0"          
+"DG1/M0/KL/ST/OUT/12/02_D_16.0"         "DG1 M0 KL ST OUT 12 02_D_16.0"         
+"DG1/M0/KRP/FIX/11/01_D_8.0"            "DG1 M0 KRP FIX 11 01_D_8.0"            
+"DG1/M0/KRP/FIX/12/01_D_16.0"           "DG1 M0 KRP FIX 12 01_D_16.0"           
+"DG1/M0/KRP/FIX/13/01_D_8.0"            "DG1 M0 KRP FIX 13 01_D_8.0"            
+"DG1/M0/KRP/FIX/14/01_D_16.0"           "DG1 M0 KRP FIX 14 01_D_16.0"           
+"DG1/M0/KRP/FIX/16/01_D_16.0"           "DG1 M0 KRP FIX 16 01_D_16.0"           
+"DG1/M0/KRP/FIX/17/01_D_8.0"            "DG1 M0 KRP FIX 17 01_D_8.0"            
+"DG1/M0/KRP/FIX/18/01_D_1.0"            "DG1 M0 KRP FIX 18 01_D_1.0"            
+"DG1/M0/KRP/KMP/IN/04/01_D_2.0"         "DG1 M0 KRP KMP IN 04 01_D_2.0"         
+"DG1/M0/KRP/KMP/IN/04/01_D_4.0"         "DG1 M0 KRP KMP IN 04 01_D_4.0"         
+"DG1/M0/KRP/KMP/IN/04/D_5.0"            "DG1 M0 KRP KMP IN 04 D_5.0"            
+"DG1/M0/KRP/KMP/IN/08/01_D_3.0"         "DG1 M0 KRP KMP IN 08 01_D_3.0"         
+"DG1/M0/KRP/KMP/IN/09/01_D_2.0"         "DG1 M0 KRP KMP IN 09 01_D_2.0"         
+"DG1/M0/KRP/KMP/IN/BOT/1/01_D_16.0"     "DG1 M0 KRP KMP IN BOT 1 01_D_16.0"     
+"DG1/M0/KRP/KMP/IN/UP/1/01_D_16.0"      "DG1 M0 KRP KMP IN UP 1 01_D_16.0"      
+"DG1/M0/KRP/KMP/IN/UP/2/01_D_16.0"      "DG1 M0 KRP KMP IN UP 2 01_D_16.0"      
+"DG1/M0/KRP/KMP/IN1/04/01_D_32.0"       "DG1 M0 KRP KMP IN1 04 01_D_32.0"       
+"DG1/M0/KRP/KMP/IN1/05/01_D_10.0"       "DG1 M0 KRP KMP IN1 05 01_D_10.0"       
+"DG1/M0/KRP/KMP/IN1/3/01_D_16.0"        "DG1 M0 KRP KMP IN1 3 01_D_16.0"        
+"DG1/M0/KRP/KMP/IN1/3/01_D_32.0"        "DG1 M0 KRP KMP IN1 3 01_D_32.0"        
+"DG1/M0/KRP/KMP/IN1/3/02_D_16.0"        "DG1 M0 KRP KMP IN1 3 02_D_16.0"        
+"DG1/M0/KRP/KMP/IN1/3/03_D_16.0"        "DG1 M0 KRP KMP IN1 3 03_D_16.0"        
+"DG1/M0/KRP/KMP/KS/007/01_D_32.0"       "DG1 M0 KRP KMP KS 007 01_D_32.0"       
+"DG1/M0/KRP/KMP/KS/03/01_D_16.0"        "DG1 M0 KRP KMP KS 03 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/05/01_D_16.0"        "DG1 M0 KRP KMP KS 05 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/07/01_D_32.0"        "DG1 M0 KRP KMP KS 07 01_D_32.0"        
+"DG1/M0/KRP/KMP/KS/08/01_D_16.0"        "DG1 M0 KRP KMP KS 08 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/08/01_D_32.0"        "DG1 M0 KRP KMP KS 08 01_D_32.0"        
+"DG1/M0/KRP/KMP/KS/09/01_D_16.0"        "DG1 M0 KRP KMP KS 09 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/10/01_D_16.0"        "DG1 M0 KRP KMP KS 10 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/10/01_D_32.0"        "DG1 M0 KRP KMP KS 10 01_D_32.0"        
+"DG1/M0/KRP/KMP/KS/11/01_D_16.0"        "DG1 M0 KRP KMP KS 11 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/12/01_D_16.0"        "DG1 M0 KRP KMP KS 12 01_D_16.0"        
+"DG1/M0/KRP/KS/001/D_16.0"              "DG1 M0 KRP KS 001 D_16.0"              
+"DG1/M0/KRP/KS/002/D_32.0"              "DG1 M0 KRP KS 002 D_32.0"              
+"DG1/M0/KRP/KS/004/D_32.0"              "DG1 M0 KRP KS 004 D_32.0"              
+"DG1/M0/KRP/KS/005/D_16.0"              "DG1 M0 KRP KS 005 D_16.0"              
+"DG1/M0/KRP/KS/006/D_32.0"              "DG1 M0 KRP KS 006 D_32.0"              
+"DG1/M0/KRP/OB/01/01_D_16.0"            "DG1 M0 KRP OB 01 01_D_16.0"            
+"DG1/M0/KRP/OB/01/01_D_32.0"            "DG1 M0 KRP OB 01 01_D_32.0"            
+"DG1/M0/KRP/OB/02/01_D_5.0"             "DG1 M0 KRP OB 02 01_D_5.0"             
+"DG1/M0/KRP/OB/03/01_D_16.0"            "DG1 M0 KRP OB 03 01_D_16.0"            
+"DG1/M0/SA/01/D_32.0"                   "DG1 M0 SA 01 D_32.0"                   
+"DG1/M0/SA/09/D_16.0"                   "DG1 M0 SA 09 D_16.0"                   
+"DG1/M0/SA/OUT/PL/001/D_16.0"           "DG1 M0 SA OUT PL 001 D_16.0"           
+"DG1/M0/SA/OUT/PL/002/D_16.0"           "DG1 M0 SA OUT PL 002 D_16.0"           
+"DG1/M0/SA/OUT/PL/002/D_8.0"            "DG1 M0 SA OUT PL 002 D_8.0"            
+"DG1/M0/SA/OUT/PL/003/D_8.0"            "DG1 M0 SA OUT PL 003 D_8.0"            
+"DG1/M0/SA/OUT/PL/004/D_4.0"            "DG1 M0 SA OUT PL 004 D_4.0"            
+"DG1/M0/SA/OUT/PL/005/01_D_32.0"        "DG1 M0 SA OUT PL 005 01_D_32.0"        
+"DG1/M0/SA/OUT/PL/005/01_D_4.0"         "DG1 M0 SA OUT PL 005 01_D_4.0"         
+"DG1/M0/SA/OUT/PL/005/02_D_16.0"        "DG1 M0 SA OUT PL 005 02_D_16.0"        
+"DG1/M0/SA/OUT/PL/006/D_4.0"            "DG1 M0 SA OUT PL 006 D_4.0"            
+"DG1/M0/SA/OUT/PL/007/D_8.0"            "DG1 M0 SA OUT PL 007 D_8.0"            
+"DG1/M0/SA/OUT/PL/008/D_16.0"           "DG1 M0 SA OUT PL 008 D_16.0"           
+"DG1/M0/SA/OUT/PL/012/D_16.0"           "DG1 M0 SA OUT PL 012 D_16.0"           
+"DG1/M0/SA/OUT/PL/013/D_16.0"           "DG1 M0 SA OUT PL 013 D_16.0"           
+"DG1/M1/GT/CON/01/IN/01/D_8.0"          "DG1 M1 GT CON 01 IN 01 D_8.0"          
+"DG1/M1/GT/CON/01/IN/02/D_4.0"          "DG1 M1 GT CON 01 IN 02 D_4.0"          
+"DG1/M1/GT/CON/01/OUT/01/01_D_32.0"     "DG1 M1 GT CON 01 OUT 01 01_D_32.0"     
+"DG1/M1/GT/CON/01/OUT/01/03_D_2.5"      "DG1 M1 GT CON 01 OUT 01 03_D_2.5"      
+"DG1/M1/GT/CON/01/OUT/01/D_2.5"         "DG1 M1 GT CON 01 OUT 01 D_2.5"         
+"DG1/M1/GT/CON/02/H/D_1.0"              "DG1 M1 GT CON 02 H D_1.0"              
+"DG1/M1/GT/CON/02/OUT/01/01_D_16.0"     "DG1 M1 GT CON 02 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/02/OUT/01/02_D_1.0"      "DG1 M1 GT CON 02 OUT 01 02_D_1.0"      
+"DG1/M1/GT/CON/02/OUT/01/03_D_8.0"      "DG1 M1 GT CON 02 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/02/OUT/01/04_D_16.0"     "DG1 M1 GT CON 02 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/03/H/D_1.2"              "DG1 M1 GT CON 03 H D_1.2"              
+"DG1/M1/GT/CON/03/OUT/01/01_D_16.0"     "DG1 M1 GT CON 03 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/03/OUT/01/02_D_1.2"      "DG1 M1 GT CON 03 OUT 01 02_D_1.2"      
+"DG1/M1/GT/CON/03/OUT/01/03_D_8.0"      "DG1 M1 GT CON 03 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/03/OUT/01/04_D_16.0"     "DG1 M1 GT CON 03 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/03/T/01/D_3.0"           "DG1 M1 GT CON 03 T 01 D_3.0"           
+"DG1/M1/GT/CON/04/H/D_1.2"              "DG1 M1 GT CON 04 H D_1.2"              
+"DG1/M1/GT/CON/04/OUT/01/01_D_16.0"     "DG1 M1 GT CON 04 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/04/OUT/01/02_D_1.2"      "DG1 M1 GT CON 04 OUT 01 02_D_1.2"      
+"DG1/M1/GT/CON/04/OUT/01/03_D_8.0"      "DG1 M1 GT CON 04 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/04/OUT/01/04_D_16.0"     "DG1 M1 GT CON 04 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/04/T/01/D_3.0"           "DG1 M1 GT CON 04 T 01 D_3.0"           
+"DG1/M1/GT/CON/05/H/D_0.8"              "DG1 M1 GT CON 05 H D_0.8"              
+"DG1/M1/GT/CON/05/OUT/01/01_D_16.0"     "DG1 M1 GT CON 05 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/05/OUT/01/02_D_0.8"      "DG1 M1 GT CON 05 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/05/OUT/01/03_D_8.0"      "DG1 M1 GT CON 05 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/05/OUT/01/04_D_16.0"     "DG1 M1 GT CON 05 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/05/T/01/D_3.0"           "DG1 M1 GT CON 05 T 01 D_3.0"           
+"DG1/M1/GT/CON/06/H/D_0.8"              "DG1 M1 GT CON 06 H D_0.8"              
+"DG1/M1/GT/CON/06/OUT/01/01_D_16.0"     "DG1 M1 GT CON 06 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/06/OUT/01/02_D_0.8"      "DG1 M1 GT CON 06 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/06/OUT/01/03_D_8.0"      "DG1 M1 GT CON 06 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/06/OUT/01/04_D_16.0"     "DG1 M1 GT CON 06 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/06/T/01/D_3.0"           "DG1 M1 GT CON 06 T 01 D_3.0"           
+"DG1/M1/GT/CON/07/H/D_0.8"              "DG1 M1 GT CON 07 H D_0.8"              
+"DG1/M1/GT/CON/07/OUT/01/01_D_16.0"     "DG1 M1 GT CON 07 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/07/OUT/01/02_D_0.8"      "DG1 M1 GT CON 07 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/07/OUT/01/03_D_8.0"      "DG1 M1 GT CON 07 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/07/OUT/01/04_D_16.0"     "DG1 M1 GT CON 07 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/07/T/01/D_3.0"           "DG1 M1 GT CON 07 T 01 D_3.0"           
+"DG1/M1/GT/CON/08/H/D_0.8"              "DG1 M1 GT CON 08 H D_0.8"              
+"DG1/M1/GT/CON/08/IN/D_0.8"             "DG1 M1 GT CON 08 IN D_0.8"             
+"DG1/M1/GT/CON/08/OUT/01/01_D_16.0"     "DG1 M1 GT CON 08 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/08/OUT/01/03_D_8.0"      "DG1 M1 GT CON 08 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/08/OUT/01/04_D_16.0"     "DG1 M1 GT CON 08 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/08/T/01/D_3.0"           "DG1 M1 GT CON 08 T 01 D_3.0"           
+"DG1/M1/GT/CON/09/H/D_0.8"              "DG1 M1 GT CON 09 H D_0.8"              
+"DG1/M1/GT/CON/09/OUT/01/01_D_16.0"     "DG1 M1 GT CON 09 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/09/OUT/01/04_D_16.0"     "DG1 M1 GT CON 09 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/09/OUT/01_D_0.8"         "DG1 M1 GT CON 09 OUT 01_D_0.8"         
+"DG1/M1/GT/CON/09/OUT/D_8.0"            "DG1 M1 GT CON 09 OUT D_8.0"            
+"DG1/M1/GT/CON/09/T/01/D_3.0"           "DG1 M1 GT CON 09 T 01 D_3.0"           
+"DG1/M1/GT/CON/10/H/D_0.8"              "DG1 M1 GT CON 10 H D_0.8"              
+"DG1/M1/GT/CON/10/OUT/01/01_D_16.0"     "DG1 M1 GT CON 10 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/10/OUT/01/02_D_0.8"      "DG1 M1 GT CON 10 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/10/OUT/01/03_D_8.0"      "DG1 M1 GT CON 10 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/10/OUT/01/04_D_16.0"     "DG1 M1 GT CON 10 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/10/T/01/D_4.0"           "DG1 M1 GT CON 10 T 01 D_4.0"           
+"DG1/M1/GT/FIX/IN/01/01_D_16.0"         "DG1 M1 GT FIX IN 01 01_D_16.0"         
+"DG1/M1/GT/FIX/OUT/01/D_16.0"           "DG1 M1 GT FIX OUT 01 D_16.0"           
+"DG1/M1/GT/FIX/OUT/09/D_4.0"            "DG1 M1 GT FIX OUT 09 D_4.0"            
+"DG1/M1/GT/PPL/H/D_1.2"                 "DG1 M1 GT PPL H D_1.2"                 
+"DG1/M1/GT/PPL/IN/001/D_1.0"            "DG1 M1 GT PPL IN 001 D_1.0"            
+"DG1/M1/GT/PPL/OUT/001/D_16.0"          "DG1 M1 GT PPL OUT 001 D_16.0"          
+"DG1/M1/GT/PPL/OUT/002/D_16.0"          "DG1 M1 GT PPL OUT 002 D_16.0"          
+"DG1/M1/GT/PPL/OUT/003/D_16.0"          "DG1 M1 GT PPL OUT 003 D_16.0"          
+"DG1/M1/GT/PPL/OUT/004/D_16.0"          "DG1 M1 GT PPL OUT 004 D_16.0"          
+"DG1/M1/GT/PPR/H/D_1.2"                 "DG1 M1 GT PPR H D_1.2"                 
+"DG1/M1/GT/PPR/OUT/02/D_16.0"           "DG1 M1 GT PPR OUT 02 D_16.0"           
+"DG1/M1/GT/SM/11/H/D_0.8"               "DG1 M1 GT SM 11 H D_0.8"               
+"DG1/M1/GT/SM/11/IN/03/03_D_2.0"        "DG1 M1 GT SM 11 IN 03 03_D_2.0"        
+"DG1/M1/GT/SM/11/OUT/02_D_8.0"          "DG1 M1 GT SM 11 OUT 02_D_8.0"          
+"DG1/M1/GT/SM/11/OUT/D_16.0"            "DG1 M1 GT SM 11 OUT D_16.0"            
+"DG1/M1/GT/SM/12/OUT/D_16.0"            "DG1 M1 GT SM 12 OUT D_16.0"            
+"DG1/M1/GT/SM/13/H/01_D_16.0"           "DG1 M1 GT SM 13 H 01_D_16.0"           
+"DG1/M1/GT/SM/13/H/02_D_1.0"            "DG1 M1 GT SM 13 H 02_D_1.0"            
+"DG1/M1/GT/SM/13/OUT/D_16.0"            "DG1 M1 GT SM 13 OUT D_16.0"            
+"DG1/M1/GT/SM/13/OUT/D_8.0"             "DG1 M1 GT SM 13 OUT D_8.0"             
+"DG1/M1/GT/SM/14/H/01/D_1.0"            "DG1 M1 GT SM 14 H 01 D_1.0"            
+"DG1/M1/GT/SM/14/H/02/D_1.5"            "DG1 M1 GT SM 14 H 02 D_1.5"            
+"DG1/M1/GT/SM/14/H/03/D_1.5"            "DG1 M1 GT SM 14 H 03 D_1.5"            
+"DG1/M1/GT/SM/14/OUT/01/01_D_8.0"       "DG1 M1 GT SM 14 OUT 01 01_D_8.0"       
+"DG1/M1/GT/SM/14/OUT/01/D_16.0"         "DG1 M1 GT SM 14 OUT 01 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/01/D_8.0"          "DG1 M1 GT SM 14 OUT 01 D_8.0"          
+"DG1/M1/GT/SM/14/OUT/02/D_16.0"         "DG1 M1 GT SM 14 OUT 02 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/04/D_16.0"         "DG1 M1 GT SM 14 OUT 04 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/06/D_16.0"         "DG1 M1 GT SM 14 OUT 06 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/07/D_8.0"          "DG1 M1 GT SM 14 OUT 07 D_8.0"          
+"DG1/M1/GT/SM/14/OUT/08/D_8.0"          "DG1 M1 GT SM 14 OUT 08 D_8.0"          
+"DG1/M1/GT/SM/V1/H/01_D_0.4"            "DG1 M1 GT SM V1 H 01_D_0.4"            
+"DG1/M1/GT/SM/V1/H/02_D_1.0"            "DG1 M1 GT SM V1 H 02_D_1.0"            
+"DG1/M1/GT/SM/V1/OUT/D_16.0"            "DG1 M1 GT SM V1 OUT D_16.0"            
+"DG1/M1/GT/SM/V1/OUT/D_8.0"             "DG1 M1 GT SM V1 OUT D_8.0"             
+"DG1/M1/GT/SM/V2/H/01_D_0.4"            "DG1 M1 GT SM V2 H 01_D_0.4"            
+"DG1/M1/GT/SM/V2/H/02_D_1.0"            "DG1 M1 GT SM V2 H 02_D_1.0"            
+"DG1/M1/GT/SM/V2/OUT/D_16.0"            "DG1 M1 GT SM V2 OUT D_16.0"            
+"DG1/M1/GT/SM/V2/OUT/D_8.0"             "DG1 M1 GT SM V2 OUT D_8.0"             
+"DG1/M1/GT/SPH/01/D_16.0"               "DG1 M1 GT SPH 01 D_16.0"               
+"DG1/M2/GU/H/D_2.0"                     "DG1 M2 GU H D_2.0"                     
+"DG1/M2/GU/KRP/001/D_16.0"              "DG1 M2 GU KRP 001 D_16.0"              
+"DG1/M2/GU/KRP/002/D_16.0"              "DG1 M2 GU KRP 002 D_16.0"              
+"DG1/M2/GU/KRP/003/D_16.0"              "DG1 M2 GU KRP 003 D_16.0"              
+"DG1/M2/GU/KRP/004/D_16.0"              "DG1 M2 GU KRP 004 D_16.0"              
+"DG1/M2/GU/KRP/005/D_16.0"              "DG1 M2 GU KRP 005 D_16.0"              
+"DG1/M2/GU/KRP/006/D_16.0"              "DG1 M2 GU KRP 006 D_16.0"              
+"DG1/M2/GU/KRP/007/D_16.0"              "DG1 M2 GU KRP 007 D_16.0"              
+"DG1/M2/GU/KRP/009/D_16.0"              "DG1 M2 GU KRP 009 D_16.0"              
+"DG1/M2/GU/KRP/010/D_2.0"               "DG1 M2 GU KRP 010 D_2.0"               
+"DG1/M2/GU/KRP/011/D_16.0"              "DG1 M2 GU KRP 011 D_16.0"              
+"DG1/M2/GU/KRP/012/D_0.0"               "DG1 M2 GU KRP 012 D_0.0"               
+"DG1/M2/GU/KRP/013/D_16.0"              "DG1 M2 GU KRP 013 D_16.0"              
+"DG1/M2/GU/KRP/014/D_16.0"              "DG1 M2 GU KRP 014 D_16.0"              
+"DG1/M2/GU/KRP/015/D_4.0"               "DG1 M2 GU KRP 015 D_4.0"               
+"DG1/M2/GU/KRP/016/D_8.0"               "DG1 M2 GU KRP 016 D_8.0"               
+"DG1/M2/GU/KRP/017/D_4.0"               "DG1 M2 GU KRP 017 D_4.0"               
+"DG1/M2/GU/KRP/018/D_8.0"               "DG1 M2 GU KRP 018 D_8.0"               
+"DG1/M2/GU/KRP/019/D_3.0"               "DG1 M2 GU KRP 019 D_3.0"               
+"DG1/M2/GU/LEG/001/D_4.0"               "DG1 M2 GU LEG 001 D_4.0"               
+"DG1/M2/GU/LEG/002/D_2.0"               "DG1 M2 GU LEG 002 D_2.0"               
+"DG1/M2/GU/LEG/003/D_4.0"               "DG1 M2 GU LEG 003 D_4.0"               
+"DG1/M2/GU/LEG/004/D_4.0"               "DG1 M2 GU LEG 004 D_4.0"               
+"DG1/M2/GU/LEG/005/D_4.0"               "DG1 M2 GU LEG 005 D_4.0"               
+"DG1/M2/H/01/D_6.0"                     "DG1 M2 H 01 D_6.0"                     
+"DG1/M3/GT/PPL/OUT/005/D_1.0"           "DG1 M3 GT PPL OUT 005 D_1.0"           
+"DG1/M3/GT/PPL/OUT/005/D_16.0"          "DG1 M3 GT PPL OUT 005 D_16.0"          
+>
+#+end_example
+
+** Добавление экземпляра класса =<mesh>= в симуляцию
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+
+  (add *m* *s*)
+#+end_src
+
+#+RESULTS:
+: #<<SIMULATION> 
+: Meshes    : (("G1" 0))
+: 3D-Regions: NIL
+: Commands  : NIL>
+
+** Создание экземпляра класса =<3d-region>=
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+
+  (defparameter *3d-r*
+    (make-instance '<3d-region> :mesh *m*))
+
+  ,*3d-r*
+#+end_src
+
+#+RESULTS:
+: #<<3D-REGION> Mesh: "G1"  3D-Suffix: NIL 2D-Suffix: NIL Simulation: NIL>
+
+** Добавление экземпляра класса =<3d-region>= в симуляцию 
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+
+  (add *3d-r* *s*)
+#+end_src
+
+#+RESULTS:
+: #<<SIMULATION> 
+: Meshes    : (("G1" 1))
+: 3D-Regions: ("DG1 G1 1")
+: Commands  : NIL>
+
+** Поиск по имени экземпляра класса =<mesh>= в симуляции
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+  (mesh "G1" *s*)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#<<MESH> "G1" Instances: 1
+tin-pathname: #P"z:/ANSYS/CFX/a32/tin/DOM/G1/A32_prj_07_DG1.tin"
+msh-pathname: #P"z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_DG1.msh"
+2D-Regions:
+Keys                                    Values
+"C/G1-G1/L/01/D_0.0"                    "C G1 G1 L 01 D_0.0"                    
+"C/G1-G1/L/02/02_D_8.0"                 "C G1 G1 L 02 02_D_8.0"                 
+"C/G1-G1/L/03/03_D_8.0"                 "C G1 G1 L 03 03_D_8.0"                 
+"C/G1-G1/R/01/D_0.0"                    "C G1 G1 R 01 D_0.0"                    
+"C/G1-G1/R/02/02_D_8.0"                 "C G1 G1 R 02 02_D_8.0"                 
+"C/G1-G1/R/03/03_D_8.0"                 "C G1 G1 R 03 03_D_8.0"                 
+"C/G1-G10/A_G1/01/D_0.0"                "C G1 G10 A_G1 01 D_0.0"                
+"C/G1-G10/A_G1/02/D_0.0"                "C G1 G10 A_G1 02 D_0.0"                
+"C/G1-G2/X_049.5/D_1.0"                 "C G1 G2 X_049.5 D_1.0"                 
+"C/G1-G2/X_060.5/PP_D_0.0"              "C G1 G2 X_060.5 PP_D_0.0"              
+"C/G1-G2/X_071.5/D_0.0"                 "C G1 G2 X_071.5 D_0.0"                 
+"C/G1-G2/X_075.0/PPL_D_0.0"             "C G1 G2 X_075.0 PPL_D_0.0"             
+"C/G1-G2/X_075.0/PPR_D_0.0"             "C G1 G2 X_075.0 PPR_D_0.0"             
+"C/G1-G2/X_093.5/D_0.0"                 "C G1 G2 X_093.5 D_0.0"                 
+"C/G1-G2/X_115.5/D_0.0"                 "C G1 G2 X_115.5 D_0.0"                 
+"C/G1-G2/X_137.5/D_0.0"                 "C G1 G2 X_137.5 D_0.0"                 
+"C/G1-G2/X_159.5/D_0.0"                 "C G1 G2 X_159.5 D_0.0"                 
+"C/G1-G2/X_181.5/D_0.0"                 "C G1 G2 X_181.5 D_0.0"                 
+"C/G1-G2/X_203.5/D_0.0"                 "C G1 G2 X_203.5 D_0.0"                 
+"C/G1-G2/X_225.5/D_0.0"                 "C G1 G2 X_225.5 D_0.0"                 
+"C/G1-G2/X_254.9/D_0.0"                 "C G1 G2 X_254.9 D_0.0"                 
+"C/G1-G2/X_261.5/D_14.5"                "C G1 G2 X_261.5 D_14.5"                
+"C/G1-G2/X_302.9/D_0.0"                 "C G1 G2 X_302.9 D_0.0"                 
+"C/G1-G2/X_350.9/D_0.0"                 "C G1 G2 X_350.9 D_0.0"                 
+"C/G1-G2/X_401.5/D_0.0"                 "C G1 G2 X_401.5 D_0.0"                 
+"C/G1-G2/X_436.5/D_0.0"                 "C G1 G2 X_436.5 D_0.0"                 
+"C/G1-G2/X_456.0/D_0.0"                 "C G1 G2 X_456.0 D_0.0"                 
+"C/G1-G2/X_466.5/D_0.0"                 "C G1 G2 X_466.5 D_0.0"                 
+"C/G1-G32/XM_40.2/D_16.0"               "C G1 G32 XM_40.2 D_16.0"               
+"C/G1-G33/XP_15.5/D_0.0"                "C G1 G33 XP_15.5 D_0.0"                
+"C/G1-G42/XM_14.8/D_16.0"               "C G1 G42 XM_14.8 D_16.0"               
+"C/G1-G5/XP_15.4/D_0.0"                 "C G1 G5 XP_15.4 D_0.0"                 
+"C/G1-G8/A_G1/01/D_0.0"                 "C G1 G8 A_G1 01 D_0.0"                 
+"C/G1-G9/XP_261.5/D_0.0"                "C G1 G9 XP_261.5 D_0.0"                
+"DG1/B/AIR_IN/D_32.0"                   "DG1 B AIR_IN D_32.0"                   
+"DG1/B/AIR_RL/D_5.0"                    "DG1 B AIR_RL D_5.0"                    
+"DG1/M0/A_G1/SA/01/D_16.0"              "DG1 M0 A_G1 SA 01 D_16.0"              
+"DG1/M0/GT/FIX/IN/01/01_D_16.0"         "DG1 M0 GT FIX IN 01 01_D_16.0"         
+"DG1/M0/GT/FIX/IN/01/02_D_4.0"          "DG1 M0 GT FIX IN 01 02_D_4.0"          
+"DG1/M0/GT/FIX/IN/01/03_D_4.0"          "DG1 M0 GT FIX IN 01 03_D_4.0"          
+"DG1/M0/GT/FIX/OUT/01/D_16.0"           "DG1 M0 GT FIX OUT 01 D_16.0"           
+"DG1/M0/GT/FIX/OUT/02/D_4.0"            "DG1 M0 GT FIX OUT 02 D_4.0"            
+"DG1/M0/GT/FIX/OUT/03/D_4.0"            "DG1 M0 GT FIX OUT 03 D_4.0"            
+"DG1/M0/GT/FIX/OUT/06/D_1.0"            "DG1 M0 GT FIX OUT 06 D_1.0"            
+"DG1/M0/GT/FIX/OUT/07/D_2.6"            "DG1 M0 GT FIX OUT 07 D_2.6"            
+"DG1/M0/GT/FIX/OUT/08/D_2.6"            "DG1 M0 GT FIX OUT 08 D_2.6"            
+"DG1/M0/GT/FIX/OUT/09/D_4.0"            "DG1 M0 GT FIX OUT 09 D_4.0"            
+"DG1/M0/GT/SPH/02/D_16.0"               "DG1 M0 GT SPH 02 D_16.0"               
+"DG1/M0/GT/SPH/03/D_16.0"               "DG1 M0 GT SPH 03 D_16.0"               
+"DG1/M0/KL/ST/HOLE/08/D_8.0"            "DG1 M0 KL ST HOLE 08 D_8.0"            
+"DG1/M0/KL/ST/OUT/01/D_1.0"             "DG1 M0 KL ST OUT 01 D_1.0"             
+"DG1/M0/KL/ST/OUT/02/D_8.0"             "DG1 M0 KL ST OUT 02 D_8.0"             
+"DG1/M0/KL/ST/OUT/03/D_16.0"            "DG1 M0 KL ST OUT 03 D_16.0"            
+"DG1/M0/KL/ST/OUT/06/D_8.0"             "DG1 M0 KL ST OUT 06 D_8.0"             
+"DG1/M0/KL/ST/OUT/07/D_6.0"             "DG1 M0 KL ST OUT 07 D_6.0"             
+"DG1/M0/KL/ST/OUT/10/01_D_16.0"         "DG1 M0 KL ST OUT 10 01_D_16.0"         
+"DG1/M0/KL/ST/OUT/10/02_D_4.0"          "DG1 M0 KL ST OUT 10 02_D_4.0"          
+"DG1/M0/KL/ST/OUT/10/03_D_16.0"         "DG1 M0 KL ST OUT 10 03_D_16.0"         
+"DG1/M0/KL/ST/OUT/11/01_D_4.0"          "DG1 M0 KL ST OUT 11 01_D_4.0"          
+"DG1/M0/KL/ST/OUT/12/01_D_4.0"          "DG1 M0 KL ST OUT 12 01_D_4.0"          
+"DG1/M0/KL/ST/OUT/12/02_D_16.0"         "DG1 M0 KL ST OUT 12 02_D_16.0"         
+"DG1/M0/KRP/FIX/11/01_D_8.0"            "DG1 M0 KRP FIX 11 01_D_8.0"            
+"DG1/M0/KRP/FIX/12/01_D_16.0"           "DG1 M0 KRP FIX 12 01_D_16.0"           
+"DG1/M0/KRP/FIX/13/01_D_8.0"            "DG1 M0 KRP FIX 13 01_D_8.0"            
+"DG1/M0/KRP/FIX/14/01_D_16.0"           "DG1 M0 KRP FIX 14 01_D_16.0"           
+"DG1/M0/KRP/FIX/16/01_D_16.0"           "DG1 M0 KRP FIX 16 01_D_16.0"           
+"DG1/M0/KRP/FIX/17/01_D_8.0"            "DG1 M0 KRP FIX 17 01_D_8.0"            
+"DG1/M0/KRP/FIX/18/01_D_1.0"            "DG1 M0 KRP FIX 18 01_D_1.0"            
+"DG1/M0/KRP/KMP/IN/04/01_D_2.0"         "DG1 M0 KRP KMP IN 04 01_D_2.0"         
+"DG1/M0/KRP/KMP/IN/04/01_D_4.0"         "DG1 M0 KRP KMP IN 04 01_D_4.0"         
+"DG1/M0/KRP/KMP/IN/04/D_5.0"            "DG1 M0 KRP KMP IN 04 D_5.0"            
+"DG1/M0/KRP/KMP/IN/08/01_D_3.0"         "DG1 M0 KRP KMP IN 08 01_D_3.0"         
+"DG1/M0/KRP/KMP/IN/09/01_D_2.0"         "DG1 M0 KRP KMP IN 09 01_D_2.0"         
+"DG1/M0/KRP/KMP/IN/BOT/1/01_D_16.0"     "DG1 M0 KRP KMP IN BOT 1 01_D_16.0"     
+"DG1/M0/KRP/KMP/IN/UP/1/01_D_16.0"      "DG1 M0 KRP KMP IN UP 1 01_D_16.0"      
+"DG1/M0/KRP/KMP/IN/UP/2/01_D_16.0"      "DG1 M0 KRP KMP IN UP 2 01_D_16.0"      
+"DG1/M0/KRP/KMP/IN1/04/01_D_32.0"       "DG1 M0 KRP KMP IN1 04 01_D_32.0"       
+"DG1/M0/KRP/KMP/IN1/05/01_D_10.0"       "DG1 M0 KRP KMP IN1 05 01_D_10.0"       
+"DG1/M0/KRP/KMP/IN1/3/01_D_16.0"        "DG1 M0 KRP KMP IN1 3 01_D_16.0"        
+"DG1/M0/KRP/KMP/IN1/3/01_D_32.0"        "DG1 M0 KRP KMP IN1 3 01_D_32.0"        
+"DG1/M0/KRP/KMP/IN1/3/02_D_16.0"        "DG1 M0 KRP KMP IN1 3 02_D_16.0"        
+"DG1/M0/KRP/KMP/IN1/3/03_D_16.0"        "DG1 M0 KRP KMP IN1 3 03_D_16.0"        
+"DG1/M0/KRP/KMP/KS/007/01_D_32.0"       "DG1 M0 KRP KMP KS 007 01_D_32.0"       
+"DG1/M0/KRP/KMP/KS/03/01_D_16.0"        "DG1 M0 KRP KMP KS 03 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/05/01_D_16.0"        "DG1 M0 KRP KMP KS 05 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/07/01_D_32.0"        "DG1 M0 KRP KMP KS 07 01_D_32.0"        
+"DG1/M0/KRP/KMP/KS/08/01_D_16.0"        "DG1 M0 KRP KMP KS 08 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/08/01_D_32.0"        "DG1 M0 KRP KMP KS 08 01_D_32.0"        
+"DG1/M0/KRP/KMP/KS/09/01_D_16.0"        "DG1 M0 KRP KMP KS 09 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/10/01_D_16.0"        "DG1 M0 KRP KMP KS 10 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/10/01_D_32.0"        "DG1 M0 KRP KMP KS 10 01_D_32.0"        
+"DG1/M0/KRP/KMP/KS/11/01_D_16.0"        "DG1 M0 KRP KMP KS 11 01_D_16.0"        
+"DG1/M0/KRP/KMP/KS/12/01_D_16.0"        "DG1 M0 KRP KMP KS 12 01_D_16.0"        
+"DG1/M0/KRP/KS/001/D_16.0"              "DG1 M0 KRP KS 001 D_16.0"              
+"DG1/M0/KRP/KS/002/D_32.0"              "DG1 M0 KRP KS 002 D_32.0"              
+"DG1/M0/KRP/KS/004/D_32.0"              "DG1 M0 KRP KS 004 D_32.0"              
+"DG1/M0/KRP/KS/005/D_16.0"              "DG1 M0 KRP KS 005 D_16.0"              
+"DG1/M0/KRP/KS/006/D_32.0"              "DG1 M0 KRP KS 006 D_32.0"              
+"DG1/M0/KRP/OB/01/01_D_16.0"            "DG1 M0 KRP OB 01 01_D_16.0"            
+"DG1/M0/KRP/OB/01/01_D_32.0"            "DG1 M0 KRP OB 01 01_D_32.0"            
+"DG1/M0/KRP/OB/02/01_D_5.0"             "DG1 M0 KRP OB 02 01_D_5.0"             
+"DG1/M0/KRP/OB/03/01_D_16.0"            "DG1 M0 KRP OB 03 01_D_16.0"            
+"DG1/M0/SA/01/D_32.0"                   "DG1 M0 SA 01 D_32.0"                   
+"DG1/M0/SA/09/D_16.0"                   "DG1 M0 SA 09 D_16.0"                   
+"DG1/M0/SA/OUT/PL/001/D_16.0"           "DG1 M0 SA OUT PL 001 D_16.0"           
+"DG1/M0/SA/OUT/PL/002/D_16.0"           "DG1 M0 SA OUT PL 002 D_16.0"           
+"DG1/M0/SA/OUT/PL/002/D_8.0"            "DG1 M0 SA OUT PL 002 D_8.0"            
+"DG1/M0/SA/OUT/PL/003/D_8.0"            "DG1 M0 SA OUT PL 003 D_8.0"            
+"DG1/M0/SA/OUT/PL/004/D_4.0"            "DG1 M0 SA OUT PL 004 D_4.0"            
+"DG1/M0/SA/OUT/PL/005/01_D_32.0"        "DG1 M0 SA OUT PL 005 01_D_32.0"        
+"DG1/M0/SA/OUT/PL/005/01_D_4.0"         "DG1 M0 SA OUT PL 005 01_D_4.0"         
+"DG1/M0/SA/OUT/PL/005/02_D_16.0"        "DG1 M0 SA OUT PL 005 02_D_16.0"        
+"DG1/M0/SA/OUT/PL/006/D_4.0"            "DG1 M0 SA OUT PL 006 D_4.0"            
+"DG1/M0/SA/OUT/PL/007/D_8.0"            "DG1 M0 SA OUT PL 007 D_8.0"            
+"DG1/M0/SA/OUT/PL/008/D_16.0"           "DG1 M0 SA OUT PL 008 D_16.0"           
+"DG1/M0/SA/OUT/PL/012/D_16.0"           "DG1 M0 SA OUT PL 012 D_16.0"           
+"DG1/M0/SA/OUT/PL/013/D_16.0"           "DG1 M0 SA OUT PL 013 D_16.0"           
+"DG1/M1/GT/CON/01/IN/01/D_8.0"          "DG1 M1 GT CON 01 IN 01 D_8.0"          
+"DG1/M1/GT/CON/01/IN/02/D_4.0"          "DG1 M1 GT CON 01 IN 02 D_4.0"          
+"DG1/M1/GT/CON/01/OUT/01/01_D_32.0"     "DG1 M1 GT CON 01 OUT 01 01_D_32.0"     
+"DG1/M1/GT/CON/01/OUT/01/03_D_2.5"      "DG1 M1 GT CON 01 OUT 01 03_D_2.5"      
+"DG1/M1/GT/CON/01/OUT/01/D_2.5"         "DG1 M1 GT CON 01 OUT 01 D_2.5"         
+"DG1/M1/GT/CON/02/H/D_1.0"              "DG1 M1 GT CON 02 H D_1.0"              
+"DG1/M1/GT/CON/02/OUT/01/01_D_16.0"     "DG1 M1 GT CON 02 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/02/OUT/01/02_D_1.0"      "DG1 M1 GT CON 02 OUT 01 02_D_1.0"      
+"DG1/M1/GT/CON/02/OUT/01/03_D_8.0"      "DG1 M1 GT CON 02 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/02/OUT/01/04_D_16.0"     "DG1 M1 GT CON 02 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/03/H/D_1.2"              "DG1 M1 GT CON 03 H D_1.2"              
+"DG1/M1/GT/CON/03/OUT/01/01_D_16.0"     "DG1 M1 GT CON 03 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/03/OUT/01/02_D_1.2"      "DG1 M1 GT CON 03 OUT 01 02_D_1.2"      
+"DG1/M1/GT/CON/03/OUT/01/03_D_8.0"      "DG1 M1 GT CON 03 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/03/OUT/01/04_D_16.0"     "DG1 M1 GT CON 03 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/03/T/01/D_3.0"           "DG1 M1 GT CON 03 T 01 D_3.0"           
+"DG1/M1/GT/CON/04/H/D_1.2"              "DG1 M1 GT CON 04 H D_1.2"              
+"DG1/M1/GT/CON/04/OUT/01/01_D_16.0"     "DG1 M1 GT CON 04 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/04/OUT/01/02_D_1.2"      "DG1 M1 GT CON 04 OUT 01 02_D_1.2"      
+"DG1/M1/GT/CON/04/OUT/01/03_D_8.0"      "DG1 M1 GT CON 04 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/04/OUT/01/04_D_16.0"     "DG1 M1 GT CON 04 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/04/T/01/D_3.0"           "DG1 M1 GT CON 04 T 01 D_3.0"           
+"DG1/M1/GT/CON/05/H/D_0.8"              "DG1 M1 GT CON 05 H D_0.8"              
+"DG1/M1/GT/CON/05/OUT/01/01_D_16.0"     "DG1 M1 GT CON 05 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/05/OUT/01/02_D_0.8"      "DG1 M1 GT CON 05 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/05/OUT/01/03_D_8.0"      "DG1 M1 GT CON 05 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/05/OUT/01/04_D_16.0"     "DG1 M1 GT CON 05 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/05/T/01/D_3.0"           "DG1 M1 GT CON 05 T 01 D_3.0"           
+"DG1/M1/GT/CON/06/H/D_0.8"              "DG1 M1 GT CON 06 H D_0.8"              
+"DG1/M1/GT/CON/06/OUT/01/01_D_16.0"     "DG1 M1 GT CON 06 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/06/OUT/01/02_D_0.8"      "DG1 M1 GT CON 06 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/06/OUT/01/03_D_8.0"      "DG1 M1 GT CON 06 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/06/OUT/01/04_D_16.0"     "DG1 M1 GT CON 06 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/06/T/01/D_3.0"           "DG1 M1 GT CON 06 T 01 D_3.0"           
+"DG1/M1/GT/CON/07/H/D_0.8"              "DG1 M1 GT CON 07 H D_0.8"              
+"DG1/M1/GT/CON/07/OUT/01/01_D_16.0"     "DG1 M1 GT CON 07 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/07/OUT/01/02_D_0.8"      "DG1 M1 GT CON 07 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/07/OUT/01/03_D_8.0"      "DG1 M1 GT CON 07 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/07/OUT/01/04_D_16.0"     "DG1 M1 GT CON 07 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/07/T/01/D_3.0"           "DG1 M1 GT CON 07 T 01 D_3.0"           
+"DG1/M1/GT/CON/08/H/D_0.8"              "DG1 M1 GT CON 08 H D_0.8"              
+"DG1/M1/GT/CON/08/IN/D_0.8"             "DG1 M1 GT CON 08 IN D_0.8"             
+"DG1/M1/GT/CON/08/OUT/01/01_D_16.0"     "DG1 M1 GT CON 08 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/08/OUT/01/03_D_8.0"      "DG1 M1 GT CON 08 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/08/OUT/01/04_D_16.0"     "DG1 M1 GT CON 08 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/08/T/01/D_3.0"           "DG1 M1 GT CON 08 T 01 D_3.0"           
+"DG1/M1/GT/CON/09/H/D_0.8"              "DG1 M1 GT CON 09 H D_0.8"              
+"DG1/M1/GT/CON/09/OUT/01/01_D_16.0"     "DG1 M1 GT CON 09 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/09/OUT/01/04_D_16.0"     "DG1 M1 GT CON 09 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/09/OUT/01_D_0.8"         "DG1 M1 GT CON 09 OUT 01_D_0.8"         
+"DG1/M1/GT/CON/09/OUT/D_8.0"            "DG1 M1 GT CON 09 OUT D_8.0"            
+"DG1/M1/GT/CON/09/T/01/D_3.0"           "DG1 M1 GT CON 09 T 01 D_3.0"           
+"DG1/M1/GT/CON/10/H/D_0.8"              "DG1 M1 GT CON 10 H D_0.8"              
+"DG1/M1/GT/CON/10/OUT/01/01_D_16.0"     "DG1 M1 GT CON 10 OUT 01 01_D_16.0"     
+"DG1/M1/GT/CON/10/OUT/01/02_D_0.8"      "DG1 M1 GT CON 10 OUT 01 02_D_0.8"      
+"DG1/M1/GT/CON/10/OUT/01/03_D_8.0"      "DG1 M1 GT CON 10 OUT 01 03_D_8.0"      
+"DG1/M1/GT/CON/10/OUT/01/04_D_16.0"     "DG1 M1 GT CON 10 OUT 01 04_D_16.0"     
+"DG1/M1/GT/CON/10/T/01/D_4.0"           "DG1 M1 GT CON 10 T 01 D_4.0"           
+"DG1/M1/GT/FIX/IN/01/01_D_16.0"         "DG1 M1 GT FIX IN 01 01_D_16.0"         
+"DG1/M1/GT/FIX/OUT/01/D_16.0"           "DG1 M1 GT FIX OUT 01 D_16.0"           
+"DG1/M1/GT/FIX/OUT/09/D_4.0"            "DG1 M1 GT FIX OUT 09 D_4.0"            
+"DG1/M1/GT/PPL/H/D_1.2"                 "DG1 M1 GT PPL H D_1.2"                 
+"DG1/M1/GT/PPL/IN/001/D_1.0"            "DG1 M1 GT PPL IN 001 D_1.0"            
+"DG1/M1/GT/PPL/OUT/001/D_16.0"          "DG1 M1 GT PPL OUT 001 D_16.0"          
+"DG1/M1/GT/PPL/OUT/002/D_16.0"          "DG1 M1 GT PPL OUT 002 D_16.0"          
+"DG1/M1/GT/PPL/OUT/003/D_16.0"          "DG1 M1 GT PPL OUT 003 D_16.0"          
+"DG1/M1/GT/PPL/OUT/004/D_16.0"          "DG1 M1 GT PPL OUT 004 D_16.0"          
+"DG1/M1/GT/PPR/H/D_1.2"                 "DG1 M1 GT PPR H D_1.2"                 
+"DG1/M1/GT/PPR/OUT/02/D_16.0"           "DG1 M1 GT PPR OUT 02 D_16.0"           
+"DG1/M1/GT/SM/11/H/D_0.8"               "DG1 M1 GT SM 11 H D_0.8"               
+"DG1/M1/GT/SM/11/IN/03/03_D_2.0"        "DG1 M1 GT SM 11 IN 03 03_D_2.0"        
+"DG1/M1/GT/SM/11/OUT/02_D_8.0"          "DG1 M1 GT SM 11 OUT 02_D_8.0"          
+"DG1/M1/GT/SM/11/OUT/D_16.0"            "DG1 M1 GT SM 11 OUT D_16.0"            
+"DG1/M1/GT/SM/12/OUT/D_16.0"            "DG1 M1 GT SM 12 OUT D_16.0"            
+"DG1/M1/GT/SM/13/H/01_D_16.0"           "DG1 M1 GT SM 13 H 01_D_16.0"           
+"DG1/M1/GT/SM/13/H/02_D_1.0"            "DG1 M1 GT SM 13 H 02_D_1.0"            
+"DG1/M1/GT/SM/13/OUT/D_16.0"            "DG1 M1 GT SM 13 OUT D_16.0"            
+"DG1/M1/GT/SM/13/OUT/D_8.0"             "DG1 M1 GT SM 13 OUT D_8.0"             
+"DG1/M1/GT/SM/14/H/01/D_1.0"            "DG1 M1 GT SM 14 H 01 D_1.0"            
+"DG1/M1/GT/SM/14/H/02/D_1.5"            "DG1 M1 GT SM 14 H 02 D_1.5"            
+"DG1/M1/GT/SM/14/H/03/D_1.5"            "DG1 M1 GT SM 14 H 03 D_1.5"            
+"DG1/M1/GT/SM/14/OUT/01/01_D_8.0"       "DG1 M1 GT SM 14 OUT 01 01_D_8.0"       
+"DG1/M1/GT/SM/14/OUT/01/D_16.0"         "DG1 M1 GT SM 14 OUT 01 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/01/D_8.0"          "DG1 M1 GT SM 14 OUT 01 D_8.0"          
+"DG1/M1/GT/SM/14/OUT/02/D_16.0"         "DG1 M1 GT SM 14 OUT 02 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/04/D_16.0"         "DG1 M1 GT SM 14 OUT 04 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/06/D_16.0"         "DG1 M1 GT SM 14 OUT 06 D_16.0"         
+"DG1/M1/GT/SM/14/OUT/07/D_8.0"          "DG1 M1 GT SM 14 OUT 07 D_8.0"          
+"DG1/M1/GT/SM/14/OUT/08/D_8.0"          "DG1 M1 GT SM 14 OUT 08 D_8.0"          
+"DG1/M1/GT/SM/V1/H/01_D_0.4"            "DG1 M1 GT SM V1 H 01_D_0.4"            
+"DG1/M1/GT/SM/V1/H/02_D_1.0"            "DG1 M1 GT SM V1 H 02_D_1.0"            
+"DG1/M1/GT/SM/V1/OUT/D_16.0"            "DG1 M1 GT SM V1 OUT D_16.0"            
+"DG1/M1/GT/SM/V1/OUT/D_8.0"             "DG1 M1 GT SM V1 OUT D_8.0"             
+"DG1/M1/GT/SM/V2/H/01_D_0.4"            "DG1 M1 GT SM V2 H 01_D_0.4"            
+"DG1/M1/GT/SM/V2/H/02_D_1.0"            "DG1 M1 GT SM V2 H 02_D_1.0"            
+"DG1/M1/GT/SM/V2/OUT/D_16.0"            "DG1 M1 GT SM V2 OUT D_16.0"            
+"DG1/M1/GT/SM/V2/OUT/D_8.0"             "DG1 M1 GT SM V2 OUT D_8.0"             
+"DG1/M1/GT/SPH/01/D_16.0"               "DG1 M1 GT SPH 01 D_16.0"               
+"DG1/M2/GU/H/D_2.0"                     "DG1 M2 GU H D_2.0"                     
+"DG1/M2/GU/KRP/001/D_16.0"              "DG1 M2 GU KRP 001 D_16.0"              
+"DG1/M2/GU/KRP/002/D_16.0"              "DG1 M2 GU KRP 002 D_16.0"              
+"DG1/M2/GU/KRP/003/D_16.0"              "DG1 M2 GU KRP 003 D_16.0"              
+"DG1/M2/GU/KRP/004/D_16.0"              "DG1 M2 GU KRP 004 D_16.0"              
+"DG1/M2/GU/KRP/005/D_16.0"              "DG1 M2 GU KRP 005 D_16.0"              
+"DG1/M2/GU/KRP/006/D_16.0"              "DG1 M2 GU KRP 006 D_16.0"              
+"DG1/M2/GU/KRP/007/D_16.0"              "DG1 M2 GU KRP 007 D_16.0"              
+"DG1/M2/GU/KRP/009/D_16.0"              "DG1 M2 GU KRP 009 D_16.0"              
+"DG1/M2/GU/KRP/010/D_2.0"               "DG1 M2 GU KRP 010 D_2.0"               
+"DG1/M2/GU/KRP/011/D_16.0"              "DG1 M2 GU KRP 011 D_16.0"              
+"DG1/M2/GU/KRP/012/D_0.0"               "DG1 M2 GU KRP 012 D_0.0"               
+"DG1/M2/GU/KRP/013/D_16.0"              "DG1 M2 GU KRP 013 D_16.0"              
+"DG1/M2/GU/KRP/014/D_16.0"              "DG1 M2 GU KRP 014 D_16.0"              
+"DG1/M2/GU/KRP/015/D_4.0"               "DG1 M2 GU KRP 015 D_4.0"               
+"DG1/M2/GU/KRP/016/D_8.0"               "DG1 M2 GU KRP 016 D_8.0"               
+"DG1/M2/GU/KRP/017/D_4.0"               "DG1 M2 GU KRP 017 D_4.0"               
+"DG1/M2/GU/KRP/018/D_8.0"               "DG1 M2 GU KRP 018 D_8.0"               
+"DG1/M2/GU/KRP/019/D_3.0"               "DG1 M2 GU KRP 019 D_3.0"               
+"DG1/M2/GU/LEG/001/D_4.0"               "DG1 M2 GU LEG 001 D_4.0"               
+"DG1/M2/GU/LEG/002/D_2.0"               "DG1 M2 GU LEG 002 D_2.0"               
+"DG1/M2/GU/LEG/003/D_4.0"               "DG1 M2 GU LEG 003 D_4.0"               
+"DG1/M2/GU/LEG/004/D_4.0"               "DG1 M2 GU LEG 004 D_4.0"               
+"DG1/M2/GU/LEG/005/D_4.0"               "DG1 M2 GU LEG 005 D_4.0"               
+"DG1/M2/H/01/D_6.0"                     "DG1 M2 H 01 D_6.0"                     
+"DG1/M3/GT/PPL/OUT/005/D_1.0"           "DG1 M3 GT PPL OUT 005 D_1.0"           
+"DG1/M3/GT/PPL/OUT/005/D_16.0"          "DG1 M3 GT PPL OUT 005 D_16.0"          
+>
+T
+#+end_example
+
+** Поиск по имени экземпляра класса =<3d-region>= 
+#+caption: По имени экземпляра класса =<3d-region>= в симуляции
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+  (3d-region  "DG1 G1 1" *s*)
+#+end_src
+
+#+caption: Поиск по имени сети экземпляра класса =<3d-region>= в симуляции
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+  
+  (3d-region-mesh "G1" *s*)
+#+end_src
+
+#+RESULTS:
+: (#<<3D-REGION> Mesh: "G1"  3D-Suffix: 1  2D-Suffix: 1  Simulation: NIL>)
+
+
+** Создание и добавление второго экземпляра класса =<3d-region>= в симуляцию
+#+begin_src lisp
+  (in-package :mnas-ansys/cfx/pre)
+
+  (add (make-instance '<3d-region>
+                      :mesh (mesh "G1" *s*))
+       ,*s*) 
+#+end_src
+
+#+RESULTS:
+: #<<SIMULATION> 
+: Meshes    : (("G1" 2))
+: 3D-Regions: ("DG1 G1 1" "DG1 G1 2")
+: Commands  : NIL>
+
