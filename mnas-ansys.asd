@@ -392,6 +392,7 @@ CFX-PRE.
   :components ((:module "src/cfx/pre"
                 :serial t
                 :components ((:file "package")
+                             (:file "ccl-functions")
                              (:file "gtm")
                              (:file "functions") 
                              (:file "class")
@@ -414,6 +415,8 @@ CFX-PRE.
                                            (:file "2d-region")
                                            (:file "3d-region")
                                            (:file "interface")
+                                           (:file "interface-pairs")
+                                           (:file "domain")
                                            ))
                              (:module "classes"
                               :serial t

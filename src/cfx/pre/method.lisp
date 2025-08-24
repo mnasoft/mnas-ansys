@@ -54,30 +54,25 @@
                                                           :Rotation-Angle ,Rotation-Angle))
         ,simulation))
 
-(defmacro mk-interface-general (mesh-name-1 mesh-name-2 simulation)
-  `(add
-    (make-instance
-     '<simulation-interface-general>
-     :mesh-name-1 ,mesh-name-1
-     :mesh-name-2 ,mesh-name-2
-     :simulation ,simulation)
-    ,simulation))
+(defun add-interface-general (mesh-name-1 mesh-name-2 simulation)
+  (add (make-instance '<simulation-interface-general>
+                      :mesh-name-1 mesh-name-1
+                      :mesh-name-2 mesh-name-2
+                      :simulation simulation)
+       simulation))
 
-(defmacro mk-interface-rot-per (mesh-name simulation)
-  `(add
-    (make-instance
-     '<simulation-interface-rotational-periodicity>
-     :mesh-name ,mesh-name
-     :simulation ,simulation)
-    ,simulation))
+(defun add-interface-rot-per (mesh-name simulation)
+  (add
+   (make-instance '<simulation-interface-rotational-periodicity>
+                  :mesh-name mesh-name
+                  :simulation simulation)
+   simulation))
 
-(defmacro mk-interface-rot-gen (mesh-name simulation)
-  `(add
-    (make-instance
-     '<simulation-interface-rotational-general>
-     :mesh-name ,mesh-name
-     :simulation ,simulation)
-    ,simulation))
+(defun add-interface-rot-gen (mesh-name simulation)
+  (add (make-instance '<simulation-interface-rotational-general>
+                      :mesh-name mesh-name
+                      :simulation simulation)
+       simulation))
 
 (defun mk-domain-fluid (&key
                           (domain-name "D1")

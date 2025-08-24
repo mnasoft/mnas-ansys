@@ -21,3 +21,14 @@
  (mesh \"G1\" (<simulation>-meshes *simulation*))
 @end(code)"
   (gethash name ht))
+
+(defmethod mesh-names ((simulation <simulation>))
+  "@b(Описание:) метод @b(mesh-names) возвращает список имен сеток для
+симуляции @b(simulation).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mesh-names *simulation*)
+@end(code)
+"
+  (ht-keys (<simulation>-meshes simulation)))

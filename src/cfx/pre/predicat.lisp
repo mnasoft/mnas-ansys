@@ -38,6 +38,13 @@
   "Возвращает подстроку строки S без первого символа."
   (subseq s 1))
 
+(defun two-string-list< (a b)
+  "Истинно, если двухэлементный список A лексикографически меньше списка B.
+   Сравнивает сначала первые элементы, при равенстве — вторые."
+  (or (string< (first a) (first b))
+      (and (string= (first a) (first b))
+           (string< (second a) (second b)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Не предикаты
 
@@ -74,3 +81,11 @@
 (defun 2d-region-left-p (2d-region-name)
   (some #'(lambda (el) (string= "L" el))
             (mnas-ansys/ccl:mk-split 2d-region-name)))
+
+(defun between-first-two-slashes (s)
+  "Возвращает подстроку между первым и вторым '/' в строке S. Если
+второго '/' нет — возвращает NIL. Пустая строка допустима (например,
+\"a//b\")."
+  (ppcre:register-groups-bind (between)
+      ("^[^/]*/([^/]*)/" s)
+    between))

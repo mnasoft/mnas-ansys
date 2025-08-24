@@ -1,132 +1,87 @@
 (in-package :mnas-ansys/cfx/pre)
 
-
 (defparameter *simulation*
   (make-instance '<simulation>))
 
+(defparameter *tin-pathnames*
+  (directory
+   (cond
+     ((string= (machine-instance) "N000325") "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_D*.tin")
+     (t "~/work/tin/A32_prj_06_D*.tin"))))
 
-(defparameter *msh-num*
-  '(("G1"  2)
-    ("G10" 1)
-    ("G2"  2)
-    ("G31" 2)
-    ("G32" 2)
-    ("G33" 2)
-    ("G34" 2)
-    ("G41" 2)
-    ("G42" 2)
-    ("G5"  2)
-    ("G6"  1)
-    ("G7"  1)
-    ("G8"  1)
-    ("G9"  2)
-    ("M1"  2)
-    ("M2"  2)
-    ("M3"  2)))
+(defparameter *msh-pathnames*
+  (directory 
+   (cond
+     ((string= (machine-instance) "N000325") "z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_D*.msh")
+     (t "~/work/tin/A32_prj_06_D*.tin"))))
 
-(defun main-test ()
-  (progn
-    ;; Загружаем сетки
-    (map nil
-         #'(lambda (tin msh)
-             (add (make-instance '<mesh>
-                                 :tin-pathname tin 
-                                 :msh-pathname msh)
-                  *simulation*))
-         (directory
-          (cond
-            ((string= (machine-instance) "N000325") "z:/ANSYS/CFX/a32/tin/DOM/*/A32_prj_07_D*.tin")
-            (t "~/work/tin/A32_prj_06_D*.tin")))
-         (directory
-          (cond
-            ((string= (machine-instance) "N000325") "z:/ANSYS/CFX/a32/msh/prj_07/A32_prj_07_D*.msh")
-            (t "~/work/tin/A32_prj_06_D*.tin")))))
+(defparameter *msh-num-ang*
+  '(("G1"  2 -22.5)
+    ("G10" 1 -45.0)
+    ("G2"  2 -22.5)
+    ("G31" 2 -22.5)
+    ("G32" 2 -22.5)
+    ("G33" 2 -22.5)
+    ("G34" 2 -22.5)
+    ("G41" 2 -22.5)
+    ("G42" 2 -22.5)
+    ("G5"  2 -22.5)
+    ("G6"  1 -45.0)
+    ("G7"  1 -45.0)
+    ("G8"  1 -45.0)
+    ("G9"  2 -22.5)
+    ("M1"  2 -22.5)
+    ("M2"  2 -22.5)
+    ("M3"  2 -22.5)))
 
-  (block 3d-region-creation
-    ;; Создаем 3d-регионы
-    (map nil
-         #'(lambda (msh-num)
-             (loop :for i :from 0 :below (second msh-num)
-                   :do
-                      (add
-                       (make-instance '<3d-region>
-                                      :mesh (mesh (first msh-num) *simulation*))
-                       *simulation*)))
-         *msh-num*)
-
-    ;; Создаем команды для вращения доменов
-    (map nil
-         #'(lambda (msh-num)
-             (let ((msh (first msh-num))
-                   (num (second msh-num)))
-               (when (= num 2)
-                 (mk-mesh-rotation (format nil "D~A ~A 2" msh msh)
-                                   "-22.5 [degree]"
-                                   *simulation*))))
-         *msh-num*))
-
-  (block materials-and-reactions-creation
-    ;; Добавляем материал и реакции
-    (add (make-instance '<simulation-materials> :simulation *simulation*)
-         *simulation*))
-
-  ;; Создаем домены
-  (block flow-domains
-    (add (make-instance '<simulation-flow>
-                        :domain-fluid-name "D1"
-                        :domain-solid-names '("M1" "M2" "M3")
-                        :simulation *simulation*)
-         *simulation*))
-
-  (block interface-creation-general
-    ;; Создаем команды для добавления генеральных флюидовых интерфейсов
-    (map nil
-         #'(lambda (el)
-             (mk-interface-general (first el)  (second el) *simulation*))
-         '(("G1"  "G2")
-           ("G1"  "G32")
-           ("G1"  "G33")
-           ("G1"  "G42")
-           ("G1"  "G5")
-           ("G1"  "G9")
-           ("G2"  "G32")
-           ("G2"  "G42")
-           ("G2"  "G5")
-           ("G2"  "G9")
-           ("G31" "G32")
-           ("G32" "G34")
-           ("G33" "G34")
-           ("G41" "G42")
-           ("G6"  "G7")
-           ("G1"  "G8")
-           ("G1"  "G10")
-           ("G2"  "G6")))
-    ;; Вывод на печать
-    *simulation*
-    )
-
-  (block inreface-creation
-    ;; Создаем команды для генерирования вращательных интерфейсов периодического типа
-    (map nil
-         #'(lambda (el)
-             (mk-interface-rot-per el *simulation*))
-         '("G1" "G2" "G6" "G7" "G8" "G10"))
-
-    ;; Создаем команды для генерирования вращательных интерфейсов генерального типа
-
-    (map nil
-         #'(lambda (el)
-             (mk-interface-rot-gen el *simulation*))
-         '("G1" "G2" "G6" "G7" "G8" "G10"))
-    ;; Вывод на печать
-    *simulation*)
-;;;; 
-  (create-script *simulation* t)
-  )
+(defun main-test (simulation msh-num-ang tin-pathnames msh-pathnames)
+;;; Загружаем сетки
+  (loop :for tin :in tin-pathnames
+        :for msh :in msh-pathnames
+        :do (add (make-instance '<mesh>
+                                :tin-pathname tin 
+                                :msh-pathname msh)
+                 simulation))
+;;; Создаем 3d-регионы
+  (loop :for (msh num ang) :in msh-num-ang
+        :do (loop :for i :from 0 :below num
+                  :do (add (make-instance '<3d-region>
+                                          :mesh (mesh msh simulation))
+                           simulation)))
+;;; Создаем команды для вращения доменов
+  (loop :for (msh num ang) :in msh-num-ang
+        :do (when (>= num 2)
+              (mk-mesh-rotation
+               (format nil "D~A ~A 2" msh msh)
+               (format nil "~A [degree]" (* ang (1- num)))
+               simulation)))
+;;; Добавляем материал и реакции
+  (add (make-instance '<simulation-materials> :simulation simulation)
+       simulation)
+;;; Создаем домены
+  (add (make-instance '<simulation-flow>
+                      :domain-fluid-name (domain-names-fluid simulation)
+                      :domain-solid-names (domain-names-solid simulation)
+                      :simulation simulation)
+       simulation)
+;;; Создаем команды для добавления генеральных флюидовых интерфейсов
+  (loop :for (mesh-name-1 mesh-name-2) :in (interface-pairs-fluid-general simulation)
+        :do (add-interface-general mesh-name-1 mesh-name-2 simulation))
+;;; Создаем команды для генерирования вращательных интерфейсов
+;;; периодического типа
+  (loop :for mesh-name :in (interface-pairs-fluid-rotational simulation)
+        :do (add-interface-rot-per mesh-name simulation))
+;;; Создаем команды для генерирования вращательных интерфейсов
+;;; генерального типа
+  (loop :for mesh-name :in (interface-pairs-fluid-rotational simulation)
+        :do (add-interface-rot-gen mesh-name simulation))
+  simulation)
 
 ;;;; Сброс настроек симуляции
 #+nil (reset *simulation*)
 
-#+nil (main-test)
+#+nil (main-test *simulation* *msh-num-ang* *tin-pathnames* *msh-pathnames*)
+#+nil (create-script *simulation* t)
+#+nil *simulation*
 
 

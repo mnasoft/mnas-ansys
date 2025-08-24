@@ -22,6 +22,10 @@
            mk-tt
            mk-tp
            )
+  (:export add-interface-general
+           add-interface-rot-per           
+           add-interface-rot-gen
+           )
   (:export <mesh>
            <mesh>-3d-region-instance-number
            <mesh>-tin-pathname
@@ -84,6 +88,11 @@
            ht-values-sort)
   (:export interfaces
            interfaces-with)
+  (:export interface-pairs
+           interface-pairs-fluid
+           interface-pairs-solid
+           interface-pairs-fluid-general
+           interface-pairs-fluid-rotational)
   (:export mesh)
   (:export select-3d-regions-by-mesh-name
            select-3d-regions-name-by-mesh-name

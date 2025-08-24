@@ -1,0 +1,60 @@
+;;;; ./src/cfx/pre/ccl-functions.lisp
+
+(in-package :mnas-ansys/cfx/pre)
+
+(defun make-domain-interface-rotational-periodicity (domain-interface i-reg-lst-1 i-reg-lst-2 &key postfix)
+  (let ((d-i
+          (mnas-ansys/ccl:good-name
+           (if postfix
+               (format nil "~A ~A" domain-interface postfix)
+               (format nil "~A" domain-interface)))))
+
+    (format t "FLOW: Flow Analysis 1~%")
+    (format t "  &replace DOMAIN INTERFACE: ~A~%" d-i )
+    (format t "    Boundary List1 = ~A Side 1~%" d-i )
+    (format t "    Boundary List2 = ~A Side 2~%" d-i)
+    (format t "    Filter Domain List1 = D1~%")
+    (format t "    Filter Domain List2 = D1~%")
+    (format t "    Interface Region List1 = ~A~%" (prepare-list i-reg-lst-1))
+    (format t "    Interface Region List2 = ~A~%" (prepare-list i-reg-lst-2))
+    (format t "    Interface Type = Fluid Fluid~%")
+    (format t "    INTERFACE MODELS: ~%")
+    (format t "      Option = Rotational Periodicity~%")
+    (format t "      AXIS DEFINITION: ~%")
+    (format t "        Option = Coordinate Axis~%")
+    (format t "        Rotation Axis = Coord 0.1~%")
+    (format t "      END~%")
+    (format t "    END~%")
+    (format t "    MESH CONNECTION: ~%")
+    (format t "      Option = Automatic~%")
+    (format t "    END~%")
+    (format t "  END~%")
+    (format t "END~%")))
+
+(defun make-f-s-interface-general-connection (fluid-dom
+                                              solid-dom
+                                              i-reg-lst-1
+                                              i-reg-lst-2)
+  (format t "FLOW: Flow Analysis 1~%")
+  (format t "  &replace DOMAIN INTERFACE: ~A ~A~%" fluid-dom solid-dom)
+  (format t "    Boundary List1 = ~A ~A Side 1~%" fluid-dom solid-dom)
+  (format t "    Boundary List2 = ~A ~A Side 2~%" fluid-dom solid-dom)
+  (format t "    Filter Domain List1 = ~A~%" fluid-dom)
+  (format t "    Filter Domain List2 = ~A~%" solid-dom)
+  (format t "    Interface Region List1 = ~A~%" (prepare-list i-reg-lst-1))
+  (format t "    Interface Region List2 = ~A~%" (prepare-list i-reg-lst-2))
+  (format t "    Interface Type = Fluid Solid~%")
+  (format t "    INTERFACE MODELS: ~%")
+  (format t "      Option = General Connection~%")
+  (format t "      FRAME CHANGE: ~%")
+  (format t "        Option = None~%")
+  (format t "      END~%")
+  (format t "      PITCH CHANGE: ~%")
+  (format t "        Option = None~%")
+  (format t "      END~%")
+  (format t "    END~%")
+  (format t "    MESH CONNECTION: ~%")
+  (format t "      Option = Automatic~%")
+  (format t "    END~%")
+  (format t "  END~%")
+  (format t "END~%~%"))
