@@ -868,7 +868,7 @@
 
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (mk-boundary-outlet \"DG1/B1/AIR_RL_OUT/D_05.000\" 0.185745 )
+ (outlet-mfr-boundary \"DG1\" \"DG1/B1/AIR_RL_OUT/D_05.000\" 0.185745)
 @end(code)
 
 "

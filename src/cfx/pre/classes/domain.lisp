@@ -84,17 +84,16 @@
     :documentation "Option")))
 
 (defclass <component> (mnas-ansys/ccl/core:<obj>)
-  ((Option
-    :accessor <component>-Option
-    :initform "Transport Equation"
-    :initarg :Option
-    :documentation "Option")
-   (Mass-Fraction
+  ((Mass-Fraction
     :accessor <component>-Mass-Fraction
     :initform nil
     :initarg :Mass-Fraction
     :documentation "Mass-Fraction 0.232")
-   ))
+   (Option
+    :accessor <component>-Option
+    :initform "Transport Equation"
+    :initarg :Option
+    :documentation "Option")))
 
 (defclass <component-list> ()
   ((components

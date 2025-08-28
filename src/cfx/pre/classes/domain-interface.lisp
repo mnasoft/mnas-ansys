@@ -19,16 +19,23 @@
                               :initform "None"
                               :initarg :option
                               :documentation "Option")))
-     
 (defclass <mass-and-momentum> (mnas-ansys/ccl/core:<obj>)
-  ((option                    :accessor <mass-and-momentum>-option
-                              :initform "Conservative Interface Flux"
-                              :initarg :option
-                              :documentation "Option")
+  ((mass-flow-rate            :accessor <mass-and-momentum>-Mass-Flow-Rate
+                              :initform nil ;; "0.5258471 [kg s^-1]"
+                              :initarg :mass-flow-rate
+                              :documentation "Mass Flow Rate")
    (momentum-interface-model  :accessor <mass-and-momentum>-momentum-interface-model
                               :initform "None"
                               :initarg :momentum-interface-model
-                              :documentation "MOMENTUM INTERFACE MODEL")))
+                              :documentation "MOMENTUM INTERFACE MODEL")
+   (option                    :accessor <mass-and-momentum>-option
+                              :initform "Conservative Interface Flux"
+                              :initarg :option
+                              :documentation "Option")
+   (Relative-Pressure         :accessor <mass-and-momentum>-Relative-Pressure
+                              :initform nil ;; "-680 [kPa]"
+                              :initarg :Relative-Pressure
+                              :documentation "Relative-Pressure")))
 (defclass <frame-change> (mnas-ansys/ccl/core:<obj>)
   ((option                    :accessor <frame-change>-option
                               :initform "None"
