@@ -423,7 +423,8 @@ CFX-PRE.
                               :components ((:file "domain")
                                            (:file "library")
                                            (:file "initialisation")
-                                           (:file "domain-interface")))
+                                           (:file "domain-interface")
+                                           (:file "boundary")                                           ))
                              (:file "test-data")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

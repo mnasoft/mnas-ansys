@@ -2,10 +2,7 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
-(make-instance  '<mass-and-momentum>
-                :momentum-interface-model nil
-                :Relative-Pressure "-680 [kPa]"
-                )
+
 
 (defclass <flow-regime> (mnas-ansys/ccl/core:<obj>)
   ((option                    :accessor <flow-regime>-option
@@ -72,9 +69,6 @@
                               :initarg :turbulence
                               :documentation "TURBULENCE")))
 
-
-
-
 (defclass <boundary> (mnas-ansys/ccl/core:<obj>)
   ((boundary-type             :accessor <boundary>-boundary-type
                               :initform "OUTLET"
@@ -92,65 +86,3 @@
                                                                        :Relative-Pressure "-680 [kPa]"))
                               :initarg :boundary-conditions
                               :documentation "BOUNDARY CONDITIONS")))
-
-(make-instance '<boundary>
-               :name "OUTLET"
-               :boundary-type "OUTLET"               
-               :location "Some One"
-               :boundary-conditions
-               (make-instance '<boundary-conditions>
-                              :flow-direction nil
-                              :heat-transfer  nil
-                              :turbulence     nil 
-                              :mass-and-momentum
-                              (make-instance  '<mass-and-momentum>
-                                              :option "Static Pressure" 
-                                              :momentum-interface-model nil
-                                              :Relative-Pressure "-680 [kPa]")))
-
-(make-instance '<boundary>
-               :name "OUTLET AIR RL"
-               :boundary-type "OUTLET"
-               :location "Some One"
-               :boundary-conditions
-               (make-instance '<boundary-conditions>
-                              :flow-direction nil
-                              :heat-transfer  nil
-                              :turbulence     nil 
-                              :mass-and-momentum
-                              (make-instance  '<mass-and-momentum>
-                                              :option "Mass Flow Rate" 
-                                              :momentum-interface-model nil
-                                              :mass-flow-rate "0.5258471 [kg s^-1]")))
-
-(make-instance '<boundary>
-               :name "INLET"
-               :boundary-type "INLET"
-               :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
-               :boundary-conditions
-               (make-instance '<boundary-conditions>
-                              :heat-transfer
-                              (make-instance  '<heat-transfer>
-                                              :option "Total Temperature"
-                                              :static-temperature nil)
-                              :mass-and-momentum
-                              (make-instance  '<mass-and-momentum>
-                                              :option "Mass Flow Rate" 
-                                              :momentum-interface-model nil
-                                              :mass-flow-rate "10.557098[kg s^-1]")))
-(/ 25.0 0.36 42.0) 
-1.6534392
-
-(/ 6000.0 3600)
-
-(-  0.022 (* 0.0018 2.0))
-
-(-  0.010 (* 0.001 2.0)) ; => 0.007999999 (0.79999995%)
-
-(* pi (-  0.010 (* 0.001 2.0)) (-  0.010 (* 0.001 2.0)) 0.25)  ; => 5.02654755290569d-5 (0.00502654755290569d0%)
-
-(* pi (-  0.022 (* 0.0018 2.0)) (-  0.022 (* 0.0018 2.0)) 0.25)  ; => 2.659044140005567d-4 (0.02659044140005567d0%)
-
-(+ 5.02654755290569d-5 2.659044140005567d-4)  ; => 3.161698895296136d-4
-
-(/ 1.65 3.161698895296136d-4 835.0) ; => 6.249955929005092d0

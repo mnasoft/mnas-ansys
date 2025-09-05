@@ -1,0 +1,85 @@
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace INITIALISATION: 
+      Option = Automatic
+      INITIAL CONDITIONS: 
+        Velocity Type = Cartesian
+        CARTESIAN VELOCITY COMPONENTS: 
+          Option = Automatic
+        END
+        COMPONENT: CH4
+          Option = Automatic
+        END
+        COMPONENT: CO
+          Option = Automatic
+        END
+        COMPONENT: CO2
+          Option = Automatic
+        END
+        COMPONENT: H2O
+          Option = Automatic
+        END
+        COMPONENT: NO
+          Option = Automatic
+        END
+        COMPONENT: O2
+          Mass Fraction = 0.232
+          Option = Automatic with Value
+        END
+        STATIC PRESSURE: 
+          Option = Automatic with Value
+          Relative Pressure = -100 [kPa]
+        END
+        TEMPERATURE: 
+          Option = Automatic with Value
+          Temperature = 480 [C]
+        END
+        TURBULENCE INITIAL CONDITIONS: 
+          Option = Medium Intensity and Eddy Viscosity Ratio
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: M1
+    &replace INITIALISATION: 
+      Option = Automatic
+      INITIAL CONDITIONS: 
+        TEMPERATURE: 
+          Option = Automatic with Value
+          Temperature = 480 [C]
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: M2
+    &replace INITIALISATION: 
+      Option = Automatic
+      INITIAL CONDITIONS: 
+        TEMPERATURE: 
+          Option = Automatic with Value
+          Temperature = 480 [C]
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: M3
+    &replace INITIALISATION: 
+      Option = Automatic
+      INITIAL CONDITIONS: 
+        TEMPERATURE: 
+          Option = Automatic with Value
+          Temperature = 480 [C]
+        END
+      END
+    END
+  END
+END

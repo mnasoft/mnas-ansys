@@ -1,0 +1,71 @@
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET
+      Boundary Type = OUTLET
+      Location = DG7 B OUT D_4.0_S_1.0
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Option = Static Pressure
+          Relative Pressure = -680 [kPa]
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET AIR RL
+      Boundary Type = OUTLET
+      Location = DG1 B AIR_RL D_5.0,DG1 B AIR_RL D_5.0 2
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.5258471 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET AIR SA
+      Boundary Type = OUTLET
+      Location = DG8 B SA_OUT D_8.0
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.5323591 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET AIR SL
+      Boundary Type = OUTLET
+      Location = DG10 B SAOUT D_16.0
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.5258471 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END

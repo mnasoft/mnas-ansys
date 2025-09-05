@@ -85,3 +85,54 @@
 #+nil *simulation*
 
 
+
+(make-instance '<boundary>
+               :name "OUTLET"
+               :boundary-type "OUTLET"               
+               :location "Some One"
+               :boundary-conditions
+               (make-instance '<boundary-conditions>
+                              :flow-direction nil
+                              :heat-transfer  nil
+                              :turbulence     nil 
+                              :mass-and-momentum
+                              (make-instance  '<mass-and-momentum>
+                                              :option "Static Pressure" 
+                                              :momentum-interface-model nil
+                                              :Relative-Pressure "-680 [kPa]")))
+
+(make-instance '<boundary>
+               :name "OUTLET AIR RL"
+               :boundary-type "OUTLET"
+               :location "Some One"
+               :boundary-conditions
+               (make-instance '<boundary-conditions>
+                              :flow-direction nil
+                              :heat-transfer  nil
+                              :turbulence     nil 
+                              :mass-and-momentum
+                              (make-instance  '<mass-and-momentum>
+                                              :option "Mass Flow Rate" 
+                                              :momentum-interface-model nil
+                                              :mass-flow-rate "0.5258471 [kg s^-1]")))
+
+(make-instance '<boundary>
+               :name "INLET"
+               :boundary-type "INLET"
+               :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
+               :boundary-conditions
+               (make-instance '<boundary-conditions>
+                              :heat-transfer
+                              (make-instance  '<heat-transfer>
+                                              :option "Total Temperature"
+                                              :static-temperature nil)
+                              :mass-and-momentum
+                              (make-instance  '<mass-and-momentum>
+                                              :option "Mass Flow Rate" 
+                                              :momentum-interface-model nil
+                                              :mass-flow-rate "10.557098[kg s^-1]")))
+
+(make-instance  '<mass-and-momentum>
+                :momentum-interface-model nil
+                :Relative-Pressure "-680 [kPa]"
+                )
