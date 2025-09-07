@@ -143,4 +143,85 @@
     :documentation "Имена солидовых доменов."))
   (:documentation "Команда для создания домена."))
 
+(defclass <simulation-boundary-inlet> (<simulation-command>)
+  ((name
+    :accessor <simulation-boundary-inlet>-name
+    :initarg :name
+    :initform "INLET"
+    :type string)
+   (mass-flow-rate
+    :accessor <simulation-boundary-inlet>-mass-flow-rate
+    :initarg :mass-flow-rate
+    :initform "10.0 [kg s^-1]"
+    :type string)
+   (location
+    :accessor <simulation-boundary-inlet>-Location
+    :initarg :location
+    :initform "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
+    :type string)
+   (static-temperature
+    :accessor <simulation-boundary-inlet>-static-temperature
+    :initarg :static-temperature
+    :initform "20.0 [C]"
+    :type string)
+   (total-temperature
+    :accessor <simulation-boundary-inlet>-total-temperature
+    :initarg :total-temperature
+    :initform "400.0 [C]"
+    :type string)
+   (components
+    :accessor <simulation-boundary-inlet>-components
+    :initarg :components
+    :initform '(("CH4" 0.0)
+                ("CO"  0.0)
+                ("CO2" 0.0)
+                ("H2O" 0.0)
+                ("NO"  0.0)
+                ("O2"  0.0)))))
 
+(defclass <simulation-boundary-outlet> (<simulation-command>)
+  ((name
+    :accessor <simulation-boundary-outlet>-name 
+    :initarg :name
+    :initform "OUTLET"
+    :type string)
+   (mass-flow-rate
+    :accessor <simulation-boundary-outlet>-mass-flow-rate
+    :initarg :mass-flow-rate
+    :initform "0.5 [kg s^-1]"
+    :type string)
+   (location
+    :accessor <simulation-boundary-outlet>-Location
+    :initarg :location
+    :initform "DG1 B AIR_RL D_5.0,DG1 B AIR_RL D_5.0 2"
+    :type string)
+   (relative-pressure
+    :accessor <simulation-boundary-outlet>-relative-pressure
+    :initarg :relative-pressure
+    :initform "-680 [kPa]"
+    :type string)))
+
+
+(make-instance '<simulation-boundary-outlet> :simulation *simulation*)
+
+
+(create-script
+ (make-instance '<simulation-boundary-inlet>
+                :name "INLET"
+                :total-temperature "400.0 [C]"
+                :static-temperature nil
+                :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
+                :components '(("O2" 0.232))
+                :simulation *simulation*)
+ t)
+
+(create-script
+ (make-instance '<simulation-boundary-outlet>
+                :name "INLET"
+                :mass-flow-rate 
+                :total-temperature "400.0 [C]"
+                :static-temperature nil
+                :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
+                :components '(("O2" 0.232))
+                :simulation *simulation*)
+ t)

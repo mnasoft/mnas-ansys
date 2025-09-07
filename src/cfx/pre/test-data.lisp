@@ -84,55 +84,47 @@
 #+nil (create-script *simulation* t)
 #+nil *simulation*
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(mk-boundary-inlet "INLET"
+                     "10.557098 [kg s^-1]"
+                     "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
+                     :total-temperature "455.6 [C]"
+                     :components
+                     '(#+nil("CH4" 1.0)
+                       ("O2"  0.232)))
 
-(make-instance '<boundary>
-               :name "OUTLET"
-               :boundary-type "OUTLET"               
-               :location "Some One"
-               :boundary-conditions
-               (make-instance '<boundary-conditions>
-                              :flow-direction nil
-                              :heat-transfer  nil
-                              :turbulence     nil 
-                              :mass-and-momentum
-                              (make-instance  '<mass-and-momentum>
-                                              :option "Static Pressure" 
-                                              :momentum-interface-model nil
-                                              :Relative-Pressure "-680 [kPa]")))
+(mk-boundary-inlet "INLET CH4 1"
+                   "0.02453831 [kg s^-1]"
+                   "DG31 B31 G1IN 01 D_0.0,DG31 B31 G1IN 01 D_0.0 2"
+                   :Static-Temperature  "18.1 [C]"
+                   :components
+                   '(("CH4" 1.0)
+                     #+nil("O2"  0.232)))
 
-(make-instance '<boundary>
-               :name "OUTLET AIR RL"
-               :boundary-type "OUTLET"
-               :location "Some One"
-               :boundary-conditions
-               (make-instance '<boundary-conditions>
-                              :flow-direction nil
-                              :heat-transfer  nil
-                              :turbulence     nil 
-                              :mass-and-momentum
-                              (make-instance  '<mass-and-momentum>
-                                              :option "Mass Flow Rate" 
-                                              :momentum-interface-model nil
-                                              :mass-flow-rate "0.5258471 [kg s^-1]")))
+(mk-boundary-inlet "INLET CH4 2"
+                   "0.15048356 [kg s^-1]"
+                   "DG41 B41 G2IN 01 D_0.0,DG41 B41 G2IN 01 D_0.0 2"
+                   :Static-Temperature  "18.1 [C]"
+                   :components
+                   '(("CH4" 1.0)
+                     #+nil("O2"  0.232)))
 
-(make-instance '<boundary>
-               :name "INLET"
-               :boundary-type "INLET"
-               :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
-               :boundary-conditions
-               (make-instance '<boundary-conditions>
-                              :heat-transfer
-                              (make-instance  '<heat-transfer>
-                                              :option "Total Temperature"
-                                              :static-temperature nil)
-                              :mass-and-momentum
-                              (make-instance  '<mass-and-momentum>
-                                              :option "Mass Flow Rate" 
-                                              :momentum-interface-model nil
-                                              :mass-flow-rate "10.557098[kg s^-1]")))
+;;;;;;;;;;
 
-(make-instance  '<mass-and-momentum>
-                :momentum-interface-model nil
-                :Relative-Pressure "-680 [kPa]"
-                )
+(mk-boundary-outlet "OUTLET"
+                    "DG7 B OUT D_4.0_S_1.0"
+                    :Relative-Pressure "-680 [kPa]")
+
+(mk-boundary-outlet "OUTLET AIR RL"
+                    "DG1 B AIR_RL D_5.0,DG1 B AIR_RL D_5.0 2"
+                    :Mass-Flow-Rate "0.5258471 [kg s^-1]")
+
+(mk-boundary-outlet "OUTLET AIR SA"
+                    "DG8 B SA_OUT D_8.0"
+                    :Mass-Flow-Rate "0.5323591 [kg s^-1]")
+
+(mk-boundary-outlet "OUTLET AIR SL"
+                    "DG10 B SAOUT D_16.0"
+                    :Mass-Flow-Rate "0.5258471 [kg s^-1]")
+

@@ -130,3 +130,86 @@
     (make-instance '<flow>
                    :name flow-name
                    :domains (make-instance '<domains-list> :domains doms))))
+
+(defun mk-boundary-inlet (name
+                          Mass-Flow-Rate
+                          Location
+                          &key
+                            Static-Temperature
+                            Total-Temperature
+                            (components
+                             '(("CH4" 0.0)
+                               ("CO"  0.0)
+                               ("CO2" 0.0)
+                               ("H2O" 0.0)
+                               ("NO"  0.0)
+                               ("O2"  0.0))))
+  (let* ((heat-transfer
+           (cond
+             (static-temperature
+               (make-instance  '<heat-transfer>
+                               :option "Static Temperature"
+                               :static-temperature static-temperature
+                               :total-temperature  nil))
+              (total-temperature
+               (make-instance  '<heat-transfer>
+                               :option "Total Temperature"
+                               :static-temperature nil
+                               :total-temperature total-temperature))))
+         (boundary-conditions
+           (make-instance '<boundary-conditions>
+                          :name name
+                          :heat-transfer heat-transfer
+                          :mass-and-momentum
+                          (make-instance  '<mass-and-momentum>
+                                          :option "Mass Flow Rate" 
+                                          :momentum-interface-model nil
+                                          :mass-flow-rate mass-flow-rate)))
+         (boundary
+           (make-instance '<boundary>
+                          :name name
+                          :boundary-type "INLET"
+                          :location location 
+                          :boundary-conditions boundary-conditions)))
+    (loop :for (component-name mass-fraction) :in components
+          :do
+             (let ((component
+                     (find component-name
+                           (<component-list>-components
+                            (<boundary-conditions>-components
+                             boundary-conditions))
+                           :key #'mnas-ansys/ccl/core:<obj>-name :test #'equal)))
+               (when (and component (/= mass-fraction 0.0))
+                 (setf (<component>-mass-fraction component)
+                       mass-fraction))))
+    boundary))
+
+(defun mk-boundary-outlet (name
+                           Location
+                           &key
+                             Relative-Pressure
+                             Mass-Flow-Rate)
+  (let* ((mass-and-momentum (cond
+                              (Relative-Pressure
+                               (make-instance  '<mass-and-momentum>
+                                               :option "Static Pressure" 
+                                               :momentum-interface-model nil
+                                               :Relative-Pressure Relative-Pressure))
+                              (Mass-Flow-Rate
+                               (make-instance  '<mass-and-momentum>
+                                               :option "Mass Flow Rate" 
+                                               :momentum-interface-model nil
+                                               :mass-flow-rate Mass-Flow-Rate))))
+         (boundary
+           (make-instance '<boundary>
+                          :name name
+                          :boundary-type "OUTLET"               
+                          :location Location
+                          :boundary-conditions
+                          (make-instance '<boundary-conditions>
+                                         :components nil
+                                         :flow-direction nil
+                                         :heat-transfer  nil
+                                         :turbulence     nil 
+                                         :mass-and-momentum mass-and-momentum))))
+    boundary))

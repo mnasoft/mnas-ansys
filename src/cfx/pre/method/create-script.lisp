@@ -833,6 +833,20 @@ END
   (loop :for solid-dom :in (<simulation-flow>-domain-solid-names obj)
         :do
            (mk-f-s-interface-n-m
-                    (<simulation-flow>-domain-fluid-name  obj)
-                    solid-dom
-                    (<simulation-command>-simulation obj))))
+            (<simulation-flow>-domain-fluid-name  obj)
+            solid-dom
+            (<simulation-command>-simulation obj))))
+
+(defmethod create-script ((obj <simulation-boundary-inlet>) stream)
+  (mk-boundary-inlet (<simulation-boundary-inlet>-name               obj)
+                     (<simulation-boundary-inlet>-mass-flow-rate     obj)
+                     (<simulation-boundary-inlet>-location           obj)
+                     :static-temperature (<simulation-boundary-inlet>-static-temperature obj)
+                     :total-temperature (<simulation-boundary-inlet>-total-temperature  obj)
+                     :components        (<simulation-boundary-inlet>-components         obj)))
+
+(defmethod create-script ((obj <simulation-boundary-outlet>) stream)
+  (mk-boundary-outlet (<simulation-boundary-outlet>-name     obj)
+                      (<simulation-boundary-outlet>-location obj)
+                      :mass-flow-rate (<simulation-boundary-outlet>-mass-flow-rate obj)
+                      :relative-pressure (<simulation-boundary-outlet>-relative-pressure obj)))

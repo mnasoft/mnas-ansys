@@ -45,7 +45,7 @@
                                                          ,(make-instance '<component> :name "CO2" :option "Mass Fraction" :mass-fraction 0.0)
                                                          ,(make-instance '<component> :name "H2O" :option "Mass Fraction" :mass-fraction 0.0)
                                                          ,(make-instance '<component> :name "NO"  :option "Mass Fraction" :mass-fraction 0.0)
-                                                         ,(make-instance '<component> :name "O2"  :option "Mass Fraction" :mass-fraction 0.232)))
+                                                         ,(make-instance '<component> :name "O2"  :option "Mass Fraction" :mass-fraction 0.0))) ; 0.232
                               :initarg :components
                               :documentation "components")
    (flow-direction            :accessor <boundary-conditions>-flow-direction

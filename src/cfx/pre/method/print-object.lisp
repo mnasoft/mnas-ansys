@@ -79,3 +79,25 @@
             (<simulation-flow>-domain-fluid-name obj)
             (<simulation-flow>-domain-solid-names obj)
             (null (null (<simulation-command>-simulation obj))))))
+
+(defmethod print-object ((obj <simulation-boundary-inlet>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S ~S ~S ~S ~S"
+            (<simulation-boundary-inlet>-name obj)
+            (<simulation-boundary-inlet>-mass-flow-rate obj)
+            (<simulation-boundary-inlet>-static-temperature obj)
+            (<simulation-boundary-inlet>-total-temperature obj)
+            (null (null (<simulation-command>-simulation obj)))
+            (<simulation-boundary-inlet>-Location obj))))
+
+(defmethod print-object ((obj <simulation-boundary-outlet>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S ~S ~S ~S"
+            (<simulation-boundary-outlet>-name obj)
+            (<simulation-boundary-outlet>-mass-flow-rate obj)
+            (<simulation-boundary-outlet>-relative-pressure obj)
+            (null (null (<simulation-command>-simulation obj)))
+            (<simulation-boundary-outlet>-location obj))))
+
+
+
