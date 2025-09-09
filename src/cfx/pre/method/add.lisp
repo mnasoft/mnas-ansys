@@ -50,7 +50,9 @@
   (push obj (<simulation>-commands simulation)))
 
 (defmethod add ((obj <simulation-boundary-inlet>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation)))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
 
 (defmethod add ((obj <simulation-boundary-outlet>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation)))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))

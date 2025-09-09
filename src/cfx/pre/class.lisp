@@ -152,8 +152,8 @@
    (mass-flow-rate
     :accessor <simulation-boundary-inlet>-mass-flow-rate
     :initarg :mass-flow-rate
-    :initform "10.0 [kg s^-1]"
-    :type string)
+    :initform nil ; "10.0 [kg s^-1]"
+    :type (or string null))
    (location
     :accessor <simulation-boundary-inlet>-Location
     :initarg :location
@@ -162,13 +162,13 @@
    (static-temperature
     :accessor <simulation-boundary-inlet>-static-temperature
     :initarg :static-temperature
-    :initform "20.0 [C]"
-    :type string)
+    :initform nil ;"20.0 [C]"
+    :type (or string null))
    (total-temperature
     :accessor <simulation-boundary-inlet>-total-temperature
     :initarg :total-temperature
-    :initform "400.0 [C]"
-    :type string)
+    :initform nil; "400.0 [C]"
+    :type  (or string null))
    (components
     :accessor <simulation-boundary-inlet>-components
     :initarg :components
@@ -188,8 +188,8 @@
    (mass-flow-rate
     :accessor <simulation-boundary-outlet>-mass-flow-rate
     :initarg :mass-flow-rate
-    :initform "0.5 [kg s^-1]"
-    :type string)
+    :initform nil ;"0.5 [kg s^-1]"
+    :type (or string null))
    (location
     :accessor <simulation-boundary-outlet>-Location
     :initarg :location
@@ -198,30 +198,7 @@
    (relative-pressure
     :accessor <simulation-boundary-outlet>-relative-pressure
     :initarg :relative-pressure
-    :initform "-680 [kPa]"
-    :type string)))
+    :initform nil ; "-680 [kPa]"
+    :type (or string null))))
 
 
-(make-instance '<simulation-boundary-outlet> :simulation *simulation*)
-
-
-(create-script
- (make-instance '<simulation-boundary-inlet>
-                :name "INLET"
-                :total-temperature "400.0 [C]"
-                :static-temperature nil
-                :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
-                :components '(("O2" 0.232))
-                :simulation *simulation*)
- t)
-
-(create-script
- (make-instance '<simulation-boundary-outlet>
-                :name "INLET"
-                :mass-flow-rate 
-                :total-temperature "400.0 [C]"
-                :static-temperature nil
-                :location "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
-                :components '(("O2" 0.232))
-                :simulation *simulation*)
- t)
