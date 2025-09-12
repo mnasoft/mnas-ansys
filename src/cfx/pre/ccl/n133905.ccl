@@ -1,0 +1,227 @@
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: INLET
+      Boundary Type = INLET
+      Location = DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2
+      BOUNDARY CONDITIONS: 
+        COMPONENT: CH4
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: CO
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: CO2
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: H2O
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: NO
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: O2
+          Mass Fraction = 0.232
+          Option = Mass Fraction
+        END
+        FLOW DIRECTION: 
+          Option = Normal to Boundary Condition
+        END
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        HEAT TRANSFER: 
+          Option = Total Temperature
+          Total Temperature = 455.6 [C]
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 10.557098[kg s^-1]
+          Option = Mass Flow Rate
+        END
+        TURBULENCE: 
+          Option = Medium Intensity and Eddy Viscosity Ratio
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: INLET CH4 1
+      Boundary Type = INLET
+      Location = DG31 B31 G1IN 01 D_0.0,DG31 B31 G1IN 01 D_0.0 2
+      BOUNDARY CONDITIONS: 
+        COMPONENT: CH4
+          Mass Fraction = 1
+          Option = Mass Fraction
+        END
+        COMPONENT: CO
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: CO2
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: H2O
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: NO
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: O2
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        FLOW DIRECTION: 
+          Option = Normal to Boundary Condition
+        END
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        HEAT TRANSFER: 
+          Option = Static Temperature
+          Static Temperature = 18.1 [C]
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.02453831 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+        TURBULENCE: 
+          Option = Medium Intensity and Eddy Viscosity Ratio
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: INLET CH4 2
+      Boundary Type = INLET
+      Location = DG41 B41 G2IN 01 D_0.0,DG41 B41 G2IN 01 D_0.0 2
+      BOUNDARY CONDITIONS: 
+        COMPONENT: CH4
+          Mass Fraction = 1
+          Option = Mass Fraction
+        END
+        COMPONENT: CO
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: CO2
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: H2O
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: NO
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        COMPONENT: O2
+          Mass Fraction = 0.0
+          Option = Mass Fraction
+        END
+        FLOW DIRECTION: 
+          Option = Normal to Boundary Condition
+        END
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        HEAT TRANSFER: 
+          Option = Static Temperature
+          Static Temperature = 18.1 [C]
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.15048356 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+        TURBULENCE: 
+          Option = Medium Intensity and Eddy Viscosity Ratio
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET
+      Boundary Type = OUTLET
+      Location = DG7 B OUT D_4.0_S_1.0
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Option = Static Pressure
+          Relative Pressure = -680 [kPa]
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET AIR RL
+      Boundary Type = OUTLET
+      Location = DG1 B AIR_RL D_5.0,DG1 B AIR_RL D_5.0 2
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.5258471 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET AIR SA
+      Boundary Type = OUTLET
+      Location = DG8 B SA_OUT D_8.0
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.5323591 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END
+
+FLOW: Flow Analysis 1
+  DOMAIN: D1
+    &replace BOUNDARY: OUTLET AIR SL
+      Boundary Type = OUTLET
+      Location = DG10 B SAOUT D_16.0
+      BOUNDARY CONDITIONS: 
+        FLOW REGIME: 
+          Option = Subsonic
+        END
+        MASS AND MOMENTUM: 
+          Mass Flow Rate = 0.5258471 [kg s^-1]
+          Option = Mass Flow Rate
+        END
+      END
+    END
+  END
+END

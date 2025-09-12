@@ -424,7 +424,8 @@ CFX-PRE.
                                            (:file "library")
                                            (:file "initialisation")
                                            (:file "domain-interface")
-                                           (:file "boundary")                                           ))
+                                           (:file "boundary")
+                                           (:file "solver")))
                              (:file "test-data")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -79,3 +79,27 @@
 @end(code)" 
   (format nil "~{~A~^,~}"
           (select-3d-regions-name-by-mesh-name mesh-name simulation)))
+
+(defmethod select-2d-regions (regexp (simulation null))
+  nil
+  )
+
+(defmethod select-2d-regions (regexp (simulation <simulation>))
+  "@b(Описание:) метод @b(select-2d-regions) возвращает список
+2d-регионов для симуляции @b(simulation), соответствующих регулярном
+выражению @b(regexp).
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ ;; Пример для поиска всех флюидовых 2d-регионов используемых для
+ ;; задания граничных условий
+ (select-2d-regions \"DG[0-9]* B[0-9]* .*\" *simulation*)
+ ;; Пример для поиска флюидовых 2d-регионов используемых для
+ ;; задания конкретного граничного условия
+ (select-2d-regions \"DG[0-9]* B[0-9]* AIR_IN .*\" *simulation*)
+@end(code)"
+  (remove-if-not
+   #'(lambda (el)
+       (ppcre:scan regexp el))
+   (2d-regions simulation)))
+

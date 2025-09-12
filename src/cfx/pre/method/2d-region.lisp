@@ -41,3 +41,11 @@
 ;;;;  surface-keys -> 2d-region-keys
 (defmethod 2d-region-keys ((mesh <mesh>))
   (ht-keys-sort (<mesh>-2d-regions mesh)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod 2d-regions ((simulation <simulation>))
+  (apply #'append
+         (loop :for i :in (3d-regions simulation)
+               :collect (2d-regions (3d-region i simulation)))))

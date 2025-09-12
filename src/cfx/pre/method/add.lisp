@@ -56,3 +56,11 @@
 (defmethod add ((obj <simulation-boundary-outlet>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation))
   (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-solver>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-control>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))

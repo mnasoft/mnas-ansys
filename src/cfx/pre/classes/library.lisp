@@ -17,8 +17,6 @@
     :initarg :Reactions-List
     :documentation "Reactions List")))
 
-
-
 (defclass <LIBRARY> (mnas-ansys/ccl/core:<obj>)
   ((objects
     :accessor <LIBRARY>-objects

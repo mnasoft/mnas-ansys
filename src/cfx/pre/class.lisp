@@ -201,4 +201,21 @@
     :initform nil ; "-680 [kPa]"
     :type (or string null))))
 
+(defclass <simulation-solver> (<simulation-command>)
+  ((solution-units
+    :accessor <simulation-solver>-solution-units
+    :initarg :solution-units
+    :initform (make-instance '<solution-units>)
+    :type (or <solution-units> null))
+   (solver-control
+    :accessor <simulation-solver>-solver-control
+    :initarg :solver-control
+    :initform (make-instance '<solver-control>)
+    :type (or <solver-control> null))))
+
+(defclass <simulation-control> (<simulation-command>) ())
+
+(defclass <simulation-control> (<simulation-command>) ())
+
+
 

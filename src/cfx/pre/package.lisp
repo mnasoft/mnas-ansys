@@ -98,7 +98,10 @@
            select-3d-regions-name-by-mesh-name
            select-3d-regions-fluid
            select-3d-regions-solid
-           simulation-fluid-domain-location
+           select-2d-regions
+           )
+  (:export locations)
+  (:export simulation-fluid-domain-location
            simulation-solid-domain-mesh-location))
 
 (in-package :mnas-ansys/cfx/pre)

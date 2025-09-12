@@ -5,6 +5,15 @@
 (defun name-icem->cfx (name)
   (ppcre:regex-replace-all "[/-]" name " "))
 
+(defmethod locations ((location null))
+  "")
+
+(defmethod locations ((location string))
+  (format nil "~A" location))
+
+(defmethod locations ((location sequence))
+  (format nil "~{~A~^,~}" (coerce location 'list)))
+
 (defmethod name ((3d-region <3d-region>))
   "@b(Описание:) метод @b(name) возвращает имя 3d-региона @b(3d-region).
 
@@ -158,7 +167,6 @@
                                :total-temperature total-temperature))))
          (boundary-conditions
            (make-instance '<boundary-conditions>
-                          :name name
                           :heat-transfer heat-transfer
                           :mass-and-momentum
                           (make-instance  '<mass-and-momentum>

@@ -74,6 +74,10 @@
                               :initform "OUTLET"
                               :initarg :boundary-type
                               :documentation "Boundary Type")
+   (interface-boundary        :accessor <boundary>-interface-boundary
+                              :initform nil ; "Off"
+                              :initarg :interface-boundary
+                              :documentation "Interface Boundary")
    (Location                  :accessor <boundary>-location
                               :initform "2d-region"
                               :initarg :location

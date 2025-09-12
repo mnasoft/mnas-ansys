@@ -838,15 +838,116 @@ END
             (<simulation-command>-simulation obj))))
 
 (defmethod create-script ((obj <simulation-boundary-inlet>) stream)
-  (mk-boundary-inlet (<simulation-boundary-inlet>-name               obj)
-                     (<simulation-boundary-inlet>-mass-flow-rate     obj)
-                     (<simulation-boundary-inlet>-location           obj)
-                     :static-temperature (<simulation-boundary-inlet>-static-temperature obj)
-                     :total-temperature (<simulation-boundary-inlet>-total-temperature  obj)
-                     :components        (<simulation-boundary-inlet>-components         obj)))
+  (format stream "~A~%"  "FLOW: Flow Analysis 1")
+  (format stream "~A~%"  "DOMAIN: D1")
+  (format stream "&replace ~A"
+          (mk-boundary-inlet (<simulation-boundary-inlet>-name               obj)
+                             (<simulation-boundary-inlet>-mass-flow-rate     obj)
+                             (<simulation-boundary-inlet>-location           obj)
+                             :static-temperature (<simulation-boundary-inlet>-static-temperature obj)
+                             :total-temperature (<simulation-boundary-inlet>-total-temperature  obj)
+                             :components        (<simulation-boundary-inlet>-components         obj)))
+  (format stream "~A~%"  "END")
+  (format stream "~A~%"  "END"))
 
 (defmethod create-script ((obj <simulation-boundary-outlet>) stream)
-  (mk-boundary-outlet (<simulation-boundary-outlet>-name     obj)
-                      (<simulation-boundary-outlet>-location obj)
-                      :mass-flow-rate (<simulation-boundary-outlet>-mass-flow-rate obj)
-                      :relative-pressure (<simulation-boundary-outlet>-relative-pressure obj)))
+  (format stream "~A~%"  "FLOW: Flow Analysis 1")
+  (format stream "~A~%"  "DOMAIN: D1")
+  (format stream "&replace ~A"  
+          (mk-boundary-outlet (<simulation-boundary-outlet>-name     obj)
+                              (<simulation-boundary-outlet>-location obj)
+                              :mass-flow-rate (<simulation-boundary-outlet>-mass-flow-rate obj)
+                              :relative-pressure (<simulation-boundary-outlet>-relative-pressure obj)))
+  (format stream "~A~%"  "END")
+  (format stream "~A~%"  "END"))
+
+(defmethod create-script ((obj <simulation-solver>) stream)
+  (format stream "~%~A~%"  "FLOW: Flow Analysis 1")
+  (format stream "~A" (<simulation-solver>-solution-units obj))
+  (format stream "~A" (<simulation-solver>-solver-control obj))
+  (format stream "~A~%"  "END"))
+
+(defmethod create-script ((obj <simulation-control>) stream)
+  (format stream "~%~A~%"
+          "SIMULATION CONTROL: 
+  &replace EXECUTION CONTROL: 
+    EXECUTABLE SELECTION: 
+      Double Precision = Off
+    END
+    INTERPOLATOR STEP CONTROL: 
+      Runtime Priority = Standard
+      MEMORY CONTROL: 
+        Catalogue Size Override = 2.5x
+        Memory Allocation Factor = 1
+      END
+    END
+    PARALLEL HOST LIBRARY: 
+      HOST DEFINITION: n133905
+        Host Architecture String = winnt-amd64
+        Installation Root = C:/ANSYS/v%v/CFX
+        Number of Processors = 8
+        Relative Speed = 9.2
+      END
+      HOST DEFINITION: n133906
+        Host Architecture String = winnt-amd64
+        Installation Root = C:/ANSYS/v%v/CFX
+        Number of Processors = 8
+        Relative Speed = 9.2
+      END
+      HOST DEFINITION: n142012
+        Host Architecture String = winnt-amd64
+        Installation Root = C:/ANSYS/v%v/CFX
+        Number of Processors = 8
+        Relative Speed = 11.15
+      END
+      HOST DEFINITION: n142013
+        Host Architecture String = winnt-amd64
+        Installation Root = C:/ANSYS/v%v/CFX
+        Number of Processors = 8
+        Relative Speed = 11.15
+      END
+    END
+    PARTITIONER STEP CONTROL: 
+      Multidomain Option = Independent Partitioning
+      Runtime Priority = Standard
+      EXECUTABLE SELECTION: 
+        Use Large Problem Partitioner = On
+      END
+      MEMORY CONTROL: 
+        Character Memory Override = 2.5x
+        Memory Allocation Factor = 1.1
+      END
+      PARTITIONING TYPE: 
+        Option = Optimized Recursive Coordinate Bisection
+        Partition Size Rule = Automatic
+        Partition Weight Factors = 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.03424, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826, 0.02826
+      END
+    END
+    RUN DEFINITION: 
+      Run Mode = Full
+      Solver Input File = D:/home/_namatv/ANSYS/CFX/a32/cfx/A32_prj_07/DP=003/A32_prj_07.def
+      INITIAL VALUES SPECIFICATION: 
+        INITIAL VALUES CONTROL: 
+          Use Mesh From = Solver Input File
+        END
+        INITIAL VALUES: Initial Values 1
+          File Name = D:/home/_namatv/ANSYS/CFX/a32/cfx/A32_prj_07/DP=003/A32_prj_07_001.res
+          Option = Results File
+        END
+      END
+    END
+    SOLVER STEP CONTROL: 
+      Runtime Priority = Standard
+      MEMORY CONTROL: 
+        Character Memory Override = 2.5x
+        Memory Allocation Factor = 1.1
+      END
+      PARALLEL ENVIRONMENT: 
+        Parallel Host List = n142013*8,n142012*8,n133906*8,n133905*8
+        Start Method = Platform MPI Distributed Parallel
+      END
+    END
+  END
+END
+" ))
+
