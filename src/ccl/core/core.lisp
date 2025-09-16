@@ -2542,9 +2542,19 @@
     :initform "Coord 0"
     :initarg :coord-frame
     :documentation "coord-frame")
+   (expression-value
+    :accessor <monitor-point>-expression-value
+    :initform nil ;; "massFlow()@REGION:C G2 G2 R GT D_4.0 4"
+    :initarg :expression-value
+    :documentation "Expression Value")
+   (monitor-location-control
+    :accessor <monitor-point>-monitor-location-control
+    :initform (make-instance '<monitor-location-control> :name "")
+    :initarg :monitor-location-control
+    :documentation "monitor-location-control")
    (option
     :accessor <monitor-point>-option
-    :initform "Cartesian Coordinates"
+    :initform "Cartesian Coordinates"   ; "Expression"
     :initarg :option
     :documentation "option")
    (output-variables-list
@@ -2552,16 +2562,12 @@
     :initform "Total Pressure"
     :initarg :output-variables-list
     :documentation "output-variables-list")
-   (monitor-location-control
-    :accessor <monitor-point>-monitor-location-control
-    :initform (make-instance '<monitor-location-control> :name "")
-    :initarg :monitor-location-control
-    :documentation "monitor-location-control")
    (position-update-frequency
     :accessor <monitor-point>-position-update-frequency
     :initform (make-instance '<position-update-frequency> :name "")
     :initarg :position-update-frequency
-    :documentation "position-update-frequency")))
+    :documentation "position-update-frequency")
+   ))
 
 (defclass <monitor-objects> (<obj>)
   ((objects

@@ -74,3 +74,61 @@
   (format t "    END~%")
   (format t "  END~%")
   (format t "END~2%"))
+
+(defun mk-monitor-point (&key
+                           (prefix "")
+                           (name "")
+                           domain-name
+                           cartesian-coordinates
+                           output-variables-list
+                           expression
+                           location 
+                           region)
+  "@b(Описание:) функция|метод|обобщенная_функция| @b(...)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mk-monitor-point
+  :prefix \"MFR\"
+  :expression \"massFlow()\"
+  :region \"C G2 G2 R GT D_4.0 4\")
+
+ @b(Пример использования:)
+ (mk-monitor-point
+  :cartesian-coordinates '(0.0 0.0 0.0)
+  :output-variables-list \"Total Pressure\")
+
+@end(code)
+"
+  (cond
+    ((and cartesian-coordinates output-variables-list prefix)
+     (make-instance
+      'mnas-ansys/ccl/core:<monitor-point>
+      :name name
+      :cartesian-coordinates (format nil "~{~A [mm]~^, ~}" cartesian-coordinates)
+      :output-variables-list output-variables-list
+      :expression-value nil))
+    ((and expression region prefix)
+     (make-instance 'mnas-ansys/ccl/core:<monitor-point>
+                    :name (mnas-ansys/ccl:good-name 
+                           (ppcre:regex-replace-all
+                            "\\s+" (concatenate 'string name " " prefix " " region)
+                            " "))
+                    :cartesian-coordinates nil
+                    :expression-value (concatenate 'string expression "@REGION:" region)
+                    :position-update-frequency nil
+                    :monitor-location-control nil
+                    :option "Expression"
+                    :output-variables-list nil))
+    ((and expression location prefix)
+     (make-instance 'mnas-ansys/ccl/core:<monitor-point>
+                    :name (mnas-ansys/ccl:good-name 
+                           (ppcre:regex-replace-all
+                            "\\s+" (concatenate 'string name " " prefix " " location)
+                            " "))
+                    :cartesian-coordinates nil
+                    :expression-value (concatenate 'string expression "@" location)
+                    :position-update-frequency nil
+                    :monitor-location-control nil
+                    :option "Expression"
+                    :output-variables-list nil))))

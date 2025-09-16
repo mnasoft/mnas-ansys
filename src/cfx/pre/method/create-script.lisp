@@ -951,3 +951,66 @@ END
 END
 " ))
 
+(defmethod create-script ((obj <simulation-monitor-point-region>) stream)
+  (let* ((regions
+           (apply #'append
+                  (mapcar
+                   #'(lambda (el)
+                       (select-2d-regions
+                        el
+                        (<simulation-command>-simulation obj)))
+                   (<simulation-monitor-point-region>-2d-regions-template obj))))
+         (monitors (loop :for i :in regions
+                         :collect 
+                         (mk-monitor-point
+                          :prefix (<simulation-monitor-point-region>-prefix obj)
+                          :expression (<simulation-monitor-point-region>-expression obj)
+                          :region i))))
+    (format stream "~A~%" "FLOW: Flow Analysis 1")
+    (format stream "~A~%" "  OUTPUT CONTROL: ")
+    (format stream "~A~%" "    MONITOR OBJECTS: ")
+    (format stream "~{~A~%~}" monitors)
+    (format stream "~A~%" "    END")
+    (format stream "~A~%" "  END")
+    (format stream "~A~%" "END")))
+
+(defmethod create-script ((obj <simulation-monitor-point-named-points>) stream)
+  (let ((monitors
+          (loop :for (name coord) :in (<simulation-monitor-point-named-points>-named-points obj)
+                :collect
+                (mk-monitor-point
+                 :name (mnas-ansys/ccl:good-name
+                        (concatenate
+                         'string
+                         (<simulation-monitor-point-named-points>-prefix obj)
+                         " "
+                         name))
+                 :cartesian-coordinates coord
+                 :domain-name
+                 (<simulation-monitor-point-named-points>-domain-name obj)
+                 :output-variables-list
+                 (<simulation-monitor-point-named-points>-output-variables-list obj)))))
+    (format stream "~A~%" "FLOW: Flow Analysis 1")
+    (format stream "~A~%" "  OUTPUT CONTROL: ")
+    (format stream "~A~%" "    MONITOR OBJECTS: ")
+    (format stream "~{~A~%~}" monitors)
+    (format stream "~A~%" "    END")
+    (format stream "~A~%" "  END")
+    (format stream "~A~%" "END")))
+
+(defmethod create-script ((obj <simulation-monitor-point>) stream)
+  (let* ((monitors nil))
+    (loop :for (prefix expression)
+            :in (<simulation-monitor-point>-prefix-expression obj) :do
+              (loop :for i :in (<simulation-monitor-point>-locations  obj) :do
+                (push (mk-monitor-point :prefix prefix
+                                        :expression expression
+                                        :location i)
+                      monitors)))
+    (format stream "~A~%" "FLOW: Flow Analysis 1")
+    (format stream "~A~%" "  OUTPUT CONTROL: ")
+    (format stream "~A~%" "    MONITOR OBJECTS: ")
+    (format stream "~{~A~%~}" monitors)
+    (format stream "~A~%" "    END")
+    (format stream "~A~%" "  END")
+    (format stream "~A~%" "END")))

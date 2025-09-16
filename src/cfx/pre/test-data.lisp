@@ -155,6 +155,105 @@ SOLVER CONTROL"
 (defmethod print-object ((obj <simulation-control>) s)
   (print-unreadable-object (obj s :type t)))
 
+(defun simulation-monitor-point-region-add (simulation)
+  "Добавляем мониторы, связанные с регионами"
+  (add (make-instance '<simulation-monitor-point-region>
+                      :prefix "MFR"
+                      :2d-regions-template
+                      '("C G1 G[0-9].*.*" "C G2 G2.*" "C G2 G6.*" ))
+       simulation))
+
+(defun simulation-monitor-point-add (simulation)
+  (let ((locations
+          (mapcar #'name
+                  (remove-if-not
+                   #'(lambda (el)
+                       (or 
+                        (eq (type-of el) '<simulation-boundary-inlet>)
+                        (eq (type-of el) '<simulation-boundary-outlet>)))
+                   (<simulation>-commands *simulation*)))))
+    (push "C G2 G6 Side 1" locations)
+    (add (make-instance  '<simulation-monitor-point>
+                         :prefix-expression '(("MFR" "massFlow()")
+                                              ("TP" "massFlowAve(Total Pressure)")
+                                              ("TT" "massFlowAve(Total Temperature)"))
+                         :locations locations)
+         simulation)))
+
+#+nil
+(defun simulation-monitor-point-named-points-add (simulation)
+  "Добавляем мониторы, связанные с регионами" 
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT R OUT"
+                      :domain-name "D1"
+                      :named-points a32-base::*named-points-r*
+                      :output-variables-list '("Total Temperature" "Density" "Velocity u"))
+       simulation)
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT L OUT"
+                      :domain-name "D1"
+                      :named-points a32-base::*named-points-l*
+                      :output-variables-list '("Total Temperature" "Density" "Velocity u"))
+       simulation)
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "SA IN"
+                      :domain-name "D1"
+                      :named-points a32-base::*sa-name-point-list*
+                      :output-variables-list '("Total Temperature"))
+       simulation)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT R 05"
+                      :domain-name "M1"
+                      :named-points a32-base::*gt05-r-tc*
+                      :output-variables-list '("Temperature"))
+       simulation)
+
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT R 13"
+                      :domain-name "M1"
+                      :named-points a32-base::*gt13-r-tc*
+                      :output-variables-list '("Temperature"))
+       simulation)
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT R 06"
+                      :domain-name "M1"
+                      :named-points a32-base::*gt06_12-r-tc*
+                      :output-variables-list '("Temperature"))
+       simulation)
+;;;;
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT L 05"
+                      :domain-name "M1"
+                      :named-points a32-base::*gt05-l-tc*
+                      :output-variables-list '("Temperature"))
+       simulation)
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT L 13"
+                      :domain-name "M1"
+                      :named-points a32-base::*gt13-l-tc*
+                      :output-variables-list '("Temperature"))
+       simulation)
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GT L 06" 
+                      :domain-name "M1"
+                      :named-points a32-base::*gt06_12-l-tc* 
+                      :output-variables-list '("Temperature"))
+       simulation)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GU R"
+                      :domain-name "M2"
+                      :named-points a32-base::*gu01-02-r-tc*
+                      :output-variables-list '("Temperature"))
+       simulation)
+  (add (make-instance '<simulation-monitor-point-named-points>
+                      :prefix "GU L"
+                      :domain-name "M2"
+                      :named-points a32-base::*gu01-02-l-tc*
+                      :output-variables-list '("Temperature"))
+       simulation))
+
 (defun simulation-setup-test (simulation msh-num-ang)
   "Выполняем настройку симуляции"
   ;; Создаем 3d-регионы
@@ -169,7 +268,14 @@ SOLVER CONTROL"
   (fluid-boundary-add  simulation)
   ;; 
   (simulation-solver-add simulation)
-  (simulation-control-add simulation))
+  (simulation-control-add simulation)
+  ;; Добавляем мониторы связанные с сечениями массового расхода
+  (simulation-monitor-point-region-add simulation)
+  ;; Добавляем мониторы связанные с граничными условиями
+  (simulation-monitor-point-add simulation)
+  ;; Добавляем мониторы по точкам
+  ;; (simulation-monitor-point-named-points-add simulation)
+  )
 
 (defun main-test (msh-num-ang tin-pathnames msh-pathnames)
   "Пример главной настроечной функции (точки входа).
@@ -195,13 +301,6 @@ SOLVER CONTROL"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(loop :for i :in
-             (append
-              (select-2d-regions "C G1 G[0-9].*.*" *simulation*)
-              (select-2d-regions "C G2 G2.*"       *simulation*)
-              (select-2d-regions "C G2 G6.*"       *simulation*))
-      :do (mk-mfr-region i))
-
-(mk-mfr-region "C G2 G2 R GT D_4.0 4")
-
-mnas-ansys/ccl/core:<monitor-point>
+(create-script
+ (nth 0 (<simulation>-commands *simulation*))
+               t)

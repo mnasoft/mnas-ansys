@@ -64,3 +64,16 @@
 (defmethod add ((obj <simulation-control>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation))
   (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-monitor-point-region>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-monitor-point-named-points>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-monitor-point>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+

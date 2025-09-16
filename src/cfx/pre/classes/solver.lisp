@@ -125,8 +125,7 @@
 
 (make-instance '<solver-control>)
 
-simulation-control.lisp
-
+"
 SIMULATION CONTROL: 
   &replace EXECUTION CONTROL: 
     EXECUTABLE SELECTION: 
@@ -206,3 +205,4 @@ SIMULATION CONTROL:
     END
   END
 END
+"

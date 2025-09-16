@@ -107,5 +107,23 @@
 (defmethod print-object ((obj <simulation-control>) s)
   (print-unreadable-object (obj s :type t)))
 
+(defmethod print-object ((obj <simulation-monitor-point-region>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S " (<simulation-monitor-point-region>-prefix obj))
+    (format s "~S " (<simulation-monitor-point-region>-expression obj))
+    (format s "~%~S " (<simulation-monitor-point-region>-2d-regions-template obj))))
 
+(defmethod print-object ((obj <simulation-monitor-point-named-points>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S " (<simulation-monitor-point-named-points>-prefix obj))
+    (format s "~S " (<simulation-monitor-point-named-points>-domain-name obj))
+    (format s "~S " (length (<simulation-monitor-point-named-points>-named-points obj)))
+    (format s "~%~S " (<simulation-monitor-point-named-points>-output-variables-list obj))
+    ))
+
+(defmethod print-object ((obj <simulation-monitor-point>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S " (null (null (<simulation-command>-simulation obj))))
+    (format s "~S " (<simulation-monitor-point>-locations obj))
+    (format s "~%~S" (<simulation-monitor-point>-prefix-expression obj))))
 

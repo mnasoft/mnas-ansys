@@ -215,7 +215,49 @@
 
 (defclass <simulation-control> (<simulation-command>) ())
 
-(defclass <simulation-control> (<simulation-command>) ())
+(defclass <simulation-monitor-point-region> (<simulation-command>)
+  ((2d-regions-template
+    :accessor <simulation-monitor-point-region>-2d-regions-template
+    :initarg :2d-regions-template
+    :initform nil)
+   (prefix
+    :accessor <simulation-monitor-point-region>-prefix
+    :initarg :prefix
+    :initform "MFR")
+   (expression
+    :accessor <simulation-monitor-point-region>-expression
+    :initarg :expression
+    :initform "massFlow()")))
 
+(defclass <simulation-monitor-point> (<simulation-command>)
+  ((prefix-expression
+    :accessor <simulation-monitor-point>-prefix-expression
+    :initarg :prefix-expression
+    :initform nil ; MFR TT TP 
+    )
+   (locations
+    :accessor <simulation-monitor-point>-locations
+    :initarg :locations
+    :initform nil #+nil '("INLET" "C G2 G6 Side 1")
+    )))
 
+(defclass <simulation-monitor-point-named-points> (<simulation-command>)
+  ((prefix       
+    :accessor <simulation-monitor-point-named-points>-prefix
+    :initarg :prefix
+    :initform "")
+   (output-variables-list
+    :accessor <simulation-monitor-point-named-points>-output-variables-list
+    :initarg :output-variables-list
+    :initform nil ;; '("Total Temperature" "Density" "Velocity u")
+    )
+   (domain-name
+    :accessor <simulation-monitor-point-named-points>-domain-name
+    :initarg :domain-name
+    :initform nil ;; D1 M1 M2 M3
+    )
+   (named-points
+    :accessor <simulation-monitor-point-named-points>-named-points
+    :initarg :named-points
+    :initform '(("100 100" (466.0 406.2809 75.29972)) ("100 101" (466.0 407.17053 70.33057))))))
 
