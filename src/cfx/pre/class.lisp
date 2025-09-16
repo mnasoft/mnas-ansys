@@ -155,7 +155,7 @@
     :initform nil ; "10.0 [kg s^-1]"
     :type (or string null))
    (location
-    :accessor <simulation-boundary-inlet>-Location
+    :accessor <simulation-boundary-inlet>-location
     :initarg :location
     :initform "DG1 B AIR_IN D_32.0,DG1 B AIR_IN D_32.0 2"
     :type string)
@@ -191,7 +191,7 @@
     :initform nil ;"0.5 [kg s^-1]"
     :type (or string null))
    (location
-    :accessor <simulation-boundary-outlet>-Location
+    :accessor <simulation-boundary-outlet>-location
     :initarg :location
     :initform "DG1 B AIR_RL D_5.0,DG1 B AIR_RL D_5.0 2"
     :type string)

@@ -149,7 +149,7 @@ SOLVER CONTROL"
   (add (make-instance '<simulation-solver>) simulation))
 
 (defun simulation-control-add (simulation)
-  "Добавляем настройку хостовSOLVER CONTROL"
+  "Добавляем настройку хостов SOLVER CONTROL"
   (add (make-instance '<simulation-control>) *simulation*))
 
 (defmethod print-object ((obj <simulation-control>) s)
@@ -171,7 +171,7 @@ SOLVER CONTROL"
                        (or 
                         (eq (type-of el) '<simulation-boundary-inlet>)
                         (eq (type-of el) '<simulation-boundary-outlet>)))
-                   (<simulation>-commands *simulation*)))))
+                   (<simulation>-commands simulation)))))
     (push "C G2 G6 Side 1" locations)
     (add (make-instance  '<simulation-monitor-point>
                          :prefix-expression '(("MFR" "massFlow()")
@@ -260,15 +260,16 @@ SOLVER CONTROL"
   (3d-region-add simulation msh-num-ang)
   ;; Добавляем материал и реакции
   (materials-add simulation)
+  ;; Задаем единицы измерения солвера
+  (simulation-solver-add simulation)
+  ;; Добавляем настройку хостов SOLVER CONTROL
+  (simulation-control-add simulation)
   ;; Создаем домены и интерфейсы типа флюид - солид
   (flow-add  simulation)
   ;; Создаем флюидовые интерфейсы
   (fluid-interface-add simulation)
   ;; Создаем флюидовые интерфейсы  
   (fluid-boundary-add  simulation)
-  ;; 
-  (simulation-solver-add simulation)
-  (simulation-control-add simulation)
   ;; Добавляем мониторы связанные с сечениями массового расхода
   (simulation-monitor-point-region-add simulation)
   ;; Добавляем мониторы связанные с граничными условиями
@@ -301,6 +302,5 @@ SOLVER CONTROL"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(create-script
- (nth 0 (<simulation>-commands *simulation*))
-               t)
+#+nil
+(create-script (nth 0 (<simulation>-commands *simulation*)) t)

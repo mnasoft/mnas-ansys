@@ -59,8 +59,35 @@
   (:export <simulation-flow>
            <simulation-flow>-flow-name
            <simulation-flow>-domain-fluid-name
-           <simulation-flow>-domain-solid-names
-           )
+           <simulation-flow>-domain-solid-names)
+  (:export <simulation-boundary-inlet>
+           <simulation-boundary-inlet>-name
+           <simulation-boundary-inlet>-mass-flow-rate
+           simulation-boundary-inlet>-location
+           <simulation-boundary-inlet>-static-temperature
+           <simulation-boundary-inlet>-total-temperature
+           <simulation-boundary-inlet>-components)
+  (:export <simulation-boundary-outlet>
+           <simulation-boundary-outlet>-name
+           <simulation-boundary-outlet>-mass-flow-rate
+           <simulation-boundary-outlet>-relative-pressure)
+  (:export <simulation-solver>
+           <simulation-solver>-solution-units
+           <simulation-solver>-solver-control)
+  (:export <simulation-control>)
+  (:export <simulation-monitor-point-region>
+           <simulation-monitor-point-region>-2d-regions-template
+           <simulation-monitor-point-region>-prefix
+           <simulation-monitor-point-region>-expression)
+  (:export <simulation-monitor-point>
+           <simulation-monitor-point>-prefix-expression
+           <simulation-monitor-point>-locations)
+  (:export <simulation-monitor-point-named-points>
+           <simulation-monitor-point-named-points>-prefix
+           <simulation-monitor-point-named-points>-output-variables-list
+           <simulation-monitor-point-named-points>-domain-name
+           <simulation-monitor-point-named-points>-named-points)
+
   (:export mk-domain-fluid
            mk-domain-solid
            mk-flow
