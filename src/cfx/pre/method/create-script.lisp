@@ -829,7 +829,9 @@ END
           (mk-flow :simulation         (<simulation-command>-simulation      obj)
                    :flow-name          (<simulation-flow>-flow-name          obj)
                    :domain-fluid-name  (<simulation-flow>-domain-fluid-name  obj)
-                   :domain-solid-names (<simulation-flow>-domain-solid-names obj)))
+                   :domain-solid-names (<simulation-flow>-domain-solid-names obj)
+                   :reference-pressure (<simulation-flow>-domain-solid-names obj)
+                   ))
   (loop :for solid-dom :in (<simulation-flow>-domain-solid-names obj)
         :do
            (mk-f-s-interface-n-m
@@ -838,6 +840,7 @@ END
             (<simulation-command>-simulation obj))))
 
 (defmethod create-script ((obj <simulation-boundary-inlet>) stream)
+  (format stream "~%")  
   (format stream "~A~%"  "FLOW: Flow Analysis 1")
   (format stream "~A~%"  "DOMAIN: D1")
   (format stream "&replace ~A"
@@ -851,6 +854,7 @@ END
   (format stream "~A~%"  "END"))
 
 (defmethod create-script ((obj <simulation-boundary-outlet>) stream)
+  (format stream "~%")
   (format stream "~A~%"  "FLOW: Flow Analysis 1")
   (format stream "~A~%"  "DOMAIN: D1")
   (format stream "&replace ~A"  
@@ -951,6 +955,38 @@ END
 END
 " ))
 
+(defun create-script-monitor-point-preamble  (stream)
+  (format stream "~%")
+  (format stream "~A~%" "FLOW: Flow Analysis 1")
+  (format stream "~A~%" "  OUTPUT CONTROL: ")
+  (format stream "~A~%" "    MONITOR OBJECTS: ")
+  (format stream "~A~%" "      MONITOR BALANCES: ")
+  (format stream "~A~%" "        Option = Full")
+  (format stream "~A~%" "      END")
+  (format stream "~A~%" "      MONITOR FORCES: ")
+  (format stream "~A~%" "        Option = Full")
+  (format stream "~A~%" "      END")
+  (format stream "~A~%" "      MONITOR PARTICLES: ")
+  (format stream "~A~%" "        Option = Full")
+  (format stream "~A~%" "      END")
+  )
+
+(defun create-script-monitor-point-postamble  (stream)
+  (format stream "~A~%" "      MONITOR RESIDUALS: ")
+  (format stream "~A~%" "        Option = Full")
+  (format stream "~A~%" "      END")
+  (format stream "~A~%" "      MONITOR TOTALS: ")
+  (format stream "~A~%" "        Option = Full")
+  (format stream "~A~%" "      END")
+  (format stream "~A~%" "    END")
+  (format stream "~A~%" "    RESULTS: ")
+  (format stream "~A~%" "      File Compression Level = Default")
+  (format stream "~A~%" "      Option = Standard")
+  (format stream "~A~%" "    END")
+  (format stream "~A~%" "  END")
+  (format stream "~A"   "END")
+  (format stream "~%"))
+
 (defmethod create-script ((obj <simulation-monitor-point-region>) stream)
   (let* ((regions
            (apply #'append
@@ -966,13 +1002,9 @@ END
                           :prefix (<simulation-monitor-point-region>-prefix obj)
                           :expression (<simulation-monitor-point-region>-expression obj)
                           :region i))))
-    (format stream "~A~%" "FLOW: Flow Analysis 1")
-    (format stream "~A~%" "  OUTPUT CONTROL: ")
-    (format stream "~A~%" "    MONITOR OBJECTS: ")
-    (format stream "~{~A~%~}" monitors)
-    (format stream "~A~%" "    END")
-    (format stream "~A~%" "  END")
-    (format stream "~A~%" "END")))
+    (create-script-monitor-point-preamble stream)
+    (format stream "~{~A~}" monitors)
+    (create-script-monitor-point-postamble stream)))
 
 (defmethod create-script ((obj <simulation-monitor-point-named-points>) stream)
   (let ((monitors
@@ -990,13 +1022,9 @@ END
                  (<simulation-monitor-point-named-points>-domain-name obj)
                  :output-variables-list
                  (<simulation-monitor-point-named-points>-output-variables-list obj)))))
-    (format stream "~A~%" "FLOW: Flow Analysis 1")
-    (format stream "~A~%" "  OUTPUT CONTROL: ")
-    (format stream "~A~%" "    MONITOR OBJECTS: ")
-    (format stream "~{~A~%~}" monitors)
-    (format stream "~A~%" "    END")
-    (format stream "~A~%" "  END")
-    (format stream "~A~%" "END")))
+    (create-script-monitor-point-preamble stream)
+    (format stream "~{~A~}" monitors)
+    (create-script-monitor-point-postamble stream)))
 
 (defmethod create-script ((obj <simulation-monitor-point>) stream)
   (let* ((monitors nil))
@@ -1007,10 +1035,6 @@ END
                                         :expression expression
                                         :location i)
                       monitors)))
-    (format stream "~A~%" "FLOW: Flow Analysis 1")
-    (format stream "~A~%" "  OUTPUT CONTROL: ")
-    (format stream "~A~%" "    MONITOR OBJECTS: ")
-    (format stream "~{~A~%~}" monitors)
-    (format stream "~A~%" "    END")
-    (format stream "~A~%" "  END")
-    (format stream "~A~%" "END")))
+    (create-script-monitor-point-preamble stream)
+    (format stream "~{~A~}" monitors)
+    (create-script-monitor-point-postamble stream)))

@@ -92,8 +92,8 @@
 (defun mk-domain-fluid (&key
                           (domain-name "D1")
                           (fluid-name "Fluid 1")
-                          (Location "DG1 G1,DG1 G1 2,DG10 G10,DG2 G2,DG2 G2 2,DG31 G31,DG31 G31 2,DG32 G32,DG32 G32 2,DG33 G33,DG33 G33 2,DG34 G34,DG34 G34 2,DG41 G41,DG41 G41 2,DG42 G42,DG42 G42 2,DG5 G5,DG5 G5 2,DG6 G6,DG7 G7,DG8 G8,DG9 G9,DG9 G9 2")
-                          (Reference-Pressure "1.943 [MPa]"))
+                          (location "DG1 G1,DG1 G1 2,DG10 G10,DG2 G2,DG2 G2 2,DG31 G31,DG31 G31 2,DG32 G32,DG32 G32 2,DG33 G33,DG33 G33 2,DG34 G34,DG34 G34 2,DG41 G41,DG41 G41 2,DG42 G42,DG42 G42 2,DG5 G5,DG5 G5 2,DG6 G6,DG7 G7,DG8 G8,DG9 G9,DG9 G9 2")
+                          (reference-pressure "1.943 [MPa]"))
   "Создание флюидового домена без инициализации."
   (make-instance '<domain>
                  :name domain-name
@@ -105,7 +105,7 @@
                  (make-instance '<domain-models>
                                 :reference-pressure
                                 (make-instance '<reference-pressure>
-                                               :reference-pressure Reference-Pressure))
+                                               :reference-pressure reference-pressure))
                  :solid-definition nil
                  :solid-models nil 
                  ))
@@ -132,7 +132,9 @@
                   simulation
                   (flow-name "Flow Analysis 1")
                   (domain-fluid-name "D1")
-                  (domain-solid-names '("M1" "M2" "M3")))
+                  (domain-solid-names '("M1" "M2" "M3"))
+                  (reference-pressure "1.943 [MPa]")
+                  )
   (let ((doms (loop :for d :in domain-solid-names
                     :collect
                     (mk-domain-solid
@@ -140,7 +142,8 @@
                      :location (simulation-solid-domain-mesh-location d simulation)))))
     (push (mk-domain-fluid
            :domain-name domain-fluid-name
-           :location (simulation-fluid-domain-location simulation))
+           :location (simulation-fluid-domain-location simulation)
+           :reference-pressure reference-pressure)
           doms)
     (make-instance '<flow>
                    :name flow-name

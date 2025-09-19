@@ -74,10 +74,11 @@
 
 (defmethod print-object ((obj <simulation-flow>) s)
   (print-unreadable-object (obj s :type t)
-    (format s "~S ~S ~S ~S"
+    (format s "~S ~S ~{~S~^,~} ~S ~S"
             (<simulation-flow>-flow-name obj)
             (<simulation-flow>-domain-fluid-name obj)
             (<simulation-flow>-domain-solid-names obj)
+            (<simulation-flow>-reference-pressure obj)
             (null (null (<simulation-command>-simulation obj))))))
 
 (defmethod print-object ((obj <simulation-boundary-inlet>) s)
@@ -111,19 +112,19 @@
   (print-unreadable-object (obj s :type t)
     (format s "~S " (<simulation-monitor-point-region>-prefix obj))
     (format s "~S " (<simulation-monitor-point-region>-expression obj))
-    (format s "~%~S " (<simulation-monitor-point-region>-2d-regions-template obj))))
+    (format s "~{~S~^,~}" (<simulation-monitor-point-region>-2d-regions-template obj))))
 
 (defmethod print-object ((obj <simulation-monitor-point-named-points>) s)
   (print-unreadable-object (obj s :type t)
     (format s "~S " (<simulation-monitor-point-named-points>-prefix obj))
     (format s "~S " (<simulation-monitor-point-named-points>-domain-name obj))
     (format s "~S " (length (<simulation-monitor-point-named-points>-named-points obj)))
-    (format s "~%~S " (<simulation-monitor-point-named-points>-output-variables-list obj))
+    (format s "~{~S~^,~}" (<simulation-monitor-point-named-points>-output-variables-list obj))
     ))
 
 (defmethod print-object ((obj <simulation-monitor-point>) s)
   (print-unreadable-object (obj s :type t)
     (format s "~S " (null (null (<simulation-command>-simulation obj))))
-    (format s "~S " (<simulation-monitor-point>-locations obj))
-    (format s "~%~S" (<simulation-monitor-point>-prefix-expression obj))))
+    (format s "~{~S~^,~} " (<simulation-monitor-point>-locations obj))
+    (format s "~{~{~S~^-~}~^,~} " (<simulation-monitor-point>-prefix-expression obj))))
 

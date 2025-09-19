@@ -339,24 +339,6 @@ CFX-PRE.
                 :components
                 ((:file "bin")))))
 
-(defsystem "mnas-ansys/cfx/file-bak"
-  :description
-  "Подсистема @(mnas-ansys/cfx/file) определяет функции, которые позволяют
-осуществить извлечение информации из cfx, def и res файлов ANSYS CFX."
-  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
-  :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :serial nil
-  :depends-on ("serializable-object"
-               "mnas-ansys/cfx/bin"
-               "mnas-org-mode"
-               "mnas-ansys/exchange"
-               ;; "mnas-ansys/cfx/file/mon"
-               )
-  :components ((:module "src/cfx/file"
-                :serial nil
-                :components
-                ((:file "file-bak")))))
-
 (defsystem "mnas-ansys/cfx/post"
   :description "Подсистема @(mnas-ansys/cfx/post) определяет функции,
  позволяющие создавать сценарии для генерирования отчетов CFX-POST."  
@@ -473,7 +455,8 @@ CFX-PRE.
   :components ((:module "src/cfx/file"
                 :serial nil
                 :components
-                ((:file "file")))))
+                ((:file "package")
+                 (:file "file")))))
 
 (defsystem "mnas-ansys/cfx/file/res-to-s-obj"
   :description

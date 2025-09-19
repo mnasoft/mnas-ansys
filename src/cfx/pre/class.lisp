@@ -140,7 +140,12 @@
     :initarg :domain-solid-names
     :initform '("M1" "M2" "M3")
     :type list
-    :documentation "Имена солидовых доменов."))
+    :documentation "Имена солидовых доменов.")
+   (reference-pressure 
+    :accessor <simulation-flow>-reference-pressure
+    :initarg :reference-pressure
+    :initform "1.943 [MPa]"
+    :documentation "Ссылочное давление."))
   (:documentation "Команда для создания домена."))
 
 (defclass <simulation-boundary-inlet> (<simulation-command>)

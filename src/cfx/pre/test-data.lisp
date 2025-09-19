@@ -67,10 +67,17 @@
        simulation))
 
 (defun flow-add (simulation)
-  "Создаем домены и интерфейсы типа флюид - солид"
+  "Создаем домены и интерфейсы типа флюид - солид.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (flow-add *simulation*)
+@end(code)
+"
   (add (make-instance '<simulation-flow>
                       :domain-fluid-name (domain-names-fluid simulation)
                       :domain-solid-names (domain-names-solid simulation)
+                      :reference-pressure "1.943 [MPa]"
                       :simulation simulation)
        simulation))
 
@@ -151,9 +158,6 @@ SOLVER CONTROL"
 (defun simulation-control-add (simulation)
   "Добавляем настройку хостов SOLVER CONTROL"
   (add (make-instance '<simulation-control>) *simulation*))
-
-(defmethod print-object ((obj <simulation-control>) s)
-  (print-unreadable-object (obj s :type t)))
 
 (defun simulation-monitor-point-region-add (simulation)
   "Добавляем мониторы, связанные с регионами"
@@ -254,29 +258,44 @@ SOLVER CONTROL"
                       :output-variables-list '("Temperature"))
        simulation))
 
-(defun simulation-setup-test (simulation msh-num-ang)
-  "Выполняем настройку симуляции"
-  ;; Создаем 3d-регионы
-  (3d-region-add simulation msh-num-ang)
-  ;; Добавляем материал и реакции
-  (materials-add simulation)
-  ;; Задаем единицы измерения солвера
-  (simulation-solver-add simulation)
-  ;; Добавляем настройку хостов SOLVER CONTROL
-  (simulation-control-add simulation)
-  ;; Создаем домены и интерфейсы типа флюид - солид
-  (flow-add  simulation)
-  ;; Создаем флюидовые интерфейсы
-  (fluid-interface-add simulation)
-  ;; Создаем флюидовые интерфейсы  
-  (fluid-boundary-add  simulation)
-  ;; Добавляем мониторы связанные с сечениями массового расхода
-  (simulation-monitor-point-region-add simulation)
-  ;; Добавляем мониторы связанные с граничными условиями
-  (simulation-monitor-point-add simulation)
-  ;; Добавляем мониторы по точкам
-  ;; (simulation-monitor-point-named-points-add simulation)
-  )
+(defun simulation-setup-test (simulation msh-num-ang
+                              &key
+                                (3d-region t)
+                                (materials t)
+                                (flow t)
+                                (fluid-interface t)
+                                (fluid-boundary t)
+                                (monitor-point-region t)
+                                (monitor-point t)
+                                (monitor-point-named-points t)
+                                (solver-add t)
+                                (control-add t)
+                                )
+  "Выполняет настройку симуляции"
+  (reset simulation)
+  (when 3d-region                       ; Создаем 3d-регионы
+    (3d-region-add simulation msh-num-ang))
+  (when materials                       ; Добавляем материал и реакции
+    (materials-add simulation))
+  (when flow          ; Создаем домены и интерфейсы типа флюид - солид
+    (flow-add  simulation))
+  (when fluid-interface                 ; Создаем флюидовые интерфейсы
+    (fluid-interface-add simulation))
+  (when fluid-boundary                  ; Создаем флюидовые интерфейсы
+    (fluid-boundary-add  simulation))
+  (when monitor-point-region          ; Добавляем мониторы связанные с
+                                      ; сечениями массового расхода
+    (simulation-monitor-point-region-add simulation))
+  (when monitor-point                 ; Добавляем мониторы связанные с
+                                      ; граничными условиями
+    (simulation-monitor-point-add simulation))
+  (when monitor-point-named-points      ; Добавляем мониторы по точкам
+    (simulation-monitor-point-named-points-add simulation))
+  (when solver-add                  ; Задаем единицы измерения солвера
+    (simulation-solver-add simulation))
+  (when control-add                 ; Добавляем настройку хостов
+                                    ; SOLVER CONTROL
+    (simulation-control-add simulation)))
 
 (defun main-test (msh-num-ang tin-pathnames msh-pathnames)
   "Пример главной настроечной функции (точки входа).
