@@ -2,7 +2,8 @@
 
 (defpackage :mnas-ansys/cfx/file/mon
   (:use #:cl)
-  (:export <mon>-number
+  (:export <mon>
+           <mon>-number
            <mon>-des
            <mon>-name
            <mon>-domen
