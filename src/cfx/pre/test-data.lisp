@@ -307,7 +307,17 @@ SOLVER CONTROL"
     ;; Загружаем сетки 
     (mesh-add *simulation* tin-pathnames msh-pathnames))
   ;; Выполняем настройку симуляции
-  (simulation-setup-test *simulation* msh-num-ang)
+  (simulation-setup-test *simulation* msh-num-ang
+                         :3d-region nil
+                         :materials nil
+                         :flow nil
+                         :fluid-interface nil
+                         :fluid-boundary nil
+                         :monitor-point-region nil
+                         :monitor-point nil
+                         :monitor-point-named-points nil
+                         :solver-add nil
+                         :control-add nil)
   *simulation*)
 
 ;;;; Сброс настроек симуляции

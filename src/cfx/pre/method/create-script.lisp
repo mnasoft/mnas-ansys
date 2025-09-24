@@ -830,7 +830,7 @@ END
                    :flow-name          (<simulation-flow>-flow-name          obj)
                    :domain-fluid-name  (<simulation-flow>-domain-fluid-name  obj)
                    :domain-solid-names (<simulation-flow>-domain-solid-names obj)
-                   :reference-pressure (<simulation-flow>-domain-solid-names obj)
+                   :reference-pressure (<simulation-flow>-reference-pressure obj)
                    ))
   (loop :for solid-dom :in (<simulation-flow>-domain-solid-names obj)
         :do
