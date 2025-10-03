@@ -95,7 +95,6 @@
   (:export main-test
            reset
            2d-region
-           2d-regions
            2d-region-values
            2d-region-keys
            3d-region
@@ -125,7 +124,8 @@
            select-3d-regions-name-by-mesh-name
            select-3d-regions-fluid
            select-3d-regions-solid
-           select-2d-regions
+           select-2d-region-values
+           select-2d-region-keys
            )
   (:export locations)
   (:export simulation-fluid-domain-location

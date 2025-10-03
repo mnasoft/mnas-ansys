@@ -992,7 +992,7 @@ END
            (apply #'append
                   (mapcar
                    #'(lambda (el)
-                       (select-2d-regions
+                       (select-2d-region-values
                         el
                         (<simulation-command>-simulation obj)))
                    (<simulation-monitor-point-region>-2d-regions-template obj))))

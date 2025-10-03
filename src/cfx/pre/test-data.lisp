@@ -95,7 +95,7 @@
 
 (defun mk-location  (location)
   (locations
-   (select-2d-regions
+   (select-2d-region-values
     (concatenate 'string "DG[0-9]* B[0-9]* " location " .*")
     *simulation*)))
 
@@ -103,7 +103,7 @@
   "Добавляем флюидовые граничные условия"
   (labels ((mk-location (location)
              (locations
-              (select-2d-regions
+              (select-2d-region-values
                (concatenate 'string "DG[0-9]* B[0-9]* " location " .*")
                simulation))))
     (add (make-instance '<simulation-boundary-inlet>

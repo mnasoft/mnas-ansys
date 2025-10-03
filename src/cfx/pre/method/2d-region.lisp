@@ -5,11 +5,13 @@
 (defmethod 2d-region (key (mesh <mesh>))
   (gethash key (<mesh>-2d-regions mesh)))
 
-(defmethod 2d-regions ((3d-region <3d-region>))
-  "
+(defmethod 2d-region-values ((3d-region <3d-region>))
+  "@b(Описание:) метод @b(2d-regions) возвращает имена 2d-регионов для
+2d-региона 3d-region.
+
  @b(Пример использования:)
 @begin[lang=lisp](code)
- (2d-regions (second (select-3d-regions-by-mesh-name \"G2\" *simulation*)))
+ (2d-region-values (second (select-3d-regions-by-mesh-name \"G2\" *simulation*)))
 @end(code)
 "
   (loop :for 2d-region
@@ -20,12 +22,17 @@
                          2d-region
                          (<3d-region>-2d-suffix 3d-region))))
 
-(defmethod 2d-regions ((seq sequence))
+(defmethod 2d-region-keys ((seq sequence))
   (apply #'append
          (loop :for i :across (coerce seq 'vector)
                :collect
-               (2d-regions i))))
+               (2d-region-values i))))
 
+(defmethod 2d-region-values ((seq sequence))
+  (apply #'append
+         (loop :for i :across (coerce seq 'vector)
+               :collect
+               (2d-region-values i))))
 
 ;;;; surfaces -> 2d-region-values
 (defmethod 2d-region-values ((mesh <mesh>))
@@ -42,10 +49,19 @@
 (defmethod 2d-region-keys ((mesh <mesh>))
   (ht-keys-sort (<mesh>-2d-regions mesh)))
 
+(defmethod 2d-region-keys ((3d-region <3d-region>))
+  (ht-keys-sort
+   (<mesh>-2d-regions
+    (<3d-region>-mesh 3d-region))))
+
+(defmethod 2d-region-values ((3d-region <3d-region>))
+  (ht-values-sort
+   (<mesh>-2d-regions
+    (<3d-region>-mesh 3d-region))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod 2d-regions ((simulation <simulation>))
+(defmethod 2d-region-values ((simulation <simulation>))
   (apply #'append
          (loop :for i :in (3d-regions simulation)
-               :collect (2d-regions (3d-region i simulation)))))
+               :collect (2d-region-values (3d-region i simulation)))))

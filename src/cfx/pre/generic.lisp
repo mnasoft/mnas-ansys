@@ -13,7 +13,11 @@
   (:documentation
    "Возвращает имя 2d-региона по ключу имя Icem."))
 
-(defgeneric 2d-regions (obj)
+(defgeneric 2d-region-values (obj)
+  (:documentation
+   "Возвращает список имен 2d-регионов объекта @b(obj)."))
+
+(defgeneric 2d-region-keys (obj)
   (:documentation
    "Возвращает список имен 2d-регионов объекта @b(obj)."))
 

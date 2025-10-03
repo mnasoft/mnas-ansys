@@ -21,7 +21,7 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.22"
+  :version "0.0.23"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
@@ -35,7 +35,7 @@ CFX-PRE.
                "mnas-ansys/cfx/pre"
                "mnas-ansys/cfx/solver"
                "mnas-ansys/cfx/file"
-               )
+               "mnas-ansys/cfx/post")
   :components ((:module "src" 
                 :serial nil
                 :components

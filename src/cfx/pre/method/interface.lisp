@@ -29,7 +29,7 @@
    (remove-if #'(lambda (el)
                   (not
                    (uiop:string-prefix-p "C" el)))
-              (2d-regions 3d-region))
+              (2d-region-values 3d-region))
    #'string<))
 
 (defmethod interfaces-with ((3d-region <3d-region>) mesh-name-2)
@@ -137,7 +137,7 @@
      #'(lambda (el)
          (or (not (uiop:string-prefix-p "DG" el))
              (string/= s-body-name (second (mnas-ansys/ccl:mk-split el)))))
-     (2d-regions (select-3d-regions-fluid simulation)))
+     (2d-region-values (select-3d-regions-fluid simulation)))
     #'string<))
 
 (defmethod solid-2d-regions (s-body-name (simulation <simulation>))
@@ -147,7 +147,7 @@
         (or (uiop:string-prefix-p "DG0" el)
             (not (uiop:string-prefix-p "DG" el))
             (string/= s-body-name (second (mnas-ansys/ccl:mk-split el)))))
-    (2d-regions (select-3d-regions-solid simulation)))
+    (2d-region-values (select-3d-regions-solid simulation)))
    #'string<))
 
 (defmethod mk-f-s-interface-n-m (fluid-domain-name solid-domain-name (simulation <simulation>))
