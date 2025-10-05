@@ -321,9 +321,11 @@ SOLVER CONTROL"
   *simulation*)
 
 ;;;; Сброс настроек симуляции
-#+nil (reset *simulation*)
+#+nil
+(reset *simulation*)
 
-#+nil (main-test *msh-num-ang* *tin-pathnames* *msh-pathnames*)
+#+nil
+(main-test *msh-num-ang* *tin-pathnames* *msh-pathnames*)
 
 #+nil (create-script *simulation* t)
 

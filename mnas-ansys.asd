@@ -410,6 +410,31 @@ CFX-PRE.
                                            (:file "solver")))
                              (:file "test-data")))))
 
+
+
+(defsystem "mnas-ansys/cfx/pre/web"
+  :description "Зависимости для сборки документации"
+  :depends-on ("40ants-routes"
+               "reblocks"
+               "mnas-string"
+               "clack"
+               "clack-handler-hunchentoot"
+               "hunchentoot"
+               "mnas-ansys/cfx/pre"
+               #+nil "postmodern"
+               )
+  :components ((:module "src/cfx/pre/web"
+                :serial t
+                :components ((:file "package")
+                             (:file "start-stop")
+                             (:file "app-hw")
+                             (:file "app-simulation")
+                             (:module "methods"
+                              :serial t
+                              :components ((:file "defwidget")
+                                           (:file "make-page")
+                                           (:file "render")))))))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defsystem "mnas-ansys/cfx/file/mon/core"

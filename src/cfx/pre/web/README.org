@@ -1,0 +1,4 @@
+
+[[file+emacs:~/quicklisp/local-projects/ANSYS/mnas-ansys/mnas-ansys.asd::415][mnas-ansys.asd]]
+
+[[/home/mna/quicklisp/local-projects/clisp/vse-gost/vse-gost.asd]]
