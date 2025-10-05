@@ -105,6 +105,9 @@
           (ppcre:split rgx i))))
 
 (defun ansys-versions ()
+  (unless
+      (mnas-string:select "ANSYS[0-9]{3}_DIR" (environ) :key #'first)
+    (sb-posix:setenv "ANSYS999_DIR" "ANSYS999_DIR" 0))
   (sort 
    (loop :for (name val)
            :in (mnas-string:select "ANSYS[0-9]{3}_DIR" (environ) :key #'first)
