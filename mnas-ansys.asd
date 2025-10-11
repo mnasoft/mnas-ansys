@@ -515,3 +515,16 @@ uns-файлов icem в msh-файлы, предназначенные для �
                 :serial nil
                 :components
                 ((:file "icem")))))
+
+(defsystem "mnas-ansys/cfx/pre/nodgui"
+  :description
+  "Подсистема @(mnas-ansys/cfx/pre/nodgui) определяет графический
+интерфейс к объекту *simulation*."
+  :serial nil
+  :depends-on ("nodgui"  "mnas-ansys/cfx/pre")
+  :components ((:module "src/cfx/pre/nodgui" 
+                :serial nil
+                :components
+                ((:file "package")))))
+
+
