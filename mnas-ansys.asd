@@ -525,6 +525,7 @@ uns-файлов icem в msh-файлы, предназначенные для �
   :components ((:module "src/cfx/pre/nodgui" 
                 :serial nil
                 :components
-                ((:file "package")))))
+                ((:file "package")
+                 (:file "meshes")))))
 
 
