@@ -21,7 +21,7 @@ CFX-PRE.
 "
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
-  :version "0.0.23"
+  :version "0.1.24"
   :serial nil
   :depends-on ("mnas-string"
                "mnas-hash-table"
@@ -530,6 +530,4 @@ uns-файлов icem в msh-файлы, предназначенные для �
                  (:file "meshes")
                  (:file "meshes-template")
                  (:file "3d-regions")
-                 (:file "menu")
-
-                 ))))
+                 (:file "simulation")))))
