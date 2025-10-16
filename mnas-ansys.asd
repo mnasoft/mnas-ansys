@@ -526,6 +526,10 @@ uns-файлов icem в msh-файлы, предназначенные для �
                 :serial nil
                 :components
                 ((:file "package")
-                 (:file "meshes")))))
+                 (:file "functions")
+                 (:file "meshes")
+                 (:file "meshes-template")
+                 (:file "3d-regions")
+                 (:file "menu")
 
-
+                 ))))
