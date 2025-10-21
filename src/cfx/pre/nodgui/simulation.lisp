@@ -4,36 +4,33 @@
 
 (defun simulation ()
   (nodgui:with-nodgui ()
-    (let* ((menubar (nodgui:make-menubar))
+    (let* (
+           (toplevel nodgui:*tk*)
+           (top (make-instance 'nodgui:frame :master toplevel)) ;; :width 500 :height 300
+           (txt (make-instance 'nodgui:scrolled-text :master top :warp nil))
+;;;; Menu
+           (menubar (nodgui:make-menubar toplevel))
            (m-meshes (nodgui:make-menu menubar "Meshes"))
            (mesh-single (make-instance 'nodgui:menubutton
-                                :master m-meshes :text "One-by-one"
-                                :command (lambda () (meshes))))
+                                       :master m-meshes :text "One-by-one"
+                                       :command (lambda () (meshes))))
            (mesh-template (make-instance 'nodgui:menubutton
-                                :master m-meshes :text "By templates"
-                                :command (lambda () (meshes-template))))
+                                         :master m-meshes :text "By templates"
+                                         :command (lambda () (meshes-template))))
            (m-3d-regions (nodgui:make-menu menubar "3D-Regions"))
-           (ck-3 (make-instance 'nodgui:menubutton
-                                :master m-3d-regions
-                                :text "Сreate"
-                                :command (lambda () (3d-regions)))))
-      #+nil
-      (nodgui:pack button))))
+           (3d-regions-create  (make-instance 'nodgui:menubutton
+                                              :master m-3d-regions
+                                              :text "Сreate"
+                                              :command (lambda () (3d-regions)))))
+      (block top
+        (block top-items
+          (nodgui:grid txt 0 0 :sticky :nswe))
+        (nodgui:grid-columnconfigure top 1 :weight 1)
+        (nodgui:grid-rowconfigure top 1 :weight 1)
+        (nodgui:pack top :side :top :fill :x)
+        )
+      (setf (nodgui:text txt)
+              (format nil "~A" *simulation*))
+)))
 
 #+nil (simulation)
-
-
-#+nil
-(button (make-instance 'nodgui:button :text "get menu button value"
-                                  :command
-                                  (lambda ()
-                                    (nodgui:message-box (format nil
-                                                         "check-value ~a"
-                                                         (nodgui:value ck-1))
-                                                 "info"
-                                                 nodgui:+message-box-type-ok+
-                                                 nodgui:+message-box-icon-info+))))
-
-
-
-
