@@ -55,9 +55,11 @@
     (<3d-region>-mesh 3d-region))))
 
 (defmethod 2d-region-values ((3d-region <3d-region>))
-  (ht-values-sort
-   (<mesh>-2d-regions
-    (<3d-region>-mesh 3d-region))))
+  (mapcar
+   #'(lambda (el)
+       (format nil "~A ~A" el (<3d-region>-2d-suffix 3d-region)))
+       (ht-values-sort
+        (<mesh>-2d-regions (<3d-region>-mesh 3d-region)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

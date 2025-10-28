@@ -11,3 +11,14 @@
  (make-instance 'mnas-ansys/cfx/pre:<3d-region>
                 :mesh (mnas-ansys/cfx/pre:mesh "G1" *simulation*))
  *simulation*)
+
+#+nil
+(button (make-instance 'nodgui:button :text "get menu button value"
+                                  :command
+                                  (lambda ()
+                                    (nodgui:message-box (format nil
+                                                         "check-value ~a"
+                                                         (nodgui:value ck-1))
+                                                 "info"
+                                                 nodgui:+message-box-type-ok+
+                                                 nodgui:+message-box-icon-info+))))

@@ -24,6 +24,8 @@
                  (gl:enable :depth-test)
                  (gl:enable :lighting)
                  (gl:enable :light0)
+
+                 (gl:color 1.0 0.2 0.2)                 
                  
                  (gl:light :light0 :position '(0 1 1 0))
                  (gl:light :light0 :diffuse '(0.9 1.0 1.0 0))
