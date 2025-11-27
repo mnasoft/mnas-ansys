@@ -1,0 +1,31 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil expand-links:t f:t
+#+options: inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+options: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+title: README
+#+date: <2025-11-27 Чт>
+#+author:
+#+email: mnasoft@mail.com
+#+language: ru
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 30.1 (Org mode 9.7.11)
+#+cite_export:
+
+** Добавление сеток
+Для определения сетки нужно указать ее:
+- tin-файл;
+- msh-файл.
+
+Добавление сеток может осуществляться по одной или группой. 
+*** Добавление сеток по одной
+#+caption: Меню для добавления сеток по одной
+[[file:img/msh-add-one-by-one.png]]
+#+caption: Диалог для добавления сеток по одной
+[[file:img/mesh-dialog.png]]
+*** Добавление сеток групповое
+#+caption: Меню для добавления группы сеток
+[[file:img/msh-add-by-template.png]]
+#+caption: Диалог для добавления группы сеток
+[[file:img/msh-by-template.png]]
