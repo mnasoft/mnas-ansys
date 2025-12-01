@@ -521,13 +521,17 @@ uns-файлов icem в msh-файлы, предназначенные для �
   "Подсистема @(mnas-ansys/cfx/pre/nodgui) определяет графический
 интерфейс к объекту *simulation*."
   :serial nil
-  :depends-on ("nodgui"  "mnas-ansys/cfx/pre")
-  :components ((:module "src/cfx/pre/nodgui" 
-                :serial nil
-                :components
-                ((:file "package")
-                 (:file "functions")
-                 (:file "meshes")
-                 (:file "meshes-template")
-                 (:file "3d-regions")
-                 (:file "simulation")))))
+  :depends-on ("nodgui"
+               "mnas-ansys/cfx/pre")
+  :components
+  ((:module "src/cfx/pre/nodgui" 
+    :serial t
+    :components
+    ((:file "package")
+     (:module "src"
+      :components
+      ((:file "functions")
+       (:file "meshes")
+       (:file "meshes-template")
+       (:file "3d-regions")
+       (:file "simulation")))))))

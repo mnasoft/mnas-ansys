@@ -52,3 +52,7 @@
 (defgeneric create-script (obj stream)
     (:documentation "Выводит в поток @b(stream) сценарий для вставки в командную строку
 CFX."))
+
+(defgeneric reset (obj)
+  (:documentation "@b(Описание:) метод @b(reset) сбрасывает объект в исходное состояние и
+возвращает его."))
