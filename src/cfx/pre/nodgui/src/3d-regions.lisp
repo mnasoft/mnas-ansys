@@ -11,7 +11,10 @@
            (msh-lb  (make-instance 'nodgui:scrolled-listbox :master top))
            (mid           (make-instance 'nodgui:frame  :master toplevel))
            (add-btn (make-instance 'nodgui:button :master mid :text "Create"))
-           (del-btn (make-instance 'nodgui:button :master mid :text "Delete"))
+           (rot-btn (make-instance 'nodgui:button :master mid :text "Rotate"))
+           (angle-lbl (make-instance 'nodgui:label  :master mid :text "Angle"))
+           (angle-eb (make-instance 'nodgui:entry :master mid :text "-22.5"))
+           (clr-btn (make-instance 'nodgui:button :master mid :text "Clear"))
            (bot           (make-instance 'nodgui:frame  :master toplevel))
            (3dr-lb (make-instance 'nodgui:scrolled-listbox :master bot))) 
       (labels ((refresh ()
@@ -29,15 +32,20 @@
                             *simulation*))
                  (refresh))
                (delete-click ()
-                 (break "~A" (nodgui:listbox-get-selection-value 3dr-lb))
+                 (break "~S" (nodgui:listbox-get-selection-value 3dr-lb))
                  #+nil
                  (loop :for i :in (nodgui:listbox-get-selection-value 3dr-lb)
                        :do (remhash i (mnas-ansys/cfx/pre:<simulation>-meshes *simulation*)))
+                 (refresh))
+               (clear-click ()
+                 (mnas-ansys/cfx/pre:reset *simulation*)
                  (refresh)))
         
         (block command-binding
           (setf (nodgui:command add-btn) #'create-click)
-          (setf (nodgui:command del-btn) #'delete-click))
+          (setf (nodgui:command rot-btn) #'delete-click)
+          (setf (nodgui:command clr-btn) #'clear-click)
+          )
 
 ;;;; grid listbox
         (nodgui:grid msh-lb       0 0 :sticky :we)
@@ -61,7 +69,7 @@
                     (nodgui:grid top 0 0 :padx 5 :pady 5 :sticky :we))
           (block mid
             (block mid-items
-              (loop :for w :in (list add-btn del-btn)
+              (loop :for w :in (list add-btn rot-btn angle-lbl angle-eb clr-btn)
               :for i :from 0
                     :do (nodgui:grid w 0 i :sticky :we)))
             (nodgui:pack mid :side :top :fill :x)
