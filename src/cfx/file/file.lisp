@@ -450,6 +450,14 @@ org-файлы данные мониторов для объекта res кла�
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun mk-fname-s-obj (res-file-name)
+    "@b(Описание:) функция @b(mk-fname-res) возвращает pathname к по
+s-obj-файлу по имени res-файла.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mk-fname-s-obj \"z:/ANSYS/CFX/a32/cfx/A32_prj_13/DP=001/A32_prj_13_000_1636.res\")
+ ; => #P\"z:/ANSYS/CFX/a32/cfx/A32_prj_13/DP=001/A32_prj_13_000_1636.s-obj\"
+@end(code)"
   (let ((device    (pathname-device    res-file-name))
         (directory (pathname-directory res-file-name))
         (name      (pathname-name      res-file-name)))
@@ -459,6 +467,17 @@ org-файлы данные мониторов для объекта res кла�
                    :type      "s-obj")))
 
 (defun mk-fname-res (res-file-name)
+  "@b(Описание:) функция @b(mk-fname-res) возвращает pathname к имени по
+имениимя res-файла.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (mk-fname-res (first (last (directory \"z:/ANSYS/CFX/a32/cfx/A32_prj_13/DP=001/*.res\"))))
+ ; => #P\"z:/ANSYS/CFX/a32/cfx/A32_prj_13/DP=001/A32_prj_13_000_1636.res\"
+
+ (mk-fname-res \"z:/ANSYS/CFX/a32/cfx/A32_prj_13/DP=001/A32_prj_13_000_1636.res\")
+ ; => #P\"z:/ANSYS/CFX/a32/cfx/A32_prj_13/DP=001/A32_prj_13_000_1636.res\"
+@end(code)"
   (let ((device    (pathname-device    res-file-name))
         (directory (pathname-directory res-file-name))
         (name      (pathname-name      res-file-name)))
