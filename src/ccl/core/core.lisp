@@ -3450,3 +3450,247 @@
     :initarg :Z-Pos
     :documentation "Z-Pos")   
    ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <volume> (<obj>)
+  ((Apply-Instancing-Transform
+    :accessor <volume>-Apply-Instancing-Transform
+    :initform "On"
+    :initarg :Apply-Instancing-Transform
+    :documentation "Apply-Instancing-Transform")
+   (Apply-Texture
+    :accessor <volume>-Apply-Texture
+    :initform "Off"
+    :initarg :Apply-Texture
+    :documentation "Apply-Texture")
+   (Blend-Texture
+    :accessor <volume>-Blend-Texture
+    :initform "On"
+    :initarg :Blend-Texture
+    :documentation "Blend-Texture")
+   (Colour
+    :accessor <volume>-Colour
+    :initform "0.666667, 0, 0"
+    :initarg :Colour
+    :documentation "Colour")
+   (Colour-Map
+    :accessor <volume>-Colour-Map
+    :initform "Default Colour Map"
+    :initarg :Colour-Map
+    :documentation "Colour-Map")
+   (Colour-Mode
+    :accessor <volume>-Colour-Mode
+    :initform "Constant"
+    :initarg :Colour-Mode
+    :documentation "Colour-Mode")
+   (Colour-Scale
+    :accessor <volume>-Colour-Scale
+    :initform "Linear"
+    :initarg :Colour-Scale
+    :documentation "Colour-Scale")
+   (Colour-Variable
+    :accessor <volume>-Colour-Variable
+    :initform "Pressure"
+    :initarg :Colour-Variable
+    :documentation "Colour-Variable")
+   (Colour-Variable-Boundary-Values
+    :accessor <volume>-Colour-Variable-Boundary-Values
+    :initform "Hybrid"
+    :initarg :Colour-Variable-Boundary-Values
+    :documentation "Colour-Variable-Boundary-Values")
+   (Culling-Mode
+    :accessor <volume>-Culling-Mode
+    :initform "No Culling"
+    :initarg :Culling-Mode
+    :documentation "Culling-Mode")
+   (Domain-List
+    :accessor <volume>-Domain-List
+    :initform "D1"
+    :initarg :Domain-List
+    :documentation "Domain-List")
+   (Draw-Faces
+    :accessor <volume>-Draw-Faces    
+    :initform "On"
+    :initarg :Draw-Faces
+    :documentation "Draw-Faces")
+   (Draw-Lines
+    :accessor <volume>-Draw-Lines
+    :initform "Off"
+    :initarg :Draw-Lines
+    :documentation "Draw-Lines")
+   (Element-Type-List
+    :accessor <volume>-Element-Type-List
+    :initform "Tet,Pyramid,Wedge,Hex,Polyhedron"
+    :initarg :Element-Type-List
+    :documentation "Element-Type-List")
+   (Inclusive
+    :accessor <volume>-Inclusive
+    :initform "Off"
+    :initarg :Inclusive
+    :documentation "Inclusive")
+   (Instancing-Transform
+    :accessor <volume>-Instancing-Transform
+    :initform "/DEFAULT INSTANCE TRANSFORM:Default Transform"
+    :initarg :Instancing-Transform
+    :documentation "Instancing-Transform")
+   (Isovolume-Intersection-Mode
+    :accessor <volume>-Isovolume-Intersection-Mode
+    :initform "At Value"
+    :initarg :Isovolume-Intersection-Mode
+    :documentation "Isovolume-Intersection-Mode")
+   (Lighting
+    :accessor <volume>-Lighting
+    :initform "On"
+    :initarg :Lighting
+    :documentation "Lighting")
+   (Line-Colour
+    :accessor <volume>-Line-Colour
+    :initform "0, 0, 0"
+    :initarg :Line-Colour
+    :documentation "Line-Colour")
+   (Line-Colour-Mode
+    :accessor <volume>-Line-Colour-Mode
+    :initform "Default"
+    :initarg :Line-Colour-Mode
+    :documentation "Line-Colour-Mode")
+   (Line-Width
+    :accessor <volume>-Line-Width
+    :initform "1"
+    :initarg :Line-Width
+    :documentation "Line-Width")
+   (Max
+    :accessor <volume>-Max
+    :initform "0.0 [Pa]"
+    :initarg :Max
+    :documentation "Max")
+   (Min
+    :accessor <volume>-Min
+    :initform "0.0 [Pa]"
+    :initarg :Min
+    :documentation "Min")
+   (Node-Number
+    :accessor <volume>-Node-Number
+    :initform "1"
+    :initarg :Node-Number
+    :documentation "Node-Number")
+   (Option
+    :accessor <volume>-Option
+    :initform "Sphere"
+    :initarg :Option
+    :documentation "Option")
+   (Point
+    :accessor <volume>-Point
+    :initform "0.265 [m], 0.440459 [m], 0.0239924 [m]"
+    :initarg :Point
+    :documentation "Point")
+   (Radius
+    :accessor <volume>-Radius
+    :initform "7.25 [mm]"
+    :initarg :Radius
+    :documentation "Radius")
+   (Range
+    :accessor <volume>-Range
+    :initform "Global"
+    :initarg :Range
+    :documentation "Range")
+   (Render-Edge-Angle
+    :accessor <volume>-Render-Edge-Angle
+    :initform "0 [degree]"
+    :initarg :Render-Edge-Angle
+    :documentation "Render-Edge-Angle")
+   (Specular-Lighting
+    :accessor <volume>-Specular-Lighting
+    :initform "On"
+    :initarg :Specular-Lighting
+    :documentation "Specular-Lighting")
+   (Surface-Drawing
+    :accessor <volume>-Surface-Drawing
+    :initform "Flat Shading"
+    :initarg :Surface-Drawing
+    :documentation "Surface-Drawing")
+   (Texture-Angle
+    :accessor <volume>-Texture-Angle
+    :initform "0"
+    :initarg :Texture-Angle
+    :documentation "Texture-Angle")
+   (Texture-Direction
+    :accessor <volume>-Texture-Direction
+    :initform "0 , 1 , 0"
+    :initarg :Texture-Direction
+    :documentation "Texture-Direction")
+   (Texture-File
+    :accessor <volume>-Texture-File
+    :initform ""
+    :initarg :Texture-File
+    :documentation "Texture-File")
+   (Texture-Material
+    :accessor <volume>-Texture-Material
+    :initform "Metal"
+    :initarg :Texture-Material
+    :documentation "Texture-Material")
+   (Texture-Position
+    :accessor <volume>-Texture-Position
+    :initform "0 , 0"
+    :initarg :Texture-Position
+    :documentation "Texture-Position")
+   (Texture-Scale
+    :accessor <volume>-Texture-Scale
+    :initform "1"
+    :initarg :Texture-Scale
+    :documentation "Texture-Scale")
+   (Texture-Type
+    :accessor <volume>-Texture-Type
+    :initform "Predefined"
+    :initarg :Texture-Type
+    :documentation "Texture-Type")
+   (Tile-Texture
+    :accessor <volume>-Tile-Texture
+    :initform "Off"
+    :initarg :Tile-Texture
+    :documentation "Tile-Texture")
+   (Transform-Texture
+    :accessor <volume>-Transform-Texture
+    :initform "Off"
+    :initarg :Transform-Texture
+    :documentation "Transform-Texture")
+   (Transparency
+    :accessor <volume>-Transparency
+    :initform "0.0"
+    :initarg :Transparency
+    :documentation "Transparency")
+   (Value-1
+    :accessor <volume>-Value-1
+    :initform "0.0"
+    :initarg :Value-1
+    :documentation "Value-1")
+   (Value-2
+    :accessor <volume>-Value-2
+    :initform "0.0"
+    :initarg :Value-2
+    :documentation "Value-2")
+   (Variable
+    :accessor <volume>-Variable
+    :initform "Pressure"
+    :initarg :Variable
+    :documentation "Variable")
+   (Variable-Boundary-Values
+    :accessor <volume>-Variable-Boundary-Values
+    :initform "Hybrid"
+    :initarg :Variable-Boundary-Values
+    :documentation "Variable-Boundary-Values")
+   (Visibility
+    :accessor <volume>-Visibility
+    :initform "On"
+    :initarg :Visibility
+    :documentation "Visibility")
+   (Volume-Intersection-Mode
+    :accessor <volume>-Volume-Intersection-Mode
+    :initform "Intersection"
+    :initarg :Volume-Intersection-Mode
+    :documentation "Volume-Intersection-Mode")
+   (object-view-transform
+    :accessor <point>-object-view-transform
+    :initform (make-instance '<object-view-transform>)
+    :initarg :object-view-transform
+    :documentation "object-view-transform")))
