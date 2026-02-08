@@ -16,11 +16,12 @@
       (:mnas-ansys/tin/read      :mnas-ansys/tin/read)
       (:mnas-ansys/tin/select    :mnas-ansys/tin/select)
       (:mnas-ansys/tin/utils     :mnas-ansys/tin/utils)
-      (:mnas-ansys/tin/dia       :mnas-ansys/tin/dia)
+      (:mnas-ansys/dia           :mnas-ansys/dia)
       
       (:mnas-ansys/ccl           :mnas-ansys/ccl)
       (:mnas-ansys/ccl/parse     :mnas-ansys/ccl/parse)
       (:mnas-ansys/belt          :mnas-ansys/belt)
+      (:mnas-ansys/cfx/file      :mnas-ansys/cfx/file)
       )
     :do (progn
           (apply #'mnas-package:document i)
