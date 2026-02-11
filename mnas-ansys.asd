@@ -32,6 +32,7 @@ CFX-PRE.
                "mnas-ansys/exchange"
                "mnas-ansys/dia"
                "mnas-ansys/ic"
+               "mnas-ansys/mesh-log"
                "mnas-ansys/cfx/pre"
                "mnas-ansys/cfx/solver"
                "mnas-ansys/cfx/file"
@@ -535,3 +536,24 @@ uns-файлов icem в msh-файлы, предназначенные для �
        (:file "meshes-template")
        (:file "3d-regions")
        (:file "simulation")))))))
+
+(defsystem "mnas-ansys/mesh-log"
+  :description
+  "Подсистема @(mnas-ansys/mesh-log) предназначена для разбора файлов
+логирования создания сеток в ANSYS ICEM CFD."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later"
+  :serial nil
+  :depends-on ("mnas-string" "mnas-package/sys")
+  :components
+  ((:module "src/mesh" 
+    :serial t
+    :components
+    ((:file "package")
+     (:file "classes")
+     (:file "parse-funcs")
+     (:file "mesh-log")
+     (:module "methods"
+      :serial t
+      :components
+      ((:file "print-object")))))))
