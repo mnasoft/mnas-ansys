@@ -557,3 +557,19 @@ uns-файлов icem в msh-файлы, предназначенные для �
       :serial t
       :components
       ((:file "print-object")))))))
+
+(defsystem "mnas-ansys/mesh-msh"
+  :description
+  "Подсистема @(mnas-ansys/mesh-msh) предназначена для разбора .msh файлов
+сеток ICEM CFD для импорта в ANSYS CFX."
+  :author "Mykola Matvyeyev <mnasoft@gmail.com>"
+  :license "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later"
+  :serial nil
+  :depends-on ()
+  :components
+  ((:module "src/mesh/msh"
+    :serial t
+    :components
+    ((:file "package")
+     (:file "parse")
+     (:file "test")))))
