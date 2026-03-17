@@ -353,7 +353,7 @@ CFX-PRE.
                "mnas-path"
                "mnas-ansys/ccl"
                "mnas-dim-value"
-               "mnas-ansys/cfx/file") ;;"serializable-object" "mnas-ansys/cfx/bin" "mnas-org-mode" "mnas-ansys/exchange" )
+               "mnas-ansys/cfx/file")
   :components ((:module "src/cfx/post"
                 :serial t
                 :components ((:file "package")
@@ -472,7 +472,8 @@ CFX-PRE.
   :author "Mykola Matvyeyev <mnasoft@gmail.com>"
   :license  "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 or later" 
   :serial nil
-  :depends-on ("serializable-object"
+  :depends-on (;; "serializable-object"
+               "cl-store"
                "mnas-ansys/cfx/bin"
                "mnas-org-mode"
                "mnas-ansys/exchange"

@@ -71,7 +71,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; defclass
 
-(defclass <res> (serializable-object:serializable-object)
+(defclass <res> ()
   (
    (mon
     :accessor <res>-mon
@@ -98,7 +98,7 @@
 
 (defmethod print-object ((res <res>) stream)
   (format stream "Res-Pathname   = ~S~%" (<res>-pathname res))
-  (format stream "S-Obj-Pathname = ~S~%" (slot-value res 'pathname))
+  #+nil (format stream "S-Obj-Pathname = ~S~%" (slot-value res 'pathname))
   (when (/= 0 (hash-table-count (<res>-mon res)))
     (format stream "Start=~A; End=~A; Count=~A~%"
             (iteration-start res) (iteration-end res) (iterations res)))
@@ -151,11 +151,14 @@
           (mnas-ansys/exchange:res->ccl (<res>-pathname res)))))
 
 (defmethod save ((res <res>))
-  (serializable-object:save res :compression nil))
+  (mk-fname-s-obj (<res>-pathname res))
+  (cl-store:store res (mk-fname-s-obj (<res>-pathname res))))
 
 (defmethod load-instance ((res <res>))
   (setf res
-        (serializable-object:load-instance (slot-value res 'pathname))))
+        (cl-store:restore
+         (mk-fname-s-obj
+          (<res>-pathname res)))))
 
 (defmethod mon-select (regexp (res <res>))
   " @b(Пример использования:)
@@ -317,18 +320,13 @@
             (probe-file s-obj-fn)
             (null force-load))
        (setf res
-             (make-instance 'mnas-ansys/cfx/file:<res>
-                            :res-pname (namestring res-fn)
-                            :pathname  (namestring s-obj-fn)))
+             (make-instance '<res> :res-pname (namestring res-fn)))
        (setf res (mnas-ansys/cfx/file:load-instance res))
        res)
 ;;;; Если есть res и и нет s-obj
       ((and (probe-file res-fn)
             (null (probe-file s-obj-fn)))
-       (setf res
-             (make-instance 'mnas-ansys/cfx/file:<res>
-                            :res-pname (namestring res-fn)
-                            :pathname  (namestring s-obj-fn)))
+       (setf res (make-instance '<res> :res-pname (namestring res-fn)))
        (mnas-ansys/cfx/file:ccl-extract res)
        (mnas-ansys/cfx/file:mon-extract res n-iter)
        (mnas-ansys/cfx/file:save        res)
@@ -339,14 +337,11 @@
             force-load)
        (delete-file s-obj-fn)
        (setf res
-             (make-instance 'mnas-ansys/cfx/file:<res>
-                            :res-pname (namestring res-fn)
-                            :pathname  (namestring s-obj-fn)))
+             (make-instance '<res> :res-pname (namestring res-fn)))
        (mnas-ansys/cfx/file:ccl-extract res)
        (mnas-ansys/cfx/file:mon-extract res n-iter)
        (mnas-ansys/cfx/file:save        res)
-       res)
-      )))
+       res))))
 
 (defun dir-to-s-obj (dir &key (n-iter *n-iter*) (force-load nil))
   "@b(Описание:) функция @b(dir-to-s-obj) создает для res-файлов,
