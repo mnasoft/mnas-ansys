@@ -24,11 +24,11 @@
  "D:/home/_namatv/PRG/msys64/home/namatv/work/A32_prj_17_000_0966.res")
 
 ;;; Цикл для пересоздания s-obj-файлов
-(loop :for i :in (append (directory "Z:/ANSYS/CFX/n70/cfx/*/*/*/*/*.res")
-                         (directory "Z:/ANSYS/CFX/n70/cfx/*/*/*/*.res")
-                         (directory "Z:/ANSYS/CFX/n70/cfx/*/*/*.res")
-                         (directory "Z:/ANSYS/CFX/n70/cfx/*/*.res")
-                         (directory "Z:/ANSYS/CFX/n70/cfx/*.res"))
+(loop :for i :in (nthcdr 37 (append (directory "Z:/ANSYS/CFX/n70/cfx/*/*/*/*/*.res")
+                                    (directory "Z:/ANSYS/CFX/n70/cfx/*/*/*/*.res")
+                                    (directory "Z:/ANSYS/CFX/n70/cfx/*/*/*.res")
+                                    (directory "Z:/ANSYS/CFX/n70/cfx/*/*.res")
+                                    (directory "Z:/ANSYS/CFX/n70/cfx/*.res")) )
       :for j :from 1
       :do
          (open-cfx-file i :force-load t)
