@@ -304,17 +304,28 @@
  @item(force-load - признак принудительной выгрузки данных из
        res-файла.)
 @end(list)
-   Если данные объекта извлекаются:
+
+ Данные извлекаются из res-файла если:
 @begin(list)
- @item(res-файла - если s-obj-файл не существует или force-load не
-       равно nil;)
- @item(s-obj-файла - если s-obj-файл существует и force-load равен
-      nil;)
-@end(list)"
+ @item(- s-obj-файл не существует;)
+ @item(- force-load не равно nil;)
+ @item(- s-obj-файл существует и force-load равен nil;)
+@end(list)
+
+ Если res-файла не существует, а соответствующий ему s-obj-файл
+существует данные о res-файле восстанавливаются из s-obj-файла.
+"
   (let* ((res-fn    (mk-fname-res   res-file-name))
          (s-obj-fn  (mk-fname-s-obj res-file-name))
          (res nil))
     (cond
+;;;; Если нет res и есть s-obj
+      ((and (null (probe-file res-fn))
+            (probe-file s-obj-fn))
+       (setf res
+             (make-instance '<res> :res-pname (namestring res-fn)))
+       (setf res (mnas-ansys/cfx/file:load-instance res))
+       res)
 ;;;; Если есть res и s-obj и нет признака обязательного повторного разбора
       ((and (probe-file res-fn)
             (probe-file s-obj-fn)

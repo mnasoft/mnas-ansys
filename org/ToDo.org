@@ -1,17 +1,7 @@
 * ToDo
-1. [0/1] Система mnas-ansys/cfx/file:
-   - [ ] При определении класса <res> через базовый класс
-     (serializable-object:serializable-object) невозможно восстановить
-     содержимое объекта при смене версии Common Lisp. Для устранения
-     этого сериазацию необходимо выполнять через через cl-store.
-     + [ ] найти места, где используется serializable-object или его методы:
-       - [ ] ./cfx/file/file.lisp:74:(defclass <res> (serializable-object:serializable-object)
-       - [ ] ./cfx/file/file.lisp:154:  (serializable-object:save res :compression nil))
-       - [ ] ./cfx/file/file.lisp:158:        (serializable-object:load-instance (slot-value res 'pathname))))
-       - [ ] ./cfx/file/mon/mon.lisp:24:(defclass <mon> (serializable-object:serializable-object)
-2. [0/1] Система mnas-ansys/cfx/solver
+1. [0/1] Система mnas-ansys/cfx/solver
    - [ ] Написать функцию для извлечения информации из out-файла.
-3. Система mnas-ansys/ccl/belt
+2. Система mnas-ansys/ccl/belt
    1. [ ] Написать функцию отбора по заголовку секции.
    2. [ ] Написать функцию вывода списка в формат CCL.
    3. Для функций:
@@ -30,7 +20,7 @@
       - [ ] make-table-end
       - [ ] make-legend
         из пакета mnas-ansys/belt в пекет mnas-ansys/ccl/classes/core.
-4. Система mnas-ansys/ccl/parse/
+3. Система mnas-ansys/ccl/parse/
    1. [ ] Улучшить парсинг
       - длинные строки с переходом на следующую строку считываются не
         полностью. Символ перехода на следующую строку - =\=.
@@ -40,21 +30,21 @@
         - [ ] потока.
    2. [ ] Определить функцию результатом выполнения которой будет код
       определения класса, представляющий объект языка CCL системы ANSYS.
-5. Система mnas-ansys/tin/read:
+4. Система mnas-ansys/tin/read:
    1. [ ] read-file-as-lines
       - [ ] заменить вызовы функции read-file-as-lines вызовами методов line-by-line;
       - [ ] функцию read-file-as-lines удалить;
    2. [ ]  Определить функцию прохода через vector строк и возвращающую
       вектор с объединенными строками если они заканчиваются на =\=.
-6. [ ] Добавить слот time (содержащий время последней модификации
+5. [ ] Добавить слот time (содержащий время последней модификации
    tin-файла) в объект <tin>, что позволит програмно принять решение о
    целесобразности считывания и разбора tin-файла.  Если время
    модификации файла не изменилось повторное считывание и разбор не
    является необходимым. Написать метод reopen, учитывающий слот time.
-7. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
+6. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
    реализацию с учетом возможности использования слота surfases
    объекта <curve>. Цель ускорение.
-8. [ ] Написать функцию для нахождения дерева кривых. При этом
+7. [ ] Написать функцию для нахождения дерева кривых. При этом
    сопряжение кривых происходит в вершинах - find-coincidense.
    - [ ] Добавить считывание точек.
 
@@ -200,3 +190,20 @@
     - [X] Оптимизировать скорость создания s-obj файла. Оптимизация
       нецелесообразна т.к. основные расходы времени приходятся на
       извлечение данных из res-файла утилитой ANSYS.
+19. [X] Система mnas-ansys/cfx/file: При определении класса <res> через базовый класс
+      (serializable-object:serializable-object) невозможно восстановить
+      содержимое объекта при смене версии Common Lisp. Для устранения
+      этого сериазацию необходимо выполнять через через cl-store.
+    + [X] найти места, где используется serializable-object или его методы:
+      - [X] ./cfx/file/file.lisp:74:(defclass <res>
+        (serializable-object:serializable-object)
+      - [X] ./cfx/file/file.lisp:154: (serializable-object:save res
+        :compression nil))
+      - [X] ./cfx/file/file.lisp:158:
+        (serializable-object:load-instance (slot-value res
+        'pathname))))
+      - [X] ./cfx/file/mon/mon.lisp:24:(defclass <mon>
+        (serializable-object:serializable-object)
+20. [X] Система mnas-ansys/cfx/file: доработана функция открыти файла
+    для обеспечения извлечения данных из s-obj файла, для которого res
+    удален.
