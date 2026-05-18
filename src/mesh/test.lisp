@@ -10,6 +10,13 @@
   (make-collection
    "Z:/ANSYS/CFX/a32/msh/prj_15/A32_prj_15_*.msh.log"))
 
-(log-names *coll*)
+;;;; g90
 
-(get-log "A32_prj_15_DM3" *coll*)
+
+(defparameter *prh-log*
+  (load-msh-log-by-location
+   "Z:/ANSYS/CFX/g90/msh/prj_01/G90L2d1_prj_01"))
+
+(format t "~S" *prh-log*)
+
+

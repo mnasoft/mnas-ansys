@@ -37,7 +37,12 @@
     :accessor <mesh-log>-has-refinements
     :initarg :has-refinements
     :initform nil
-    :documentation "Флаг наличия block refinements"))
+    :documentation "Флаг наличия block refinements")
+   (count
+    :accessor <mesh-log>-count
+    :initarg :count
+    :initform 1
+    :documentation "Количество объектов в задаче"))
   (:documentation "Класс для хранения данных из лог-файла ICEM CFD"))
 
 (defclass <mesh-log-collection> ()

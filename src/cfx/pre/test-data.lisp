@@ -260,16 +260,16 @@ SOLVER CONTROL"
 
 (defun simulation-setup-test (simulation msh-num-ang
                               &key
-                                (3d-region t)
-                                (materials t)
-                                (flow t)
-                                (fluid-interface t)
-                                (fluid-boundary t)
-                                (monitor-point-region t)
-                                (monitor-point t)
-                                (monitor-point-named-points t)
-                                (solver-add t)
-                                (control-add t)
+                                3d-region
+                                materials
+                                flow
+                                fluid-interface
+                                fluid-boundary
+                                monitor-point-region
+                                monitor-point
+                                monitor-point-named-points
+                                solver-add
+                                control-add
                                 )
   "Выполняет настройку симуляции"
   (reset simulation)
@@ -284,18 +284,19 @@ SOLVER CONTROL"
   (when fluid-boundary                  ; Создаем флюидовые интерфейсы
     (fluid-boundary-add  simulation))
   (when monitor-point-region          ; Добавляем мониторы связанные с
-                                      ; сечениями массового расхода
+                                        ; сечениями массового расхода
     (simulation-monitor-point-region-add simulation))
   (when monitor-point                 ; Добавляем мониторы связанные с
-                                      ; граничными условиями
+                                        ; граничными условиями
     (simulation-monitor-point-add simulation))
   (when monitor-point-named-points      ; Добавляем мониторы по точкам
     (simulation-monitor-point-named-points-add simulation))
   (when solver-add                  ; Задаем единицы измерения солвера
     (simulation-solver-add simulation))
-  (when control-add                 ; Добавляем настройку хостов
-                                    ; SOLVER CONTROL
-    (simulation-control-add simulation)))
+  (when control-add                     ; Добавляем настройку хостов
+                                        ; SOLVER CONTROL
+    (simulation-control-add simulation))
+  simulation)
 
 (defun main-test (msh-num-ang tin-pathnames msh-pathnames)
   "Пример главной настроечной функции (точки входа).

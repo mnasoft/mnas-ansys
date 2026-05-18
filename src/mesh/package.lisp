@@ -22,6 +22,7 @@
            get-log
            log-names
            )
+  (:export load-msh-log-by-location)
   (:documentation
    "Пакет @b(mnas-ansys/mesh-log) предназначен для разбора файлов 
     логирования создания сеток в ANSYS ICEM CFD."))

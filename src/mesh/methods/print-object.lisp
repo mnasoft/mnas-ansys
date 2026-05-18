@@ -5,19 +5,24 @@
 (defmethod print-object ((obj <mesh-log>) stream)
   "Вывод объекта <mesh-log> в поток"
   (print-unreadable-object (obj stream :type t)
-    (format stream "~A: nodes=~D tetra=~D prism=~D hex=~D"
+    (format stream "~A: nodes=~D tetra=~D prism=~D hex=~D count=~D"
             (<mesh-log>-name obj)
             (<mesh-log>-nodes obj)
             (<mesh-log>-tetra obj)
             (<mesh-log>-prism obj)
-            (<mesh-log>-hex obj))))
+            (<mesh-log>-hex obj)
+            (<mesh-log>-count obj)
+            )))
 
 (defmethod print-object ((obj <mesh-log-collection>) stream)
   "Вывод объекта <mesh-log-collection> в поток"
   (print-unreadable-object (obj stream :type t)
     (format stream "pattern=~S count=~D"
             (<mesh-log-collection>-pattern obj)
-            (hash-table-count (<mesh-log-collection>-logs obj)))))
+            (hash-table-count (<mesh-log-collection>-logs obj)))
+    (format t "~%")
+    (loop :for i :in (sort (log-names obj) #'string<)
+      :do (format t "~S~%" (get-log i obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -11,3 +11,20 @@
           (make-instance '<mesh-log-collection> :pattern pattern)))
     (load-logs collection)
     collection))
+
+(defun change-count (name count collection)
+  (setf (<mesh-log>-count
+         (get-log name collection))
+        count))
+
+(defun load-msh-log-by-location (prj-name)
+  (let* ((coll (make-collection
+                (concatenate 'string prj-name "_*.msh.log"))))
+    (ignore-errors (load (concatenate 'string prj-name ".lisp")))
+    (map nil #'(lambda (el)
+                 (change-count (first el) (second el) coll))
+         *change-count-data*)
+    (format t "~S" coll)
+    coll))
+
+
