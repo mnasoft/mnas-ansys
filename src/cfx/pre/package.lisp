@@ -33,12 +33,16 @@
            <mesh>-name
            <mesh>-2d-regions
            )
+  (:export mesh
+           mesh-names
+           )
   (:export <3d-region>
            <3d-region>-mesh
            <3d-region>-simulation
            <3d-region>-3d-suffix
            <3d-region>-2d-suffix
            )
+  (:export 3d-region)
   (:export <simulation>
            <simulation>-meshes
            <simulation>-3d-regions
@@ -97,7 +101,6 @@
            2d-region
            2d-region-values
            2d-region-keys
-           3d-region
            3d-regions
            3d-region-mesh
            3d-region-min
@@ -119,7 +122,7 @@
            interface-pairs-solid
            interface-pairs-fluid-general
            interface-pairs-fluid-rotational)
-  (:export mesh)
+
   (:export select-3d-regions-by-mesh-name
            select-3d-regions-name-by-mesh-name
            select-3d-regions-fluid

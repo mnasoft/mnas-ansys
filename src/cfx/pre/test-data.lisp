@@ -91,7 +91,8 @@
         :do (add-interface-rot-per mesh-name simulation))
   ;; Вращательных генерального типа
   (loop :for mesh-name :in (interface-pairs-fluid-rotational simulation)
-        :do (add-interface-rot-gen mesh-name simulation)))
+        :do (add-interface-rot-gen mesh-name simulation))
+  simulation)
 
 (defun mk-location  (location)
   (locations

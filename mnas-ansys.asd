@@ -389,6 +389,8 @@ CFX-PRE.
                               :serial t
                               :components ((:file "print-object")
                                            (:file "mesh")
+                                           (:file "mesh-names")
+                                           (:file "command")
                                            (:file "add")
                                            (:file "initialize-instance")
                                            (:file "create-script")
@@ -398,6 +400,7 @@ CFX-PRE.
                                            (:file "2d-region")
                                            (:file "3d-region")
                                            (:file "interface")
+                                           (:file "interfaces-general")
                                            (:file "interface-pairs")
                                            (:file "domain")
                                            ))

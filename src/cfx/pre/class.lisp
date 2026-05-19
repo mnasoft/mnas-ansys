@@ -22,7 +22,7 @@
     :accessor <mesh>-name
     :initarg  :name
     :initform nil
-    :documentation "Именя домена, например: \"G1\".")
+    :documentation "Имена домена, например: \"G1\".")
    (2d-regions
     :accessor <mesh>-2d-regions ; <mesh>-surfaces <mesh>-2d-regions
     :initform (make-hash-table :test #'equal)

@@ -89,3 +89,13 @@
   (ppcre:register-groups-bind (between)
       ("^[^/]*/([^/]*)/" s)
     between))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun interface-p (2d-region-name)
+  (string= "C" (first (mnas-ansys/ccl:mk-split 2d-region-name))))
+
+(defun interface-rotational-p (2d-region-name)
+  (or (2d-region-left-p 2d-region-name)
+      (2d-region-right-p 2d-region-name)))
+

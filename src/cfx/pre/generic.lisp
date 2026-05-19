@@ -9,6 +9,20 @@
   (:documentation
    "Добавляем объект @b(item) в коллекцию @b(collection)."))
 
+(defgeneric mesh (key container)
+  (:documentation
+   "Возвращает объект типа <mesh> по ключу @b(key) в контейнере @b(container)."))
+
+(defgeneric mesh-names (container)
+  (:documentation
+   "@b(Описание:) метод @b(mesh-names) возвращает список имен сеток для
+контейнера @b(container)."))
+
+(defgeneric command (number container)
+  (:documentation
+   "@b(Описание:) метод @b(command) возвращает команду по ее номеру для
+контейнера @b(container)."))
+
 (defgeneric 2d-region (key obj)
   (:documentation
    "Возвращает имя 2d-региона по ключу имя Icem."))
@@ -25,9 +39,9 @@
   (:documentation
    "Возвращает список имен 3d-регионов объекта @b(obj)."))
 
-(defgeneric 3d-region (name obj)
+(defgeneric 3d-region (key container)
   (:documentation
-   "Возвращает 3d-регион для объекта @b(obj) по его имени."))
+   "Возвращает объект класса <3d-region> по ключу @b(key) в контейнере @b(container)."))
 
 (defgeneric 3d-region-mesh (mesh-name obj)
   (:documentation "Возвращает список объектов типа @b(<3d-region>) по имени сетки
@@ -54,5 +68,11 @@
 CFX."))
 
 (defgeneric reset (obj)
-  (:documentation "@b(Описание:) метод @b(reset) сбрасывает объект в исходное состояние и
+  (:documentation
+   "@b(Описание:) метод @b(reset) сбрасывает объект в исходное состояние и
+возвращает его."))
+
+(defgeneric interfaces-general (obj)
+  (:documentation
+   "@b(Описание:) метод @b(reset) сбрасывает объект в исходное состояние и
 возвращает его."))
