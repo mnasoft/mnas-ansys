@@ -2,13 +2,4 @@
 
 (in-package :mnas-ansys/cfx/pre)
 
-(defmethod domain-names-fluid ((simulation <simulation>))
-  "D1")
-
-(defmethod domain-names-solid  ((simulation <simulation>))
-  (sort 
-   (remove-if-not
-    #'(lambda (el)
-        (uiop:string-prefix-p "M" el))
-    (mesh-names simulation))
-   #'string<))
+;;;; Методы разнесены по одноименным файлам в этом каталоге.
