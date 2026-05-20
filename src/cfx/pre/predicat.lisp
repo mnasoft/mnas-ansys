@@ -93,9 +93,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun interface-p (2d-region-name)
-  (string= "C" (first (mnas-ansys/ccl:mk-split 2d-region-name))))
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (string= "C" (first items))))
+
+(defun interface-same-mesh-p (2d-region-name)
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (and (interface-p 2d-region-name)
+         (string= (second items) (third items)))))
 
 (defun interface-rotational-p (2d-region-name)
-  (or (2d-region-left-p 2d-region-name)
-      (2d-region-right-p 2d-region-name)))
+  (and (interface-same-mesh-p 2d-region-name)
+       (or (2d-region-left-p 2d-region-name)
+           (2d-region-right-p 2d-region-name))))
 
+(defun interface-right-p (2d-region-name)
+  (and (interface-same-mesh-p 2d-region-name)
+       (2d-region-right-p 2d-region-name)))
+
+(defun interface-left-p (2d-region-name)
+  (and (interface-same-mesh-p 2d-region-name)
+       (2d-region-left-p 2d-region-name)))
