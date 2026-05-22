@@ -22,3 +22,16 @@
   (remove-if #'interface-rotational-p
              (interfaces 3d-region)))
 
+(defmethod interface-ff-diff-general ((3d-region <3d-region>))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (interface-ff-diff-general (3d-region \"DG1 G1 2\" *simulation*))
+@end(code)"
+  (remove-if
+   (complement #'interface-ff-diff-general-p)
+   (2d-region-values 3d-region)))
+
+
+
+
+

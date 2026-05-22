@@ -56,9 +56,14 @@
            <simulation-interfaces-general>-mesh-name-1
            <simulation-interfaces-general>-mesh-name-2)
   (:export <simulation-interface-rotational-periodicity>
-           <simulation-interface-rotational-periodicity>-mesh-name)
+           <simulation-interface-rotational-periodicity>-mesh-name
+           )
   (:export <simulation-interface-rotational-general>
-           <simulation-interface-rotational-general>-mesh-name)
+           <simulation-interface-rotational-general>-mesh-name
+           )
+  (:export <simulation-interface-diff-periodicity>
+           <simulation-interface-diff-general>
+           )
   (:export <simulation-materials>)
   (:export <simulation-flow>
            <simulation-flow>-flow-name

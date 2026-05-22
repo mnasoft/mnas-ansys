@@ -77,3 +77,10 @@
   (push obj (<simulation>-commands simulation))
   (setf (<simulation-command>-simulation obj) simulation))
 
+(defmethod add ((obj <simulation-interface-diff-periodicity>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-interface-diff-general>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))

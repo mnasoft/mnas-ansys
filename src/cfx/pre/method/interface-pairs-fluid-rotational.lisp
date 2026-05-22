@@ -3,9 +3,10 @@
 (in-package :mnas-ansys/cfx/pre)
 
 (defmethod interface-pairs-fluid-rotational ((simulation <simulation>))
-  "@b(Описание:) метод @b(interface-pairs-fluid-general) возвращает список
-строк представляющих имена флюидовых сеток для создания между ними
-интерфейсов типа fluid-fluid типа rotational-periodicy и general."
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+ (interface-pairs-fluid-rotational *simulation*)
+@end(code)"
   (mapcar #'first
           (sort
            (remove-if-not
@@ -13,3 +14,4 @@
                 (string= (first el) (second el)))
             (interface-pairs-fluid simulation))
            #'two-string-list<)))
+

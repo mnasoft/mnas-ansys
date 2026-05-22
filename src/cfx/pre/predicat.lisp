@@ -96,15 +96,70 @@
   (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
     (string= "C" (first items))))
 
+(defun interface-ff-p (2d-region-name)
+  "@b(Описание:) функция @b(interface-ff-p) возвращает T, если это
+интерфейс типа флюид-флюид.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (interface-ff-p \"C G1 G2 X_022.0 D_0.0 1\")
+@end(code)
+"
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (and (interface-p 2d-region-name)
+         (eq #\G (char (second items) 0))
+         (eq #\G (char (third  items) 0)))))
+
+(defun interface-ss-p (2d-region-name)
+  "@b(Описание:) функция @b(interface-ff-p) возвращает T, если это
+интерфейс типа солид-солид.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (interface-ff-p \"C M1 M2 GT GU D_0.0 26\")
+@end(code)"
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (and (interface-p 2d-region-name)
+         (eq #\M (char (second items) 0))
+         (eq #\M (char (third  items) 0)))))
+
 (defun interface-same-mesh-p (2d-region-name)
+  "@b(Описание:) функция @b(interface-diff-mesh-p) возвращает T, если
+@b(2d-region-name) соединяет 3д-регионы с разноименными сетками.
+
+  "
   (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
     (and (interface-p 2d-region-name)
          (string= (second items) (third items)))))
+
+(defun interface-diff-mesh-p (2d-region-name)
+  "@b(Описание:) функция @b(interface-diff-mesh-p) возвращает T, если
+@b(2d-region-name) соединяет 3д-регионы с разноименными сетками.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (interface-diff-mesh-p \"C G1 G2 X_022.0 D_0.0 1\")
+@end(code)"
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (and (interface-p 2d-region-name)
+         (string/= (second items)
+                   (third items)))))
 
 (defun interface-rotational-p (2d-region-name)
   (and (interface-same-mesh-p 2d-region-name)
        (or (2d-region-left-p 2d-region-name)
            (2d-region-right-p 2d-region-name))))
+
+(defun interface-same-mesh-rotational-p (2d-region-name)
+  (and (interface-same-mesh-p 2d-region-name)
+       (or (2d-region-left-p 2d-region-name)
+           (2d-region-right-p 2d-region-name))))
+
+(defun interface-diff-mesh-rotational-p (2d-region-name)
+  (and (interface-diff-mesh-p 2d-region-name)
+       (or (2d-region-left-p 2d-region-name)
+           (2d-region-right-p 2d-region-name))))
+
 
 (defun interface-right-p (2d-region-name)
   (and (interface-same-mesh-p 2d-region-name)
@@ -113,3 +168,25 @@
 (defun interface-left-p (2d-region-name)
   (and (interface-same-mesh-p 2d-region-name)
        (2d-region-left-p 2d-region-name)))
+
+(defun interface-ff-diff-general-p (2d-region-name)
+  "Генеральный "
+    (and (interface-diff-mesh-p 2d-region-name)
+         (interface-ff-p 2d-region-name)
+         (not (interface-diff-mesh-rotational-p 2d-region-name))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun interface-diff-mesh-right-p (2d-region-name)
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (and (interface-p 2d-region-name)
+         (string/= (second items)
+                   (third items))
+         (some #'2d-region-right-p (cdddr items)))))
+
+(defun interface-diff-mesh-left-p (2d-region-name)
+  (let ((items (mnas-ansys/ccl:mk-split 2d-region-name)))
+    (and (interface-p 2d-region-name)
+         (string/= (second items)
+                   (third items))
+         (some #'2d-region-left-p (cdddr items)))))

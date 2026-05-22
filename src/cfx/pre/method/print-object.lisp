@@ -72,6 +72,21 @@
             (<simulation-interface-rotational-general>-mesh-name obj)
             (null (null (<simulation-command>-simulation obj))))))
 
+(defmethod print-object ((obj <simulation-interface-diff-periodicity>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S ~S"
+            (<simulation-interface-diff-periodicity>-mesh-name-1 obj)
+            (<simulation-interface-diff-periodicity>-mesh-name-2 obj)
+            (null (null (<simulation-command>-simulation obj)))
+            )))
+
+(defmethod print-object ((obj <simulation-interface-diff-general>) s)
+  (print-unreadable-object (obj s :type t)
+    (format s "~S ~S ~S"
+            (<simulation-interface-diff-general>-mesh-name-1 obj)
+            (<simulation-interface-diff-general>-mesh-name-2 obj)
+            (null (null (<simulation-command>-simulation obj))))))
+
 (defmethod print-object ((obj <simulation-flow>) s)
   (print-unreadable-object (obj s :type t)
     (format s "~S ~S ~{~S~^,~} ~S ~S"

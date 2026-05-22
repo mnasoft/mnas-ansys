@@ -3,6 +3,10 @@
 (in-package :mnas-ansys/cfx/pre)
 
 (defmethod interface-pairs-fluid ((simulation <simulation>))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+ (interface-pairs-fluid *simulation*)
+@end(code) "  
   (remove-if-not
    #'(lambda (el)
        (and

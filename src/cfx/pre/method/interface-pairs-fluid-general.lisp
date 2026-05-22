@@ -3,11 +3,7 @@
 (in-package :mnas-ansys/cfx/pre)
 
 (defmethod interface-pairs-fluid-general ((simulation <simulation>))
-  "@b(Описание:) метод @b(interface-pairs-fluid-general) возвращает список пар
-строк представляющих имена флюидовых сеток для создания между ними
-интерфейсов типа fluid-fluid типа general.
-
- @b(Пример использования:)
+  " @b(Пример использования:)
 @begin[lang=lisp](code)
  (interface-pairs-fluid-general *simulation*)
 @end(code) "

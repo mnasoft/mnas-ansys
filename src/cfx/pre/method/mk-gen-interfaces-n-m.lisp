@@ -3,6 +3,7 @@
 (in-package :mnas-ansys/cfx/pre)
 
 ;;;;
+#+nil 
 (defmethod mk-gen-interfaces-n-m (g1 g2 (simulation <simulation>))
   (let* ((g1-3d-regions
            (select-3d-regions-by-mesh-name g1 simulation))

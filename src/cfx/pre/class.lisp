@@ -118,6 +118,37 @@
     :documentation "Имя первой сетки."))
   (:documentation "Вращательный генеральный интерфейс."))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defclass <simulation-interface-diff-periodicity> (<simulation-command>)
+  ((mesh-name-1
+    :accessor <simulation-interface-diff-periodicity>-mesh-name-1
+    :initarg :mesh-name-1
+    :type string
+    :documentation "Имя первой сетки, сопрягаемой интефейсом")
+   (mesh-name-2
+    :accessor <simulation-interface-diff-periodicity>-mesh-name-2
+    :initarg :mesh-name-2
+    :type string
+    :documentation "Имя второй сетки, сопрягаемой интефейсом."))
+  (:documentation "Вращательный периодичный интерфейс, создаваймый между разноименными
+сетками."))
+
+(defclass <simulation-interface-diff-general> (<simulation-command>)
+  ((mesh-name-1
+    :accessor <simulation-interface-diff-general>-mesh-name-1
+    :initarg :mesh-name-1
+    :type string
+    :documentation "Имя первой сетки, сопрягаемой интефейсом")
+   (mesh-name-2
+    :accessor <simulation-interface-diff-general>-mesh-name-2
+    :initarg :mesh-name-2
+    :type string
+    :documentation "Имя второй сетки, сопрягаемой интефейсом."))
+  (:documentation "Вращательный генеральный интерфейс, создаваймый между разноименными
+сетками."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defclass <simulation-materials> (<simulation-command>)
   ()
   (:documentation "Добавляет материалы."))

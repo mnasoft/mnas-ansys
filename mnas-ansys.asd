@@ -408,6 +408,8 @@ CFX-PRE.
                                            (:file "3d-region-mesh")
                                            (:file "3d-region-min")
                                            (:file "3d-region-max")
+                                           (:file "3d-region-not-max")
+                                           (:file "3d-region-not-min")
                                            (:file "3d-region-left")
                                            (:file "3d-region-right")
                                            (:file "select-3d-regions-by-mesh-name")

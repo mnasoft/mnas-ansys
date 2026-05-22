@@ -51,9 +51,19 @@
   (:documentation "Возвращает объект типа @b(<3d-region>) с минимальным 3d-суффиксом по
 имени сетки @b(mesh-name) для объекта @b(obj)"))
 
+(defgeneric 3d-region-not-min (mesh-name obj)
+  (:documentation
+   "@b(Описание:) Возвращает объекты типа @b(<3d-region>) с не минимальным
+3d-суффиксом по имени сетки @b(mesh-name) из симуляции @b(obj)."))
+
 (defgeneric 3d-region-max (mesh-name obj)
   (:documentation "Возвращает объект типа @b(<3d-region>) с минимальным 3d-суффиксом по
 имени сетки @b(mesh-name) для объекта @b(obj)"))
+
+(defgeneric 3d-region-not-max (mesh-name obj)
+    (:documentation
+  "@b(Описание:) Возвращает объекты типа @b(<3d-region>) с не
+максимальным 3d-суффиксом по имени сетки @b(mesh-name) из симуляции @b(obj)."))
 
 (defgeneric 3d-region-left (mesh-name obj)
   (:documentation "Возвращает список объектов типа @b(<3d-region>) с минимальными
@@ -103,10 +113,6 @@ CFX."))
   (:documentation
    "@b(Описание:) метод @b(interfaces-with) возвращает список имен 2d-регионов
 @b(3d-region), сопряженных с сеткой @b(mesh-name-2)."))
-
-(defgeneric mk-gen-interfaces-n-m (g1 g2 simulation)
-  (:documentation
-   "Создает данные для обобщенного интерфейса между сетками @b(g1) и @b(g2)."))
 
 (defgeneric interface-rot-min (mesh-name simulation)
   (:documentation

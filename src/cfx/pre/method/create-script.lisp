@@ -15,20 +15,48 @@
     (<simulation>-mesh-transformation obj))))
 
 (defmethod create-script ((obj <simulation-interface-general>) stream)
-  (mk-gen-interfaces-n-m
-   (<simulation-interfaces-general>-mesh-name-1 obj)
-   (<simulation-interfaces-general>-mesh-name-2 obj)
-   (<simulation-command>-simulation obj)))
+  (let* ((g1 (<simulation-interfaces-general>-mesh-name-1 obj))
+         (g2 (<simulation-interfaces-general>-mesh-name-2 obj))
+         (simulation (<simulation-command>-simulation obj))
+         (g1-3d-regions
+           (select-3d-regions-by-mesh-name g1 simulation))
+         (g2-3d-regions
+           (select-3d-regions-by-mesh-name g2 simulation))
+         (il1 (apply #'append
+                     (mapcar
+                      #'(lambda (el)
+                          (interfaces-general-with-01 el g2))
+                      g1-3d-regions)))
+         (il2 (apply #'append
+                     (mapcar
+                      #'(lambda (el)
+                          (interfaces-general-with-01 el g1))
+                      g2-3d-regions))))
+    (when (and il1 il2)
+      (make-domain-interface-general-connection
+       (mnas-string:common-prefix (append il1 il2)) il1 il2))))
 
 (defmethod create-script ((obj <simulation-interface-rotational-periodicity>) stream)
-  (mk-rot-per-interfaces-n-m
-   (<simulation-interface-rotational-periodicity>-mesh-name obj)
-   (<simulation-command>-simulation obj)))
+  (let* ((mesh-name (<simulation-interface-rotational-periodicity>-mesh-name obj))
+         (simulation (<simulation-command>-simulation obj))
+         (postfix "ROT")
+         (i-min (interface-rot-min mesh-name simulation))
+         (i-max (interface-rot-max mesh-name simulation)))
+    (when (and i-min i-max)
+      (make-domain-interface-rotational-periodicity
+       (mnas-string:common-prefix (append i-min i-max)) i-min i-max
+       :postfix postfix))))
 
 (defmethod create-script ((obj <simulation-interface-rotational-general>) stream)
-  (mk-rot-gen-interfaces-n-m
-   (<simulation-interface-rotational-general>-mesh-name obj)
-   (<simulation-command>-simulation obj)))
+  (let* ((mesh-name (<simulation-interface-rotational-general>-mesh-name obj))
+         (simulation (<simulation-command>-simulation obj))
+         (postfix "ROT GEN")
+         (i-left (interface-rot-left mesh-name simulation))
+         (i-right (interface-rot-right mesh-name simulation)))
+    (when (and i-left i-right)
+      (make-domain-interface-general-connection
+       (mnas-string:common-prefix (append i-left i-right)) i-left i-right
+       :postfix postfix))))
 
 (defmethod create-script ((obj <simulation-materials>) stream)
   (format t "
@@ -1038,3 +1066,60 @@ END
     (create-script-monitor-point-preamble stream)
     (format stream "~{~A~}" monitors)
     (create-script-monitor-point-postamble stream)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod create-script ((obj <simulation-interface-diff-periodicity>) stream)
+  (let* ((mesh-name-1 (<simulation-interface-diff-periodicity>-mesh-name-1 obj))
+         (mesh-name-2 (<simulation-interface-diff-periodicity>-mesh-name-2 obj))
+         (meshes (list mesh-name-1 mesh-name-2))
+         (simulation (<simulation-command>-simulation obj))
+         (postfix "ROT")
+         (i-min (mapcar #'(lambda (el) (3d-region-min el simulation)) meshes))
+         (i-max (mapcar #'(lambda (el) (3d-region-max el simulation)) meshes))
+         (int-r (mapcar #'(lambda (3d-reg) (2d-region-values 3d-reg)) i-min))
+         (int-l (mapcar #'(lambda (3d-reg) (2d-region-values 3d-reg)) i-max))
+         (i-r   (apply #'append
+                       (mapcar #'(lambda (2d-reg)
+                                   (remove-if-not #'interface-diff-mesh-right-p 2d-reg))
+                               int-r)))
+         (i-l   (apply #'append
+                       (mapcar #'(lambda (2d-reg)
+                                   (remove-if-not #'interface-diff-mesh-left-p 2d-reg))
+                               int-l))))
+    (when (and i-r i-l)
+      (make-domain-interface-rotational-periodicity
+       (mnas-string:common-prefix (append i-r i-l)) i-r i-l
+       :postfix postfix))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defmethod create-script ((obj <simulation-interface-diff-general>) stream)
+  (let* ((mesh-name-1 (<simulation-interface-diff-general>-mesh-name-1 obj))
+         (mesh-name-2 (<simulation-interface-diff-general>-mesh-name-2 obj))
+         (meshes (list mesh-name-1 mesh-name-2))
+         (simulation (<simulation-command>-simulation obj))
+         (postfix "ROT GEN")
+
+         (3d-not-min (apply #'append (mapcar #'(lambda (el) (3d-region-not-min el simulation)) meshes)))
+         (3d-not-max (apply #'append (mapcar #'(lambda (el) (3d-region-not-max el simulation)) meshes)))
+
+         (2d-not-min (mapcar #'(lambda (3d-reg) (2d-region-values 3d-reg)) 3d-not-min))
+         (2d-not-max (mapcar #'(lambda (3d-reg) (2d-region-values 3d-reg)) 3d-not-max))
+
+         (i-not-min  (apply #'append
+                            (mapcar #'(lambda (2d-reg)
+                                        (remove-if-not #'interface-diff-mesh-right-p 2d-reg))
+                                    2d-not-min)))
+         (i-not-max  (apply #'append
+                            (mapcar #'(lambda (2d-reg)
+                                        (remove-if-not #'interface-diff-mesh-left-p 2d-reg))
+                                    2d-not-max))))
+    (when (and i-not-min i-not-max)
+      (make-domain-interface-general-connection
+       (mnas-string:common-prefix (append i-not-min i-not-max)) i-not-min i-not-max
+       :postfix postfix))))
+
+
+
