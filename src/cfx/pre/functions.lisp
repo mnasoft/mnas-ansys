@@ -126,24 +126,71 @@ NIL
         ,simulation))
 
 (defun add-interface-general (mesh-name-1 mesh-name-2 simulation)
-  (add (make-instance '<simulation-interface-general>
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (add-interface-general \"G31\" \"G32\" *simulation*)
+@end(code)"  
+  (let* ((i-g (make-instance '<simulation-interface-general>
                       :mesh-name-1 mesh-name-1
                       :mesh-name-2 mesh-name-2
-                      :simulation simulation)
-       simulation))
+                      :simulation simulation))
+         (sides (int-sides i-g)))
+    (when (and (first sides) (second sides))
+      (add i-g simulation))))
 
 (defun add-interface-rot-per (mesh-name simulation)
-  (add
-   (make-instance '<simulation-interface-rotational-periodicity>
-                  :mesh-name mesh-name
-                  :simulation simulation)
-   simulation))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (add-interface-rot-per \"G1\" *simulation*)
+@end(code)"
+  (let* ((i-r-p (make-instance '<simulation-interface-rotational-periodicity>
+                               :mesh-name mesh-name
+                               :simulation simulation))
+         (sides (int-sides i-r-p)))
+    (when (and (first sides) (second sides))
+      (add i-r-p simulation))))
 
 (defun add-interface-rot-gen (mesh-name simulation)
-  (add (make-instance '<simulation-interface-rotational-general>
-                      :mesh-name mesh-name
-                      :simulation simulation)
-       simulation))
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (add-interface-rot-gen \"G1\" *simulation*)
+@end(code)"
+  (let* ((i-r-g (make-instance '<simulation-interface-rotational-general>
+                               :mesh-name mesh-name
+                               :simulation simulation))
+         (sides (int-sides i-r-g)))
+    (when (and (first sides) (second sides))
+      (add i-r-g simulation))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun add-interface-diff-rot-per (mesh-name-1 mesh-name-2 simulation)
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (add-interface-diff-rot-per \"G1\" \"G2\" *simulation*)
+@end(code)"
+  (let* ((i-d-r-p (make-instance ' <simulation-interface-diff-periodicity> 
+                                 :mesh-name-1 mesh-name-1
+                                 :mesh-name-2 mesh-name-2
+                                 :simulation simulation))
+         (sides (int-sides i-d-r-p)))
+    (when (and (first sides) (second sides))
+      (add i-d-r-p simulation))))
+
+(defun add-interface-diff-rot-gen (mesh-name-1 mesh-name-2 simulation)
+  " @b(Пример использования:)
+@begin[lang=lisp](code)
+  (add-interface-diff-rot-gen \"G1\" \"G2\" *simulation*)
+@end(code)"
+  (let* ((i-d-r-g (make-instance '<simulation-interface-diff-general>
+                                 :mesh-name-1 mesh-name-1
+                                 :mesh-name-2 mesh-name-2
+                                 :simulation simulation))
+         (sides (int-sides i-d-r-g)))
+    (when (and (first sides) (second sides))
+      (add i-d-r-g simulation))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun mk-domain-fluid (&key
                           (domain-name "D1")

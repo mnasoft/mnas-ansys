@@ -35,13 +35,26 @@
   (push obj (<simulation>-commands simulation)))
 
 (defmethod add ((obj <simulation-interface-general>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation)))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
 
 (defmethod add ((obj <simulation-interface-rotational-periodicity>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation)))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
 
 (defmethod add ((obj <simulation-interface-rotational-general>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation)))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-interface-diff-periodicity>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+(defmethod add ((obj <simulation-interface-diff-general>) (simulation <simulation>))
+  (push obj (<simulation>-commands simulation))
+  (setf (<simulation-command>-simulation obj) simulation))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod add ((obj <simulation-materials>) (simulation <simulation>))
   (push obj (<simulation>-commands simulation)))
@@ -77,10 +90,3 @@
   (push obj (<simulation>-commands simulation))
   (setf (<simulation-command>-simulation obj) simulation))
 
-(defmethod add ((obj <simulation-interface-diff-periodicity>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation))
-  (setf (<simulation-command>-simulation obj) simulation))
-
-(defmethod add ((obj <simulation-interface-diff-general>) (simulation <simulation>))
-  (push obj (<simulation>-commands simulation))
-  (setf (<simulation-command>-simulation obj) simulation))

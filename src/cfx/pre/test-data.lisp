@@ -83,9 +83,14 @@
 
 (defun fluid-interface-add (simulation)
   "Создаем команды для добавления флюидовых интерфейсов"
-  ;; Генеральных
   (loop :for (mesh-name-1 mesh-name-2) :in (interface-pairs-fluid-general simulation)
-        :do (add-interface-general mesh-name-1 mesh-name-2 simulation))
+        :do
+           ;; Генеральных разноименных
+           (add-interface-general      mesh-name-1 mesh-name-2 simulation)
+           ;; Вращательных разноименных генерального типа
+           (add-interface-diff-rot-gen mesh-name-1 mesh-name-2 simulation)
+           ;; Вращательных разноименных периодического типа
+           (add-interface-diff-rot-per mesh-name-1 mesh-name-2 simulation))
   ;; Вращательных периодического типа
   (loop :for mesh-name :in (interface-pairs-fluid-rotational simulation)
         :do (add-interface-rot-per mesh-name simulation))
@@ -284,11 +289,9 @@ SOLVER CONTROL"
     (fluid-interface-add simulation))
   (when fluid-boundary                  ; Создаем флюидовые интерфейсы
     (fluid-boundary-add  simulation))
-  (when monitor-point-region          ; Добавляем мониторы связанные с
-                                        ; сечениями массового расхода
+  (when monitor-point-region ; Добавляем мониторы связанные с сечениями массового расхода
     (simulation-monitor-point-region-add simulation))
-  (when monitor-point                 ; Добавляем мониторы связанные с
-                                        ; граничными условиями
+  (when monitor-point ; Добавляем мониторы связанные с граничными условиями
     (simulation-monitor-point-add simulation))
   (when monitor-point-named-points      ; Добавляем мониторы по точкам
     (simulation-monitor-point-named-points-add simulation))

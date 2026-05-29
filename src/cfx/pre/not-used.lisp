@@ -958,29 +958,6 @@
                         (list str-or-lst)
                         str-or-lst)))
 
-(defun make-monitor-point (name-point m-prefix m-variable domain)
-  (loop :for (name point) :in name-point
-        :do
-           (format t "FLOW: Flow Analysis 1~%")
-           (format t "  OUTPUT CONTROL: ~%")
-           (format t "    MONITOR OBJECTS: ~%")
-           (format t "      &replace MONITOR POINT: ~A ~A~%" m-prefix name )
-           (format t "        Cartesian Coordinates = ~{~8,3F [mm]~^, ~}~%" point)
-           (format t "        Coord Frame = Coord 0~%")
-           (format t "        Option = Cartesian Coordinates~%")
-           (format t "        Output Variables List = ~A~%" m-variable)
-           (format t "        MONITOR LOCATION CONTROL: ~%")
-           (format t "          Domain Name = ~A~%" domain)
-           (format t "          Interpolation Type = Nearest Vertex~%")
-           (format t "        END~%")
-           (format t "        POSITION UPDATE FREQUENCY: ~%")
-           (format t "          Option = Initial Mesh Only~%")
-           (format t "        END~%")
-           (format t "      END~%")
-           (format t "    END~%")
-           (format t "  END~%")
-           (format t "END~%~%")))
-
 (defmethod surfaces ((d (eql nil)))
   d)
 

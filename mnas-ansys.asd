@@ -397,6 +397,7 @@ CFX-PRE.
                                            (:file "add")
                                            (:file "initialize-instance")
                                            (:file "do-add")
+                                           (:file "int-sides")                                           
                                            (:file "create-script")
                                            (:file "ht")
                                            (:file "reset")
