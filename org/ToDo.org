@@ -1,31 +1,51 @@
 * ToDo
-1. [ ] Доработать функцию fluid-interface-add для добавления
-   интерфейсов с разноименными сетками.
-2. [ ] Избавиться от дублирования
+** Mnas-ansys/cfx/pre
+1. [ ] Откорректировать создание именованых мониторов в части имени
+   домена для которых они создаются.
+   #+begin_src lisp
+     (in-package :mnas-ansys/cfx/pre)
+
+   #+end_src
+2. [X] Внести методы для формирования точек из проекта a32-base в
+   настоящий проект.
+3. [ ] Избавиться от дублирования
    - [ ] 3d-region-right = 3d-region-not-min;
    - [ ] 3d-region-left = 3d-region-not-max
-3. [0/1] Система mnas-ansys/cfx/solver
-   - [ ] Написать функцию для извлечения информации из out-файла.
-4. Система mnas-ansys/ccl/belt
-   1. [ ] Написать функцию отбора по заголовку секции.
-   2. [ ] Написать функцию вывода списка в формат CCL.
-   3. Для функций:
-      - [X] make-point
-      - [X] make-line
-      - [X] make-surface-of-revolution
-      - [ ] make-table-head
-      - [ ] make-table-end
-      - [X] make-legend
-             создать соответствующие им объекты в сситеме mnas-ansys/ccl/classes.
-   4. [ ] Перенести фунции:
-      - [ ] make-point
-      - [ ] make-line
-      - [ ] make-surface-of-revolution
-      - [ ] make-table-head
-      - [ ] make-table-end
-      - [ ] make-legend
-        из пакета mnas-ansys/belt в пекет mnas-ansys/ccl/classes/core.
-5. Система mnas-ansys/ccl/parse/
+4. [ ] Сократить имена для интекфейсов
+   #+begin_src lisp
+     (in-package :mnas-ansys/cfx/pre)
+
+     <simulation-interface-general> ->                <interface-general> 
+     <simulation-interface-diff-general> ->           <interface-diff-general> 
+     <simulation-interface-diff-periodicity> ->       <interface-diff-periodicity> 
+     <simulation-interface-rotational-general> ->     <interface-rotational-general> 
+     <simulation-interface-rotational-periodicity> -> <interface-rotational-periodicity> 
+   #+end_src
+** Mnas-ansys/cfx/solver 
+1. [1/1] Система mnas-ansys/cfx/solver
+   - [X] Написать функцию для извлечения информации из out-файла.
+     
+** Mnas-ansys/ccl/belt 
+1. [ ] Написать функцию отбора по заголовку секции.
+2. [ ] Написать функцию вывода списка в формат CCL.
+3. Для функций:
+   - [X] make-point
+   - [X] make-line
+   - [X] make-surface-of-revolution
+   - [ ] make-table-head
+   - [ ] make-table-end
+   - [X] make-legend создать соответствующие им объекты в сситеме
+     mnas-ansys/ccl/classes.
+4. [ ] Перенести фунции:
+   - [ ] make-point
+   - [ ] make-line
+   - [ ] make-surface-of-revolution
+   - [ ] make-table-head
+   - [ ] make-table-end
+   - [ ] make-legend из пакета mnas-ansys/belt в пекет
+     mnas-ansys/ccl/classes/core.
+        
+2. Система mnas-ansys/ccl/parse/
    1. [ ] Улучшить парсинг
       - длинные строки с переходом на следующую строку считываются не
         полностью. Символ перехода на следующую строку - =\=.
@@ -35,33 +55,34 @@
         - [ ] потока.
    2. [ ] Определить функцию результатом выполнения которой будет код
       определения класса, представляющий объект языка CCL системы ANSYS.
-6. Система mnas-ansys/tin/read:
-   1. [ ] read-file-as-lines
-      - [ ] заменить вызовы функции read-file-as-lines вызовами методов line-by-line;
-      - [ ] функцию read-file-as-lines удалить;
-   2. [ ]  Определить функцию прохода через vector строк и возвращающую
+** Mnas-ansys/tin/read 
+1. [ ] read-file-as-lines
+   - [ ] заменить вызовы функции read-file-as-lines вызовами методов line-by-line;
+   - [ ] функцию read-file-as-lines удалить;
+2. [ ]  Определить функцию прохода через vector строк и возвращающую
       вектор с объединенными строками если они заканчиваются на =\=.
-7. [ ] Добавить слот time (содержащий время последней модификации
+3. [ ] Добавить слот time (содержащий время последней модификации
    tin-файла) в объект <tin>, что позволит програмно принять решение о
    целесобразности считывания и разбора tin-файла.  Если время
    модификации файла не изменилось повторное считывание и разбор не
    является необходимым. Написать метод reopen, учитывающий слот time.
-8. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
+4. [ ] curve-names-coeged-with-surface-in-family - Пересмотреть
    реализацию с учетом возможности использования слота surfases
    объекта <curve>. Цель ускорение.
-9. [ ] Написать функцию для нахождения дерева кривых. При этом
+5. [ ] Написать функцию для нахождения дерева кривых. При этом
    сопряжение кривых происходит в вершинах - find-coincidense.
    - [ ] Добавить считывание точек.
-10. [0/2] Mnas-ansys/mesh-log: добавить методы для
-    - [ ]  вычисления в коллекции
-      - [ ]  общего количества
-        - [ ] нодов;
-        - [ ] тетраєдров;
-      - [ ] относительного количества;
-        - [ ] нодов;
-        - [ ] тетраєдров;
-    - [ ] считывания и разбора специального файла, передназначенного
-      для определения количества вставок конкретной сетки, приходящееся
-      на задачу.
-11. [ ] Доработать генераторе интерфейсов сетки для неодноименных доменоа
-12. [ ] И справить ошибку в генераторе интерфейсов.
+** Mnas-ansys/mesh-log 
+1. [0/2]  добавить методы для
+   - [ ]  вычисления в коллекции
+     - [ ]  общего количества
+       - [ ] нодов;
+       - [ ] тетраєдров;
+     - [ ] относительного количества;
+       - [ ] нодов;
+       - [ ] тетраєдров;
+   - [ ] считывания и разбора специального файла, передназначенного
+     для определения количества вставок конкретной сетки, приходящееся
+     на задачу.
+
+
