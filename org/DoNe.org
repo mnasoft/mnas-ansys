@@ -1,4 +1,5 @@
 * DoNe
+1. [ ] Определена функция для проверки в ICEM создания именованых интерфейсов по  make-icem-named-points
 1. [X] Определить недостающие методы для классов:
    - [X] <simulation-interface-diff-periodicity>
    - [X] <simulation-interface-diff-general>

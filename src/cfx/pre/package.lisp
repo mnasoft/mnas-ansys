@@ -14,9 +14,10 @@
   (:export rotate-point-around-vector
            mk-gt-cone-pnts
            move-rotate-point-around-vector
-           make-ic-point
            mk-t-f-points
            )
+  (:export make-ic-point
+           make-icem-named-points)
   (:export mk-mfr
            mk-mfr-region
            mk-tt

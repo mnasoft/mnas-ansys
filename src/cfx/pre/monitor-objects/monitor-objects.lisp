@@ -107,7 +107,10 @@
       :name name
       :cartesian-coordinates (format nil "~{~A [mm]~^, ~}" cartesian-coordinates)
       :output-variables-list output-variables-list
-      :expression-value nil))
+      :expression-value nil
+      :monitor-location-control (make-instance
+                                 'mnas-ansys/ccl/core:<monitor-location-control>
+                                 :domain-name domain-name)))
     ((and expression region prefix)
      (make-instance 'mnas-ansys/ccl/core:<monitor-point>
                     :name (mnas-ansys/ccl:good-name 
@@ -129,6 +132,8 @@
                     :cartesian-coordinates nil
                     :expression-value (concatenate 'string expression "@" location)
                     :position-update-frequency nil
-                    :monitor-location-control nil
+                    :monitor-location-control (make-instance
+                                               'mnas-ansys/ccl/core:<monitor-location-control>
+                                               :domain-name domain-name)
                     :option "Expression"
                     :output-variables-list nil))))

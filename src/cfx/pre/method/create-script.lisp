@@ -1044,24 +1044,24 @@ END
     (create-script-monitor-point-postamble stream)))
 
 (defmethod create-script ((obj <simulation-monitor-point-named-points>) stream)
-  (let ((monitors
-          (loop :for (name coord) :in (<simulation-monitor-point-named-points>-named-points obj)
-                :collect
-                (mk-monitor-point
-                 :name (mnas-ansys/ccl:good-name
-                        (concatenate
-                         'string
-                         (<simulation-monitor-point-named-points>-prefix obj)
-                         " "
-                         name))
-                 :cartesian-coordinates coord
-                 :domain-name
-                 (<simulation-monitor-point-named-points>-domain-name obj)
-                 :output-variables-list
-                 (<simulation-monitor-point-named-points>-output-variables-list obj)))))
-    (create-script-monitor-point-preamble stream)
-    (format stream "~{~A~}" monitors)
-    (create-script-monitor-point-postamble stream)))
+  (let* ((domain-name (<simulation-monitor-point-named-points>-domain-name obj))
+         (monitors
+           (loop :for (name coord) :in (<simulation-monitor-point-named-points>-named-points obj)
+                 :collect
+                 (let* ((nm
+                          (mnas-ansys/ccl:good-name (concatenate 'string (<simulation-monitor-point-named-points>-prefix obj) " " name)))
+                        (variables-list
+                          (<simulation-monitor-point-named-points>-output-variables-list obj))
+                        (mp
+                          (mk-monitor-point :name                  nm
+                                            :cartesian-coordinates coord 
+                                            :domain-name           domain-name 
+                                            :output-variables-list variables-list)))
+
+                   mp))))
+      (create-script-monitor-point-preamble stream)
+      (format stream "~{~A~}" monitors)
+      (create-script-monitor-point-postamble stream)))
 
 (defmethod create-script ((obj <simulation-monitor-point>) stream)
   (let* ((monitors nil))

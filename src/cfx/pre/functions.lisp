@@ -82,6 +82,25 @@ NIL
     (format t "ic_point {} ~A ~A {~{~8,3F~^,~}}; " part names p))
   (format t "~3%"))
 
+(defun make-icem-named-points (named-points &optional (fam "GEOM"))
+  "@b(Описание:) функция @b(make-icem-named-points) в качестве побочного
+эффекта печатает на стандартный вывод команду ICEM, создающую точки в ICEM.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+  (make-icem-named-points '((\"P2 1\" (0.0 1.0 2.0))
+                            (\"P2 2\" (0.0 2.0 3.0)))
+                          \"GU\")
+@end(code)"
+  (loop :for (name p) :in named-points
+        :for i :from 1
+        :do
+           (mnas-ansys/ic:point
+            (ppcre:regex-replace-all "\\s+" fam "_")
+            (format nil "~A_~3,'0D"(ppcre:regex-replace-all "\\s+" name "_") i)
+            p))
+  (format t "~3%"))
+
 (defun mk-t-f-points (p1
                       p2
                       &key
